@@ -1,0 +1,355 @@
+<script type="text/html" id="onePost">
+    <!-- ko template:{name:editingTemplate()}--><!--/ko-->
+</script>
+<script type="text/html" id="album">
+    <article class="relative">
+        <div data-bind="attr:{id:'thumb'+$data._id()},foreach:$data.attachments" style="margin-left:0">
+            <!--ko if:$index() < 6-->
+                <a data-bind="attr:{href:'//' + picture(), rel:$parent._id}, click:$parent.setCurrentItem, event:{singletap:$parent.setCurrentItem }, title:$data.excerpt() || $data.name()" target="_blank" class="thumbnail grid slideShow">
+                    <span data-bind="html:getAttachmentThumb.call($data)"></span>
+                </a>
+            <!--/ko-->
+        </div> <!-- listings thumbnail -->
+        <div class="contentBottom media-body media-details">
+            <p class="thumbPostDesc"></p>
+        </div> <!-- listings content -->
+        <div data-bind="RTModal:slideShow"></div>
+    </article>
+</script>
+<script type="text/html" id="listing">
+    <article class="contentArea relative media listing" style="margin-top:0">
+        <div class="pull-left">
+            <a href="#" data-bind="html:getThumbnail.call($data),click:setCurrentItem"></a>
+            <div class="mediaThumbLinks">
+                <span class="thumbInfo"><a href="#" class="text-center" data-bind="click:setCurrentItem, text:counts.attachments()+' attachments' " style="display: block"></a>
+                </span>
+            </div>
+        </div> <!-- listings thumbnail -->
+        <div class="contentBottom media-body media-details">
+            <h3 class="media-heading">
+                <a href="#" data-bind="text:page.name, attr:{href:page.uri}"></a>
+                <a href="#"><small class="muted" data-bind="text:page.subtype() + ' - ' +listing.property_type()"></small></a>
+            </h3>
+            <span class="price relative">
+                <span class="listingType" data-bind="html:'FOR<br>' + listing.type().toUpperCase()"></span>
+                <span data-bind="text:'$' + RTC.ThousandSep(listing.price())"></span>
+            </span>
+            <ul class="nav">
+                <li><i class="info16 sqft"></i> <span style="color: #2691D4;" data-bind="text:RTC.ThousandSep(listing.built_size()) + ' sqft'"></span></li>
+                <li><i class="info16 bathrooms"></i> <span style="color: #2691D4;" data-bind="text:listing.baths() + ' bathrooms'"></span></li>
+                <li><i class="info16 bedrooms"></i> <span style="color: #2691D4;" data-bind="text:listing.rooms() + ' bedrooms'"></span></li>
+            </ul>
+            <p data-bind="html:content"></p>
+        </div> <!-- listings content -->
+        <div data-bind="RTModal:slideShow"></div>
+    </article>
+</script>
+<script type="text/html" id="post">
+    <!--ko if:hasDetails-->
+    <article class="relative media" style="padding-top:10px;">
+        <!--ko if:picture -->
+        <div class="pull-left" data-bind="ifnot:hasVideo">
+            <a data-bind="attr:{href : link.src}" target="_blank" class="external_link">
+                <img class="img-polaroid" alt="Post Picture Preview" data-bind="attr:{src:picture}" src="" style="width:110px" />
+            </a>
+            <small class="centralize text-center" style="display:block">
+                <a target="_blank" data-bind="attr:{href:link.provider.url}, html:providerInfo" style="color:#bbb" href="#" ></a>
+            </small>
+        </div> <!-- listings thumbnail -->
+        <!--/ko-->
+        <div class="contentBottom media-body media-details">
+            <!--ko if:hasVideo() && !isEmbeddedVideo()-->
+            <div style="margin-bottom: 5px;display:block" class="thumbnail videoPreview">
+                <a data-bind="attr:{href:link.src}, html:getVideoThumbnail(), click:embedVideo" target="_blank" class="external_link"></a>
+                <span class="thumbLinks"><a target="_blank" data-bind="attr:{href : link.provider.url}, html:providerInfo"></a>
+                </span>
+            </div>
+            <!--/ko-->
+            <!--ko if:isEmbeddedVideo-->
+            <div class="iframeLoadingOverlay" data-bind="visible:$data.isLoadingIframe">
+                <i class="icon-spinner icon-spin icon-3x inverted"></i>
+            </div>
+            <div class="videoEmbed" data-bind="getHtml:isEmbeddedVideo"></div>
+            <!--/ko-->
+
+            <!--ko if:!isEmbeddedRich() && hasRich()-->
+            <a href="#" data-bind="title:'View this document here',click:embedDoc, placement:'bottom', html:getRichThumbnail()" style="width:110px;height:110px;display:block;z-index:10">
+            </a>
+            <!--/ko-->
+            <!--ko if:isEmbeddedRich-->
+            <div class="iframeLoadingOverlay" data-bind="visible:$data.isLoadingIframe">
+                <i class="icon-spinner icon-spin icon-3x inverted"></i>
+
+            </div>
+            <div data-bind="getHtml:isEmbeddedRich"></div>
+            <!--/ko-->
+
+            <p class="thumbPostDesc">
+                <a data-bind="attr:{href:link.src}, text:link.name || 'Link'" target="_blank" class="external_link"></a>
+                <!--ko if: link.provider && link.provider.name--> -  <small class="muted">
+                    <a data-bind="attr:{href:link.provider.url}, text:link.provider.name" style="color:#bbb" href="#" ></a>
+                </small>
+        <!--/ko-->
+            <br>
+                <span data-bind="text:link.description"></span>
+            </p>
+        </div> <!-- listings content -->
+    </article>
+    <!--/ko-->
+</script>
+<script type="text/html" id="testimonial">
+    <span></span>
+</script>
+<script type="text/html" id="regular">
+    <article class="postFeed media relative" data-bind="attr:{id : _id}, event: {mouseover: showPostSettings, mouseleave: hidePostSettings}, css:{private:privacy.is() === 'PRIVATE'},slideIn:hasHidden">
+        <!--ko if:interactable-->
+        <label class="muted" style="position:absolute;right:5px;top:0;font-size:9px" data-bind="text:privacy.is, visible:!postSettings()"></label>
+        <div class="postSettings" data-bind="visible:postSettings">
+            <!--ko if : is_owner-->
+            <div class="btn-group">
+                <button class="btn btn-mini"  data-bind="
+                        css:{active:privacy.is() === 'PUBLIC'},
+                        click:$root.performAction.bind($data, 'privacy', 'PUBLIC'),
+                        title:'Make this Public. This post will be visible to everyone',
+                        disable:$data.isDefaultAlbum">
+                    <i class="icon-eye-open"></i></button>
+                <button class="btn btn-mini"  data-bind="
+                        css:{active:privacy.is() === 'PRIVATE'},
+                        click:$root.performAction.bind($data, 'privacy', 'PRIVATE'),
+                        title:'Make this Private.<br><span class=\'text-warning\'><strong>*</strong>People already participating in this post will still see this post even if made private.</strong></span>',
+                        disable:$data.isDefaultAlbum">
+                    <i class="icon-eye-close"></i></button>
+            </div>
+            <!--/ko-->
+            <div class="btn-group">
+                <button class="btn dropdown-toggle btn-mini" data-toggle="dropdown" data-bind="disable:$data.isDefaultAlbum"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <!--ko ifnot : is_owner-->
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#"><i class="icon-exclamation-sign"></i>&nbsp;Report Post</a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="-1" href="#">Post is abusive</a></li>
+                            <li><a tabindex="-1" href="#">Post is spam/duplicated</a></li>
+                            <li></li>
+                        </ul>
+                    </li>
+                    <!--/ko-->
+                    <!--ko if:isPostDeleteable() || isPostHideable()--><li class="divider"></li><!--/ko-->
+                    <!--ko if: isPostDeleteable-->
+                    <li><a href="#" data-bind="click:$root.performAction.bind($data, 'delete')"><i class="icon-trash"></i>&nbsp;Delete Post</a></li>
+                    <!--/ko-->
+                    <!--ko if: isPostHideable-->
+                    <li><a href="#" data-bind="click:hide"><i class="icon-ban-circle"></i>&nbsp;Hide Post</a></li>
+                    <!--/ko-->
+                </ul>
+            </div>
+        </div> <!-- post settings -->
+        <!--/ko-->
+        <div class="pull-left hidden-phone">
+            <span style="width:60px">
+                <a href="#" data-bind="attr:{title:user.name}" class="drop-shadow curved">
+                    <img style="width:60px; height:60px;" data-bind="getAvatar : {context:$data.user, size:60}, attr:{alt:user.name}" width="60" height="60">
+                </a>
+            </span>
+        </div> <!-- post profile thumb -->
+        <div class="media-body">
+            <div class="postTitle">
+                <!--ko if:isTestimonial() && status() !== 'active'-->
+                <small class="postStatusInfoLabel" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></small>
+                <!--/ko-->
+                    <div style="width:40px;float:left;margin-right:2%" class="visible-phone">
+                        <a href="#" data-bind="attr:{title:user.name}" class="drop-shadow curved">
+                            <img style="width:40px; height:40px;" data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40" height="40">
+                        </a>
+                    </div> <!-- phone profile thumb -->
+                <a data-bind="
+                   attr:{href : '/' + user._id()},
+                   title: 'View ' + user.name() + '\'s Profile',
+                   text:user.name,
+                   qtip: RTApp.getUserHoverCard" class="personHoverCard"></a>&nbsp;<span data-bind="html:generated_title"> </span> <small class="muted"><time data-bind="timeago:created"></time></small>
+                <!--ko if : type() === 'wallpost' || type() === 'post'--><p data-bind="html:content" class="post-content"></p></span><!--/ko-->
+                <!--ko if:type() === 'testimonial'-->
+                <div class="clearfix" style="margin:10px auto">
+                    <blockquote>
+                        <p data-bind="html:content"></p>
+                        <small><cite data-bind="text:user.name"></cite></small>
+                    </blockquote>
+                </div>
+                <!--/ko-->
+            </div> <!-- post Title -->
+            <!--ko template:getTemplate()--><!--/ko-->
+            <!--ko if:!$data.hasOwnProperty('isDefaultAlbum')-->
+            <!--ko template:'postActionLinks'--><!--/ko-->
+            <!--ko template:{name:'postComments',if:showCommentBox() && !isTestimonial()}--><!--/ko-->
+            <!--/ko-->
+        </div>
+    </article> <!-- one_post-->
+</script>
+<script type="text/html" id="postActionLinks">
+    <div class="postActions">
+        <!--ko if : status() === 'active'-->
+        <ul class="postActionButtons">
+            <!--ko if:interactable-->
+            <!--ko ifnot:isTestimonial-->
+            <li class="hasActiveState" data-bind="hoverClass: 'hovering'">
+                <a data-bind="attr:{href : '#' + _id} , title:'This feature is not enabled yet'"><i class="action20 share"></i></a></li>
+            <li class="hasActiveState" data-bind="if:isSubscribable, css:{active:subscribing},hoverClass: 'hovering'">
+                <a class="subscribe-link"  href="#" class="subscribe-link" data-bind="title:subscribeTitle"><i class="action20 subscribe"></i></a></li>
+            <!--/ko-->
+            <li class="hasActiveState" data-bind="css:{active:liking},hoverClass: 'hovering'">
+                <a class="like-link" href="#"  class="like-link" data-bind="title:likeTitle"><i class="action20 like"></i></a></li>
+            <!--/ko-->
+        </ul>
+        <!--/ko-->
+
+        <ul class="postActionInfo" data-bind="if:$data.connections">
+            <li data-bind="ifnot:isTestimonial,hoverClass: 'hovering'">
+                <a  data-bind="attr:{href :uri}, click : getComments, title:'See more comments'" class="likerHoverCard"><i class="action16 comments"></i><small class="muted" data-bind="text:currentCommentCount"></small><small class="muted" data-bind="text: ' of ' + counts.comments()"></small></a>
+            </li>
+            <li data-bind="ifnot:isTestimonial,hoverClass: 'hovering'">
+                <a  data-bind="attr:{href :'/subscribers'}, title:'See subscribers'" class="subscriberHoverCard"><i class="info16 people"></i><small class="muted" data-bind="text:counts.subscribers"></small>
+                </a></li>
+            <li data-bind="hoverClass: 'hovering'">
+                <a data-bind="attr:{href :'/likers'}, title:'See likes'" class="likerHoverCard"><i class="action16 likeSmall"></i><small class="muted" data-bind="text:counts.likers"></small>
+                </a></li>
+        </ul>
+    </div> <!-- post action links -->
+</script>
+<script type="text/html" id="editMode">
+    <article class="postFeed editMode" data-bind="css:cssParentClassesForReceived">
+        <div class="dropdown postSettings" data-bind="css:cssOptionsClassesForReceived">
+            <div class="pull-left">
+                <label class="label" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></label>
+            </div>
+            <div class="pull-right">
+                <div class="btn-group">
+                    <button class="btn btn-mini small-caps" data-bind="click:approval, enable:status() !== 'trash'">
+                        <i class="icon-ok" data-bind="css:{'icon-remove':status() === 'active', 'icon-ok':status() === 'pending'}"></i>
+                        <span data-bind="text:status() === 'active' ? 'UnApprove' : 'Approve'"></span>
+                    </button>
+                    <!--<button class="btn btn-mini" data-bind="css:{active:status() === 'active'}">Archive</button>-->
+                    <button class="btn btn-mini btn-inverse small-caps" data-bind="css:{active:status() === 'trash'}, click:trash">
+                        <i class="icon-trash icon-white"></i></button>
+                </div>
+            </div>
+        </div> <!-- post settings -->
+        <div class="feedProfileThumbs thumbnails">
+            <span class="mediumNail">
+                <a href="#" class="thumbnail" data-bind="attr:{title:user.name}">
+                    <img class="img-polaroid"  data-bind="getAvatar : {context:$data.user, size:90}, attr:{alt:user.name}" width="50" height="50">
+                </a>
+            </span>
+        </div> <!-- post profile thumb -->
+        <div class="postTitle">
+            <a  data-bind="attr:{href : '/' + user._id()}, title: 'View ' + user.name() + '\'s Profile', text:user.name" class="personHoverCard"></a>&nbsp;<span data-bind="html:generated_title"></span>
+            <blockquote>
+                <p data-bind="html:content"></p>
+                <small><cite data-bind="text:user.name"></cite></small>
+            </blockquote>
+            <small class="muted"><time data-bind="timeago:created"></time></small>
+        </div> <!-- post Title -->
+    </article>
+</script>
+<script type="text/html" id="postComments">
+    <div class="indentedComment widgetOuterBox">
+        <ul class="commentList commentBG" data-bind="attr:{id : 'forPost' + _id()}">
+            <!--ko if : comments().length-->
+            <!--ko foreach : comments-->
+            <li class="commentBG commentContentArea" data-bind="
+                event: {mouseover: showCommentOptions, mouseleave: hideCommentOptions},
+                slideIn:hasMore,
+                css:{contentNoBottom:($index() === ($parent.comments().length - 1))}">
+                <div class="commentInline">
+                    <button class="close" type="button" style="display:none" data-bind="visible:commentOptions, click:$parent.deleteComment">&times;</button>
+                    <div class="media">
+                        <div class="commentThumb visible-desktop pull-left">
+                            <img data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40px" height="40px">
+                        </div>
+                        <div class="commentBody media-body">
+                            <div class="commentThumb hidden-desktop" style="float:left;margin-right:2%">
+                                <img data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40px" height="40px">
+                            </div>
+                            <a class="commentAuthor personHoverCard" data-bind="attr:{href : '/' + user._id()}, text:user.name"></a>
+                            <p style="display: inline;" data-bind="html:content"></p>&nbsp;&nbsp;
+                            <span class="commentInfo" style="display: inline">
+                                <small class="muted"><time data-bind="timeago:created"></time></small>
+                                <!--ko if: $data.interactions-->
+                                <span class="commentActions hasActiveState" data-bind="css:{active:interactions.like},hoverClass: 'hovering'">
+                                    <a href="#" class="like-link"><i class="action16 likeSmall"></i></a>
+                                </span>
+                                <!--/ko-->
+                                <span class="commentActions">
+                                    <a href="#" class="likerHoverCard"><span data-bind="text:counts.likers"></span></a>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div> <!-- comment inline -->
+            </li> <!-- comment -->
+            <!--/ko-->
+            <!--/ko-->
+            <!--ko if:RTApp.user() && canComment() && !isTestimonial()-->
+            <li class="commentForm commentBG contentNoBottom commentContentArea">
+                <div class="commentInline">
+                    <div class="media" style="overflow-y:visible !important;">
+                        <div class="commentThumb" style="float:left;margin-right:2%">
+                            <img data-bind="getAvatar:{context:RTApp.user, size:40}, attr:{alt:RTApp.user().name}" width="40px" height="40px" />
+                        </div>
+                        <div class="commentTextarea">
+                            <button class="close" type="button" data-bind="click:destroyComment, visible:commentSubmit">&times;</button>
+                            <form action="" style="width:100%" method="post" class="comment-form">
+                                <textarea data-bind="click:showCommentSubmit, value:commentText, expand:true, valueUpdate:'afterkeydown'" class="commentInput contentArea expand20-200" placeholder="Your comment" style="width:95%"></textarea>
+                            </form>
+                        </div>
+                    </div>
+                    <!--ko if : commentSubmit-->
+                    <div style="text-align: right;margin-bottom:5px;padding-right:0" class="clearfix" >
+                        <div class="btn-toolbar pull-right" style="margin:0">
+<!--                            <div class="btn-group">
+                                <button name="privateMessage" data-bind="click:RTApp.performAction.bind($data, 'message'), enable:commentText" class="btn btn-small" >Private Message</button>
+                            </div>-->
+                            <div class="btn-group">
+                                <button name="comment" data-bind="click:RTApp.performAction.bind($data, 'comment'), enable:commentText" class="btn btn-info btn-small" >Comment</button>
+                            </div>
+                        </div>
+                    </div><!-- form-submit -->
+                    <!--/ko-->
+                </div> <!-- comment inline -->
+            </li> <!-- comment form-->
+            <!--/ko-->
+        </ul> <!-- comments -->
+    </div> <!-- comment OuterBox-->
+</script>
+<script type="text/html" id="undoTemplate">
+    <div class="alert">
+        <!--ko if:isHidden-->
+        <i class="icon-exclamation-sign"></i>&nbsp;You have hidden a post from your profile page.
+        <a href="#" class="text-center text-info" data-bind="click:unhide">undo</a>
+        <!--/ko-->
+        <!--ko if:isReported-->
+        <i class="icon-exclamation-sign"></i>&nbsp;Thank you for your feedback, this post is now hidden from your profile
+        <a href="#" class="text-center text-info" data-bind="click:unhide">undo report</a>
+        <!--/ko-->
+        <!--ko if:isTrashed-->
+        <i class="icon-exclamation-sign"></i>&nbsp;You have trashed this post and it is now hidden from your profile.
+        <a href="#" class="text-center text-info" data-bind="click:trash">undo trash</a>
+        <!--/ko-->
+        <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'This option disappears if you navigate away from this page or apply any filters.'">?</a>
+    </div>
+</script>
+<script type="text/html" id="conversation">
+    <li style="padding :0;margin: 0" class="alert alert-success">
+        <a class="messageContent">
+            <div class="media clearfix" style="margin-bottom: 0">
+                <span class="pull-left">
+                    <img alt="LoginThumb" width="35" height="35" src="" data-bind="getAvatar : {context : $data, size : 40}">
+                </span>
+                <div class="media-body">
+                    <h6 class="media-header" data-bind="text:user.name"></h6>
+                    <small class="text-left span3" style="margin: 0" data-bind="text: excerpt"></small>
+                </div>
+            </div>
+        </a>
+    </li>
+    <li class="divider" style="padding:0;margin:0"></li>
+</script>

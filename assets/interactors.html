@@ -1,0 +1,55 @@
+<section id="interactors">
+    <header class="titleBar">
+        <div class="contentArea titleBarBG">
+            <button type="button" class="close" aria-hidden="true" data-bind="click:hide">&times;</button>
+            <h6>People </h6>
+        </div>
+    </header>
+    <div class="contentArea">
+        <div class="centralize relative" data-bind="visible:!items().length">
+            <i class="icon-spinner icon-spin icon-3x" style="position:absolute;top:100px;color:#ccc;margin:0 auto;padding:0;left:140px"></i>
+        </div>
+        <ul class="media-list" id="interactorList" style="height:350px" data-bind="scroll:true">
+            <!--ko serverForEach: {name:'interactor', foreach: items, afterRender:resize}-->
+            <!--/ko-->
+            <li>
+                <div id="moreInteractors" style="text-align:center;margin:0 auto;padding:10px">
+                    <small data-bind="visible:total() === items().length">There is nothing more to show</small>
+                    <!--<a href="#" style="display:none" data-bind="hasMore() && !isGettingNext(), click:getNextPage">Show More</a>-->
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>
+<script type="text/html" id="interactor">
+    <li class="media">
+        <span class="pull-left"></span>
+        <div class="pull-left">
+            <a href="#" data-bind="attr:{title:name}">
+                <img data-bind="getAvatar : {context:$data, size:40},alt:{title:name}" width="40" height="40">
+            </a>
+        </div>
+        <div class="media-body">
+            <h5 class="media-heading smaller">
+                <a data-bind="attr:{href : '/' + _id()}, title:'See ' + name() + '\'s Profile', text:name, qtip:RTApp.getUserHoverCard" class="personHoverCard"></a>&nbsp;
+                <br>
+                <a href="#" databind="with:roles">
+                    <small class="muted" data-bind="text:(roles.indexOf('admin')!==-1) ? 'Realt Staff': 'Realt ' + roles()[0].ucfirst()"></small>
+                </a>
+            </h5>
+            <!--ko if:interactable-->
+            <div class="postActions clearfix">
+                <ul class="postActionButtons">
+                    <li class="hasActiveState" data-bind="if:isSubscribable, css:{active:subscribing}, hoverClass: 'hovering'">
+                        <a  class="subscribe-link" href="#" data-bind="title:(subscribing() ? 'Stop Subscribing to ' : 'Subscribe to ') + name() + '\'s Activity'"><i class="action16 subscribe"></i></a>
+                    </li>
+                    <li class="hasActiveState" data-bind="css:{active:liking}, hoverClass: 'hovering'">
+                        <a class="like-link"  data-bind="title:(liking() ? 'Stop Liking ' : 'Like ') + name() + '\'s Profile'" href="#"><i class="action16 likeSmall"></i></a>
+                    </li>
+                </ul>
+            </div>
+            <!--/ko-->
+            <!-- postActions -->
+        </div>
+    </li>
+</script>

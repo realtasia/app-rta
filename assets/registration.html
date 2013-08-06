@@ -1,0 +1,321 @@
+<div class="" id="tokenBox">
+    <section class="RTAWindow">
+        <header class="titleBar">
+            <div class="contentArea titleBarBG">
+                <button type="button" class="close" aria-hidden="true" data-bind="click : hide">&times;</button>
+                <h6>Registration</h6>
+            </div>
+        </header>
+        <section class="RTAWindowContainer">
+            <section class="folderView">
+                <ul class="nav nav-pills nav-stacked">
+                    <li data-bind="css : {active : currentState() !== 'interest'}, click : setTokenState"><a href="#">Register</a></li>
+                    <!--ko if: !ajaxLoaded()-->
+                    <li data-bind="css : {active : currentState() === 'interest'}, click : setInterestState"><a href="#">Join Beta</a></li>
+                    <!--/ko-->
+                </ul>
+            </section>
+            <section class="RTAWindowContent hasLeftBar" style="padding:10px">
+                <div class="contentArea introBox">
+                    <p style="margin: 0" data-bind="visible : currentState() !== 'interest'"> If you've already joined the Beta Program, please be patient as we are still testing the system with a 100 randomly selected users at a time. We extend this to another 100 each week.
+                    </p>
+                    <p style="margin: 0" data-bind="visible : currentState() === 'interest'"> Join the program and we'll invite you during our next beta cycle. <br />We need a valid mobile phone number for verification. Please fill in all fields & have your mobile phone with you.
+                    </p>
+                    <hr>
+                    <!--ko if : currentState() === 'token'-->
+                    <form class="form-horizontal">
+                        <p class="muted">Please enter your Beta Key. We'll use your mobile number to retrieve your details.</p>
+                        <div class="control-group" data-bind="validationElement: betaKey">
+                            <label class="control-label" for="betaKey">Beta Key</label>
+                            <div class="controls">
+                                <input type="text" autocomplete="off" id="betaKey" placeholder="Your given key" data-bind="value : betaKey,valueUpdate: 'afterkeydown'">
+                                <span class="help-block" data-bind="validationMessage: betaKey"></span>
+                            </div>
+                        </div>
+                        <div class="control-group" data-bind="validationElement: mobile">
+                            <label class="control-label" for="mobile">Mobile</label>
+                            <div class="controls">
+                                <div class="input-prepend input-append" style="width:83%">
+                                    <span class="add-on">+65</span>
+                                    <input type="text" autocomplete="off" id="mobile" placeholder="Enter your mobile number" data-bind="value : mobile,valueUpdate: 'afterkeydown'">
+                                    <span class="add-on">
+                                        <img src="/images/16.gif" style="display:none" id="phoneLoading" />
+                                    </span>
+                                </div>
+                                <span class="help-block" data-bind="validationMessage: mobile"></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <button class="btn btn-inverse" data-bind="click:showRegForm, css :{disabled : !isKeyAuthenticated() && !mobile.isValid()}">
+                                    <span>Continue</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!--ko if: !ajaxLoaded()-->
+                        <a class="pull-right" href="#" data-bind="click : setInterestState">I don't have a beta key.</a>
+                        <!--/ko-->
+                    </form>
+                    <!--/ko-->
+                    <!--ko if : currentState() === 'reg'-->
+                    <form class="form-horizontal" id="registrationDiv">
+                        <p class="muted" data-bind="ifnot:VM.isError && ajaxLoaded">Please fill in your details</p>
+                        <p class="muted" data-bind="if:ajaxLoaded">Welcome back, <span data-bind="text: first_name"></span>. Please fill in a few more details</p>
+                        <!--ko ifnot: isAgentForm-->
+                            <!--ko ifnot: ajaxLoaded-->
+                                <p class="text-error" data-bind="visible: VM.isError">
+                                    <strong data-bind="text: VM.ajaxData().message"></strong>
+                                </p>
+                                <div class="control-group" data-bind="validationElement: first_name">
+                                    <label class="control-label" for="first_name">First Name</label>
+                                    <div class="controls">
+                                        <input type="text" autocomplete="off" id="first_name" placeholder="Enter your first name" data-bind="value : first_name,valueUpdate: 'afterkeydown'">
+                                        <span class="help-block" data-bind="validationMessage: first_name"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group" data-bind="validationElement: last_name">
+                                    <label class="control-label" for="last_name">Last Name</label>
+                                    <div class="controls">
+                                        <input type="text" autocomplete="off" id="last_name" placeholder="Enter your last name" data-bind="value : last_name,valueUpdate: 'afterkeydown'">
+                                        <span class="help-block" data-bind="validationMessage: last_name"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group" data-bind="validationElement: username">
+                                    <label class="control-label" for="username">Username</label>
+                                    <div class="controls">
+                                        <div class="input-prepend input-append" style="width:58.3%">
+                                            <span class="add-on" style="color:#999">realtasia.com.sg/</span>
+                                            <input type="text" autocomplete="off" style="font-weight: bold" id="username" placeholder="Your very own URL" data-bind="value : username,valueUpdate: 'afterkeydown'">
+                                            <span class="add-on">
+                                                <img src="/images/16.gif" style="display:none" id="usernameLoading" />
+                                            </span>
+                                        </div>
+                                        <span class="help-block" data-bind="validationMessage: username"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group" data-bind="validationElement: email">
+                                    <label class="control-label" for="email">Email</label>
+                                    <div class="controls">
+                                        <div class="input-append" style="width:93%">
+                                            <input type="text" autocomplete="off" id="email" placeholder="Enter your email address" data-bind="value : email,valueUpdate:'afterkeydown'">
+                                            <span class="add-on">
+                                                <img src="/images/16.gif" style="display:none" id="emailLoading" />
+                                            </span>
+                                        </div>
+                                        <span class="help-block" data-bind="validationMessage: email,valueUpdate: 'blur'"></span>
+                                    </div>
+                                </div>
+                            <!--/ko-->
+                            <div class="control-group" data-bind="validationElement: password">
+                                <label class="control-label" for="password">Password</label>
+                                <div class="controls">
+                                    <input type="password" id="password" placeholder="Enter a password" data-bind="value : password,valueUpdate: 'afterkeydown'">
+                                    <span class="help-block" data-bind="validationMessage: password"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" data-bind="validationElement: confirmPassword">
+                                <label class="control-label" for="confirmPassword">Confirm Password</label>
+                                <div class="controls">
+                                    <input type="password" id="confirmPassword" placeholder="Confirm your password" data-bind="value : confirmPassword,valueUpdate: 'afterkeydown'">
+                                    <span class="help-block" data-bind="validationMessage: confirmPassword"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" data-bind="validationElement: birthday">
+                                <label class="control-label" for="birthday">Birthday</label>
+                                <div class="controls">
+                                    <input size="16" readonly="readonly" id="birthday" data-bind="datepicker: birthday, datepickerOptions : {changeMonth : true, changeYear : true, yearRange : '1920:2012', dateFormat: 'dd-M-y'}" type="text">
+                                    <span class="help-block" data-bind="validationMessage: birthday"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" data-bind="validationElement: gender">
+                                <label class="control-label" for="gender">Gender</label>
+                                <div class="controls">
+                                    <label class="radio inline ">
+                                        <input type="radio" name="gender" id="genderMale" value="male" data-bind="checked: gender"> Male
+                                    </label>
+                                    <label class="radio inline ">
+                                        <input type="radio" name="gender" id="genderFemale" value="female" data-bind="checked: gender"> Female
+                                    </label>
+                                </div>
+                            </div>
+                            <!--ko if : user_type() === 'agent'-->
+                                <div class="control-group" data-bind="validationElement: company">
+                                    <label class="control-label" for="company">Company</label>
+                                    <div class="controls">
+                                        <input type="text" autocomplete="off" id="company" placeholder="Enter your company name" data-bind="value : companyLabel, autoComplete : { source: getCompany, select: addCompany, change:resetCompany, delay: 500, minLength: 2 }">
+                                        <span class="help-block" data-bind="validationMessage: company"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group" data-bind="validationElement: designation">
+                                    <label class="control-label" for="designation">Designation</label>
+                                    <div class="controls">
+                                        <input type="text" autocomplete="off" id="designation" placeholder="Enter your designation" data-bind="value : designation,valueUpdate: 'afterkeydown'">
+                                        <span class="help-block" data-bind="validationMessage: designation"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group" data-bind="validationElement: license">
+                                    <label class="control-label" for="license">License</label>
+                                    <div class="controls">
+                                        <input type="text" autocomplete="off" id="license" placeholder="Enter your cea license" data-bind="value : license,valueUpdate: 'afterkeydown'">
+                                        <span class="help-block" data-bind="validationMessage: license"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <button class="btn btn-inverse" data-bind="click:submitRegistration, css :{disabled : !regFormValid()}"><span>Finish</span></button>
+                                        <span><img src="/images/16.gif" style="display:none" id="preloadedAgentComplete" /></span>
+                                    </div>
+                                </div>
+                            <!--/ko-->
+                            <!--ko if : user_type() === 'user'-->
+                                <div class="control-group">
+                                <div class="controls">
+                                    <button class="btn btn-inverse" data-bind="click:showAgentForm, css :{disabled : !regNoUserFormValid()}"><span>Continue</span></button>
+                                </div>
+                            </div>
+                            <!--/ko-->
+                        <!--/ko-->
+                        <!--ko if: isAgentForm-->
+                        <div class="control-group">
+                            <div class="controls"><label class="checkbox">
+                                    <input value="agent" data-bind="checked : checkUser" type="checkbox" /> Click if you are a Real Estate Agent.</label>
+                                <small class="muted">Tip: Licensed agents can create listings.</small>
+                            </div>
+                        </div>
+                            <!--ko if : user_type() === 'user'-->
+                                <div class="control-group">
+                                <div class="controls">
+                                    <button class="btn btn-inverse" data-bind="click:submitRegistration, css :{disabled : !regNoUserFormValid()}"><span>I'm not an Agent, finish Registration.</span></button>
+                                    <span><img src="/images/16.gif" style="display:none" id="agentFormUserComplete" /></span>
+                                </div>
+                            </div>
+                            <!--/ko-->
+                            <!--ko if : user_type() === 'agent'-->
+                                <div class="control-group" data-bind="validationElement: company">
+                                    <label class="control-label" for="company">Company</label>
+                                    <div class="controls">
+                                        <input type="text" autocomplete="off" id="company" placeholder="Enter your company name" data-bind="value : companyLabel, autoComplete : { source: getCompany, select: addCompany, change:resetCompany, delay: 500, minLength: 2 }">
+                                        <span class="help-block" data-bind="validationMessage: company"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group" data-bind="validationElement: designation">
+                                    <label class="control-label" for="designation">Designation</label>
+                                    <div class="controls">
+                                        <input type="text" autocomplete="off" id="fdesignation" placeholder="Enter your designation" data-bind="value : designation,valueUpdate: 'afterkeydown'">
+                                        <span class="help-block" data-bind="validationMessage: designation"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group" data-bind="validationElement: license">
+                                    <label class="control-label" for="license">License</label>
+                                    <div class="controls">
+                                        <input type="text" autocomplete="off" id="flicense" placeholder="Enter your cea license" data-bind="value : license,valueUpdate: 'blur'">
+                                        <span class="help-block" data-bind="validationMessage: license"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <button class="btn btn-inverse" data-bind="click:submitRegistration, css :{disabled : !regFormValid()}"><span>Finish</span></button>
+                                        <span><img src="/images/16.gif" style="display:none" id="agentFormAgentComplete" /></span>
+                                    </div>
+                                </div>
+                            <!--/ko-->
+                        <!--/ko-->
+                    </form>
+                    <!--/ko-->
+                    <!--ko if : currentState() === 'interest' && !ajaxLoaded() -->
+                    <form class="form-horizontal">
+                        <p class="muted">Please fill in your details.</p>
+                        <div class="control-group" data-bind="validationElement: first_name">
+                            <label class="control-label" for="first_name">First Name</label>
+                            <div class="controls">
+                                <input type="text" autocomplete="off" id="ifirst_name" placeholder="Enter your first name" data-bind="value : first_name,valueUpdate: 'afterkeydown'">
+                                <span class="help-block" data-bind="validationMessage: first_name"></span>
+                            </div>
+                        </div>
+                        <div class="control-group" data-bind="validationElement: last_name">
+                            <label class="control-label" for="last_name">Last Name</label>
+                            <div class="controls">
+                                <input type="text" autocomplete="off" id="ilast_name" placeholder="Enter your last name" data-bind="value : last_name,valueUpdate: 'afterkeydown'">
+                                <span class="help-block" data-bind="validationMessage: last_name"></span>
+                            </div>
+                        </div>
+                        <div class="control-group" data-bind="validationElement: username">
+                            <label class="control-label" for="username">Username</label>
+                            <div class="controls">
+                                <div class="input-prepend input-append" style="width:58.3%">
+                                    <span class="add-on" style="color:#999">realtasia.com.sg/</span>
+                                    <input type="text" autocomplete="off" style="font-weight: bold" id="iusername" placeholder="Your very own URL" data-bind="value : username,valueUpdate: 'afterkeydown'">
+                                    <span class="add-on">
+                                        <img src="/images/16.gif" style="display:none" id="iusernameLoading" />
+                                    </span>
+                                </div>
+                                <span class="help-block" data-bind="validationMessage: username"></span>
+                            </div>
+                        </div>
+                        <div class="control-group" data-bind="validationElement: email">
+                            <label class="control-label" for="email">Email</label>
+                            <div class="controls">
+                                <div class="input-append" style="width:93%">
+                                    <input type="text" autocomplete="off" id="iemail" placeholder="Enter your email address" data-bind="value : email,valueUpdate: 'afterkeydown'">
+                                    <span class="add-on">
+                                        <img src="/images/16.gif" style="display:none" id="iemailLoading" />
+                                    </span>
+                                </div>
+                                <span class="help-block" data-bind="validationMessage: email"></span>
+                            </div>
+                        </div>
+                        <div class="control-group" data-bind="validationElement: mobile">
+                            <label class="control-label" for="imobile">Mobile</label>
+                            <div class="controls">
+                                <div class="input-prepend input-append" style="width:84.1%">
+                                    <span class="add-on">+65</span>
+                                    <input type="text" autocomplete="off" id="imobile" placeholder="Enter your mobile number" data-bind="value : mobile,valueUpdate: 'afterkeydown'">
+                                    <span class="add-on">
+                                        <img src="/images/16.gif" style="display:none" id="iphoneLoading" />
+                                    </span>
+                                </div>
+                                <span class="help-block" data-bind="validationMessage: mobile"></span>
+                            </div>
+                        </div>
+                        <!--ko if : mobileVerify-->
+                        <div class="control-group info" data-bind="validationElement: smstoken">
+                            <label class="control-label" for="ismstoken">SMS Token</label>
+                            <div class="controls">
+                                <div class="input-append" style="width:93%">
+                                    <input type="text" autocomplete="off" id="ismstoken" placeholder="Enter 4-digit token sent to your phone" data-bind="value : smstoken,valueUpdate: 'afterkeydown'">
+                                    <span class="add-on">
+                                        <img src="/images/16.gif" style="display:none" id="iverifyLoading" />
+                                    </span>
+                                </div>
+                                <span class="help-block" data-bind="validationMessage: smstoken"></span>
+                            </div>
+                        </div>
+                        <!--/ko-->
+                        <div class="control-group" data-bind="validationElement: message">
+                            <label class="control-label" for="message">Message</label>
+                            <div class="controls">
+                                <textarea id="message" rows="1" placeholder="How did you find out about us?" data-bind="value : message,valueUpdate: 'afterkeydown'"></textarea>
+                                <span class="help-block" data-bind="validationMessage: message"></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls"><label class="checkbox">
+                                    <input value="agent" data-bind="checked : checkUser" type="checkbox" /> Click if you are a Real Estate Agent.</label>
+                                <small class="muted">Tip: Licensed agents can create listings.</small>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <button class="btn btn-inverse" data-bind="click:submitInterest, css :{disabled : !interestFormValid()}"><span>Finish</span></button>
+                                <span>
+                                    <img src="/images/16.gif" style="display:none" id="rtInterestLoader" />
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <!--/ko-->
+                </div>
+            </section>
+        </section>
+    </section>
+</div>

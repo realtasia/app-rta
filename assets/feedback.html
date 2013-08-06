@@ -1,0 +1,54 @@
+<section data-bind="feedbackAnimate: visibility">
+    <div id="feedbackBG"></div>
+    <div id="feedbackForm">
+        <div data-bind="css:{dropdown:RTApp.isSmallerThanTablet}">
+            <a data-bind="visible:RTApp.isSmallerThanTablet" class="dropdown-toggle alert alert-info shadow" data-toggle="dropdown" href="#"><span data-bind="text: selectedOption().ucfirst()"></span><b class="caret"></b></a>
+            <ul class="responsiveMenu" role="menu" aria-labelledby="feedBackType" data-bind="css:{'dropdown-menu':RTApp.isSmallerThanTablet, 'nav nav-tabs':RTApp.isTabletOrLarger}">
+                <li data-bind="css:{active: selectedOption()==='compliment'}"><a data-bind="click: selectOption.bind($data,'compliment')" href="#">Compliment</a></li>
+                <li data-bind="css:{active: selectedOption()==='question'}"><a data-bind="click: selectOption.bind($data,'question')" href="#">Have a question?</a></li>
+                <li data-bind="css:{active: selectedOption()==='idea'}"><a data-bind="click: selectOption.bind($data,'idea')" href="#">Have an idea?</a></li>
+                <li data-bind="css:{active: selectedOption()==='problem'}"><a data-bind="click: selectOption.bind($data,'problem')" href="#">Report a problem</a></li>
+            </ul>
+        </div>
+        <div id="feedbackWrap">
+            <form id="theFeedBackForm">
+                <div class="contentArea">
+                    <button class="btn btn-inverse pull-right" style="margin:0 20px 0 0" data-bind="click: submit">Submit</button>
+                    <fieldset data-bind="flash: selectedOption()==='compliment'">
+                        <legend>Share a compliment.</legend>
+                        <label><b>Go ahead, make us smile. :)</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Share with us how we are doing, we really appreciate it.'">?</a></label>
+                        <textarea data-bind="expand:true, value: reportOne" placeholder="Please provide as much detail as you can"></textarea>
+                    </fieldset>
+                    <fieldset data-bind="flash: selectedOption()==='question'">
+                        <legend>Ask a question</legend>
+                        <label><b>Please be as detailed as possible.</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'We will post this question to one of our administrators, and will reply to you via email.'">?</a></label>
+                        <textarea data-bind="expand:true, value: reportOne" placeholder="Please provide as much detail as you can"></textarea>
+                    </fieldset>
+                    <fieldset data-bind="flash: selectedOption()==='idea'">
+                        <legend>Share an idea</legend>
+                        <label><b>Tell us more!</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Do share your idea with us, we will keep you updated.'">?</a></label>
+                        <textarea data-bind="expand:true, value: reportOne" placeholder="Please provide as much detail as you can"></textarea>
+                    </fieldset>
+                    <fieldset data-bind="flash: selectedOption()==='problem'">
+                        <legend>Report a problem</legend>
+                        <label><b>What were you doing / intended to do</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Please tell us, with as much detail as possible, what exactly you were doing.'">?</a></label>
+                        <textarea data-bind="expand:true, value: reportOne" placeholder="Please provide as much detail as you can"></textarea>
+                        <label><b>What happened / did not happen</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Please tell us, with as much detail as possible, what happened instead.'">?</a></label>
+                        <textarea data-bind="expand:true, value: reportTwo" placeholder="Please provide as much detail as you can"></textarea>
+                        <br>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="optionRefresh" data-bind="checked: optionRefresh" checked>Still occurs even after refreshing the page.
+                        </label>
+                        <br>
+                        <label class="checkbox inline">
+                            <input type="checkbox" name="optionSignout" data-bind="checked: optionSignout" checked>Still occurs even if I sign out and in.
+                        </label>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+        <a href="#" id="feedbackButton" class="btn btn-primary rotate" data-bind="
+           click: toggle,
+           text: visibility() ? 'Close This' : 'Feedback'">Feedback</a>
+    </div>
+</section>

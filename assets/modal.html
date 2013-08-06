@@ -1,0 +1,69 @@
+<div id="rtModal">
+    <div id="rtModalOverlay"></div>
+    <div id="slideshow">
+        <div data-bind="visible:!isLoading()" id=slideshowNav>
+            <div style="position:absolute;right:5px;top:3px">
+                <a href="#" data-bind="click:closeSlideshow,event:{singletap:closeSlideshow}" style="font-size:3em;color:#fff;">×</a>
+            </div>
+            <div style="position:absolute;left:5px;bottom:45%; opacity: .9">
+                <a href="#" data-bind="click:slideToggle,event:{swipeleft:slideToggle}" id="slidePrev" style="font-size:3.5em;color:#fff;">&lsaquo;</a></div>
+            <div style="position:absolute;right:5px;bottom:45%; opacity: .9">
+                <a href="#" data-bind="click:slideToggle,event:{swipeleft:slideToggle}" id="slideRight" style="font-size:3.5em;color:#fff;">&rsaquo;</a></div>
+        </div>
+        <div id="rtModalBox"class="clearfix" >
+            <div data-bind="visible:isLoading" id="rtModalLoadingGraphic">
+                <i class="icon-spinner icon-spin icon-3x" data-bind="css:{inverted:isSlideShow}" ></i></div>
+            <div id="rtModalLoadedContent" data-bind="visible:!isLoading()">
+                <!--ko if:currentItem-->
+                <p id="slideshowTitle" data-bind="visible:isSlideShow,text:currentItem().description"></p>
+                <!--/ko-->
+                <p id="slideshowTotalCount" data-bind="visible:isSlideShow,text:totalText"></p>
+                <div data-bind="foreach:items">
+                    <div data-bind="getHtml:$data.getFullPreview.bind($data),visible:$data === $parent.currentItem() && !$parent.isLoading() && !$parent.showMap()"></div>
+                </div>
+            </div>
+        </div>
+        <div style="width:25%;position:fixed;right:30px;top:5%;bottom:5%;" class="outerBox visible-desktop" data-bind="with:currentItem">
+            <div style="position:absolute;top:0;bottom:0;left:0;right:0;" class="contentArea contentBox">
+                <div class="media" data-bind="ifnot:$parent.hasListing">
+                    <span class="pull-left">
+                        <a href="#" data-bind="attr:{title:user.name}" style="width:40px">
+                            <img alt="Author" class="img-polaroid"  data-bind="getAvatar : {context:$data.user, size:40}" width="40" height="40">
+                        </a>
+                    </span>
+                    <div class="media-body postTitle">
+                        <a data-bind="attr:{href: '/' + user._id()}, title: 'View ' + user.name() + '\\\'s Profile', text: user.name" class="personHoverCard"></a>
+                        <p data-bind="text:description"></p><small data-bind="timeago:created" class="muted"></small>
+                    </div>
+                </div>
+                <div data-bind="with:$parent.hasListing" class="relative">
+                    <h3 class="media-heading" style="line-height:20px">
+                        <a href="#" data-bind="attr:{href : page.uri}, title:\'Go to \' + page.name() + \'\\\'s Profile\', text:page.name"></a>
+                        <a href="#"><small class="muted" data-bind="text:listing.property_type() + '- for ' + listing.type()"></small></a>
+                    </h3>
+                    <p data-bind="html:excerpt" style="margin:10px 0 0 10px"></p>
+                    <table class="table table-condensed" style="margin:10px 5px 5px 5px">
+                        <tr data-bind="if: listing.leaseSpace"><th>Renting</th><td data-bind="text: listing.leaseSpace"></td></tr>
+                        <tr><th>Asking</th><td data-bind="text: '$' + RTC.ThousandSep.call(null, listing.price())"></td></tr>
+                        <tr data-bind="if: listing.valuation"><th>Valuation</th><td data-bind="text: listing.valuation"></td></tr>
+                        <tr data-bind="if: listing.cov"><th>COV</th><td data-bind="text: listing.cov"></td></tr>
+                        <tr><th>Built Size</th><td data-bind="text: listing.built_size"></td></tr>
+                        <tr data-bind="if: listing.land_size"><th>Land Size</th><td data-bind="text: listing.land_size"></td></tr>
+                        <tr><th>Rooms</th><td data-bind="text: listing.rooms"></td></tr>
+                        <tr data-bind="if:RTApp.user() && (RTApp.user().isAgent() || RTApp.user().isAdmin())"><th>Cobroke Notes</th><td class="text-warning"  data-bind="html:listing.cobroke"></td></tr>
+                    </table>
+                    <ul class="nav nav-pills" style="margin-bottom:0">
+                        <!--<li><a href="#">Attachments</a></li>
+                        <li class="divider"></li>-->
+                        <li><a href="#" data-bind="title:'This feature is not enabled yet.'">Map</a></li>
+                        <li><a href="#" data-bind="click:showComments">Comments</a></li>
+                    </ul>
+                    <!--ko template:{name:'postActionLinks'}--><!--/ko-->
+                    <!--ko template:{name:'postComments',if:displayComments()}--><!--/ko-->
+                </div>
+                <!--ko template:{name:'postActionLinks', if:!$parent.hasListing}--><!--/ko-->
+                <!--ko template:{name:'postComments',if:showCommentBox() && !$parent.hasListing}--><!--/ko-->
+            </div>
+        </div>
+    </div>
+</div>

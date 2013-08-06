@@ -1,0 +1,7 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[remote "bbucket"]
+	url = ssh://git@bitbucket.org/jasonnathan/app-rta.git
+	fetch = +refs/heads/*:refs/remotes/bbucket/*

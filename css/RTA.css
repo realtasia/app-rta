@@ -1,0 +1,1528 @@
+/*[fmt]0*/
+/*Document   : RTA
+Created on : Aug 7, 2012, 6:15:19 PM
+Author       : Jason Nathan
+Description: General Defs
+
+Common*/
+/*+clearfix {*/.statusRight:after,#resultCount:after,.listing:after,.mainListingContent:after,.postedBy:after,.formContainer:after,.containerLeft:after,.containerRight:after,.large:after,.regular:after,.hoverCard .thumbnails:after,.hoverCard .thumbnail:after,.hoverCard.contentLeft:after,.hoverCard.contentRight:after,.hoverCard .withLabel:after,.regular:after,.membersInline LI:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+}
+
+.tooltipster-hovercard {
+    border-radius:2px;
+    border: 2px solid #999;
+    background: #fff;
+    min-width: 320px;
+}
+
+/* Use this next selector to style things like font-size and line-height: */
+.tooltipster-hovercard .tooltipster-content {
+    font-size: 12px;
+    padding: 5px;
+}
+
+.statusRight,#resultCount,.listing,.mainListingContent,.postedBy,.formContainer,.containerLeft,.containerRight,.large,.regular,.hoverCard .thumbnails,.hoverCard .thumbnail,.hoverCard.contentLeft,.hoverCard.contentRight,.hoverCard .withLabel,.regular,.membersInline LI {
+    display: inline-block;
+}
+
+.statusRight,#resultCount,.listing,.mainListingContent,.postedBy,.formContainer,.containerLeft,.containerRight,.large,.regular,.hoverCard .thumbnails,.hoverCard .thumbnail,.hoverCard.contentLeft,.hoverCard.contentRight,.hoverCard .withLabel,.regular,.membersInline LI {
+    display: block;
+    height: 1px;
+}/*+}*/BODY {
+    padding-top: 0px;
+    background: #FDFDFD;
+}/*StatusBox*/
+.newPostButtons,.newPostMediaButtons {
+    height: 20px;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+
+.newPostMediaButtons {
+    position: relative;
+    right: 70px;
+    bottom: 4px;
+    text-align: right;
+    padding-bottom: 2px;
+}
+
+.newPostButtons LI A,.newPostMediaButtons LI A {
+    padding: 2px;
+}
+
+#newPostArea .close {
+    position: absolute;
+    border-radius: 2px;
+    bottom: 0;
+    padding: 0 3px 0 0;
+    height: 15px;
+    top: 0;
+    right: 0;
+}
+
+#newPostArea {
+    position: relative;
+    padding: 0;
+}/*[clearfix]*/.statusRight {
+    position: relative;
+    width: 14px;
+    height: 20px;
+    position: absolute;
+    right: 9px;
+    top: 0;
+}
+
+.statusBoxExpand {
+    position: relative;
+    margin-bottom: 6px;
+}
+
+.statusBoxExpand BUTTON.btn {
+    position: absolute;
+    top: -3px;
+    right: 6px;
+}/*post*/
+.relative {
+    position: relative;
+}
+
+#resultCount H3 SPAN {
+    font-size: 9pt;
+    color: #999999;
+    font-weight: 400;
+}/*[clearfix]*/#resultCount {
+    left: 0;
+    padding: 0px;
+    height: 20px;
+    margin-left: 5px;
+}/*[clearfix]*/.listing {
+    height: 100%;
+}
+
+.contentBox .widgetOuterBox {
+    margin: 10px 0;
+}/*[clearfix]*/.mainListingContent {
+    padding: 0px;
+    margin: 0px;
+    padding-bottom: 5px;
+    display: block;
+}
+
+.listing P {
+    color: #444;
+}
+
+.listing .media-heading {
+    font-weight: 500;
+    border-bottom: 1px solid #EBECEC;
+    padding-bottom: 6px;
+    padding-top: 0px;
+    margin: 2px 0px 5px;
+    font-size: 1.35em !important;
+}
+
+.listingLeft {
+    left: 10px;
+    top: 0;
+    width: 165px;
+    /*+placement:float-left 0px 0px;*/
+    float: left;
+    position: relative;
+    left: 0px;
+    top: 0px;
+}
+
+.listingRight {
+    /*[disabled]left:180px;*/
+    height: auto;
+    padding: 5px;
+    margin-left: 165px;
+    right: 0;
+    top: 0;
+}
+
+.post {
+}
+
+.thumbInfo {
+    /*+border-radius:0;*/
+    border-radius: 0;
+    /*[disabled]border:1px solid #D6D6D6;*/
+    background-color: #E6E6E6;
+    display: block;
+    /*+box-shadow:inset 0 1px #EBECEC;*/
+    box-shadow: inset 0 1px #EBECEC;
+    margin: 0px;
+    padding: 0px;
+}
+
+.mediaThumbLinks {
+    margin: 0px;
+    padding: 0px;
+    width: 160px;
+}
+
+.mediaThumbLinks LI {
+    padding: 0px;
+    margin: 0px;
+    width: 78px;
+}
+
+a.thumbnail{
+    border-radius: 0;
+}
+
+.media-list .pull-left .thumbnail,.thumbInfo {
+    /*+border-radius:0;*/
+    border-radius: 0;
+    border: 1px solid #D6D6D6;
+    background-color: #E6E6E6;
+    /*+box-shadow:none;*/
+    box-shadow: none;
+    margin-top: 1px;
+}
+
+.pull-left .thumbnail IMG {
+    /*+border-radius:0;*/
+    border-radius: 0;
+    border: 1px solid #D6D6D6;
+    background-color: #E6E6E6;
+}
+
+.price {
+    background: #E9EBEC url("/images/forBG.gif") no-repeat -2px 0px;
+    padding: 5px 5px 5px 47px;
+    border: 1px solid #DEDEDE;
+    display: block;
+    height: 20px;
+    right: 10px;
+    top: 33px;
+    text-shadow: 1px 1px #FFFFFF;
+    position: absolute;
+}
+
+.listingType {
+    background: #E2E3E4 url("/images/forBG.gif") no-repeat -2px 0px;
+    display: block;
+    font-size: 7.8pt;
+    color: #686868;
+    padding: 1px 0px 0px;
+    height: 27px;
+    margin: 0px;
+    text-shadow: 1px 1px #FFFFFF;
+    line-height: 1.2;
+    text-align: center;
+    width: 36px;
+    /*+placement:anchor-top-left 0px 0px;*/
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    border-top: 1px solid #F4F4F4;
+}
+
+.listing DD {
+    color: #2691D4;
+}
+
+.listing DT {
+    width: 10%;
+}/*[clearfix]*/.postedBy {
+    position: relative;
+    bottom: 0;
+    right: 25px;
+    min-width: 100%;
+    width: auto;
+    text-align: right;
+    height: 18px;
+}
+
+.postedBy LI {
+    display: inline-block;
+    vertical-align: top;
+    display: inline;
+}
+
+.postedByLabel {
+    font-style: italic;
+    color: #9B9999;
+    font-size: 0.9em;
+    /*[disabled]line-height:1.8;*/
+}
+
+.postedByThumb {
+    line-height: 1;
+}
+
+.postedByName A {
+    color: #686868;
+    text-align: left;
+    font-size: 0.9em;
+}
+
+.postActions {
+    border-top: 1px solid #E2E3E4;
+    width: 100%;
+    padding-bottom: 10px;
+    margin-top: 5px;
+    position: absolute;
+    height: 20px;
+    bottom: 0;
+    right: 0;
+}
+
+.postActionButtons {
+    top: 0;
+    left: 0;
+    margin: 0px 0px 0;
+    padding-bottom: 0;
+    padding-top: 3px;
+}
+
+.postActionButtons LI,.postActionInfo LI,.mediaThumbLinks LI {
+    list-style: none;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+}
+
+.postActionButtons LI {
+    padding-top: 5px;
+    margin: 3px 1px 0;
+}
+
+.postActionInfo LI A {
+    padding: 0;
+    margin: 0 5px 0 0;
+    font-size: 0.9em;
+}/*comments*/
+.postComments {
+    display: block;
+    left: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #F3F3F3;
+    margin: 0 auto;
+    border-right: 1px solid #E2E3E4;
+}
+
+.comments {
+    margin: 0px !important;
+    /*+box-shadow:none;*/
+    box-shadow: none;
+}
+
+.commentBG {
+    margin: 0;
+    padding: 1px;
+    list-style: none;
+    height: 100%;
+    border-bottom: 1px solid #E2E3E4 !important;
+    color: #686868;
+    background: rgb(247, 247, 247);
+    /*Old browsers
+    IE9 SVG, needs conditional override of 'filter' to 'none'*/
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzUlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmN2Y3ZjciIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZjNmM2YzIiBzdG9wLW9wYWNpdHk9IjEiLz4KICA8L3JhZGlhbEdyYWRpZW50PgogIDxyZWN0IHg9Ii01MCIgeT0iLTUwIiB3aWR0aD0iMTAxIiBoZWlnaHQ9IjEwMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-radial-gradient(center, ellipse cover, rgba(247,247,247,1) 0%, rgba(243,243,243,1) 100%);
+    /*FF3.6+*/
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(247,247,247,1)), color-stop(100%,rgba(243,243,243,1)));
+    /*Chrome,Safari4+*/
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(247,247,247,1) 0%,rgba(243,243,243,1) 100%);
+    /*Chrome10+,Safari5.1+*/
+    background: -o-radial-gradient(center, ellipse cover, rgba(247,247,247,1) 0%,rgba(243,243,243,1) 100%);
+    /*Opera 12+*/
+    background: -ms-radial-gradient(center, ellipse cover, rgba(247,247,247,1) 0%,rgba(243,243,243,1) 100%);
+    /*IE10+*/
+    background: radial-gradient(at center, ellipse cover, rgba(247,247,247,1) 0%,rgba(243,243,243,1) 100%);
+}
+
+LI.postCommentLast {
+    border-bottom: none;
+}
+
+.listing .commentBody {
+    min-height: 42px;
+    text-align: left;
+}
+
+.commentAuthor {
+    text-align: left;
+    display: block;
+}
+
+LI.commentActions {
+    width: auto;
+    min-width: 36px;
+    display: inline;
+    display: inline-block;
+    position: absolute;
+    right: 1px;
+    top: -2px;
+    text-align: left;
+    height: 100%;
+    margin: 0px !important;
+    line-height: 2;
+    font-size: 0.9em;
+}
+
+.commentActions I.icons {
+    width: 16px;
+    height: 16px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.commentBody P {
+    margin: 0px;
+    padding: 0px 0 0px 0px;
+    text-align: left;
+    color: #444;
+    line-height: 1.5;
+}
+
+.commentBody {
+    line-height: 1.5;
+    /*[disabled]max-width:300px;*/
+}
+
+TEXTAREA.commentInput {
+    background-color: transparent;
+    width: 100%;
+    height: 26px;
+    padding: 0 0 0 2px;
+    margin: 0;
+    border-bottom: 1px solid #E2E3E4;
+    resize: none;
+    /*+box-shadow:none;*/
+    box-shadow: none;
+    font-size: 1em !important;
+}
+
+TEXTAREA.commentInput:focus {
+    outline: 0;
+    outline: none;
+    /*+box-shadow:none;*/
+    box-shadow: none;
+}/*Search Filter Area
+Search Box Area*/
+#search-wrap .btn-group {
+    position: relative;
+    left: 220px;
+    top: -28px;
+    width: 112px;
+}
+
+.listingsSearch .btn-group A {
+    text-transform: uppercase;
+    font-size: 0.85em;
+}
+
+.listingsSearch .btn-group .btn,.listingsSearch .btn-group .btn:first-child {
+    top: 0;
+    font-variant: small-caps;
+}/*Form Container*/
+
+.containerLeft .btn-toolbar {
+    margin: 0;
+    height: 30px;
+    position: relative;
+    top: 0;
+    float: right;
+}/*[clearfix]*/.containerLeft,.containerRight {
+    width: 48%;
+    position: relative;
+    display: inline;
+    display: block;
+    display: inline-block;
+    top: 0;
+    margin: 0px;
+    padding: 0px;
+}
+
+.containerLeft {
+    left: 0;
+    margin-right: 1%;
+}
+
+.containerLeft .leftNudge {
+    margin-left: 10px;
+    margin-right: -5px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.containerLeft LABEL,.containerLeft INPUT {
+    /*[disabled]width:66px;*/
+    float: left;
+    margin: 3px 0 0px 5px;
+}
+
+.containerLeft INPUT {
+    width: 41%;
+    padding-left: 2px;
+    margin-top: 3px;
+    margin-right: 0px;
+    /*+border-radius:1px;*/
+    border-radius: 1px;
+    height: 24px;
+    background: transparent url('/images/searchInputBG.gif') repeat-x;
+    border: 0 none;
+    padding-top: 2px;
+    padding-bottom: 4px;
+}
+
+.containerRight LABEL {
+    float: left;
+    margin: 5px 5px 0px;
+}
+
+.containerRight {
+    margin-left: 1%;
+    right: 0;
+}
+
+.filterBox {
+    position: relative;
+    /*[empty]margin-top:;*/
+    padding-top: 0;
+}
+
+.filterContentBG {
+    background-color: #EEE !important;
+}
+
+.opaque {
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+
+    /* IE 5-7 */
+    filter: alpha(opacity=30);
+
+    /* Netscape */
+    -moz-opacity: 0.3;
+
+    /* Safari 1.x */
+    -khtml-opacity: 0.3;
+
+    /* Good browsers */
+    opacity: 0.3;
+}
+
+.superscript{font-size:xx-small; vertical-align:top;margin-left:-1px;}
+
+#wraparound {
+    color: #6A6340;
+    margin: -12px -22px 0;
+    position: relative;
+    box-shadow: 1px 1px 2px #ccc;
+}
+
+#wraparound .contentArea {
+    padding: 5px;
+}
+
+#wraparound:after {
+    border-right: 10px solid transparent;
+    right: -1px;
+}
+
+#wraparound:before,#wraparound:after {
+    border-top: 10px solid #CCCCCC;
+    bottom: -11px;
+    content: " ";
+    position: absolute;
+}
+
+#wraparound:before {
+    border-left: 10px solid transparent;
+    left: -1px;
+}
+
+#wraparound:before,#wraparound:after {
+    border-top: 10px solid #CCCCCC;
+    bottom: -11px;
+    content: " ";
+    position: absolute;
+}
+
+#drop-down-filter {
+    border-radius: 0 0 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    border-top: none;
+    top: -1px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0px;
+}
+
+#slidePriceLabel {
+    text-align: center;
+    color: #9B9999;
+    font-size: 0.9em;
+    padding-top: 2px;
+    width: 64.5%;
+    display: inline-block;
+}
+
+BUTTON#mapBtn {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    padding-top: 0px;
+}
+
+BUTTON#mapBtn IMG {
+    padding-left: 2px;
+}/*Profile Listings*/
+.profileListings #wraparound {
+    color: #6A6340;
+    margin: 0;
+    position: relative;
+}
+
+.profileListings #wraparound:after {
+    border-right: 0 none;
+    right: -1px;
+}
+
+.profileListings #wraparound:before,.profileListings #wraparound:after {
+    border-top: 0 none;
+    bottom: -11px;
+    content: " ";
+    position: absolute;
+}
+
+.profileListings #wraparound:before {
+    border-left: 0 none;
+    left: -1px;
+}
+
+.profileListings #wraparound:before,.profileListings #wraparound:after {
+    border-top: 0 none;
+    bottom: -11px;
+    content: " ";
+    position: absolute;
+}
+
+.profileListings #drop-down-filter {
+    border-radius: 0 0 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    border-top: none;
+    top: -1px;
+    left: 0;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0px;
+}/*Fix DropDowns*/
+
+.row {
+    padding: 20px 0;
+}/*[clearfix]*/.large,.regular {
+    background-color: #D6D6D6;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+}
+
+.hoverCard.contentArea {
+    background-color: #FFFFFF;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    border: 0 none;
+}/*[clearfix]*/.hoverCard .thumbnails {
+    padding: 0;
+    margin: 0;
+}/*[clearfix]*/
+
+.hoverCard .thumbnails LI {
+    margin: 0 10px 0 0;
+    width: 41px;
+}/*[clearfix]*/.hoverCard.contentLeft {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 0 0 5px;
+    height: 100%;
+    display: inline-block;
+    padding: 0px;
+}/*[clearfix]*/.hoverCard.contentRight {
+    display: inline-block;
+    /*[empty]padding-left:;*//*[empty]margin-left:;*/
+    position: relative;
+    top: 5px;
+    /*[empty]left:;*/
+    vertical-align: top;
+}
+
+.hoverCard H5 {
+    padding: 0px;
+    margin: 0px;
+    line-height: 1;
+}
+
+.hoverCard H6 {
+    margin-top: 5px;
+    font-weight: bold;
+    color: #686868;
+    font-size: 0.9em;
+}
+
+.hoverCard .subHeader {
+    color: #9B9999;
+    font-size: 0.9em;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+.hoverCard .header {
+    padding: 0;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.hoverCard .detail {
+    color: #9B9999;
+    font-size: 0.9em;
+    display: block;
+}/*[clearfix]*/.hoverCard .withLabel {
+    padding: 0;
+    margin-top: 0;
+}
+
+.hoverCard .withLabel P {
+    /*[empty]padding-left:;*/
+    display: inline-block;
+    max-width: 222px;
+    margin-left: 5px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.hoverCard .label {
+    width: 70px;
+    padding: 2px 4px 2px 0;
+    display: inline-block;
+    /*+placement:float-left 0px 0px;*/
+    float: left;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    text-align: right;
+    line-height: 1.5;
+    background: 0;
+    text-shadow: none;
+    color: #2691D4;
+}/*[clearfix]*/.regular {
+    width: 310px;
+}
+
+.regular .contentLeft,.regular .contentLeft IMG {
+    max-width: 95px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.regular .contentRight {
+    max-width: 205px;
+    padding-left: 5px;
+}
+
+.large {
+    width: 400px;
+}
+
+.large .contentLeft {
+    width: 305px;
+}
+
+.large .contentRight,.large .contentRight IMG {
+    max-width: 95px;
+    top: 0;
+}
+
+.hoverCard .membersList {
+    max-height: 250px;
+    overflow: auto;
+}
+
+UL.membersList {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+UL.membersList .contentArea {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.membersInline {
+    padding: 0 0 2px;
+    margin: 0px;
+    border-bottom: 1px solid #D6D6D6;
+}/*[clearfix]*/.membersInline LI {
+    display: inline;
+    display: block;
+    display: inline-block;
+    padding: 2px;
+    vertical-align: middle;
+}
+
+A.tipsTest {
+    text-align: center;
+    /*+placement:margin-auto 0px 0px;*/
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    border: 1px solid #9B9999;
+    padding: 5px;
+    background-color: #E6E6E6;
+    /*+border-radius:5px;*/
+    border-radius: 5px;
+    /*+box-shadow:1px 1px 2px #9B9999;*/
+    box-shadow: 1px 1px 2px #9B9999;
+    text-shadow: 1px 1px 1px #FCFDFE;
+}
+
+.tipLinkContainer {
+    width: 100%;
+    /*+placement:margin-auto 0px 0px;*/
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    text-align: center;
+}
+
+HR.bolderLine {
+    border-top-color: #9B9999;
+}
+/*HACKS BODY .qtip .content{padding:0;margin:0;height:0;min-height:0;width:0;min-width:0;}*/
+.container40 {
+    min-height: 60px;
+}
+
+.fixed40 {
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+    margin: 0px;
+    left: 0;
+    top: 0;
+}
+
+.content40 {
+    min-height: 40px;
+    height: auto;
+    padding: 0px;
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    margin: 0px 0px 0px 50px;
+}
+
+.bottom40 {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    margin: 0 0px 0px;
+    padding: 0px;
+    border: 1px solid #000000;
+}
+
+.pager {
+    display: none;
+}
+
+.no-js .pager {
+    display: block;
+}
+
+.ui-dialog-title {
+    padding: 0px !important;
+}
+
+.ui-dialog-buttonpane {
+    padding: 1px;
+}
+
+INPUT[readonly],SELECT[readonly],TEXTAREA[readonly] {
+    cursor: pointer;
+}
+
+LABEL .close {
+    font-size: 1.2em;
+    margin-right: 12px;
+}
+
+#mediaLibrary .nav-tabs {
+    margin-bottom: 0px;
+}
+
+#mediaLibrary .nav-tabs > LI > A {
+    padding: 10px 10px 5px;
+    margin: 1px 10px 0px 0px;
+    height: 32px;
+    vertical-align: top;
+    font-size: 1.2em;
+}
+
+#mediaLibrary .nav-tabs > LI > A > SPAN {
+    display: inline-block;
+    vertical-align: super;
+    padding: 0px;
+    margin: 0px;
+    line-height: 1.5;
+}
+
+#mediaSubMenu {
+    background-color: #F7F7F7;
+    border-bottom: 1px solid #EEE;
+    margin: -9px -10px 20px;
+    padding: 0 0 0 10px;
+}
+
+#uploadArea .close {
+    margin-top: 0;
+    margin-left: 8px;
+    font-size: 21px;
+}
+
+#mediaSubMenu H4 {
+    padding: 5px;
+    border-bottom: 1px solid #FFF;
+}
+
+.RTAWindowContainer H3,.RTAWindowContainer H4 {
+    margin: 0px;
+}
+
+.ui-autocomplete {
+    max-height: 350px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /*+border-radius:0px;*/
+    border-radius: 0px;
+}
+
+.inplaceLabel {
+    padding: 5px;
+    margin: 0;
+    height: 20px;
+}
+
+.indentedComment .media {
+    margin-top: 0;
+}
+
+.listingsSearch.fixed {
+    margin-top: 60px;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    width: 578px;
+}
+
+.centerContent .listingsSearch.fixed {
+    margin-top: 60px;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    width: 500px;
+}
+
+.media-details .unstyled > li > strong {
+    margin-right: 1.5%;
+    min-width: 70px;
+    display: inline-block;
+}
+
+#leftbar i.hovercards {
+    margin-right: 0 !important;
+    margin-left: 3px;
+}
+/*
+    ColorBox Core Style:
+    The following CSS is consistent between example themes and should not be altered.
+*/
+#colorbox, #rtModalOverlay, #cboxWrapper,#cboxOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+#colorbox, #cboxWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+#cboxOverlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+
+#cboxMiddleLeft, #cboxBottomLeft {
+    clear: left;
+}
+
+#cboxContent {
+    position: relative;
+}
+
+#cboxLoadedContent {
+    overflow: auto;
+}
+
+#cboxTitle {
+    margin: 0;
+}
+
+#cboxLoadingOverlay, #cboxLoadingGraphic {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow {
+    cursor: pointer;
+}
+
+.cboxPhoto {
+    float: left;
+    margin: auto;
+    border: 0;
+    display: block;
+    max-width: none;
+}
+
+.cboxIframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+}
+
+#cboxLoadedContent {
+    background: #fff;
+}
+
+#colorbox, #cboxContent, #cboxLoadedContent {
+    box-sizing: content-box;
+}
+
+#rtModalOverlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #222;
+    opacity: .98;
+}
+
+#cboxOverlay {
+    background-color: #222;
+    opacity: .98;
+}
+/*
+    User Style:
+    Change the following styles to modify the appearance of ColorBox.  They are
+    ordered & tabbed in a way that represents the nesting of the generated HTML.
+*/
+#slideshow * {
+    z-index: 9999;
+}
+
+#slideshowNav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#rtModalBox {
+    border: 5px solid #222;
+    width: auto;
+    height: auto;
+    width: 600px;
+    height: 450px;
+    position: fixed;
+    left: 25%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: -225px;
+}
+
+#rtModalLoadedContent {
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    /*margin-top:20px;*/
+}
+
+#slideshowTitle {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    color: #fff;
+    font-weight: bold;
+    margin-top: -20px;
+}
+
+#slideshowTotalCount {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    color: #fff;
+    font-weight: bold;
+    margin-top: -20px;
+}
+
+#rtModalLoadingGraphic {
+    background: #fff url(/images/26.gif) no-repeat center center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+#rtModalLoadingGraphic i {
+    display: inline;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    top: 50%;
+    position: absolute;
+    left: 45%;
+}
+
+#slideshow #rtModalLoadingGraphic {
+    background: #000 none no-repeat center center;
+}
+
+#slideshow .navbar-inner {
+    padding: 0 5px;
+}
+
+#slideshow .nav .active a {
+    background: none;
+    color: #aaa;
+}
+
+#slideshow .nav a {
+    padding: 2px 5px;
+}
+
+#slideshow table td,#slideshow table th {
+    border-top: none;
+}
+/*
+UI Tooltips
+*/
+.ui-tooltip.ui-widget-content {
+    background: #f9fcf7;
+    /* Old browsers */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y5ZmNmNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWY5ZjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  #f9fcf7 0%, #f5f9f0 100%);
+    /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9fcf7), color-stop(100%,#f5f9f0));
+    /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%);
+    /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%);
+    /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%);
+    /* IE10+ */
+    background: linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%);
+    /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9fcf7', endColorstr='#f5f9f0',GradientType=0 );
+    /* IE6-8 */
+}
+
+.tooltip.ui-tooltip.ui-widget-content {
+    background-image: none;
+    background-color: #000;
+    opacity: .8;
+    border: 0 !important;
+    padding: 2px 5px;
+}
+
+.tooltip.ui-tooltip-content {
+    background-color: transparent;
+    color: #fefefe;
+}
+
+.navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
+    padding: 0;
+}
+
+.in > li > a {
+    background: black;
+    color: white;
+}
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+    text-decoration: inherit;
+    display: inline-block;
+    cursor: pointer;
+    speak: none;
+}
+.mainNavPhone > li > a > i{
+    text-shadow: -1px -1px 2px #000;
+    color:#ccc;
+}
+#container {
+    position: relative;
+    top: 0;
+    margin: 0 auto;
+    max-width: 1010px;
+    /*[empty]+border-radius:;*/
+    min-height: 500px;
+}
+
+.ui-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    float: left;
+    display: none;
+    min-width: 160px;
+    _width: 160px;
+    padding: 4px 0;
+    margin: 2px 0 0 0;
+    list-style: none;
+    background-color: #ffffff;
+    border-color: #ccc;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    *border-right-width: 2px;
+    *border-bottom-width: 2px; }
+.ui-autocomplete .ui-menu-item > a.ui-corner-all {
+    display: block;
+    padding: 3px 15px;
+    clear: both;
+    font-weight: normal;
+    line-height: 18px;
+    color: #555555;
+    white-space: nowrap; }
+.ui-autocomplete .ui-menu-item > a.ui-corner-all.ui-state-hover, .ui-autocomplete .ui-menu-item > a.ui-corner-all.ui-state-active {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #0088cc;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    background-image: none; }
+html {
+	 -webkit-font-smoothing: antialiased;
+}
+
+
+/* This is the default Tooltipster theme (feel free to modify or duplicate and create multiple themes!): */
+.tooltipster-default {
+	border-radius: 5px;
+	border: 2px solid #000;
+	background: #4c4c4c;
+	color: #fff;
+}
+
+/* Use this next selector to style things like font-size and line-height: */
+.tooltipster-default .tooltipster-content {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	line-height: 16px;
+	padding: 8px 10px;
+	overflow: hidden;
+}
+
+/* This next selector defines the color of the border on the outside of the arrow. This will automatically match the color and size of the border set on the main tooltip styles. Set display: none; if you would like a border around the tooltip but no border around the arrow */
+.tooltipster-default .tooltipster-arrow .tooltipster-arrow-border {
+	/* border-color: ... !important; */
+}
+
+
+/* If you're using the icon option, use this next selector to style them */
+.tooltipster-icon {
+	cursor: help;
+	margin-left: 4px;
+}
+
+
+
+
+
+
+
+
+/* This is the base styling required to make all Tooltipsters work */
+.tooltipster-base {
+	padding: 0;
+	font-size: 0;
+	line-height: 0;
+	position: absolute;
+	z-index: 9999999;
+	pointer-events: none;
+	width: auto;
+	overflow: visible;
+}
+.tooltipster-base .tooltipster-content {
+	overflow: hidden;
+}
+
+
+/* These next classes handle the styles for the little arrow attached to the tooltip. By default, the arrow will inherit the same colors and border as what is set on the main tooltip itself. */
+.tooltipster-arrow {
+	display: block;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+.tooltipster-arrow span, .tooltipster-arrow-border {
+	display: block;
+	width: 0;
+	height: 0;
+	position: absolute;
+}
+.tooltipster-arrow-top span, .tooltipster-arrow-top-right span, .tooltipster-arrow-top-left span {
+	border-left: 8px solid transparent !important;
+	border-right: 8px solid transparent !important;
+	border-top: 8px solid;
+	bottom: -8px;
+}
+.tooltipster-arrow-top .tooltipster-arrow-border, .tooltipster-arrow-top-right .tooltipster-arrow-border, .tooltipster-arrow-top-left .tooltipster-arrow-border {
+	border-left: 9px solid transparent !important;
+	border-right: 9px solid transparent !important;
+	border-top: 9px solid;
+	bottom: -8px;
+}
+
+.tooltipster-arrow-bottom span, .tooltipster-arrow-bottom-right span, .tooltipster-arrow-bottom-left span {
+	border-left: 8px solid transparent !important;
+	border-right: 8px solid transparent !important;
+	border-bottom: 8px solid;
+	top: -8px;
+}
+.tooltipster-arrow-bottom .tooltipster-arrow-border, .tooltipster-arrow-bottom-right .tooltipster-arrow-border, .tooltipster-arrow-bottom-left .tooltipster-arrow-border {
+	border-left: 9px solid transparent !important;
+	border-right: 9px solid transparent !important;
+	border-bottom: 9px solid;
+	top: -8px;
+}
+.tooltipster-arrow-top span, .tooltipster-arrow-top .tooltipster-arrow-border, .tooltipster-arrow-bottom span, .tooltipster-arrow-bottom .tooltipster-arrow-border {
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+}
+.tooltipster-arrow-top-left span, .tooltipster-arrow-bottom-left span {
+	left: 6px;
+}
+.tooltipster-arrow-top-left .tooltipster-arrow-border, .tooltipster-arrow-bottom-left .tooltipster-arrow-border {
+	left: 5px;
+}
+.tooltipster-arrow-top-right span,  .tooltipster-arrow-bottom-right span {
+	right: 6px;
+}
+.tooltipster-arrow-top-right .tooltipster-arrow-border, .tooltipster-arrow-bottom-right .tooltipster-arrow-border {
+	right: 5px;
+}
+.tooltipster-arrow-left span, .tooltipster-arrow-left .tooltipster-arrow-border {
+	border-top: 8px solid transparent !important;
+	border-bottom: 8px solid transparent !important;
+	border-left: 8px solid;
+	top: 50%;
+	margin-top: -7px;
+	right: -8px;
+}
+.tooltipster-arrow-left .tooltipster-arrow-border {
+	border-top: 9px solid transparent !important;
+	border-bottom: 9px solid transparent !important;
+	border-left: 9px solid;
+	margin-top: -8px;
+}
+.tooltipster-arrow-right span, .tooltipster-arrow-right .tooltipster-arrow-border {
+	border-top: 8px solid transparent !important;
+	border-bottom: 8px solid transparent !important;
+	border-right: 8px solid;
+	top: 50%;
+	margin-top: -7px;
+	left: -8px;
+}
+.tooltipster-arrow-right .tooltipster-arrow-border {
+	border-top: 9px solid transparent !important;
+	border-bottom: 9px solid transparent !important;
+	border-right: 9px solid;
+	margin-top: -8px;
+}
+
+
+/* Some CSS magic for the awesome animations - feel free to make your own custom animations and reference it in your Tooltipster settings! */
+
+.tooltipster-fade {
+	opacity: 0;
+	-webkit-transition-property: opacity;
+	-moz-transition-property: opacity;
+	-o-transition-property: opacity;
+	-ms-transition-property: opacity;
+	transition-property: opacity;
+}
+.tooltipster-fade-show {
+	opacity: 1;
+}
+
+.tooltipster-grow {
+	-webkit-transform: scale(0,0);
+	-moz-transform: scale(0,0);
+	-o-transform: scale(0,0);
+	-ms-transform: scale(0,0);
+	transform: scale(0,0);
+	-webkit-transition-property: -webkit-transform;
+	-moz-transition-property: -moz-transform;
+	-o-transition-property: -o-transform;
+	-ms-transition-property: -ms-transform;
+	transition-property: transform;
+	-webkit-backface-visibility: hidden;
+}
+.tooltipster-grow-show {
+	-webkit-transform: scale(1,1);
+	-moz-transform: scale(1,1);
+	-o-transform: scale(1,1);
+	-ms-transform: scale(1,1);
+	transform: scale(1,1);
+	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
+	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+}
+
+.tooltipster-swing {
+	opacity: 0;
+	-webkit-transform: rotateZ(4deg);
+	-moz-transform: rotateZ(4deg);
+	-o-transform: rotateZ(4deg);
+	-ms-transform: rotateZ(4deg);
+	transform: rotateZ(4deg);
+	-webkit-transition-property: -webkit-transform, opacity;
+	-moz-transition-property: -moz-transform;
+	-o-transition-property: -o-transform;
+	-ms-transition-property: -ms-transform;
+	transition-property: transform;
+}
+.tooltipster-swing-show {
+	opacity: 1;
+	-webkit-transform: rotateZ(0deg);
+	-moz-transform: rotateZ(0deg);
+	-o-transform: rotateZ(0deg);
+	-ms-transform: rotateZ(0deg);
+	transform: rotateZ(0deg);
+	-webkit-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 1);
+	-webkit-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
+	-moz-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
+	-ms-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
+	-o-transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
+	transition-timing-function: cubic-bezier(0.230, 0.635, 0.495, 2.4);
+}
+
+.tooltipster-fall {
+	top: 0;
+	-webkit-transition-property: top;
+	-moz-transition-property: top;
+	-o-transition-property: top;
+	-ms-transition-property: top;
+	transition-property: top;
+	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
+	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+}
+.tooltipster-fall-show {
+}
+.tooltipster-fall.tooltipster-dying {
+	-webkit-transition-property: all;
+	-moz-transition-property: all;
+	-o-transition-property: all;
+	-ms-transition-property: all;
+	transition-property: all;
+	top: 0px !important;
+	opacity: 0;
+}
+
+.tooltipster-slide {
+	left: -40px;
+	-webkit-transition-property: left;
+	-moz-transition-property: left;
+	-o-transition-property: left;
+	-ms-transition-property: left;
+	transition-property: left;
+	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
+	-webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-moz-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-ms-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	-o-transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+	transition-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.15);
+}
+.tooltipster-slide.tooltipster-slide-show {
+}
+.tooltipster-slide.tooltipster-dying {
+	-webkit-transition-property: all;
+	-moz-transition-property: all;
+	-o-transition-property: all;
+	-ms-transition-property: all;
+	transition-property: all;
+	left: 0px !important;
+	opacity: 0;
+}
+
+
+/* CSS transition for when contenting is changing in a tooltip that is still open. The only properties that will NOT transition are: width, height, top, and left */
+.tooltipster-content-changing {
+	opacity: 0.5;
+	-webkit-transform: scale(1.1, 1.1);
+	-moz-transform: scale(1.1, 1.1);
+	-o-transform: scale(1.1, 1.1);
+	-ms-transform: scale(1.1, 1.1);
+	transform: scale(1.1, 1.1);
+}
