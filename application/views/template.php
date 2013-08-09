@@ -8,7 +8,8 @@
             <title>Realtasia Singapore</title>
         <?php endif; ?>
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-        <meta name="viewport" content="initial-scale=1">
+        <!--<meta name="viewport" content="initial-scale=1">-->
+        <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" type="text/css" href="http://<?php echo RT::COM_SERVER ?>/css/final/css/jquery-ui-boostrap.css" />
         <?php
         echo Assets::factory('all')

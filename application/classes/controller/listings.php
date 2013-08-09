@@ -20,28 +20,26 @@ class Controller_Listings extends Controller_Auth {
 
     public function action_index()
     {
-        $req  = $this->req('/post/listings/', parent::listings_search());
-        $data = json_decode($req, true);
+        $req  = Api::request('/post/listings/', parent::listings_search());
+        $data = $req->get_data();
         //echo "<pre>";
         //print_r(parent::listings_search());
         //die($req);
         if ($this->auto_render)
         {
-            $this->pagination = Pagination::factory($data['data']);
-            $this->template->set('cl', $data['data']);
+            $this->pagination = Pagination::factory($data);
+            $this->template->set('cl', $data);
             $this->template->set('clt', 'listings');
-            return $this->content = View::factory('listings')->set('cl', $data['data']);
+            return $this->content = View::factory('listings')->set('cl', $data);
         }
 
-        $this->response->headers('Content-type', 'application/json');
-        $this->response->body($req);
+        return parent::json_response($req);
     }
 
     public function action_keyword()
     {
         $this->auto_render = false;
-        $this->response->headers('Content-type', 'application/javascript');
-        $this->response->body($this->req('/page/listingkeyword/', $this->query()));
+        return parent::json_response(Api::request('/page/listingkeyword/', $this->query()));
     }
 
     public function after()

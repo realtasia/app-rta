@@ -45,7 +45,6 @@ abstract class Controller_Auth extends Controller_Template {
         //$ba = Profiler::start('Controller', 'Auth ' . 'Session Setup');
         /*         * **************************************************************** */
         ASDK::dynamoSession();
-        //ASDK::dynamoGC();
         $this->session = Session::instance();
         //Profiler::stop($ba);
     }
@@ -95,6 +94,7 @@ abstract class Controller_Auth extends Controller_Template {
             if ($uid)
             {
                 $this->cu_id = $uid;
+                $this->get_cu();
             }
         }
 
@@ -107,7 +107,7 @@ abstract class Controller_Auth extends Controller_Template {
     /**
      * Logs out via the api server and destroys the session.
      *
-     * @uses self::req()
+     * @uses Api::logout()
      * @return array|NULL
      */
     public function action_logout()
@@ -116,7 +116,10 @@ abstract class Controller_Auth extends Controller_Template {
 
         $this->destroy();
 
-        $this->request->redirect($this->request->referrer());
+        if($redirect = $this->request->query('redirect_to'))
+            return $this->request->redirect($redirect);
+
+        return $this->request->redirect($this->request->referrer());
     }
 
     /**
@@ -128,8 +131,7 @@ abstract class Controller_Auth extends Controller_Template {
     {
 
         $this->auto_render = FALSE;
-        $remember          = $this->request->post('remember');
-
+        $p = $this->request->post();
         if (!$this->cu_id)
         {
             $api = $this->session->get('api');
@@ -140,7 +142,7 @@ abstract class Controller_Auth extends Controller_Template {
             }
         }
 
-        $r = Api::auth()->login($this->request->post(), $remember);
+        $r = Api::auth()->login($p, (bool) \Arr::get($p, 'remember'));
 
         if (!$r::success())
         {
@@ -177,18 +179,14 @@ abstract class Controller_Auth extends Controller_Template {
         $r   = Request::factory($url);
         unset($params['url']);
 
-        switch ($type)
-        {
-            case HTTP_Request::POST:
-                $r->post($params);
-                $r->method($type);
-                break;
-            default:
-                $r->query($params);
-                $r->method($type);
-                break;
-        }
+        if($type === HTTP_Request::POST)
+            $r->post($params)->method($type);
+        else
+            $r->query($params)->method(HTTP_Request::GET);
+
         $this->response->headers('Content-type', 'application/json');
+
+        // a little ambiguous but this method returns JSON when given a Kohana_Request object.
         return $this->response->body(Api::request($r));
     }
 
@@ -223,6 +221,12 @@ abstract class Controller_Auth extends Controller_Template {
         return $this->response->body(Api::response()->as_json());
     }
 
+    /**
+     * An implementation of polling -> for new messages, counts etc. I really I
+     * wish I had more time to get a better solution up.
+     *
+     * @return Response
+     */
     public function action_poll()
     {
         $this->auto_render = false;
@@ -302,46 +306,6 @@ abstract class Controller_Auth extends Controller_Template {
     }
 
     /**
-     * Utility that validates a request session
-     *
-     * @param array|json string $api
-     * @todo status type fail and error not handled.
-     * @return boolean
-     */
-    public function check($api)
-    {
-        $data = Api_Response::factory($api);
-
-        $message = $data->get_data();
-
-        if ($data::error() && $this->get_cu())
-        {
-            if (\Arr::get($message, 'title') === 'access_denied')
-            {
-                $this->destroy();
-                header("HTTP/1.0 401 Access Denied");
-                exit;
-                //$this->request->redirect('/accessdenied');
-            }
-        }
-        //print_r($api);
-
-        if (!$state = $data::get_state())
-            return false;
-
-        if (Security::check($state))
-        {
-            if ($data::error())
-                $this->errors = $message;
-
-            if ($data::fail())
-                $this->fails = $message;
-        }
-
-        //return false;
-    }
-
-    /**
      * Fetches an access token from the set property or session if there is one
      *
      * @return string|NULL
@@ -393,57 +357,6 @@ abstract class Controller_Auth extends Controller_Template {
     }
 
     /**
-     * Makes a request to the API server with given params. Checks the response
-     * and sets new tokens.
-     *
-     * @uses self::check()
-     * @uses self::new_token()
-     *
-     * @param string $uri
-     * @param array $params post or query params. state included automatically
-     * @param string $type the request type
-     * @return NULL|json string
-     */
-    public function req($uri, $params, $type = NULL)
-    {
-        if (strpos('//', $uri) === 0)
-        {
-            $uri = 'http:' . $uri;
-        }
-        if (strpos($uri, 'http') !== 0)
-        {
-            $uri = 'http://' . RT::API_SERVER . $uri;
-        }
-        $response = NULL;
-
-        $params['state'] = Security::token(true);
-
-        $r = Request::factory($uri);
-        $r->headers('Accept-Encoding', 'gzip, deflate');
-
-        switch ($type)
-        {
-            case HTTP_Request::POST:
-                $r->post($params);
-                $r->method($type);
-                break;
-            default:
-                $r->query($params);
-                $r->method(HTTP_Request::GET);
-                break;
-        }
-
-        $response = $r->execute()->body();
-        $response = gzdecode($response);
-        //die($response);
-        //$this->check($response);
-
-        //$this->new_token($response);
-
-        return $response;
-    }
-
-    /**
      * Checks if there is a user logged in an optionally his role.
      *
      * @param string $role
@@ -468,15 +381,20 @@ abstract class Controller_Auth extends Controller_Template {
     public function ajax_response($status, $data)
     {
         $this->auto_render = false;
+        if(is_numeric($status))
+        {
+            if($status === 200)
+                $status = "success";
 
-        $body = [
+            $status = "error";
+        }
+
+        $this->response->headers('Content-type', 'application/json');
+        return $this->response->body(json_encode([
             'session' => Session::instance()->get("api"),
             'status'  => $status,
             'data'    => $data
-        ];
-        //if(!ob_start("ob_gzhandler")) ob_start();
-        $this->response->headers('Content-type', 'application/json');
-        $this->response->body(json_encode($body));
+        ]));
     }
 
     /**
@@ -593,160 +511,12 @@ abstract class Controller_Auth extends Controller_Template {
         return $links;
     }
 
-    protected function search_defaults()
-    {
-        $query         = $this->request->query();
-        $query['sort'] = \Arr::get($query, 'sort', '') === 'Newest' ? 'popular' : 'active';
-
-        $state    = \Arr::get($query, 'state');
-//        if($state && !Security::check($state))
-//        {
-//            return [];
-//        }
-        $defaults = [
-            'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
-            'filter'       => \Arr::get($query, 'filter', 'All'),
-            'sort'         => 'active',
-            'access_token' => $this->token()
-        ];
-
-        return Arr::merge($defaults, $query);
-    }
-
-    protected function people_search()
-    {
-        $query  = $this->request->query();
-        $filter = \Arr::get($query, 'filter');
-        $roles  = [];
-        switch ($filter)
-        {
-            case 'Users': $roles = ['user'];
-                break;
-            case 'Staff': $roles = ['admin'];
-                break;
-            case 'Agents': $roles = ['agent'];
-                break;
-        }
-
-        $query['sort'] = \Arr::get($query, 'sort', 'active');
-
-        switch ($query['sort'])
-        {
-            case 'Last Active': $query['sort'] = 'active';
-                break;
-            case 'Newest': $query['sort'] = 'newest';
-                break;
-            case 'Alphabetical': $query['sort'] = 'alpha';
-                break;
-        }
-
-        $defaults = [
-            'limit'        => 11,
-            'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
-            'roles'        => $roles,
-            'sort'         => '',
-            'access_token' => $this->token(),
-            's'            => null,
-            'include_ids'  => [],
-            'status'       => 'active',
-            'privacy'      => 'PUBLIC',
-        ];
-
-        return Arr::overwrite($defaults, $query);
-    }
-
-    protected function locations_search()
-    {
-        $query         = $this->search_defaults();
-        $query['sort'] = \Arr::get($query, 'sort', 'active');
-
-        switch ($query['sort'])
-        {
-            case 'Last Active': $query['sort'] = 'active';
-                break;
-            case 'Newest': $query['sort'] = 'newest';
-                break;
-            case 'Alphabetical': $query['sort'] = 'alpha';
-                break;
-        }
-
-        $filter = \Arr::get($query, 'filter');
-        if (in_array($filter, ['Private Apartments', 'Serviced Apartments', 'Private Landed', 'HDB']))
-        {
-            $query['subtypes'] = $filter;
-        }
-
-        $query['type'] = 'location';
-
-        $defaults = [
-            'limit'        => 11,
-            'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
-            'sort'         => '',
-            'access_token' => $this->token(),
-            's'            => null,
-            'include_ids'  => [],
-            'privacy'      => 'PUBLIC',
-            'type'         => 'location',
-            'subtypes'     => null
-        ];
-
-        return Arr::overwrite($defaults, $query);
-    }
-
-    protected function listings_search()
-    {
-        $query = $this->search_defaults();
-        switch ($query['sort'])
-        {
-            case 'Last Active': $query['sort'] = 'active';
-                break;
-            case 'Newest': $query['sort'] = 'newest';
-                break;
-        }
-
-        $filter = \Arr::get($query, 'filter');
-        if (in_array($filter, ['Private Apartments', 'Serviced Apartments', 'Private Landed', 'HDB']))
-        {
-            $query['filter'] = $filter;
-        }
-
-        $params = [
-            'type'      => ucfirst(strtolower(\Arr::get($query, 'type', 'sale'))),
-            'builtLow'  => static::checkNumberField(\Arr::get($query, 'builtLow', 0)),
-            'builtHigh' => static::checkNumberField(\Arr::get($query, 'builtHigh')),
-            'priceHigh' => static::checkNumberField(\Arr::get($query, 'priceHigh')),
-            'priceLow'  => static::checkNumberField(\Arr::get($query, 'priceLow', 0)),
-            'roomsHigh' => static::checkNumberField(\Arr::get($query, 'roomsHigh')),
-            'roomsLow'  => static::checkNumberField(\Arr::get($query, 'roomsLow', 0)),
-            's'         => Security::xss_clean(\Arr::get($query, 's', ''))
-        ];
-
-        return \Arr::merge($query, ['listing' => array_filter($params)]);
-    }
-
-    protected static function checkNumberField($v)
-    {
-        switch (true)
-        {
-            case $v === 'STUDIO':
-            case strtolower($v) === '1 room':
-                return 1;
-            case $v === '0 sqft':
-            case $v === '0':
-            case $v === '0 rooms':
-                return 0;
-        }
-
-        return floatval(str_replace(',', '', $v));
-    }
-
-    protected function _keyword($url, $query)
-    {
-        $this->auto_render = false;
-        $this->response->headers('Content-type', 'application/javascript');
-        return $this->response->body($this->req($url, $query));
-    }
-
+    /**
+     * Estracts the needed changed info of a given user so the UI can be kept
+     * updated. Sets this in a session for continuous comparisons
+     * @param array $cu
+     * @return type
+     */
     protected function set_poll_session(array $cu)
     {
         $cuPoll             = \Arr::extract($cu, ['_id', 'subscribers', 'likers', 'settings', 'counts']);
@@ -758,6 +528,9 @@ abstract class Controller_Auth extends Controller_Template {
     }
 
 
+    /**
+     * @todo get rid of these tester functions
+     */
     public function action_sessionapi()
     {
         print_r(Session::instance()->get("api"));
@@ -769,6 +542,4 @@ abstract class Controller_Auth extends Controller_Template {
         print_r(Session::instance()->get("cu"));
         die();
     }
-
-
 }

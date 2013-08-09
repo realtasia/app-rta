@@ -67,7 +67,6 @@ class Api {
      */
     public function get_user(\Api_Response $response = null)
     {
-        //$this->logout();
         $s  = Session::instance();
         $cu = $s->get("cu");
 
@@ -81,14 +80,11 @@ class Api {
                       'access_token' => $api::get_token()
                 ]);
 
-                if ($r::success() && $r::get_grant_type() === self::PASSWORD)
+                if($r::success())
                 {
-                    $s->set('cu', $r->get_data());
                     $cu = $r->get_data();
+                    $r::get_grant_type() === self::PASSWORD ? $s->set('cu', $cu) : $s->delete("cu");
                 }
-
-                if($r::get_grant_type() !== self::PASSWORD)
-                    $s->delete("cu");
             }
         }
         return $cu;
@@ -120,7 +116,6 @@ class Api {
             'user_agent'   => urlencode(Request::$user_agent),
             'grant_type'   => static::CLIENT
         ];
-        file_put_contents('debug.html', print_r($creds, true));
         return self::request('/auth/credentials', $creds, HTTP_Request::POST);
     }
 

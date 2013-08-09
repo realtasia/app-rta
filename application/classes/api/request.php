@@ -27,30 +27,22 @@ class Api_Request extends Api {
     public function execute($uri, array $params, $type = NULL)
     {
         if (strpos('//', $uri) === 0)
-        {
             $uri = 'http:' . $uri;
-        }
-        if (strpos($uri, 'http') !== 0)
-        {
-            $uri = 'http://' . RT::API_SERVER . $uri;
-        }
 
+        if (strpos($uri, 'http') !== 0)
+            $uri = 'http://' . RT::API_SERVER . $uri;
+
+        // yes this is ridiculous, but will leave it in for now.
         if (!\Arr::get($params, 'state'))
             $params['state'] = Security::token();
 
         $r = Request::factory($uri);
 
-        switch ($type)
-        {
-            case HTTP_Request::POST:
-                $r->post($params);
-                $r->method($type);
-                break;
-            default:
-                $r->query($params);
-                $r->method(HTTP_Request::GET);
-                break;
-        }
+        if($type === HTTP_Request::POST)
+            $r->post($params)->method($type);
+        else
+            $r->query($params)->method(HTTP_Request::GET);
+
         return parent::response(static::executeDirect($r));
     }
 

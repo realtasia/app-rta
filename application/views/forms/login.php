@@ -22,7 +22,7 @@
             </h4>
             <form class="contentArea" style="margin-bottom: 0;font-size:110%" data-bind="submit: RTApp.currentForm().login">
                 <p class="text-error" data-bind="visible: window['RTApp'].isError">
-                    <strong data-bind="text: window['RTApp'].ajaxData().message">
+                    <strong data-bind="text: window['RTApp'].ajaxMessage">
                     </strong>
                 </p>
                 <div class="control-group" data-bind="validationElement: RTApp.currentForm().password">
@@ -71,7 +71,7 @@
             <form class="contentArea" style="margin-bottom: 0;font-size:110%" data-bind="submit: login">
 
                 <p class="text-error" data-bind="visible: window['RTApp'].isError">
-                    <strong data-bind="text: window['RTApp'].ajaxData().message">
+                    <strong data-bind="text: window['RTApp'].ajaxMessage">
                     </strong>
                 </p>
                 <div class="control-group" data-bind="validationElement: username">

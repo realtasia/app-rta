@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-08-05 06:22:45 
+   Compiled at: 2013-08-07 00:10:12 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1650,17 +1650,22 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-08-05 06:22:45 
+   Compiled at: 2013-08-07 00:10:12 
 ================================ */
 RT["App"] = function() {
     "use strict";
-    var self = this, o = "user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch displayMobileListingsWizard hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin";
-    RTC.MakeObsFromArray.call(self, o);
-    RTC.MakeObsFromArray.apply(self, ["postForm ajaxData", {}]);
+    var self, o = "user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch displayMobileListingsWizard hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin";
+    RTC.MakeObsFromArray.call(this, o);
+    RTC.MakeObsFromArray.call(this, "postForm ajaxData", {});
+    self = this;
     self.ticks.extend({throttle: 5 * 60 * 1e3});
     self.currentPage(1);
     self.formParams(self.Search() && self.Search().formFields);
     self.ajaxStatus("success");
+    self.ajaxMessage = ko.computed(function(){
+        var d = this.ajaxData();
+        return d && d.message || null;
+    }, this);
     self.client = ko.computed(function() {
         return !self.user();
     }, self);

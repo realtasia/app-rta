@@ -25,28 +25,31 @@ class Controller_Company extends Controller_Auth {
 
         $par = ['access_token' => $this->token()];
 
-        $response = $this->req('/page/index/' . $slug, $par);
-        $response = json_decode($response, true);
+        $response = Api::request('/page/index/' . $slug, $par);
 
-        if (empty($response['data']) || !isset($response['data']['_id']))
+        $data = $response->get_data();
+
+        if (empty($data) || !\Arr::get($data, '_id'))
         {
             $this->request->redirect();
         }
 
-        if((string)$response['data']['_id'] === $slug)
+        if((string)\Arr::get($data, '_id') === $slug)
         {
-            $this->request->redirect($response['data']['uri'], 301);
+            $this->request->redirect(\Arr::get($data, 'uri'), 301);
         }
 
-        if($response['status'] === 'error')
+        /**
+         * @todo need to catch and handle this error properly
+         */
+        if($response::error())
         {
-            //echo "<pre>";
             print_r(Session::instance()->get('session'));
             die(print_r($response, true));
         }
 
-        $this->cp = $response['data'];
-        $this->title = $this->cp['name'];
+        $this->cp = $data;
+        $this->title = \Arr::get($data, 'name');
 
         if($this->request->action() !== 'edit')
         {
@@ -56,23 +59,19 @@ class Controller_Company extends Controller_Auth {
 
     public function action_feed()
     {
-        //var_dump($this->cp);
-        //$this->auto_render = FALSE;
-
-        $req  = $this->req($this->cp['connections']['feed'], $this->query());
-        $data = json_decode($req, true);
-        $this->pagination = Pagination::factory($data['data']);
+        $req  = Api::request($this->cp['connections']['feed'], $this->query());
+        $data = $req->get_data();
+        $this->pagination = Pagination::factory($data);
         //echo $skip;
         //die($req);
         if ($this->auto_render)
         {
-            $this->template->set('cl', $data['data']);
+            $this->template->set('cl', $data);
             $this->template->set('clt', 'posts');
-            return $this->content->set('cl', empty($data['data']) ? [] : $data['data']);
+            return $this->content->set('cl', $data ? [] : $data);
         }
 
-        $this->response->headers('Content-type', 'application/javascript');
-        $this->response->body($req);
+        return parent::json_response($req);
     }
 
     public function action_info()
@@ -85,21 +84,20 @@ class Controller_Company extends Controller_Auth {
         if($this->request->param('id') === 'keyword')
             return $this->action_keyword();
 
-            $req  = $this->req('/listing/search/', $this->listings_query());
+            $req  = Api::request('/listing/search/', $this->listings_query());
             //die($req);
-            $data = json_decode($req, true);
-            if ($data['status'] === 'success')
+            $data = $req->get_data();
+            if ($data::success())
             {
                 if ($this->auto_render)
                 {
-                    $this->pagination = Pagination::factory($data['data']);
-                    $this->template->set('cl', $data['data']);
+                    $this->pagination = Pagination::factory($data);
+                    $this->template->set('cl', $data);
                     $this->template->set('clt', 'listings');
-                    $this->content    = View::factory('listings')->set('cl', $data['data']);
-                    return $this->content->set('introcontent', Kohana::find_file('views', 'introcontent/company'));
+                    $this->content    = View::factory('listings')->set('cl', $data);
+                    return $this->content->set('introcontent', View::factory('introcontent/company'));
                 }
-                $this->response->headers('Content-type', 'application/javascript');
-                $this->response->body($req);
+                return parent::json_response($req);
             }
     }
 
@@ -129,21 +127,21 @@ class Controller_Company extends Controller_Auth {
 
     public function action_members()
     {
-        $req  = $this->req('/user/', $this->people_query(['company_id' => $this->cp['_id']]));
-        $data = json_decode($req, true);
+        $req  = Api::request('/user/', $this->people_query(['company_id' => $this->cp['_id']]));
+        $data = $req->get_data();
         //echo "<pre>";
         //print_r($this->people_query(['company_id' => $this->cp['_id']]));
         //die($req);
         if ($this->auto_render)
         {
-            $this->pagination = Pagination::factory($data['data']);
-            $this->template->set('cl', $data['data']);
+            $this->pagination = Pagination::factory($data);
+            $this->template->set('cl', $data);
             $this->template->set('clt', 'people');
-            $this->content    = View::factory('people')->set('cl', $data['data']);
-            return $this->content->set('introcontent', Kohana::find_file('views', "introcontent/company"));
+            $this->content    = View::factory('people')->set('cl', $data);
+            return $this->content->set('introcontent', View::factory("introcontent/company"));
         }
-        $this->response->headers('Content-type', 'application/javascript');
-        $this->response->body($req);
+
+        return parent::json_response($req);
     }
 
     protected function query()

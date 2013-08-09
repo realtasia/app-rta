@@ -20,19 +20,18 @@ class Controller_Locations extends Controller_Auth {
 
     public function action_index()
     {
-        $req  = $this->req('/page/search/', $this->query());
-        $data = json_decode($req, true);
+        $req  = Api::request('/page/search/', $this->query());
+        $data = $req->get_data();
         //die($req);
         if ($this->auto_render)
         {
-            $this->pagination = Pagination::factory($data['data']);
-            $this->template->set('cl', $data['data']);
+            $this->pagination = Pagination::factory($data);
+            $this->template->set('cl', $data);
             $this->template->set('clt', 'locations');
-            return $this->content = View::factory('locations')->set('cl', $data['data']);
+            return $this->content = View::factory('locations')->set('cl', $data);
         }
 
-        $this->response->headers('Content-type', 'application/json');
-        $this->response->body($req);
+        return parent::json_response($req);
     }
 
     public function action_keyword()

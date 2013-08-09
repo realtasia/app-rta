@@ -32,8 +32,10 @@ class Api_Auth extends Api {
               'grant_type'   => parent::PASSWORD
             ], HTTP_Request::POST);
 
-        if ($remember === TRUE && r::success())
+        file_put_contents('debug.html', var_export($remember === TRUE, true));
+        if ($remember === TRUE && $r::success())
         {
+            //file_put_contents('debug.html', print_r($cookie, true));
             $cookie = $r::get_user_id() . '_' . $r::get_token();
             // Set the autologin cookie
             Cookie::set('authautologin', $cookie, Date::WEEK);
@@ -65,6 +67,11 @@ class Api_Auth extends Api {
                 $cookie = $r::get_user_id() . '_' . $r::get_token();
                 Cookie::set('authautologin', $cookie, Date::WEEK);
                 return $r::get_data();
+            }
+            else
+            {
+                //file_put_contents('debug.html', print_r($r::get_session(), true));
+                //file_put_contents('debug.html', print_r($r::data(), true));
             }
         }
 

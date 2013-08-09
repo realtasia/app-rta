@@ -165,7 +165,7 @@
 <div id="locationForm" style="display:none" title="Create Location" data-bind="with:locationForm">
     <form class="form-horizontal">
         <p class="text-error" data-bind="visible: $root.isError">
-            <strong data-bind="text: $root.ajaxData().message"> </strong>
+            <strong data-bind="text: $root.ajaxMessage"> </strong>
         </p>
         <div class="control-group">
             <label class="control-label">Name</label>

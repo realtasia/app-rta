@@ -556,9 +556,9 @@ class Controller_Media extends Controller_Auth {
         ]);
 
         $url = '/post/update/';
-        $r = $this->req($url, $params, HTTP_Request::POST);
+        $r = Api::request($url, $params, HTTP_Request::POST);
         $this->extract_album($r);
-        return $r;
+        return parent::json_response($req);
     }
 
     /**
@@ -584,9 +584,9 @@ class Controller_Media extends Controller_Auth {
         ];
 
         $url = '/post/update/';
-        $r = $this->req($url, \Arr::merge($this->params, $params), HTTP_Request::POST);
+        $r = Api::request($url, $params, HTTP_Request::POST);
         $this->extract_album($r);
-        return $r;
+        return parent::json_response($req);
     }
 
     /**
@@ -611,8 +611,7 @@ class Controller_Media extends Controller_Auth {
         ];
 
         $this->cu_id = (string) Arr::get((array) $this->cu, '_id');
-        $url = '/user/update/' . $this->cu_id;
-        $this->req($url, $params, HTTP_Request::POST);
+        Api::request('/user/update/' . $this->cu_id, $params, HTTP_Request::POST);
         $this->cu = null;
         $this->session->set('cu', null);
         return $this->get_cu();
@@ -656,22 +655,16 @@ class Controller_Media extends Controller_Auth {
      * returned api request to use for the next file. this is stored in the
      * session
      *
-     * @param mixed $api
+     * @param \Api_Response $api
      */
-    protected function extract_album($api)
+    protected function extract_album(\Api_Response $api)
     {
         $a_id = $this->session->get('albumId');
         if (!$a_id)
         {
-            if (!is_array($api))
-            {
-                $api = @json_decode($api, true);
-            }
+            $data = $api->get_data();
 
-            $status = \Arr::get($api, 'status');
-            $data = \Arr::get($api, 'data');
-
-            if ($status === 'success' && $data)
+            if ($api::success() && $data)
             {
                 $page = \Arr::get($data, 'page');
                 $this->session->set('albumId', $page['_id']);

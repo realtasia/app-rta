@@ -20,25 +20,19 @@ class Controller_People extends Controller_Auth {
 
     public function action_index()
     {
-        $req  = $this->req('/user/', $this->query());
-        $data = json_decode($req, true);
+        $req  = Api::request('/user/', $this->query());
+        $data = $req->get_data();
         //echo "<pre>";
         //die($req);
         //die(Debug::vars($this->query()));
         if ($this->auto_render)
         {
-            $data = Arr::get($data, 'data', []);
-            if(empty($data))
-            {
-               $data = [];
-            }
             $this->pagination = Pagination::factory($data);
             $this->template->set('cl', $data);
             $this->template->set('clt', 'people');
             return $this->content = View::factory('people')->set('cl', $data);
         }
-        $this->response->headers('Content-type', 'application/javascript');
-        $this->response->body($req);
+        return parent::json_response($req);
     }
 
     public function query()

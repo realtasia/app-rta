@@ -1,6 +1,4 @@
-<?php
-
-defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') or die('No direct script access.');
 
 /**
  * Description of client
@@ -25,29 +23,32 @@ class Controller_Location extends Controller_Auth {
 
         $par = ['access_token' => $this->token()];
 
-        $response = $this->req('/page/index/' . $slug, $par);
+        $response = Api::request('/page/index/' . $slug, $par);
 
-        $response = json_decode($response, true);
+        $data = $response->get_data();
 
-        if (empty($response['data']) || !isset($response['data']['_id']))
+        if (empty($data) || !\Arr::get($data, '_id'))
         {
             $this->request->redirect();
         }
 
-        if ((string) $response['data']['_id'] === $slug)
+        if ((string) \Arr::get($data, '_id') === $slug)
         {
-            $this->request->redirect($response['data']['uri'], 301);
+            $this->request->redirect(!\Arr::get($data, 'uri'), 301);
         }
 
-        if ($response['status'] === 'error')
+        /**
+         * @todo need to catch and handle this error properly
+         */
+        if ($response::error)
         {
             //echo "<pre>";
             print_r(Session::instance()->get('session'));
             die(print_r($response, true));
         }
 
-        $this->cp    = $response['data'];
-        $this->title = $this->cp['name'];
+        $this->cp    = $data;
+        $this->title = \Arr::get($data, 'name');
 
         if ($this->request->action() !== 'edit')
         {
@@ -57,20 +58,19 @@ class Controller_Location extends Controller_Auth {
 
     public function action_feed()
     {
-        $req              = $this->req($this->cp['connections']['feed'], $this->query());
-        $data             = json_decode($req, true);
-        $this->pagination = Pagination::factory($data['data']);
+        $req              = Api::request($this->cp['connections']['feed'], $this->query());
+        $data             = $req->get_data();
+        $this->pagination = Pagination::factory($data);
         //echo $skip;
         //die($req);
         if ($this->auto_render)
         {
-            $this->template->set('cl', $data['data']);
+            $this->template->set('cl', $data);
             $this->template->set('clt', 'posts');
-            return $this->content->set('cl', empty($data['data']) ? [] : $data['data']);
+            return $this->content->set('cl', empty($data) ? [] : $data);
         }
 
-        $this->response->headers('Content-type', 'application/javascript');
-        $this->response->body($req);
+        return parent::json_response($req);
     }
 
     public function action_locations()
@@ -80,138 +80,57 @@ class Controller_Location extends Controller_Auth {
 
         if ($this->cp['subtype'] === 'Estate')
         {
-            $req = $this->req('/page/search/', $this->location_query());
+            $req = Api::request('/page/search/', $this->location_query());
             //echo "<pre>";
             //die($req);
             if ($this->auto_render)
             {
-                $data             = json_decode($req, true);
-                $this->pagination = Pagination::factory($data['data']);
-                $this->template->set('cl', $data['data']);
+                $data             = $req->get_data();
+                $this->pagination = Pagination::factory($data);
+                $this->template->set('cl', $data);
                 $this->template->set('clt', 'locations');
-                $this->content    = View::factory('locations')->set('cl', $data['data']);
-                return $this->content->set('introcontent', Kohana::find_file('views', 'introcontent/location'));
+                $this->content    = View::factory('locations')->set('cl', $data);
+                return $this->content->set('introcontent', View::factory('introcontent/location'));
             }
-            $this->response->headers('Content-type', 'application/javascript');
-            $this->response->body($req);
+            return parent::json_response($req);
         }
     }
 
     public function action_likers()
     {
-        $q      = [
-            'skip'         => ((int) Arr::get($this->request->query(), 'page', 1) - 1) * 10,
-            'access_token' => $this->token()
-        ];
-        $u      = $this->cp;
-        $ids    = [];
-        $return = [];
-
-        $o_ids = json_decode($this->req($u['connections']['likers'], $q), true);
-        if ($o_ids['status'] === 'success')
-        {
-            $data = Arr::get($o_ids, 'data');
-            if (!empty($data))
-            {
-                foreach ($data as $v)
-                {
-                    $ids[] = $v['_id'];
-                }
-
-                if (!empty($ids))
-                {
-                    $q                = $this->people_query();
-                    $q['include_ids'] = $ids;
-                    $req              = $this->req("/user", $q);
-                    $return           = json_decode($req, true);
-                    if ($return['status'] === 'success')
-                    {
-                        unset($data);
-                        if ($this->auto_render)
-                        {
-                            $data             = Arr::get($return, 'data');
-                            $this->pagination = Pagination::factory($data);
-                            $this->template->set('cl', $data);
-                            $this->template->set('clt', 'people');
-                            $this->content    = View::factory('people')->set('cl', $data);
-                            return $this->content->set('introcontent', Kohana::find_file('views', "introcontent/location"));
-                        }
-                        $this->response->headers('Content-type', 'application/javascript');
-                        $this->response->body($req);
-                    }
-                }
-            }
-        }
+        $ids = parent::get_interactor_ids(\Arr::path($this->cp, 'connections.likers'));
+        if (!empty($ids))
+            return parent::get_people_by_ids($ids);
     }
 
     public function action_subscribers()
     {
-        $q      = [
-            'skip'         => ((int) Arr::get($this->request->query(), 'page', 1) - 1) * 10,
-            'access_token' => $this->token()
-        ];
-        $u      = $this->cp;
-        $ids    = [];
-        $return = [];
-        //die($this->req($u['connections']['subscribers'], $q));
-        $o_ids = json_decode($this->req($u['connections']['subscribers'], $q), true);
-        if ($o_ids['status'] === 'success')
-        {
-            $data = Arr::get($o_ids, 'data');
-            if (!empty($data))
-            {
-                foreach ($data as $v)
-                {
-                    $ids[] = $v['_id'];
-                }
-
-                if (!empty($ids))
-                {
-                    $q                = $this->people_query();
-                    $q['include_ids'] = $ids;
-                    $req              = $this->req("/user", $q);
-                    $return           = json_decode($req, true);
-                    if ($return['status'] === 'success')
-                    {
-                        unset($data);
-                        if ($this->auto_render)
-                        {
-                            $data             = Arr::get($return, 'data');
-                            $this->pagination = Pagination::factory($data);
-                            $this->template->set('cl', $data);
-                            $this->template->set('clt', 'people');
-                            $this->content    = View::factory('people')->set('cl', $data);
-                            return $this->content->set('introcontent', Kohana::find_file('views', "introcontent/location"));
-                        }
-                        $this->response->headers('Content-type', 'application/javascript');
-                        $this->response->body($req);
-                    }
-                }
-            }
-        }
+        $ids = parent::get_interactor_ids(\Arr::path($this->cp, 'connections.subscribers'));
+        if (!empty($ids))
+            return parent::get_people_by_ids($ids);
     }
 
     public function action_listings()
     {
-        if($this->request->param('id') === 'keyword')
+        if ($this->request->param('id') === 'keyword')
             return $this->action_keyword();
 
-            $req  = $this->req('/listing/search/', $this->listings_query());
-            //die($req);
-            $data = json_decode($req, true);
-            if ($data['status'] === 'success')
+        $req  = Api::request('/listing/search/', $this->listings_query());
+        //die($req);
+        $data = $req->get_data();
+        if ($data::success())
+        {
+            if ($this->auto_render)
             {
-                if ($this->auto_render)
-                {
-                    $this->pagination = Pagination::factory($data['data']);
-                    $this->template->set('cl', $data['data']);
-                    $this->template->set('clt', 'listings');
-                    $this->content    = View::factory('listings')->set('cl', $data['data']);
-                    return $this->content->set('introcontent', Kohana::find_file('views', 'introcontent/location'));
-                }
-                $this->response->headers('Content-type', 'application/javascript');
-                $this->response->body($req);
+                $this->pagination = Pagination::factory($data);
+                $this->template->set('cl', $data);
+                $this->template->set('clt', 'listings');
+                $this->content    = View::factory('listings')->set('cl', $data);
+                return $this->content->set('introcontent', View::factory('introcontent/location'));
             }
+
+            return parent::json_response($req);
+        }
     }
 
     public function action_keyword()
@@ -227,8 +146,8 @@ class Controller_Location extends Controller_Auth {
     protected function location_query()
     {
         return Arr::merge($this->locations_search(), [
-                    'object_id' => (string) $this->cp['_id']
-                ]);
+              'object_id' => (string) $this->cp['_id']
+        ]);
     }
 
     protected function listings_query()
@@ -254,12 +173,12 @@ class Controller_Location extends Controller_Auth {
         }
 
         $defaults = \Arr::merge($page, [
-                    'status'       => 'active',
-                    'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
-                    'sort'         => 'active',
-                    'access_token' => $this->token(),
-                    'user_id'      => $onlyCU ? (string) $this->cu->_id : null,
-                ]);
+              'status'       => 'active',
+              'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
+              'sort'         => 'active',
+              'access_token' => $this->token(),
+              'user_id'      => $onlyCU ? (string) $this->cu->_id : null,
+        ]);
 
         return Arr::overwrite($defaults, $query);
     }
@@ -304,11 +223,11 @@ class Controller_Location extends Controller_Auth {
         {
             $this->template->meta = (array) Metatag::factory($this->cp);
             $this->leftbar        = View::factory('leftbarLocation')
-                    ->set('cp', $this->cp)
-                    ->set('links', $this->leftbar_links());
+              ->set('cp', $this->cp)
+              ->set('links', $this->leftbar_links());
             $this->rightbar       = View::factory('rightbarCompany')
-                    ->set('cp', $this->cp)
-                    ->set('links', $this->rightbar_links());
+              ->set('cp', $this->cp)
+              ->set('links', $this->rightbar_links());
             //$this->leftbar = null;
             //$this->rightbar = null;
             $this->template->set('cp', $this->cp);

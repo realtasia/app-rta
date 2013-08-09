@@ -2,7 +2,7 @@
     <!-- ko template:{name:editingTemplate()}--><!--/ko-->
 </script>
 <script type="text/html" id="album">
-    <article class="relative">
+    <article class="relative clearfix" style="clear:both;">
         <div data-bind="attr:{id:'thumb'+$data._id()},foreach:$data.attachments" style="margin-left:0">
             <!--ko if:$index() < 6-->
                 <a data-bind="attr:{href:'//' + picture(), rel:$parent._id}, click:$parent.setCurrentItem, event:{singletap:$parent.setCurrentItem }, title:$data.excerpt() || $data.name()" target="_blank" class="thumbnail grid slideShow">
@@ -17,7 +17,7 @@
     </article>
 </script>
 <script type="text/html" id="listing">
-    <article class="contentArea relative media listing" style="margin-top:0">
+    <article class="contentArea relative media listing clearfix" style="margin-top:0">
         <div class="pull-left">
             <a href="#" data-bind="html:getThumbnail.call($data),click:setCurrentItem"></a>
             <div class="mediaThumbLinks">
@@ -46,7 +46,7 @@
 </script>
 <script type="text/html" id="post">
     <!--ko if:hasDetails-->
-    <article class="relative media" style="padding-top:10px;">
+    <article class="relative media clearfix" style="padding-top:10px;">
         <!--ko if:picture -->
         <div class="pull-left" data-bind="ifnot:hasVideo">
             <a data-bind="attr:{href : link.src}" target="_blank" class="external_link">
@@ -101,7 +101,7 @@
     <span></span>
 </script>
 <script type="text/html" id="regular">
-    <article class="postFeed media relative" data-bind="attr:{id : _id}, event: {mouseover: showPostSettings, mouseleave: hidePostSettings}, css:{private:privacy.is() === 'PRIVATE'},slideIn:hasHidden">
+    <article class="postFeed media relative clearfix" data-bind="attr:{id : _id}, event: {mouseover: showPostSettings, mouseleave: hidePostSettings}, css:{private:privacy.is() === 'PRIVATE'},slideIn:hasHidden">
         <!--ko if:interactable-->
         <label class="muted" style="position:absolute;right:5px;top:0;font-size:9px" data-bind="text:privacy.is, visible:!postSettings()"></label>
         <div class="postSettings" data-bind="visible:postSettings">

@@ -1,6 +1,4 @@
-<?php
-
-defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') or die('No direct script access.');
 
 /**
  *
@@ -116,6 +114,220 @@ class Controller_Template extends Controller {
             '\\1'
         );
         return preg_replace($search, $replace, $o);
+    }
+
+    /**
+     * Utility methods used in various Controllers to perform respective searches
+     */
+    protected function get_interactor_ids($url, array $query = array(), $object_ids = false)
+    {
+        $ids = [];
+
+        $o_ids = Api::request($url, \Arr::merge([
+                'skip'         => ((int) Arr::get($this->request->query(), 'page', 1) - 1) * 10,
+                'access_token' => $this->token()
+              ], $query));
+
+        if ($o_ids::success())
+        {
+            $data = $o_ids->get_data();
+            if (!empty($data))
+            {
+                foreach ($data as $v)
+                    $ids[] = $v[!$object_ids ? '_id' : 'object_id'];
+            }
+        }
+
+        return $ids;
+    }
+
+    protected function get_people_by_ids($ids)
+    {
+        $q                = $this->people_query();
+        $q['include_ids'] = $ids;
+        $req              = Api::request("/user", $q);
+        if ($req::success())
+        {
+            unset($data);
+            if ($this->auto_render)
+            {
+                $data             = $o_ids->get_data();
+                $this->pagination = Pagination::factory($data);
+                $this->template->set('cl', $data);
+                $this->template->set('clt', 'people');
+                $this->content    = View::factory('people')->set('cl', $data);
+                return $this->content->set('introcontent', View::Factory("introcontent/location"));
+            }
+            return parent::json_response($req);
+        }
+    }
+
+    /**
+     * This method sets the default values for any given search query.
+     *
+     * @return array the processed $parameters
+     */
+    protected function search_defaults()
+    {
+        $query         = $this->request->query();
+        $query['sort'] = \Arr::get($query, 'sort', '') === 'Newest' ? 'popular' : 'active';
+
+        $state = \Arr::get($query, 'state');
+
+        $defaults = [
+            'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
+            'filter'       => \Arr::get($query, 'filter', 'All'),
+            'sort'         => 'active',
+            'access_token' => $this->token()
+        ];
+
+        return Arr::merge($defaults, $query);
+    }
+
+    protected function people_search()
+    {
+        $query  = $this->request->query();
+        $filter = \Arr::get($query, 'filter');
+        $roles  = [];
+        switch ($filter)
+        {
+            case 'Users': $roles = ['user'];
+                break;
+            case 'Staff': $roles = ['admin'];
+                break;
+            case 'Agents': $roles = ['agent'];
+                break;
+        }
+
+        $query['sort'] = \Arr::get($query, 'sort', 'active');
+
+        switch ($query['sort'])
+        {
+            case 'Last Active': $query['sort'] = 'active';
+                break;
+            case 'Newest': $query['sort'] = 'newest';
+                break;
+            case 'Alphabetical': $query['sort'] = 'alpha';
+                break;
+        }
+
+        $defaults = [
+            'limit'        => 11,
+            'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
+            'roles'        => $roles,
+            'sort'         => '',
+            'access_token' => $this->token(),
+            's'            => null,
+            'include_ids'  => [],
+            'status'       => 'active',
+            'privacy'      => 'PUBLIC',
+        ];
+
+        return Arr::overwrite($defaults, $query);
+    }
+
+    protected function locations_search()
+    {
+        $query         = $this->search_defaults();
+        $query['sort'] = \Arr::get($query, 'sort', 'active');
+
+        switch ($query['sort'])
+        {
+            case 'Last Active': $query['sort'] = 'active';
+                break;
+            case 'Newest': $query['sort'] = 'newest';
+                break;
+            case 'Alphabetical': $query['sort'] = 'alpha';
+                break;
+        }
+
+        $filter = \Arr::get($query, 'filter');
+        if (in_array($filter, ['Private Apartments', 'Serviced Apartments', 'Private Landed', 'HDB']))
+        {
+            $query['subtypes'] = $filter;
+        }
+
+        $query['type'] = 'location';
+
+        $defaults = [
+            'limit'        => 11,
+            'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
+            'sort'         => '',
+            'access_token' => $this->token(),
+            's'            => null,
+            'include_ids'  => [],
+            'privacy'      => 'PUBLIC',
+            'type'         => 'location',
+            'subtypes'     => null
+        ];
+
+        return Arr::overwrite($defaults, $query);
+    }
+
+    protected function listings_search()
+    {
+        $query = $this->search_defaults();
+        switch ($query['sort'])
+        {
+            case 'Last Active': $query['sort'] = 'active';
+                break;
+            case 'Newest': $query['sort'] = 'newest';
+                break;
+        }
+
+        $filter = \Arr::get($query, 'filter');
+        if (in_array($filter, ['Private Apartments', 'Serviced Apartments', 'Private Landed', 'HDB']))
+        {
+            $query['filter'] = $filter;
+        }
+
+        $params = [
+            'type'      => ucfirst(strtolower(\Arr::get($query, 'type', 'sale'))),
+            'builtLow'  => static::checkNumberField(\Arr::get($query, 'builtLow', 0)),
+            'builtHigh' => static::checkNumberField(\Arr::get($query, 'builtHigh')),
+            'priceHigh' => static::checkNumberField(\Arr::get($query, 'priceHigh')),
+            'priceLow'  => static::checkNumberField(\Arr::get($query, 'priceLow', 0)),
+            'roomsHigh' => static::checkNumberField(\Arr::get($query, 'roomsHigh')),
+            'roomsLow'  => static::checkNumberField(\Arr::get($query, 'roomsLow', 0)),
+            's'         => Security::xss_clean(\Arr::get($query, 's', ''))
+        ];
+
+        return \Arr::merge($query, ['listing' => array_filter($params)]);
+    }
+
+    protected static function checkNumberField($v)
+    {
+        switch (true)
+        {
+            case $v === 'STUDIO':
+            case strtolower($v) === '1 room':
+                return 1;
+            case $v === '0 sqft':
+            case $v === '0':
+            case $v === '0 rooms':
+                return 0;
+        }
+
+        return floatval(str_replace(',', '', $v));
+    }
+
+    protected function _keyword($url, $query)
+    {
+        $this->auto_render = false;
+        $this->response->headers('Content-type', 'application/json');
+        return $this->response->body(Api::request($url, $query)->as_json());
+    }
+
+    protected function json_response($json)
+    {
+        if ($json instanceof Api_Response)
+            $json = $json->as_json();
+
+        if (is_array($json))
+            $json = json_encode($json);
+
+        $this->response->headers('Content-type', 'application/json');
+        return $this->response->body($json);
     }
 
 }

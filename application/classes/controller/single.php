@@ -51,130 +51,63 @@ EOD;
 
     public function action_user()
     {
-        $id = $this->request->query('id');
         $par = ['access_token' => $this->token()];
-        $req = $this->req('/user/index/' . $id, $par);
-        $response = json_decode($req, true);
+        $req = Api::request('/user/index/' . $this->request->query('id'), $par);
+        $data = $req->get_data();
         //die($req);
         if($this->auto_render)
         {
-            $this->template->meta = (array) Metatag::factory($response['data']);
-            $this->content = View::factory('loops/single/user', $response['data']);
+            $this->template->meta = (array) Metatag::factory($data);
+            $this->content = View::factory('loops/single/user', $data);
         }
-        $this->response->body(View::factory('loops/single/hoverCard', $response['data']));
+        $this->response->body(View::factory('loops/single/hoverCard', $data));
     }
 
     public function action_location()
     {
-        $id = $this->request->query('id');
         $par = ['access_token' => $this->token()];
-        $req = $this->req('/page/index/' . $id, $par);
-        $response = json_decode($req, true);
+        $req = Api::request('/page/index/' . $this->request->query('id'), $par);
+        $data = $req->get_data();
         //die($req);
         if($this->auto_render)
         {
-            $this->template->meta = (array) Metatag::factory($response['data']);
-            $this->content = View::factory('loops/single/location', $response['data']);
+            $this->template->meta = (array) Metatag::factory($data);
+            $this->content = View::factory('loops/single/location', $data);
         }
-        $this->response->body(View::factory('loops/single/hoverCard', $response['data']));
+        $this->response->body(View::factory('loops/single/hoverCard', $data));
     }
 
     public function action_post()
     {
-        $id  = $this->request->query('id');
         $get = $this->request->query('get');
         if($get)
             return $this->$get($id);
 
         $par = ['access_token' => $this->token()];
-        $req = $this->req('/post/index/' . $id, $par);
+        $req = Api::request('/post/index/' . $this->request->query('id'), $par);
         //die($req);
         if($this->auto_render)
         {
-            $data = \Arr::get(json_decode($req, true), 'data');
-            $type = \Arr::get($data, 'type');
-
+            $data = $req->get_data();
             $this->template->meta = (array) Metatag::factory($data);
-
-
             return $this->content = View::factory('loops/single')->set('post', $data);
         }
-        $this->response->headers('Content-type', 'application/javascript');
-        $this->response->body($req);
+
+        return parent::json_response($req);
     }
 
     public function subscribers($id)
     {
-        $this->auto_render = false;
-        $ids    = [];
-        $return = [];
-        $q      = [
-            'skip'         => ((int) Arr::get($this->request->query(), 'page', 1) - 1) * 10,
-            'access_token' => $this->token()
-        ];
-
-        $o_ids = json_decode($this->req("/post/subscribers/$id", $q), true);
-        if($o_ids['status'] === 'success')
-        {
-            $data = Arr::get($o_ids, 'data');
-            if (!empty($data))
-            {
-                foreach ($data as $v)
-                {
-                    $ids[] = $v['_id'];
-                }
-
-                if (!empty($ids))
-                {
-                    $q['include_ids'] = $ids;
-                    $req              = $this->req("/user", $q);
-                    $return           = json_decode($req, true);
-                    if ($return['status'] === 'success')
-                    {
-                        unset($data);
-                        $this->response->headers('Content-type', 'application/javascript');
-                        $this->response->body($req);
-                    }
-                }
-            }
-        }
+        $ids = parent::get_interactor_ids("/post/subscribers/$id");
+        if (!empty($ids))
+            return parent::get_people_by_ids($ids);
     }
 
     public function likers($id, $type = 'post')
     {
-        $this->auto_render = false;
-        $ids    = [];
-        $return = [];
-        $q      = [
-            'skip'         => ((int) Arr::get($this->request->query(), 'page', 1) - 1) * 10,
-            'access_token' => $this->token()
-        ];
-
-        $o_ids = json_decode($this->req("/$type/subscribers/$id", $q), true);
-        if($o_ids['status'] === 'success')
-        {
-            $data = Arr::get($o_ids, 'data');
-            if (!empty($data))
-            {
-                foreach ($data as $v)
-                {
-                    $ids[] = $v['_id'];
-                }
-
-                if (!empty($ids))
-                {
-                    $q['include_ids'] = $ids;
-                    $req              = $this->req("/user", $q);
-                    $return           = json_decode($req, true);
-                    if ($return['status'] === 'success')
-                    {
-                        unset($data);
-                        $this->response->headers('Content-type', 'application/javascript');
-                        $this->response->body($req);
-                    }
-                }
-            }
-        }
+        $ids = parent::get_interactor_ids("/$type/likers/$id");
+        if (!empty($ids))
+            return parent::get_people_by_ids($ids);
     }
 
     protected function people_query()
