@@ -21,11 +21,13 @@
                 <p id="barcodeProfile"><a href="#" data-bind="click:scanBarCode" class="responsiveIconLink" style="color:#000"><i class="icon-qrcode"></i></a><span>&nbsp;&nbsp;Scan <a href="#" data-bind="click:scanBarCode">eContact Card</a></span>.</p><div class="modal square hide fade" id="barCodeBox" style="display:none;"><img alt="User Contact Card" src="/images/121126183535.png" /></div>
             </div>
         </div>
-        <!--ko if : user-->
-        <div class="createListing visible-desktop" style="display:none" data-bind="visible:user().isAdmin || user().isAgent">
-            <a href="#" data-bind="click:initListings" class="responsiveIconLink"><i class="icon-list"></i><span style="text-transform: capitalize;font-variant: small-caps">&nbsp;New Listing</span></a>
+        <div class="visible-desktop">
+            <!--ko with : user-->
+            <div class="createListing" style="display:none" data-bind="visible:isAdmin() || isAgent()">
+                <a href="#" data-bind="click:$parent.initListings.bind($parent)" class="responsiveIconLink"><i class="icon-list"></i><span style="text-transform: capitalize;font-variant: small-caps">&nbsp;New Listing</span></a>
+            </div>
+            <!--/ko-->
         </div>
-        <!--/ko-->
         <div class="outerBox">
             <div class="contentArea newWidgetContentBG">
                 <nav class="tabbable tabs-left">

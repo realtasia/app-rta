@@ -133,6 +133,7 @@ HR {
 }
 
 .inplaceLabel{background:#eee;}
+.inplaceLabel:hover{text-decoration: underline;}
 
 UL.dropdown-menu,.btn,.nav-pills > LI > A,.add-on {
     /*+border-radius:0px;*/
@@ -4258,3 +4259,4 @@ ul.responsiveMenu li.active a {
     margin:0 auto;
     max-height:550px;
 }
+

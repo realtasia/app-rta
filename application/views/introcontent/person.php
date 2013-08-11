@@ -70,9 +70,11 @@
                     <a href="#edit" class="btn btn-small" style="display:none" data-bind="title:'Edit your profile', visible:$root.cpIsCu">
                         <i class="icon-pencil"></i> <span>Edit Profile</span>
                     </a>
-                    <a class="btn btn-small btn-rta hidden-tablet hidden-desktop" style="display:none" data-bind="click:$root.initListingsMobile.bind($root), title:'Create a Listing', visible:$root.user().isAdmin || $root.user().isAgent">
-                        <i class="icon-plus-sign"></i> <span>New Listing</span>
-                    </a>
+                    <span class="visible-phone" data-bind="with:$root.user">
+                        <a class="btn btn-small btn-rta" style="display:none" data-bind="click:$root.initListings.bind($root), title:'Create a Listing', visible:isAdmin() || isAgent()">
+                            <i class="icon-plus-sign"></i> <span>New Listing</span>
+                        </a>
+                    </span>
                     <!--/ko-->
                 </span>
             </div>

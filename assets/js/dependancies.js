@@ -316,30 +316,32 @@ RT["Com"] = {
      * @returns {Boolean|void}
      */
     Interaction: function(element, i, VM) {
+        VM = RT.Com.GetObsVal(VM); // in case it is an observable
         var e = jQuery(element), // the element, normally anchor tag
-                VM = RT.Com.GetObsVal(VM), // in case it is an observable
                 span = e.find('span:not(.badge)'), // if this element has a named label
                 I = i || span && span.text && span.text().toLowerCase(), // either given or extracted from the label
-                canI = RT.Com.GetObsVal(VM.interactions), // if can be interacted on
-                state = canI ? canI.hasOwnProperty(I) && canI[I]() : null, // the current state of the interaction
-                actions = RT.Com.GetObsVal(VM.actions),
-                newI; // in case we need to change the label
+                actions = RT.Com.GetObsVal(VM.actions);
+        // if there is an interactions object in VM, then this equates to true
+        this.canInteract = RT.Com.GetObsVal(VM.interactions);
+
+        // the current state of the interaction. If the property doesn't exist,
+        // this equates to false (negative interaction, i.e. 'unlike' or 'unsubscribe'
+        this.state = this.canInteract ? this.canInteract.hasOwnProperty(I) && this.canInteract[I]() : false;
+
+        // extract URl from actions
+        this.url = actions[this.state ? 'un' + I : I]();
+
+        this.modifyElement = function() {
+            // the label text should reflect a new action, not the current one
+            if (span)
+                span.text((this.state ? I : 'un' + I).ucfirst());
+
+            return e.attr('href', this.url || null);
+        };
+
+        return this;
 
 
-        // if this object can't be interacted on, there is nothing left to do.
-        if (canI) {
-// if the value of state is true, (positive interaction) then we got to change
-// the label text to negative and add an active class to the parent
-            state && (e.addClass('active') && (newI = 'un' + I)) || (e.removeClass('active') && (newI = I));
-            // if we have a label, update it's text
-            span && span.text(newI.ucfirst());
-            // set the element's href attribute to the url
-            e.attr('href', actions[newI]() || null);
-            // return the url
-            return actions[newI]() || null;
-        }
-        e.remove();
-        return false;
     },
     MakeObjPropsObs: function() {
         if (arguments[0]) {
@@ -382,7 +384,7 @@ RT["Com"] = {
             return self.template;
         };
     },
-    CBSettings: {transition: "none", speed: 1, open: !0, maxWidth: '95%', maxHeight: '95%', height: "30%", onClosed: function() {
+    CBSettings: {transition: "none", speed: 1,top:'10%',open: !0, maxWidth: '95%', maxHeight: '95%', height: "30%", onClosed: function() {
             return RTApp.currentForm(null) && (RTC.processing = !1); //ko.cleanNode(document.getElementById(id));
         }},
     qtipPlacement: function(element) {
@@ -499,6 +501,14 @@ RT["Com"] = {
             return cu && setTimeout(RTC.poll, 3e4);
         });
     },
+    arrGet: function($arr, $key, $default){
+        // likely this isn't an array but an object :-)
+        if($arr.hasOwnProperty($key)){
+            return $arr[$key];
+        }
+        // so it doesn't return undefined.
+        return $default || null;
+    },
     forEach: ko.utils.arrayForEach,
     debug: true,
     log: function(k, d) {
@@ -596,8 +606,8 @@ RT["Com"] = {
         };
         self.init();
     },
-    Obstract: function(o, k){
-        return o.hasOwnProperty(k) && RT.Com.GetObsVal(o[k]) || null;
+    Obstract: function(o, k) {
+        return RT.Com.GetObsVal(RT.Com.arrGet(o, k));
     }
 };
 window["RTC"] = RT["Com"];
@@ -612,52 +622,18 @@ RT["handlers"] = {
             var data = ko.unwrap(vA()), geo = ko.toJS(data.geo),
                     add = data.address(), options, map;
             if (data.showAddress()) {
-                if (geo && google) {
+                if (geo) {
                     options = {
-                        zoom: 4,
-                        center: new google.maps.LatLng(geo.lat, geo.lon),
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                        elt: element, /*ID of element on the page where you want the map added*/
+                        zoom: 10, /*initial zoom level of the map*/
+                        latLng: {lat: geo.lat, lng: geo.lon}, /*center of map in latitude/longitude */
+                        mtype: 'map', /*map type (map)*/
+                        bestFitMargin: 0, /*margin offset from the map viewport when applying a bestfit on shapes*/
+                        zoomOnDoubleClick: true                    /*zoom in when double-clicking on map*/
                     };
-                    return new google.maps.Map($(element).get(0), options);
+                    return new MQA.TileMap(options);
                 }
             }
-            //      function initialize() {
-            //        var mapOptions = {
-            //          zoom: 8,
-            //          center: new google.maps.LatLng(-34.397, 150.644),
-            //          mapTypeId: google.maps.MapTypeId.ROADMAP
-            //        };
-            //        map = new google.maps.Map(document.getElementById('map_canvas'),
-            //            mapOptions);
-            //      }
-            //      var geocoder;
-            //      var map;
-            //      function initialize() {
-            //        geocoder = new google.maps.Geocoder();
-            //        var latlng = new google.maps.LatLng(-34.397, 150.644);
-            //        var mapOptions = {
-            //          zoom: 8,
-            //          center: latlng,
-            //          mapTypeId: google.maps.MapTypeId.ROADMAP
-            //        }
-            //        map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-            //      }
-            //
-            //      function codeAddress() {
-            //        var address = document.getElementById('address').value;
-            //        geocoder.geocode( { 'address': address}, function(results, status) {
-            //          if (status == google.maps.GeocoderStatus.OK) {
-            //            map.setCenter(results[0].geometry.location);
-            //            var marker = new google.maps.Marker({
-            //                map: map,
-            //                position: results[0].geometry.location
-            //            });
-            //          } else {
-            //            alert('Geocode was not successful for the following reason: ' + status);
-            //          }
-            //        });
-            //      }
-            //      google.maps.event.addDomListener(window, 'load', initialize);
         }
     },
     flash: {
@@ -1449,7 +1425,7 @@ RT["handlers"] = {
             self.resize = function(cb) {
                 "use strict";
                 var t = this, sl = function() {
-                    if(typeof(cb) === 'function'){
+                    if (typeof(cb) === 'function') {
                         cb.call();
                     }
                     return this.isLoading(false);
@@ -1587,7 +1563,7 @@ RT["handlers"] = {
                     }
                     return $(p).fadeIn('fast', function() {
 
-                        return uw.resize.call(uw, function(){
+                        return uw.resize.call(uw, function() {
                             $(p).find('.draggable img').draggable({axis: "x", revert: true, delay: 0});
                         });
                     });

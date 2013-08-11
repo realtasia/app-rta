@@ -40,13 +40,14 @@ class Controller_Location extends Controller_Auth {
         /**
          * @todo need to catch and handle this error properly
          */
-        if ($response::error)
+        if ($response::error())
         {
             //echo "<pre>";
             print_r(Session::instance()->get('session'));
             die(print_r($response, true));
         }
-
+        //echo "<pre>";
+        //die(print_r($data));
         $this->cp    = $data;
         $this->title = \Arr::get($data, 'name');
 
@@ -99,8 +100,7 @@ class Controller_Location extends Controller_Auth {
     public function action_likers()
     {
         $ids = parent::get_interactor_ids(\Arr::path($this->cp, 'connections.likers'));
-        if (!empty($ids))
-            return parent::get_people_by_ids($ids);
+        return parent::get_people_by_ids($ids);
     }
 
     public function action_subscribers()

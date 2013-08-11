@@ -1,4 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
 
 /**
  *
@@ -143,23 +145,32 @@ class Controller_Template extends Controller {
 
     protected function get_people_by_ids($ids)
     {
-        $q                = $this->people_query();
-        $q['include_ids'] = $ids;
-        $req              = Api::request("/user", $q);
-        if ($req::success())
+        $data = [];
+
+        if (!empty($ids))
         {
-            unset($data);
-            if ($this->auto_render)
+            $req = Api::request("/user", \Arr::merge($this->people_query(), [
+                    'include_ids' => $ids
+            ]));
+            if ($req::success())
             {
-                $data             = $o_ids->get_data();
-                $this->pagination = Pagination::factory($data);
-                $this->template->set('cl', $data);
-                $this->template->set('clt', 'people');
-                $this->content    = View::factory('people')->set('cl', $data);
-                return $this->content->set('introcontent', View::Factory("introcontent/location"));
+                if ($this->auto_render) // grab the data from the response
+                    $data = $req->get_data();
+                else // just return the response if ajax
+                    return self::json_response($req);
             }
-            return parent::json_response($req);
         }
+
+        if ($this->auto_render)
+        {
+            $this->pagination = Pagination::factory($data);
+            $this->template->set('cl', $data);
+            $this->template->set('clt', 'people');
+            $this->content    = View::factory('people')->set('cl', $data);
+            return $this->content->set('introcontent', View::Factory("introcontent/location"));
+        }
+
+        return self::json_response([]);
     }
 
     /**

@@ -47,7 +47,7 @@
         }
         ?>
     </div>
-    <div class="media visible-phone" data-bind="with:RTApp.cp">
+    <div class="media visible-phone">
         <div style="width:90px;height:90px" class="pull-left"><i class="hovercards" data-bind="attr:{'class':RTApp.cpIconClass(90)}"></i></div>
         <div class="media-body">
             <h4 style="display:inline-block" class="noMargTopBtm">

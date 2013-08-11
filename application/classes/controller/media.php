@@ -556,8 +556,8 @@ class Controller_Media extends Controller_Auth {
         ]);
 
         $url = '/post/update/';
-        $r = Api::request($url, $params, HTTP_Request::POST);
-        $this->extract_album($r);
+        $req = Api::request($url, $params, HTTP_Request::POST);
+        $this->extract_album($req);
         return parent::json_response($req);
     }
 
@@ -584,8 +584,8 @@ class Controller_Media extends Controller_Auth {
         ];
 
         $url = '/post/update/';
-        $r = Api::request($url, $params, HTTP_Request::POST);
-        $this->extract_album($r);
+        $req = Api::request($url, $params, HTTP_Request::POST);
+        $this->extract_album($req);
         return parent::json_response($req);
     }
 
