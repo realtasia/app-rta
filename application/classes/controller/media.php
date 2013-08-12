@@ -414,7 +414,7 @@ class Controller_Media extends Controller_Auth {
         {
             $s3url = 'http://' . RT::BUCKET . DIRECTORY_SEPARATOR . $args['Key'];
             $mediainfo = [
-                'src'    => static::build_iframe_link($s3url),
+                'src'    => static::build_iframe_link($s3url, $mime),
                 'width'  => 440,
                 'height' => 250,
                 'type'   => $mime
@@ -705,7 +705,7 @@ class Controller_Media extends Controller_Auth {
      */
     protected static function build_iframe_link($file_url)
     {
-        $data = ['url' => $file_url, 'embedded' => 'true'];
+        $data = ['url' => urlencode($file_url), 'embedded' => 'true'];
 
         return "http://docs.google.com/viewer?" . http_build_query($data);
     }

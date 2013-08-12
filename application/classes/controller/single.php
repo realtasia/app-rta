@@ -1,4 +1,7 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
+
 /**
  * Description of single
  *
@@ -18,29 +21,29 @@ class Controller_Single extends Controller_Auth {
     public function action_parseurl()
     {
         $this->auto_render = false;
-        $text = $this->request->query('text');
-        $regex = <<<EOD
+        $text              = $this->request->query('text');
+        $regex             = <<<EOD
         /(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/
 EOD;
-        if(preg_match($regex, $text, $matches))
+        if (preg_match($regex, $text, $matches))
         {
-            $key = '3ec47f021d4e11e1ae874040d3dc5c07';
-            $r = Request::factory('http://api.embed.ly/1/oembed')
-                        ->query(array(
-                           'key' => $key,
-                           'url' => $matches[0],
-                           'maxwidth' => 600,
-                           'autoplay' => true
-                        ));
+            $key     = '3ec47f021d4e11e1ae874040d3dc5c07';
+            $r       = Request::factory('http://api.embed.ly/1/oembed')
+              ->query(array(
+                'key'      => $key,
+                'url'      => $matches[0],
+                'maxwidth' => 600,
+                'autoplay' => true
+            ));
             $results = json_decode($r->execute(), true);
 
-            if(!isset($results['url']))
-                  $results['url'] = $matches[0];
+            if (!isset($results['url']))
+                $results['url'] = $matches[0];
 
             $results['uid'] = uniqid();
             return $this->response
-                 ->headers('Content-type', 'application/json')
-                 ->body(json_encode($results, JSON_PRETTY_PRINT));
+                ->headers('Content-type', 'application/json')
+                ->body(json_encode($results, JSON_PRETTY_PRINT));
         }
     }
 
@@ -51,28 +54,28 @@ EOD;
 
     public function action_user()
     {
-        $par = ['access_token' => $this->token()];
-        $req = Api::request('/user/index/' . $this->request->query('id'), $par);
+        $par  = ['access_token' => $this->token()];
+        $req  = Api::request('/user/index/' . $this->request->query('id'), $par);
         $data = $req->get_data();
         //die($req);
-        if($this->auto_render)
+        if ($this->auto_render)
         {
             $this->template->meta = (array) Metatag::factory($data);
-            $this->content = View::factory('loops/single/user', $data);
+            $this->content        = View::factory('loops/single/user', $data);
         }
         $this->response->body(View::factory('loops/single/hoverCard', $data));
     }
 
     public function action_location()
     {
-        $par = ['access_token' => $this->token()];
-        $req = Api::request('/page/index/' . $this->request->query('id'), $par);
+        $par  = ['access_token' => $this->token()];
+        $req  = Api::request('/page/index/' . $this->request->query('id'), $par);
         $data = $req->get_data();
         //die($req);
-        if($this->auto_render)
+        if ($this->auto_render)
         {
             $this->template->meta = (array) Metatag::factory($data);
-            $this->content = View::factory('loops/single/location', $data);
+            $this->content        = View::factory('loops/single/location', $data);
         }
         $this->response->body(View::factory('loops/single/hoverCard', $data));
     }
@@ -80,17 +83,17 @@ EOD;
     public function action_post()
     {
         $get = $this->request->query('get');
-        if($get)
-            return $this->$get($id);
+        if ($get)
+            return $this->$get($this->request->query('id'));
 
         $par = ['access_token' => $this->token()];
         $req = Api::request('/post/index/' . $this->request->query('id'), $par);
         //die($req);
-        if($this->auto_render)
+        if ($this->auto_render)
         {
-            $data = $req->get_data();
+            $data                 = $req->get_data();
             $this->template->meta = (array) Metatag::factory($data);
-            return $this->content = View::factory('loops/single')->set('post', $data);
+            return $this->content        = View::factory('loops/single')->set('post', $data);
         }
 
         return parent::json_response($req);
@@ -130,4 +133,5 @@ EOD;
         }
         return parent::after();
     }
+
 }

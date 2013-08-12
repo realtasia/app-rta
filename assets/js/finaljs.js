@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-08-11 21:38:43 
+   Compiled at: 2013-08-12 17:39:29 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1611,7 +1611,7 @@ RT["handlers"] = {
             init: function(vm) {
                 //return console.log(vm);
                 var s = ko.utils.extend(RT.Com.CBSettings, {
-                    href: '/assets/dialog.html', height: "auto", width: "300px",
+                    href: '/assets/dialog.html', height: "auto", width: "35%", maxWidth:'95%', minWidth:'400px',
                     onComplete: function() {
                         ko.applyBindings(vm, document.getElementById("dialogContent"));
                         return $.colorbox.resize();
@@ -1626,7 +1626,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-08-11 21:38:43 
+   Compiled at: 2013-08-12 17:39:29 
 ================================ */
 RT["App"] = function() {
     "use strict";
@@ -2276,7 +2276,7 @@ RT["ControllerLibrary"] = function() {
     RTC.MakeObsFromArray.call(self, o);
     self.history([{name: 'Home', libraryURL: RTApp.cp().uri(), backLink: {}}, new RT.albumsView]);
     self.deleteAlbum = function(d) {
-        var t = this, ea = t.editingAlbum;
+        var t = this, ea = t.editingAlbum && t.editingAlbum() ? t.editingAlbum : ko.observable(d);
         ea() && ea().actions && ea().actions["delete"] && RTApp.performAction('delete', ea(), null);
         return t.selectedAlbum(null) && ea(null) && t.stopEditingAlbum();
     };
@@ -2312,8 +2312,8 @@ RT["ControllerLibrary"] = function() {
     self.getAttachments = function(force) {
         "use strict";
         var sa = self.selectedAlbum(),
-                hasA = sa.attachments, a;
-        if (!force && !sa.hasNextPage()) {
+                hasA = sa && sa.attachments, a;
+        if (!sa || (sa && !force && !sa.hasNextPage())) {
             return;
         }
 
@@ -2350,7 +2350,8 @@ RT["ControllerLibrary"] = function() {
     };
     self.initPager = function() {
         "use strict";
-        var p = jQuery("#loadAttachments"), exists = p.data() && !!p.data().waypointsWaypointsIds;
+        var p = $("#loadAttachments"), exists = p.data() && !!p.data().waypointsWaypointsIds;
+        console.log(self.selectedAlbum())
         if (self.selectedAlbum() && self.selectedAlbum().hasNextPage()) {
             return exists && p.waypoint("enable") || p.waypoint(RTC.AlbumHandler.bind(this), {offset: 'bottom-in-view'});
         }
@@ -2402,10 +2403,6 @@ RT["ControllerLibrary"].prototype = new RTC.PageInterface;
 RT["albumsView"] = function() {
     var self = this;
     self.name = "Albums";
-    self.caption = ko.computed(function() {
-        var t = this;
-        return RTC.Obstract(t, 'excerpt') || RTC.Obstract(t, 'message') || RTC.Obstract(t, 'name');
-    }, self);
     self.libraryURL = "#media";
     self.backLink = {
         action: function() {
@@ -2420,7 +2417,6 @@ RT["albumsView"] = function() {
                 }, a);
                 a.isFormPage(!0);
                 f.formLabel = "Create new Album";
-                console.log(f)
                 return a.createAlbum();
                 //return a.goTo(RT.editForm.bind(null, f), 2), true;
             },
@@ -2435,10 +2431,16 @@ RT["albumsView"] = function() {
                 if (RTC.isSuccess(r) && !!r.data.length) {
                     RTC.forEach(r.data, function(item) {
                         item.seeAlbum = function(d) {
-                            RTApp.cplib().goTo(RT.singleAlbum.bind(null, d), 2);
+                            var a = RTApp.cplib();
+                            a.selectedAlbum(d);
+                            a.goTo(RT.singleAlbum.bind(null, d), 2);
                             return true;
                         };
                         item.libraryURL = "#media" + item.uri;
+                        item.caption = ko.computed(function() {
+                            var t = this;
+                            return RTC.Obstract(t, 'excerpt') || RTC.Obstract(t, 'message');
+                        }, item);
                     });
                     return ko.mapping.fromJS(r.data, {create: RTC.CreateLoop}, self.items);
                 }
@@ -2452,19 +2454,19 @@ RT["albumsView"] = function() {
 };
 RT["singleAlbum"] = function(album) {
     var seeAttachment = function(d) {
-        RTApp.cplib().goTo(RT.singleAttachment.bind(d, album, album.attachments.indexOf(d)), 3);
+        RTApp.cplib().goTo(RT.singleAttachment.bind(d, album), 3);
         return true;
-    };
-    album.deleteDialog = new RT.ConfirmDialog({
+    }, deleteDialog = new RT.ConfirmDialog({
         message: "Deleting this album will delete all its pictures including ones that are used in your listings.",
         ok: function() {
-            return RTApp.cplib().goBack(), !0;
+            var a = RTApp.cplib();
+            return a.deleteAlbum.call(a, album) && a.goBack(), !0;
         }
     });
     album.backLink = {
         action: function() {
             var a = RTApp.cplib();
-            return a.isFormPage(!1) && a.goBack(), true;
+            return a.selectedAlbum(null) && a.isFormPage(!1) && a.goBack(), true;
         },
         icon: 'icon-chevron-left', title: 'Back to Albums',
         uri: '#media'
@@ -2476,12 +2478,13 @@ RT["singleAlbum"] = function(album) {
             icon: 'icon-pencil', title: 'Edit this album'
         }, {
             action: function() {
-                return ko.bindingHandlers.confirmDialog.init(new RT.ConfirmDialog({
-                    message: "Deleting this album will delete all its pictures including ones that are used in your listings.",
-                    ok: function() {
-                        return RTApp.cplib().goBack(), !0;
-                    }
-                }));
+                if(album.isDefaultAlbum()){
+                    return ko.bindingHandlers.confirmDialog.init(new RT.ConfirmDialog({
+                        title: 'Action cannot be completed!',
+                       message: 'This is a default album that cannot be deleted. To remove a photo, please click on the thumbnail for more options'
+                    }));
+                }
+                return ko.bindingHandlers.confirmDialog.init(deleteDialog);
             },
             icon: 'icon-trash', title: 'Delete this album'
         }, {
@@ -2499,7 +2502,7 @@ RT["singleAlbum"] = function(album) {
             return;
         }
 
-        a = force && sa.getAttachments();
+        a = (force || sa.hasNextPage()) && sa.getAttachments();
         a && a.done(function(r) {
             if (RTC.isSuccess(r) && !!r.data.length) {
                 sa.hasNextPage(r.data.length > 10);
@@ -2514,7 +2517,7 @@ RT["singleAlbum"] = function(album) {
                     r.data && album.attachments.pushAll(ko.utils.arrayMap(r.data, RTC.CreateLoop));
                 }
             }
-            //return self.initPager();
+            return RTApp.cplib().initPager();
         });
         return;
     };
@@ -2533,33 +2536,40 @@ RT["singleAlbum"] = function(album) {
     }, album);
     return album;
 };
-RT["editForm"] = function(currentItem) {
-    this.name = currentItem.formLabel || "Edit this item";
-    this.uri = currentItem.uri + "/Edit";
-    this.backLink = {
-        action: function() {
-            return RTApp.cplib().goBack(), !0;
-        },
-        icon: 'icon-chevron-left', uri: !!currentItem.uri() ? "#media" + currentItem.uri() : "#media", title: 'Go back'
-    };
-    this.rightLinks = [{
-            action: function() {
-                return true;
-            },
-            icon: 'icon-save', uri: currentItem.uri, title: 'Save this album'
-        }, {
-            action: function() {
-                return ko.bindingHandlers.confirmDialog.init(currentItem.deleteDialog);
-            },
-            icon: 'icon-trash', uri: currentItem.uri, title: 'Delete this album'
-        }];
-    this.content = {name: 'editForm', data: currentItem};
-    this.Search = ko.observable(!RTApp.cplib().isFormPage());
-    return this;
-};
+//RT["editForm"] = function(currentItem) {
+//    this.name = currentItem.formLabel || "Edit this item";
+//    this.uri = currentItem.uri + "/Edit";
+//    this.backLink = {
+//        action: function() {
+//            return RTApp.cplib().goBack(), !0;
+//        },
+//        icon: 'icon-chevron-left', uri: !!currentItem.uri() ? "#media" + currentItem.uri() : "#media", title: 'Go back'
+//    };
+//    this.rightLinks = [{
+//            action: function() {
+//                if (currentItem.hasOwnProperty('saveChanges')) {
+//                    currentItem.saveChanges.call(null, currentItem);
+//                }
+//                //return true;
+//            },
+//            icon: 'icon-save', uri: currentItem.uri, title: 'Save this album'
+//        }, {
+//            action: function() {
+//                return ko.bindingHandlers.confirmDialog.init(currentItem.deleteDialog);
+//            },
+//            icon: 'icon-trash', uri: currentItem.uri, title: 'Delete this album'
+//        }];
+//    this.content = {name: 'editForm', data: currentItem};
+//    this.Search = ko.observable(!RTApp.cplib().isFormPage());
+//    return this;
+//};
 RT["singleAttachment"] = function(currentAlbum) {
     var self = this;
     self.parent = currentAlbum;
+    self.editing = ko.observable(false);
+    self.startEdit = function(){
+        return self.editing(true);
+    };
     self.deleteDialog = new RT.ConfirmDialog({
         ok: function() {
             RTApp.cplib().deleteFile(self);
@@ -2574,12 +2584,6 @@ RT["singleAttachment"] = function(currentAlbum) {
     };
     self.rightLinks = [{
             action: function() {
-                var a = RTApp.cplib();
-                return a.isFormPage(!0) && a.goTo(RT.editForm.bind(null, self), 4);
-            },
-            icon: 'icon-pencil', title: 'Edit this item', uri: "#media" + currentAlbum.uri() + "/Edit"
-        }, {
-            action: function() {
                 return ko.bindingHandlers.confirmDialog.init(self.deleteDialog);
             },
             icon: 'icon-trash', title: 'Delete this item', uri: "#media" + currentAlbum.uri() + "/Delete"
@@ -2589,9 +2593,9 @@ RT["singleAttachment"] = function(currentAlbum) {
         var a = this.parent.attachments, i = a.indexOf(this);
         return i + 1 + " of " + a().length;
     }, self);
-    self.name = ko.computed(function() {
+    self.caption = ko.computed(function() {
         var t = this;
-        return RTC.Obstract(t, 'excerpt') || RTC.Obstract(t, 'message') || RTC.Obstract(t, 'name');
+        return RTC.Obstract(t, 'name') || RTC.Obstract(t, 'excerpt') || RTC.Obstract(t, 'message');
     }, self);
     self.previous = function(d) {
         var a = d.parent.attachments, l = RTApp.cplib(), i = a.indexOf(d),
@@ -2604,6 +2608,19 @@ RT["singleAttachment"] = function(currentAlbum) {
         return l.history.pop() && l.goTo(RT.singleAttachment.bind(e, d.parent), 3);
     };
     self.content = {name: 'pictureView', data: self};
+    // throttle the subscription so as not to fire ajax indefinitely.
+    self.name.extend({throttle:650});
+    //the method that actually updates the attachment.
+    self.name.subscribe(function(v) {
+            var t = this, p = {
+                album_id: t.page && RTC.GetObsVal(t.page._id) || currentAlbum && RTC.GetObsVal(currentAlbum._id),
+                message: v,
+                url: '/post/update/' + t._id(),
+                request_type: 'update_attachment'
+            };
+            return RTC.PostApi({}, p);
+        }, self);
+
 //    self.slideShow = new RT.Modal({
 //        items: currentAlbum.items,
 //        currentItem: self,
@@ -2964,7 +2981,7 @@ RT["Post"].prototype.extend(function() {
             i.width = "16";
             i.height = "16";
             i.src = "https://plus.google.com/_/favicon?domain=" + u;
-            i = $(i).addClass('favicon')
+            i = $(i).addClass('favicon');
             $(s).text(p.name()).prepend(i);
             return $(s).html();
         }
@@ -4123,7 +4140,7 @@ RT["Forms"] = {
                 i.width = "16";
                 i.height = "16";
                 i.src = "https://plus.google.com/_/favicon?domain=" + u;
-                i = $(i).addClass('favicon')
+                i = $(i).addClass('favicon');
                 $(s).text(p.name).prepend(i);
                 return $(s).html();
             }
@@ -4271,7 +4288,7 @@ RT["Forms"] = {
                         log('[Refresh]');
                     },
                     StateChanged: function(up) {
-                        log('[StateChanged]', up.state == plupload.STARTED ? "STARTED" : "STOPPED");
+                        log('[StateChanged]', up.state === plupload.STARTED ? "STARTED" : "STOPPED");
                         up.state === plupload.STARTED && (up.settings.multipart_params = t.uploadParams());
                     },
                     UploadProgress: function(up, file) {
@@ -4320,7 +4337,7 @@ RT["Forms"] = {
                     QueueChanged: function(up) {
                         // Called when the files in queue are changed by adding/removing files
                         log('[QueueChanged]');
-                    },
+                    }
                 }
             };
         }, self);
@@ -4333,6 +4350,7 @@ RT["Forms"] = {
     },
     Attachment: function(params, album, lib) {
         "use strict";
+        console.log(ko.toJS(params));
         var self = this, page, id;
         params = params || {};
         id = params._id || params.id;
@@ -4348,6 +4366,7 @@ RT["Forms"] = {
         self.type = "attachment";
         self._id = RTC.MakeObs(id);
         self.actions = params.actions;
+        self.uri = params.uri;
         self.connections = params.connections;
         self.subtype = RTC.MakeObs(params.subtype);
         self.mediainfo = params.mediainfo || {
@@ -4360,7 +4379,7 @@ RT["Forms"] = {
             name: lib.name,
             type: "library"
         };
-        self.name(params.name);
+        self.name(RTC.GetObsVal(params.name));
         self.message = RTC.MakeObs(params.message).extend({maxLength: 10e3});
         self.excerpt = RTC.MakeObs(params.excerpt).extend({maxLength: 10e3});
         self.user = lib.user;
@@ -4381,10 +4400,18 @@ RT["Forms"] = {
         self.update = function(pars) {
             self._id(pars._id);
             self.page = pars.page;
+            self.name(pars.name)
             self.actions = ko.mapping.fromJS(pars.actions);
             self.connections = ko.mapping.fromJS(pars.connections);
             pars.picture && self.picture(pars.picture);
             pars.mediainfo && (self.mediainfo = pars.mediainfo);
+
+//            var a = lib.selectedAlbum().attachments, ci = ko.utils.arrayFirst(a(), function(item) {
+//                return item._id() === self._id();
+//            }), i = a.indexOf(ci);
+            //RT.singleAttachment.bind(ko.mapping.fromJS(pars, {create: RTC.CreateLoop}, ci), album)
+            //a.replace(a()[i], ko.mapping.fromJS(pars, {create: RTC.CreateLoop}))
+
         };
         self.updateAttachment = function() {
             var t = this, s, p = {
@@ -4807,7 +4834,7 @@ RT["Forms"] = {
                     var p = T.listing.price(), v = T.listing.valuation(),
                             rc = C.RemoveCommas, ts = C.ThousandSep;
                     return T.listing.cov(ts(parseInt(rc(p), 10) - parseInt(rc(v), 10)) || 0);
-                }, T)
+                }, T);
             }
             ;
             return T.listing[n].subscribe(function(v) {
@@ -4971,7 +4998,6 @@ RT["Forms"]["Info"].prototype = {
         var t = this, tmp = ko.toJS(t.editables), itm, i, j;
         tmp.name = t.name();
         tmp.info.birthday = new Date(tmp.info.birthday).toString();
-        console.log(tmp.info.birthday)
         if (tmp.password === "") {
             tmp.password = null;
             tmp.confirmPassword = null;
@@ -5776,71 +5802,46 @@ jQuery(document).ready(function($) {
     //run it the first time
     ril(RTApp.isSmallerThanTablet());
     $(document.body)
-            .on("click", ".hasActiveState", function() {
-//                "use strict";
-//                var e = $(this), isNavigation = e.hasClass("isNavigation");
-//                if (!e.find("a").hasClass("disabled")) {
-//                    if (isNavigation) {
-//                        $(".hasActiveState").each(function() {
-//                            $(this).removeClass("active").removeClass("hovering");
-//                        });
-//                    }
-//                }
-//                if (isNavigation) {
-//                    e.addClass("active");
-//                    e.removeClass("hovering");
-//                } else {
-//                    if (e.hasClass("active")) {
-//                        e.removeClass("active");
-//                        e.addClass("hovering");
-//                    } else {
-//                        e.addClass("active");
-//                        e.removeClass("hovering");
-//                    }
-//                }
-//                return;
-    })
             .on("click", ".subscribe-link, .like-link", function(e) {
-                e.preventDefault();
-                var t = this,
-                        a = ko.dataFor(t),
-                        r = RTC,
-                        isLike = $(t).hasClass('like-link'), s,
-                        performSub = function(noElementChange){
-                            var j, u = r.Interaction(t, "subscribe", a);
-                            return (j = r.PostApi({}, {url: u.url})) && j.done(function() {
-                                a.interactions.subscribe(!a.interactions.subscribe());
-                                if(!noElementChange){
-                                    return u.modifyElement();
-                                }
-                                return;
-                            });
-                        },
-                        performLike = function(){
-                            var j, l = r.Interaction(t, "like", a);
-                            return (j = r.PostApi({}, {url: l.url})) && j.done(function() {
-                                a.interactions.like(!a.interactions.like());
-                                return l.modifyElement();
-                            });
-
-                            return l;
-                        };
-
-                if(isLike){
-                    s = performLike().state;
-                    if(s){
-                       //return performSub(true);
-                    }
-                    return;
+        e.preventDefault();
+        var t = this,
+                a = ko.dataFor(t),
+                r = RTC,
+                isLike = $(t).hasClass('like-link'), s,
+                performSub = function(noElementChange) {
+            var j, u = r.Interaction(t, "subscribe", a);
+            return (j = r.PostApi({}, {url: u.url})) && j.done(function() {
+                a.interactions.subscribe(!a.interactions.subscribe());
+                if (!noElementChange) {
+                    return u.modifyElement();
                 }
+                return;
+            });
+        },
+                performLike = function() {
+            var j, l = r.Interaction(t, "like", a);
+            return (j = r.PostApi({}, {url: l.url})) && j.done(function() {
+                a.interactions.like(!a.interactions.like());
+                return l.modifyElement();
+            });
 
-                return performSub();
+            return l;
+        };
 
-            })
+        if (isLike) {
+            s = performLike().state;
+            if (s) {
+                //return performSub(true);
+            }
+            return;
+        }
+        return performSub();
+
+    })
             .on("click", ".subscriberHoverCard", function(e) {
-                e.preventDefault();
-                return new RTApp.interactors(ko.dataFor(this)).init('subscribers');
-            })
+        e.preventDefault();
+        return new RTApp.interactors(ko.dataFor(this)).init('subscribers');
+    })
             .on("click", ".likerHoverCard", function(e) {
         e.preventDefault();
         return new RTApp.interactors(ko.dataFor(this)).init('likers');
@@ -5865,15 +5866,15 @@ jQuery(document).ready(function($) {
             .on("mouseenter", '.hasHoverButtons', function() {
         $(this).find('.imageBar').fadeIn();
     })
-            .on("mouseenter", '.carousel', function(){
-                $(this).find('.carousel-control').fadeIn();
-            })
+            .on("mouseenter", '.carousel', function() {
+        $(this).find('.carousel-control').fadeIn();
+    })
             .on("mouseleave", '.hasHoverButtons', function() {
         $(this).find('.imageBar').hide();
     })
-            .on("mouseleave", '.carousel', function(){
-                $(this).find('.carousel-control').fadeOut();
-            })
+            .on("mouseleave", '.carousel', function() {
+        $(this).find('.carousel-control').fadeOut();
+    })
             .on('keypress', function(e) {
         var t = RTApp.currentSlideShow(), k = e.keyCode || e.which,
                 ct = t && t.currentItem, tl = t && t.isLoading;

@@ -136,7 +136,7 @@ class Controller_Template extends Controller {
             if (!empty($data))
             {
                 foreach ($data as $v)
-                    $ids[] = $v[!$object_ids ? '_id' : 'object_id'];
+                    $ids[] = $v[$object_ids ? 'object_id' : '_id'];
             }
         }
 

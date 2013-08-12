@@ -1608,7 +1608,7 @@ RT["handlers"] = {
             init: function(vm) {
                 //return console.log(vm);
                 var s = ko.utils.extend(RT.Com.CBSettings, {
-                    href: '/assets/dialog.html', height: "auto", width: "300px",
+                    href: '/assets/dialog.html', height: "auto", width: "35%", maxWidth:'95%', minWidth:'400px',
                     onComplete: function() {
                         ko.applyBindings(vm, document.getElementById("dialogContent"));
                         return $.colorbox.resize();

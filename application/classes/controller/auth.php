@@ -44,7 +44,8 @@ abstract class Controller_Auth extends Controller_Template {
         /* Profiling******************************************************** */
         //$ba = Profiler::start('Controller', 'Auth ' . 'Session Setup');
         /*         * **************************************************************** */
-        ASDK::dynamoSession();
+        //ASDK::dynamoSession();
+        //Mongosession::init();
         $this->session = Session::instance();
         //Profiler::stop($ba);
     }

@@ -37,9 +37,8 @@
                 <span data-bind="html:getThumbnail(90)"></span>
             </div>
             <div class="media-body">
-                <p><span data-bind="text:name"></span><small class="muted">&nbsp;&middot;&nbsp;<time data-bind="timeago:modified"></time></small></p>
-                <small class="muted" data-bind="text: $data.caption"></small>
-
+                <p><span data-bind="text:name"></span>&nbsp;(<span data-bind="text:counts.attachments"></span>)<small class="muted">&nbsp;&middot;&nbsp;<time data-bind="timeago:modified"></time></small></p>
+                <small style="color:#333;" data-bind="text: caption"></small>
             </div>
         </a>
     </li>
@@ -47,10 +46,15 @@
 </script> <!--album list-->
 
 <script type="text/html" id="pictureList">
-<div data-bind="foreach:$data">
+<div>
+    <!--ko foreach:$data-->
     <a class="thumbnail grid" data-bind="click:seeAttachment, href: libraryURL">
         <span data-bind="html:getAttachmentThumb(150)"></span>
     </a>
+    <!--/ko-->
+    <div class="thumbnail grid" style="cursor: pointer;">
+        <a data-bind="visible: $parent.hasNextPage" href="#" id="loadAttachments" style="width:150px;height:85px;text-align: center;font-size: 2em;display:block;margin-top:65px">Load More</a>
+    </div>
 </div>
 </script> <!--picture list-->
 
@@ -62,15 +66,9 @@
         </span>
     </div>
 </div>
-<div class="btn-toolbar">
-    <button href="#" class="active btn btn-small"><i class="icon-eye-open"></i> Public</button>
-    <button href="#" class="btn btn-small"><i class="icon-eye-close"></i> Private</button>
-</div>
 <form class="RTForm">
-    <label>Name</label>
-    <input type="text" class="input-large" data-bind="value:name, valueUpdate: 'afterkeydown'" />
     <label>Description</label>
-    <textarea type="text" class="input-large" data-bind="value: message, valueUpdate: 'afterkeydown', expand:35" />
+    <textarea type="text" class="input-large" data-bind="value: $data.name, valueUpdate: 'afterkeydown', expand:35" />
     <input type="hidden" name="state" data-bind="value:RTApp.st" />
 </form>
 </script> <!--edit form-->
@@ -79,16 +77,18 @@
 <div id="singleAttachment" class="carousel slide">
     <div class="carousel-inner">
         <div class="item active">
-            <p>
-
-            </p>
             <div class="relative">
                 <small class="shadowedText" style="position:absolute;left:5px;top:5px;" data-bind="text:$data.pagination"></small>
                 <div class="centralize" data-bind="getHtml:$data.getFullPreview.bind($data)"></div>
             </div>
             <div class="postTitle">
-                <p><span style="margin-right:5px" data-bind="text:$data.name"></span>
-                    <small class="muted" data-bind="text:$data.message"></small><small class="muted"><time data-bind="timeago:created"></time></small></p> </div>
+                <p><span style="margin-right:5px" data-bind="text:$data.caption"></span>&middot;&nbsp;<small class="muted"><time data-bind="timeago:created"></time></small></p> </div>
+            <div class="btn-toolbar">
+                <label class="muted inplaceLabel" data-bind="visible:!editing(),click:startEdit, hoverClass:'showIcon'"><span data-bind="text:'Click to edit description'"></span><span class="pull-right"><i class="icon-edit" style="display:none;"></i></span></label>
+                <!--ko if: editing-->
+                <input type="text" autocomplete="off" id="editItemName" data-bind="value:$data.name, valueUpdate: 'afterkeydown', hasfocus:editing" placeholder="Enter a description.">
+                <!--/ko-->
+            </div>
             <!--ko template:'postActionLinks'--><!--/ko-->
             <!--ko template:{name:'postComments',if:showCommentBox() && !isTestimonial()}--><!--/ko-->
         </div>
@@ -119,12 +119,12 @@
     </div>
     <div class="span7">
         <div class="btn-toolbar pull-right">
+            <!--ko ifnot:isDefaultAlbum-->
             <div class="btn-group">
                 <button class="btn btn-small btn-rta" id="browseButton" data-bind="click:checkAlbum">
                     <i class="icon-upload"></i> Add Files
                 </button>
             </div>
-            <!--ko ifnot:isDefaultAlbum-->
             <div class="btn-group" data-toggle="buttons-radio" style="z-index:10">
                 <button type="button"  class="btn btn-small" data-bind="title:'Make album Public', placement:'bottom', css:{active:privacy.is() === 'PUBLIC'}, click:setPublic">
                     <i class="icon-eye-open"></i></button>
@@ -189,7 +189,7 @@
                                 <div class="btn-toolbar">
                                     <label class="muted inplaceLabel" data-bind="visible:!isEditingName(),click:editName, hoverClass:'showIcon'"><span data-bind="html:name()||'Click to add an album name'"></span><span class="pull-right"><i class="icon-edit" style="display:none;"></i></span></label>
                                     <!--ko if:isEditingName-->
-                                    <input type="text" autocomplete="off" id="name" data-bind="value:name, valueUpdate: 'afterkeydown', disable:isDefaultAlbum, hasfocus:isEditingName" placeholder="Enter an Album name">
+                                    <input type="text" autocomplete="off" id="editAlbumName" data-bind="value:name, valueUpdate: 'afterkeydown', disable:isDefaultAlbum, hasfocus:isEditingName" placeholder="Enter an Album name">
                                     <!--/ko-->
                                 </div>
                             </div>
@@ -197,7 +197,7 @@
                                 <div class="btn-toolbar">
                                     <label class="muted inplaceLabel" data-bind="visible:!isEditingExcerpt(),click:editExcerpt, hoverClass:'showIcon'"><span data-bind="html:excerpt()||'Click to add an album description'"></span><span class="pull-right"><i class="icon-edit" style="display:none;"></i></span></label>
                                     <!--ko if:isEditingExcerpt-->
-                                    <input type="text" autocomplete="off" data-bind="value:excerpt, valueUpdate: 'afterkeydown', disable:isDefaultAlbum, hasfocus:isEditingExcerpt" id="excerpt" placeholder="Enter a description">
+                                    <input type="text" autocomplete="off" data-bind="value:excerpt, valueUpdate: 'afterkeydown', disable:isDefaultAlbum, hasfocus:isEditingExcerpt" id="editAlbumExcerpt" placeholder="Enter a description">
                                     <!--/ko-->
                                     <span class="help-block"></span>
                                 </div>
