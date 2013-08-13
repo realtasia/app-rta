@@ -20,8 +20,8 @@ BODY & GLOBAL*/
 
 button.windowMenuItem {
     height: 69px;
-    padding: 5px;
-    width: 69px;
+    padding: 1%;
+    width: 98%;
 }
 
 .RTAWindow .titleBar .close {
@@ -2894,19 +2894,11 @@ UL.commentList B {
     right: 5px;
 }
 
-.slimWidth .windowMenu LI {
-    display: inline-block;
-    list-style: none;
-    padding: 0px;
-    margin: 0;
-    width: 14.3%;
-}
-
 .windowMenu LI {
     display: inline-block;
     list-style: none;
     border: 1px solid transparent;
-    width: 65px;
+    width: 18%;
 }
 
 .windowMenu LI.hovering {
@@ -3405,7 +3397,7 @@ INPUT#birthday {
     margin: 3px 0;
 }
 
-.accordion-inner.horizontal INPUT[type=text] {
+.accordion-inner.horizontal INPUT[type=text], .accordion-inner.horizontal select {
     width: 250px;
     margin: 3px 0;
 }

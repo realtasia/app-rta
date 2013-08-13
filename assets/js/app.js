@@ -562,7 +562,7 @@ RT["App"].prototype = {
                 return v.width() >= 768;
             });
             t.isSmallerThanTablet = ko.computed(function() {
-                return v.width() <= 767;
+                return v.width() < 768;
             });
             t.isPhone = ko.computed(function() {
                 return v.width() <= 480;
@@ -906,33 +906,6 @@ RT["singleAlbum"] = function(album) {
     }, album);
     return album;
 };
-//RT["editForm"] = function(currentItem) {
-//    this.name = currentItem.formLabel || "Edit this item";
-//    this.uri = currentItem.uri + "/Edit";
-//    this.backLink = {
-//        action: function() {
-//            return RTApp.cplib().goBack(), !0;
-//        },
-//        icon: 'icon-chevron-left', uri: !!currentItem.uri() ? "#media" + currentItem.uri() : "#media", title: 'Go back'
-//    };
-//    this.rightLinks = [{
-//            action: function() {
-//                if (currentItem.hasOwnProperty('saveChanges')) {
-//                    currentItem.saveChanges.call(null, currentItem);
-//                }
-//                //return true;
-//            },
-//            icon: 'icon-save', uri: currentItem.uri, title: 'Save this album'
-//        }, {
-//            action: function() {
-//                return ko.bindingHandlers.confirmDialog.init(currentItem.deleteDialog);
-//            },
-//            icon: 'icon-trash', uri: currentItem.uri, title: 'Delete this album'
-//        }];
-//    this.content = {name: 'editForm', data: currentItem};
-//    this.Search = ko.observable(!RTApp.cplib().isFormPage());
-//    return this;
-//};
 RT["singleAttachment"] = function(currentAlbum) {
     var self = this;
     self.parent = currentAlbum;
@@ -1450,7 +1423,7 @@ RT["Page"] = function() {
                 case "Private Landed":
                     return cls + "LND90";
                 case "Serviced Apartments":
-                    return cls + "SVC90";
+                    return cls + "SVCAPT90";
                 case "HDB":
                     return cls + "HDB90";
                 case "estate":
@@ -2823,7 +2796,6 @@ RT["Forms"] = {
             return T.steps.indexOf(T.currentStep());
         }, this);
         this.subTypes = ['Private Apartments', 'Serviced Apartments', 'Private Landed', 'HDB'];
-
         this.showAddress(true);
         this.editing() && this.currentStep(this.steps()[1]);
         this.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
@@ -3128,7 +3100,7 @@ RT["Forms"] = {
             return cps <= t.totalSteps && cs(cps) && t.completedSteps.push(cps);
         };
         this.resize = function() {
-            return jQuery.colorbox.resize();
+            return jQuery.colorbox.resize() && jQuery('.windowMenuBar td').width('20%');
         };
         this.reload = function() {
             return $.fn.colorbox.load();
@@ -3200,13 +3172,13 @@ RT["Forms"] = {
         a && T.checkAttachments.call(this);
         C.forEach(['price', 'valuation', 'cov', 'landSize', 'builtSize'], function(n) {
             if (n === 'valuation' || n === 'price') {
-                return T.listing[n].subscribe(function() {
+                T.listing[n].subscribe(function() {
                     var p = T.listing.price(), v = T.listing.valuation(),
                             rc = C.RemoveCommas, ts = C.ThousandSep;
                     return T.listing.cov(ts(parseInt(rc(p), 10) - parseInt(rc(v), 10)) || 0);
                 }, T);
             }
-            ;
+
             return T.listing[n].subscribe(function(v) {
                 return T.listing[n](C.MakePrice(v));
             }, T);
