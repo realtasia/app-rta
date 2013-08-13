@@ -165,7 +165,7 @@
               ->js("kodebug.js");
             echo Assets::factory('dep2')
               ->process(TRUE)
-              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.js", ['processor' => 'jsminplus']);
+              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.js");
             //Fragment::save();
             //endif;
             echo Assets::factory('finaljs')
