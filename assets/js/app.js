@@ -2780,28 +2780,28 @@ RT["Forms"] = {
     Listing: function() {
         var T = this, C = RTC;
         var o = "showMediaMenu priceFormat hasValuation hasLand serverVals tempAlbum uploadAlbum currentStep subtype showSubType showAddress editing queued size name picture mediaLib selectFromAlbum uploadNew";
-        C.MakeObsFromArray.call(this, o);
-        this.hide = function() {
+        C.MakeObsFromArray.call(T, o);
+        T.hide = function() {
             return $.colorbox.close();
         };
-        this.steps = ko.observableArray([
+        T.steps = ko.observableArray([
             new C.Step(1, 'Location Details', 'locationDetailsT'),
             new C.Step(2, 'Listing Details', 'listingDetailsT'),
             new C.Step(3, 'Finish', 'listingAttachmentT'),
             new C.Step(4, 'Media', 'mediaAttachT'),
             new C.Step(5, 'Status', 'postStatusT')
         ]);
-        this.currentStep(this.steps()[0]);
-        this.currentIndex = ko.computed(function() {
+        T.currentStep(this.steps()[0]);
+        T.currentIndex = ko.computed(function() {
             return T.steps.indexOf(T.currentStep());
         }, this);
-        this.subTypes = ['Private Apartments', 'Serviced Apartments', 'Private Landed', 'HDB'];
-        this.showAddress(true);
-        this.editing() && this.currentStep(this.steps()[1]);
-        this.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
-        this.aptTypes = ['Condominium', 'Walkup', 'Apartment'];
-        this.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House"];
-        this.propertyTypeCaption = ko.computed(function() {
+        T.subTypes = ['Private Apartments', 'Serviced Apartments', 'Private Landed', 'HDB'];
+        T.showAddress(true);
+        T.editing() && this.currentStep(this.steps()[1]);
+        T.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
+        T.aptTypes = ['Condominium', 'Walkup', 'Apartment'];
+        T.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House"];
+        T.propertyTypeCaption = ko.computed(function() {
             var s = this.subtype();
             switch (s) {
                 case 'Private Apartments':
@@ -2813,8 +2813,8 @@ RT["Forms"] = {
                     return 'Please choose a HDB flat type';
             }
         }, this);
-        this.leaseSpaceTypes = ["Whole Unit", "Master Room", "Common Room"];
-        this.propertyTypes = ko.computed(function() {
+        T.leaseSpaceTypes = ["Whole Unit", "Master Room", "Common Room"];
+        T.propertyTypes = ko.computed(function() {
             var t = this, s = t.subtype();
             switch (s) {
                 case 'Private Apartments':
@@ -2826,17 +2826,17 @@ RT["Forms"] = {
                     return t.hdbTypes;
             }
         }, this);
-        this.subtype.subscribe(function() {
+        T.subtype.subscribe(function() {
             return T.listing.property_type(null);
         });
-        this.getTemplate = function() {
+        T.getTemplate = function() {
             return T.currentStep().template;
         };
-        this.completedSteps = ko.observableArray();
-        this.isStepComplete = function(step) {
+        T.completedSteps = ko.observableArray();
+        T.isStepComplete = function(step) {
             return T.completedSteps.indexOf(step) >= 0;
         };
-        this.defaults = {
+        T.defaults = {
             type: ko.observable('Sale'),
             page: ko.observable({_id: '', name: ''}),
             page_parent: ko.observable({_id: '', name: ''}),
@@ -2859,9 +2859,9 @@ RT["Forms"] = {
             unitIsAddress: ko.observable(false),
             message: ko.observable("").extend({required: !0}).extend({maxLength: 10e3})
         };
-        this.listing = this.defaults;
-        this.listing.builtSize.extend({required: !0});
-        this.locationDetails = ko.computed(function() {
+        T.listing = T.defaults;
+        T.listing.builtSize.extend({required: !0});
+        T.locationDetails = ko.computed(function() {
             var l = T.listing, p = l.page();
             return {
                 name: C.GetObsVal(p.name),
@@ -2871,26 +2871,26 @@ RT["Forms"] = {
                 subtype: C.GetObsVal(T.subtype),
                 address: C.GetObsVal(l.address)
             };
-        }, this);
-        this.goNext = function() {
+        }, T);
+        T.goNext = function() {
             return T.canGoNext() && T.currentStep(T.steps()[T.currentIndex() + 1]);
         };
-        this.canGoBack = ko.computed(function() {
+        T.canGoBack = ko.computed(function() {
             return T.editing() ? T.currentIndex() > 1 : T.currentIndex() > 0;
         });
-        this.goBack = function() {
+        T.goBack = function() {
             return T.canGoBack() && T.currentStep(T.steps()[T.currentIndex() - 1]);
         };
-        this.queryLocation = function(term) {
+        T.queryLocation = function(term) {
             return new C.GetApi({}, {url: '/listing/keyword/', s: term});
         };
-        this.searchPostal = function(req, res) {
+        T.searchPostal = function(req, res) {
             var s = T.queryLocation(req.term);
             return s && s.done(function(r) {
                 return r.data && r.data.length > 0 && res(r.data);
             });
         };
-        this.noAutocomplete = function(d, e) {
+        T.noAutocomplete = function(d, e) {
             var l = T.listing, s, v = $(e.currentTarget).val();
             if (l.page()._id.length === 0) {
                 s = T.queryLocation(v);
@@ -2905,7 +2905,7 @@ RT["Forms"] = {
             }
             return false;
         };
-        this.chooseLocation = function(e, ui) {
+        T.chooseLocation = function(e, ui) {
             var i = ui && ui.item || {}, c = i && i.child, l = T.listing;
             return c && c._id && l.address(i.address) && C.GetApi({}, {url: '/page/index/' + c._id}).done(function(r) {
                 if (RTC.isSuccess(r) && r.data) {
@@ -2926,14 +2926,14 @@ RT["Forms"] = {
                 });
             }) || T.subtype('') && T.showSubType(true);
         };
-        this.resetSteps = function() {
+        T.resetSteps = function() {
             this.listing = this.defaults;
             this.listing.page({_id: '', name: ''});
             this.subtype(null);
             this.currentStep(this.steps()[0]);
             return !1;
         };
-        this.goToStep = function(data) {
+        T.goToStep = function(data) {
             if (data.id() !== 1) {
                 if (!T.steps()[0].isComplete()) {
 //return false;
@@ -2942,24 +2942,24 @@ RT["Forms"] = {
 
             return T.editing() ? false : T.currentStep(data);
         };
-        this.selectedCoverId = ko.computed(function() {
+        T.selectedCoverId = ko.computed(function() {
             return this.picture() ? this.picture()._id() : "";
-        }, this);
-        this.selectCover = function(d) {
+        }, T);
+        T.selectCover = function(d) {
             return T.picture(d);
         };
-        this.addedMedia = ko.observableArray();
-        this.addedMediaCaption = ko.computed(function() {
+        T.addedMedia = ko.observableArray();
+        T.addedMediaCaption = ko.computed(function() {
             return "<span class='text-info' style='font-size:1.1em'>" + this.addedMedia().length + " </span> item(s) selected";
         }, this);
-        this.addToSelected = function(d) {
+        T.addToSelected = function(d) {
             var am = T.addedMedia, found = ko.utils.arrayFirst(am(), function(i) {
                 return RTC.GetObsVal(i._id) === RTC.GetObsVal(d._id);
             });
             d.isSelected(!found);
             return !!found ? am.remove(d) : am.push(d) && T.picture(d);
         };
-        this.selectAllAttachments = function() {
+        T.selectAllAttachments = function() {
             var am = T.addedMedia, l = T.mediaLib(), s = l ? l.selectedAlbum() : false,
                     a = s ? s.attachments() : false;
             return a && RTC.forEach(a, function(i) {
@@ -2967,25 +2967,25 @@ RT["Forms"] = {
                 return am.push(i);
             });
         };
-        this.removeAttachment = function(d) {
+        T.removeAttachment = function(d) {
             d.isSelected(false);
             return T.addedMedia.remove(d);
         };
-        this.albumNavText = ko.computed(function() {
+        T.albumNavText = ko.computed(function() {
             var t = this, l = t.mediaLib, sa = l && l() ? l().selectedAlbum : false;
             if (sa && sa()) {
                 return "Viewing <strong style='color:#666'>" + sa().name() + "</strong>";
             }
             return "Choose album to select files";
-        }, this);
-        this.removeAllAttachments = function() {
+        }, T);
+        T.removeAllAttachments = function() {
             var l = T.mediaLib(), s = l && l.selectedAlbum(), a = s ? s.attachments() : false;
             a && RTC.forEach(a, function(i) {
                 return i.isSelected(false);
             });
             return T.addedMedia([]);
         };
-        this.uploadOptionText = ko.computed(function() {
+        T.uploadOptionText = ko.computed(function() {
             var t = this, l = t.mediaLib, sa = l && l() ? l().selectedAlbum : false,
                     i = $(document.createElement('i')), s = $(document.createElement('span'));
             if (sa && sa()) {
@@ -2997,35 +2997,35 @@ RT["Forms"] = {
             s.text(" Create new").prepend(i);
             return s.html();
         }, this);
-        this.goToMediaLib = function() {
+        T.goToMediaLib = function() {
             "use strict";
             var cp = RTApp.user(), p = {url: cp.uri() + '/media'};
             return cp && (p = new RTC.Get({}, p)) && p.done(function(r) {
-                return RTC.isSuccess(r) && T.mediaLib(new RT.Library(r.data));
-            }) && T.goToStep(T.steps()[3]) || !1;
+                return RTC.isSuccess(r) && T.mediaLib(new RT.Library(r.data)) && T.goToStep(T.steps()[3]) || !1;
+            });
         };
-        this.selectFromAlbum(true);
-        this.prepareForUpload = function(d, e) {
+        T.selectFromAlbum(true);
+        T.prepareForUpload = function(d, e) {
             var l = T.mediaLib(), s = l && l.selectedAlbum();
             return s ? T.addToAlbum.call(T, d) : T.createAlbum.call(T);
         };
-        this.createAlbum = function() {
+        T.createAlbum = function() {
             "use strict";
             var l = T.mediaLib(), s = l && T.uploadAlbum;
             l && s(new RT.Forms.Album({}, l));
             return T.currentStep(new RTC.Step(5, 'Upload', 'editAlbumT'));
         };
-        this.initUploader = function() {
+        T.initUploader = function() {
             var l = T.mediaLib(), s = l ? T.uploadAlbum : !1, u = l && l.up;
             return s && s() && (u() && u().refresh() || u(new RTC.Uploader(s())) && u().init());
         };
-        this.deleteAlbum = function() {
+        T.deleteAlbum = function() {
             var ea = T.uploadAlbum, l = T.mediaLib();
             ea() && ea().actions && ea().actions["delete"]() && RTApp.performAction('delete', ea(), null);
             l.up() && l.up().destroy() && l.up(null);
             return l.selectedAlbum(null) && ea(null) && T.stopEditingAlbum();
         };
-        this.deleteFile = function(data) {
+        T.deleteFile = function(data) {
             "use strict";
             var l = T.mediaLib(), sa = l.selectedAlbum, ua = T.uploadAlbum;
             data.actions && data.actions['delete'] && RTApp.performAction('delete', data, null);
@@ -3037,7 +3037,7 @@ RT["Forms"] = {
             });
             return true;
         };
-        this.stopEditingAlbum = function() {
+        T.stopEditingAlbum = function() {
             "use strict";
             var ta = T.tempAlbum, d = T.uploadAlbum, sv = d() && d().serverVals,
                     l = T.mediaLib(), u = l && l.up;
@@ -3055,7 +3055,7 @@ RT["Forms"] = {
                 url: "/media/deletealbumid"
             });
         };
-        this.checkAttachments = function() {
+        T.checkAttachments = function() {
             var t = this, l = t.mediaLib(), s = l ? l.selectedAlbum() : false,
                     a = s ? s.attachments() : false, m = t.addedMedia(), f;
             if (a && !!m.length) {
@@ -3067,10 +3067,10 @@ RT["Forms"] = {
                 });
             }
         };
-        this.save = function(d, e) {
+        T.save = function(d, e) {
             return !1;
         };
-        this.publish = function(d, e) {
+        T.publish = function(d, e) {
             "use strict";
             var p = {JSON: ko.toJSON(T.toJS())}, sv = T.serverVals, a = RTApp, cpid;
             p.request_type = "create_listing";
@@ -3092,35 +3092,35 @@ RT["Forms"] = {
                 }
             });
         };
-        this.cancel = function(d, e) {
+        T.cancel = function(d, e) {
             return !1;
         };
-        this.progressStep = function() {
+        T.progressStep = function() {
             var t = this, cs = t.currentStep, cps = cs() + 1;
             return cps <= t.totalSteps && cs(cps) && t.completedSteps.push(cps);
         };
-        this.resize = function() {
+        T.resize = function() {
             return jQuery.colorbox.resize() && jQuery('.windowMenuBar td').width('20%');
         };
-        this.reload = function() {
+        T.reload = function() {
             return $.fn.colorbox.load();
         };
-        this.hasLand.subscribe(function(v) {
+        T.hasLand.subscribe(function(v) {
             "use strict";
             var l = T.listing.landSize;
             return v && l.extend({required: !0}) || l("") && l.rules([]);
         });
-        this.hasValuation.subscribe(function(v) {
+        T.hasValuation.subscribe(function(v) {
             "use strict";
             var p = T.listing.valuation;
             return v && p.extend({required: !0}) || p("") && p.rules([]);
         });
-        this.listing.type.subscribe(function(v) {
+        T.listing.type.subscribe(function(v) {
             "use strict";
             var s = T.listing.leaseSpace;
             return v === 'Rent' && s.extend({required: !0}) || s("") && s.rules([]);
         });
-        this.toJS = ko.computed(function() {
+        T.toJS = ko.computed(function() {
             var l = ko.toJS(this.listing), am = this.addedMedia(), rc = RTC.RemoveCommas, tmp;
             l.addedMedia = [];
             if (am.length > 0) {
@@ -3142,21 +3142,21 @@ RT["Forms"] = {
             l.valuation = parseFloat(rc(l.valuation)) || 0;
             l.showAddress = this.showAddress();
             return l;
-        }, this);
-        this.completedLabel = ko.computed(function() {
+        }, T);
+        T.completedLabel = ko.computed(function() {
             return this.currentIndex() && this.currentIndex() + " of " + this.steps().length;
-        }, this);
-        this.listing.property_type.subscribe(function(v) {
+        }, T);
+        T.listing.property_type.subscribe(function(v) {
             if (v) {
                 var types = T.propertyTypes(), s = T.steps()[0];
                 return types.indexOf(v) >= 0 && s.isComplete(true);
             }
-        });
-        this.toggleMediaMenu = function() {
+        }, T);
+        T.toggleMediaMenu = function() {
             return this.showMediaMenu(!this.showMediaMenu());
         };
-        this.errors = ko.validation.group(this.listing, {deep: !0});
-        this.canGoNext = ko.computed(function() {
+        T.errors = ko.validation.group(this.listing, {deep: !0});
+        T.canGoNext = ko.computed(function() {
             var ci = T.currentIndex();
             switch (ci) {
                 case 0:
@@ -3168,8 +3168,8 @@ RT["Forms"] = {
             }
             return ci < T.steps().length - 1;
         });
-        var l = this.mediaLib(), s = l && l.selectedAlbum(), a = s ? s.attachments() : !1;
-        a && T.checkAttachments.call(this);
+        var l = T.mediaLib(), s = l && l.selectedAlbum(), a = s ? s.attachments() : !1;
+        a && T.checkAttachments.call(T);
         C.forEach(['price', 'valuation', 'cov', 'landSize', 'builtSize'], function(n) {
             if (n === 'valuation' || n === 'price') {
                 T.listing[n].subscribe(function() {

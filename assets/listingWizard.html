@@ -6,7 +6,7 @@
             <h6><i class="icon-magic"></i> Listing Wizard</h6>
         </div>
     </header>
-    <section class="RTAWindowContainer relative">
+    <section class="relative">
         <nav class="windowMenuBar">
             <ul class="nav nav-pills windowMenu">
                 <li data-bind="hoverClass:'hovering'">
@@ -306,7 +306,7 @@
 </script> <!--small nail-->
 
 <script type="text/html" id="mediaAttachT">
-<section class="RTAWindowContainer" style="margin-top:35px;">
+<section class="" style="margin-top:35px;">
     <section class="RTAWindowContent" data-bind="with:mediaLib">
         <ul class="thumbnails" style="max-height: none">
             <!--ko serverForEach : {name : 'albums', foreach: albums, if:!selectedAlbum()}--><!--/ko-->
@@ -391,7 +391,7 @@
 
 <script type="text/html" id="editAlbumT">
 <div id="editAlbum" data-bind="with:uploadAlbum">
-    <section class="RTAWindowContainer">
+    <section class="">
         <section id="mediaLibrary" class="RTAWindowContent noSidebar">
             <div class="contentArea introBox relative">
                 <form class="form-horizontal">
