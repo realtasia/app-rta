@@ -252,7 +252,7 @@ class Controller_Person extends Controller_Auth {
                         $this->template->set('clt', $ot);
                         $this->content    = View::factory('subscriptions' . ucfirst($ot))->set('cl', $data);
 
-                        $this->content->set('introcontent', View::factory("introcontent/person"));
+                        $this->content->set('introcontent',Kohana::find_file('views', "introcontent/person"));
                         return;
                     }
 

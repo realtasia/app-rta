@@ -1329,6 +1329,20 @@ RT["handlers"] = {
     ko.observableArray.fn["pushAll"] = function(items) {
         this.push.apply(this, items);
     };
+    ko.unapplyBindings = function (node, remove) {
+        var $node = $(node);
+    // unbind events
+    $node.find("*").each(function () {
+        $(this).unbind();
+    });
+
+    // Remove KO subscriptions and references
+    if (remove) {
+        ko.removeNode($node[0]);
+    } else {
+        ko.cleanNode($node[0]);
+    }
+};
 
     // ko binding tick (for clocks)
     (function() {

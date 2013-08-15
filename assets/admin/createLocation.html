@@ -1,0 +1,28 @@
+<section class="RTAWindow clearfix" id="locationForm" style="height:99%;margin:0 auto;">
+    <header class="titleBar">
+        <div class="contentArea titleBarBG">
+            <button type="button" class="close" aria-hidden="true" data-bind="click : function(){return $.colorbox.close()}">&times;</button>
+            <h6><i class="icon-file-text"></i> New Location</h6>
+        </div>
+    </header>
+    <div title="Create Location" class="contentArea">
+        <form>
+            <p class="text-error" data-bind="visible: $root.isError">
+                <strong data-bind="text: $root.ajaxMessage"> </strong>
+            </p>
+            <label class="control-label">Name</label>
+            <input type="text" data-bind="value:name" name="name" placeholder="Name">
+            <label class="control-label">Estate</label>
+            <input type="text" data-bind="value:estate" name="estate" placeholder="Estate">
+            <label class="control-label">Type</label>
+            <input type="text" data-bind="value:type" name="type" placeholder="Type">
+            <label class="control-label">Sub Type</label>
+            <select data-bind="options: subtypes, value: subtype, optionsCaption: 'Choose a subtype'" name="subtype"></select>
+            <label class="control-label">Property Type</label>
+            <select data-bind="options: propertyTypes, value:property_type, optionsCaption: 'Choose a propertytype'" name="proptype"></select>
+            <label class="control-label">Content</label>
+            <textarea type="text" data-bind="value:content" name="content" placeholder="Content"></textarea>
+            <button type="submit" data-bind="click:$root.saveLocation" class="btn">Save</button>
+        </form>
+    </div>
+</section>

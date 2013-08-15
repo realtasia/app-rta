@@ -53,7 +53,8 @@ class Controller_Home extends Controller_Auth {
 
     public function action_test()
     {
-        $this->content = View::factory('test');
+        $this->content = View::factory('table');
+        //$this->content = View::factory('test');
     }
 
 }

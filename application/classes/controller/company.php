@@ -95,7 +95,7 @@ class Controller_Company extends Controller_Auth {
                     $this->template->set('cl', $data);
                     $this->template->set('clt', 'listings');
                     $this->content    = View::factory('listings')->set('cl', $data);
-                    return $this->content->set('introcontent', View::factory('introcontent/company'));
+                    return $this->content->set('introcontent', Kohana::find_file('views', 'introcontent/company'));
                 }
                 return parent::json_response($req);
             }

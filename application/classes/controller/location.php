@@ -91,7 +91,7 @@ class Controller_Location extends Controller_Auth {
                 $this->template->set('cl', $data);
                 $this->template->set('clt', 'locations');
                 $this->content    = View::factory('locations')->set('cl', $data);
-                return $this->content->set('introcontent', View::factory('introcontent/location'));
+                return $this->content->set('introcontent', Kohana::find_file('views', 'introcontent/location'));
             }
             return parent::json_response($req);
         }
@@ -126,7 +126,7 @@ class Controller_Location extends Controller_Auth {
                 $this->template->set('cl', $data);
                 $this->template->set('clt', 'listings');
                 $this->content    = View::factory('listings')->set('cl', $data);
-                return $this->content->set('introcontent', View::factory('introcontent/location'));
+                return $this->content->set('introcontent', Kohana::find_file('views', 'introcontent/location'));
             }
 
             return parent::json_response($req);
@@ -146,7 +146,8 @@ class Controller_Location extends Controller_Auth {
     protected function location_query()
     {
         return Arr::merge($this->locations_search(), [
-              'object_id' => (string) $this->cp['_id']
+              'object_id' => (string) $this->cp['_id'],
+              'object_name' => (string) urlencode($this->cp['name'])
         ]);
     }
 

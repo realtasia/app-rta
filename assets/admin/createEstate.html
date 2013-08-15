@@ -1,0 +1,20 @@
+<section class="RTAWindow clearfix" id="estateForm" style="height:99%;margin:0 auto;">
+    <header class="titleBar">
+        <div class="contentArea titleBarBG">
+            <button type="button" class="close" aria-hidden="true" data-bind="click : function(){return $.colorbox.close()}">&times;</button>
+            <h6><i class="icon-edit"></i> Modify Estate</h6>
+        </div>
+    </header>
+    <div title="Create Location" class="contentArea">
+        <form>
+            <h4>Modifying Estate in <span class="text-info" data-bind="text:selectedEntries"></span> selected entries</h4>
+            <label class="control-label">Estate</label>
+            <input data-bind="value: estate, autoComplete : { source: getEstates, select: addEstate }" type="text" name="estate" placeholder="Estate">
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" data-bind="click:modifyEstate" class="btn">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

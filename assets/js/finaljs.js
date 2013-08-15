@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-08-13 20:28:56 
+   Compiled at: 2013-08-15 02:26:56 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1332,6 +1332,20 @@ RT["handlers"] = {
     ko.observableArray.fn["pushAll"] = function(items) {
         this.push.apply(this, items);
     };
+    ko.unapplyBindings = function (node, remove) {
+        var $node = $(node);
+    // unbind events
+    $node.find("*").each(function () {
+        $(this).unbind();
+    });
+
+    // Remove KO subscriptions and references
+    if (remove) {
+        ko.removeNode($node[0]);
+    } else {
+        ko.cleanNode($node[0]);
+    }
+};
 
     // ko binding tick (for clocks)
     (function() {
@@ -1626,11 +1640,11 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-08-13 20:28:56 
+   Compiled at: 2013-08-15 02:26:56 
 ================================ */
 RT["App"] = function() {
     "use strict";
-    var self, o = "user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch  hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin";
+    var self, o = "user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch  hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin adminLocations";
     RTC.MakeObsFromArray.call(this, o);
     RTC.MakeObsFromArray.call(this, "postForm ajaxData", {});
     self = this;

@@ -1,6 +1,6 @@
 RT["App"] = function() {
     "use strict";
-    var self, o = "user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch  hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin";
+    var self, o = "user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch  hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin adminLocations";
     RTC.MakeObsFromArray.call(this, o);
     RTC.MakeObsFromArray.call(this, "postForm ajaxData", {});
     self = this;
