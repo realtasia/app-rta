@@ -583,7 +583,7 @@ RT["App"].prototype = {
         })(t);
         t.user.subscribe(handleUser);
         t.user() && handleUser(t.user());
-        $(".pager").hide();
+        //$(".pager").hide();
 
         routie({
             'Register': function() {

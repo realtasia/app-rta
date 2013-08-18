@@ -1,5 +1,5 @@
 <div class="contentArea" data-bind="css:{centerContent: RTApp.isLargerThanDefault, 'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}, style:{marginLeft: RTApp.centerView}">
-    <ul class="small-block-grid-2" id="phoneProfileNav" data-bind="with:RTApp.cp">
+    <ul class="small-block-grid-2 grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp">
         <li data-bind="css : {active : currentEdit() === 'notifications'}"><a href="#" data-bind="click:changeEdit.bind($data, 'notifications')"><i class="sideNavIcon icon-bell"></i>&nbsp;Notifications</a></li>
         <li data-bind="css : {active : currentEdit() === 'privacy'}"><a href="#" data-bind="click:changeEdit.bind($data, 'privacy')"><i class="sideNavIcon icon-lock"></i>&nbsp;Privacy</a></li>
     </ul>

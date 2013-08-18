@@ -112,7 +112,7 @@ class Api {
     {
         $creds = [
             'client_id'    => RT::CLIENT_ID,
-            'redirect_uri' => 'http://' . RT::BASE_URL,
+            'redirect_uri' => 'http://' . RT::CLIENT_REDIRECT,
             'user_agent'   => urlencode(Request::$user_agent),
             'grant_type'   => static::CLIENT
         ];

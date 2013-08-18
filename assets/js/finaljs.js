@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-08-15 02:26:56 
+   Compiled at: 2013-08-17 15:38:10 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -387,7 +387,7 @@ RT["Com"] = {
             return self.template;
         };
     },
-    CBSettings: {transition: "none", speed: 1,top:'10%',open: !0, maxWidth: '95%', maxHeight: '95%', height: "30%", onClosed: function() {
+    CBSettings: {transition: "none", speed: 1, top: '10%', open: !0, maxWidth: '95%', maxHeight: '95%', height: "30%", onClosed: function() {
             return RTApp.currentForm(null) && (RTC.processing = !1); //ko.cleanNode(document.getElementById(id));
         }},
     qtipPlacement: function(element) {
@@ -504,9 +504,9 @@ RT["Com"] = {
             return cu && setTimeout(RTC.poll, 3e4);
         });
     },
-    arrGet: function($arr, $key, $default){
+    arrGet: function($arr, $key, $default) {
         // likely this isn't an array but an object :-)
-        if($arr.hasOwnProperty($key)){
+        if ($arr.hasOwnProperty($key)) {
             return $arr[$key];
         }
         // so it doesn't return undefined.
@@ -1144,6 +1144,21 @@ RT["handlers"] = {
         init: function(e, v) {
             return console.log(ko.unwrap(v()));
         }
+    },
+    radioButton: {
+        init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var value = valueAccessor(), e = $(element), nv = ko.unwrap(allBindingsAccessor().value),
+                    clickHandler = function() {
+                        return function() {
+                            e.parent().children().each(function() {
+                                return $(this).removeClass("active");
+                            });
+                            return e.addClass("active") && value(nv);
+                        };
+                    };
+            value() === nv && e.addClass('active');
+            return ko.bindingHandlers.click.init(element, clickHandler, allBindingsAccessor, viewModel, bindingContext);
+        },
     }
 };
 
@@ -1332,20 +1347,20 @@ RT["handlers"] = {
     ko.observableArray.fn["pushAll"] = function(items) {
         this.push.apply(this, items);
     };
-    ko.unapplyBindings = function (node, remove) {
+    ko.unapplyBindings = function(node, remove) {
         var $node = $(node);
-    // unbind events
-    $node.find("*").each(function () {
-        $(this).unbind();
-    });
+        // unbind events
+        $node.find("*").each(function() {
+            $(this).unbind();
+        });
 
-    // Remove KO subscriptions and references
-    if (remove) {
-        ko.removeNode($node[0]);
-    } else {
-        ko.cleanNode($node[0]);
-    }
-};
+        // Remove KO subscriptions and references
+        if (remove) {
+            ko.removeNode($node[0]);
+        } else {
+            ko.cleanNode($node[0]);
+        }
+    };
 
     // ko binding tick (for clocks)
     (function() {
@@ -1625,7 +1640,7 @@ RT["handlers"] = {
             init: function(vm) {
                 //return console.log(vm);
                 var s = ko.utils.extend(RT.Com.CBSettings, {
-                    href: '/assets/dialog.html', height: "auto", width: "35%", maxWidth:'95%', minWidth:'400px',
+                    href: '/assets/dialog.html', height: "auto", width: "35%", maxWidth: '95%', minWidth: '400px',
                     onComplete: function() {
                         ko.applyBindings(vm, document.getElementById("dialogContent"));
                         return $.colorbox.resize();
@@ -1640,7 +1655,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-08-15 02:26:56 
+   Compiled at: 2013-08-17 15:38:10 
 ================================ */
 RT["App"] = function() {
     "use strict";
@@ -2227,7 +2242,7 @@ RT["App"].prototype = {
         })(t);
         t.user.subscribe(handleUser);
         t.user() && handleUser(t.user());
-        $(".pager").hide();
+        //$(".pager").hide();
 
         routie({
             'Register': function() {

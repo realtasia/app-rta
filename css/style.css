@@ -912,12 +912,34 @@ DIV.controls {
     -webkit-box-shadow: 0 5px 8px #DDD;
     -o-box-shadow: 0 5px 8px #DDD;
     box-shadow: 0 5px 8px #DDD;
+    -webkit-transition: all .1s linear;
+    -o-transition: all .1s linear;
+    -moz-transition: all .1s linear;
+    -ms-transition: all .1s linear;
+    -kthtml-transition: all .1s linear;
+    transition: all .1s linear;
 }
+
+.shadowMild {
+    box-shadow: 1px 1px 3px #ddd;
+    -webkit-transition: all .1s linear;
+    -o-transition: all .1s linear;
+    -moz-transition: all .1s linear;
+    -ms-transition: all .1s linear;
+    -kthtml-transition: all .1s linear;
+    transition: all s linear;
+}
+
+.shadowMild:hover {
+    box-shadow: 1px 1px 3px #fff;
+}
+
 
 .shadowedText{
     text-shadow: 1px 1px 1px #000;
     color:#fff;
 }
+
 
 .clear {
     clear: both;
@@ -3918,7 +3940,7 @@ p.messageContent {
 .newWidgetOuterBox {
     border: 1px solid #ccc;
     margin-bottom: 10px;
-/*    box-shadow: 1px 1px 2px #eee;*/
+    /*    box-shadow: 1px 1px 2px #eee;*/
 }
 
 .newWidgetContentBG {
@@ -4193,11 +4215,11 @@ ul.responsiveMenu li.active a {
     color:#888;
     text-shadow:1px 1px 1px #ccc;
 }
-#phoneProfileNav{
+.grid-fix{
     margin:0 auto !important;
     border:1px solid #ddd;
 }
-#phoneProfileNav > li, .listingSearchBox > li{
+.grid-fix > li, .listingSearchBox > li{
     margin:0 auto;
     padding:0;
     text-align: center;
@@ -4206,24 +4228,24 @@ ul.responsiveMenu li.active a {
 #attachmentView > li{clear:none !important;}
 .navbar-subcontrol .nav > li > a{padding:10px 5px 0 5px;;}
 .navbar-subcontrol .navbar-inner{padding:0 10px;}
-#phoneProfileNav .dropdown-menu{padding:0 3px;}
-#phoneProfileNav > li > a, #phoneProfileNav .dropdown-menu > li > a{
+.grid-fix .dropdown-menu{padding:0 3px;}
+.rtResponsiveMenu > li > a, .grid-fix .dropdown-menu > li > a{
     padding:5px 1px;
     background:#fff;
     display: block;
     font-size: 90%;
     color:#333;
 }
-#phoneProfileNav > li.active > a, #phoneProfileNav > li.active > a:hover{
+.rtResponsiveMenu > li.active > a, .grid-fix > li.active > a:hover{
     background:#666;
     color:#fff;
     text-shadow: none;
 }
-#phoneProfileNav > li > a:hover{
+.rtResponsiveMenu > li > a:hover{
     text-decoration: none;
     color:#000;
 }
-#phoneProfileNav > li > a:hover > i, #phoneProfileNav > li > a:active > i{
+.rtResponsiveMenu > li > a:hover > i, .grid-fix > li > a:active > i{
     color:#e77000;
 }
 .smallCaps{font-variant: small-caps}
@@ -4250,5 +4272,21 @@ ul.responsiveMenu li.active a {
 .carousel-inner > .item > img {
     margin:0 auto;
     max-height:550px;
+}
+
+.capitalise{
+    text-transform:capitalize;font-variant: small-caps;
+}
+
+input.fullscap{
+    border:0 !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    border-bottom:solid 1px #ccc !important;
+    outline:none !important; /* prevents textbox highlight in chrome */
+    margin-bottom:5px !important;
+    padding-bottom: 1px;
+    padding-left: 2px;
 }
 

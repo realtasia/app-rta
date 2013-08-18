@@ -1,6 +1,6 @@
 <!--<h2 class="bold">Welcome to Realtasia. <small class="normal">The Right Now Real Estate.</small></h2>-->
-<div id="myCarousel" class="carousel slide" style="padding:25px 50px;margin:40px 0 0 0;">
-    <ol class="carousel-indicators">
+<div id="myCarousel" class="carousel slide" style="margin:60px 0 0 0;">
+    <ol class="carousel-indicators" style="top:0">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
         <li data-target="#myCarousel" data-slide-to="2"></li>

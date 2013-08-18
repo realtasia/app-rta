@@ -1,12 +1,6 @@
 <section>
     <section class="infoContent">
-        <h6 class="wrapperHeader">
-            <img alt="Personal & Contact Details" src="/img/png/glyphicons_352_nameplate.png" />
-            <p>Personal & Contact Details&nbsp;</p>
-        </h6>
-        <div data-bind="with:RTApp.cp().info">
-            <pre data-bind="text:ko.toJSON(new Date($data.birthday()* 1e3).toString(), null, 2)"></pre>
-        </div>
+        <h4 class="contentArea noMargTopBtm"><i class="icon-phone-sign"></i> Personal & Contact Details</h4>
         <div class="leftPadding">
             <ul class="infoLists">
                 <li style="display:<?php echo empty($info['telephone']['mobile']) ? 'none' : 'block' ?>">
@@ -19,7 +13,7 @@
                 </li>
                 <li style="display:<?php echo empty($info['birthday']) ? 'none' : 'block' ?>">
                     <label class="infoYear">&nbsp;Birthday&nbsp;</label>
-                    <span class="infoDetail"><?php echo empty($info['birthday']) ? 'Private' : gmdate('dS F Y', (int) $info['birthday']) ?></span>
+                    <span class="infoDetail"><?php echo empty($info['birthday']) ? 'Private' : date('dS F Y', (int) $info['birthday']) ?></span>
                 </li>
                 <li style="display:<?php echo \Arr::get($info, 'languages') ? 'block' : 'none' ?>">
                     <label class="infoYear">&nbsp;Languages&nbsp;</label>
@@ -29,7 +23,7 @@
         </div>
     </section>
     <section class="infoContent" style="display:<?php echo \Arr::get($info, 'education') ? 'block' : 'none' ?>">
-        <h6 class="wrapperHeader"><img alt="Education & Certification" src="/img/png/glyphicons_332_certificate.png" /><p>Education & Certification</p></h6>
+        <h4 class="contentArea noMargTopBtm"><i class="icon-certificate"></i> Education & Certification</h4>
         <div class="leftPadding">
             <ul class="infoLists">
                 <?php foreach (\Arr::get($info, 'education', []) as $item): ?>
@@ -42,7 +36,7 @@
         </div>
     </section>
     <section class="infoContent" style="display:<?php echo \Arr::get($info, 'achievements') ? 'block' : 'none' ?>">
-        <h6 class="wrapperHeader"><img alt="Awards & Achievements" src="/img/png/glyphicons_074_cup.png" /><p>Awards & Achievements</p></h6>
+        <h4 class="contentArea noMargTopBtm"><i class="icon-trophy"></i> Awards & Achievements</p></h4>
         <div class="leftPadding">
             <ul class="infoLists">
                 <ul class="infoLists">

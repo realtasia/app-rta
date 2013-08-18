@@ -19,10 +19,10 @@
             <label class="control-label">Sub Type</label>
             <select data-bind="options: subtypes, value: subtype, optionsCaption: 'Choose a subtype'" name="subtype"></select>
             <label class="control-label">Property Type</label>
-            <select data-bind="options: propertyTypes, value:property_type, optionsCaption: 'Choose a propertytype'" name="proptype"></select>
+            <select data-bind="enable:propertyTypes, options: propertyTypes, value:property_type, optionsCaption: 'Choose a propertytype'" name="proptype"></select>
             <label class="control-label">Content</label>
             <textarea type="text" data-bind="value:content" name="content" placeholder="Content"></textarea>
-            <button type="submit" data-bind="click:$root.saveLocation" class="btn">Save</button>
+            <button type="submit" data-bind="click:$parent.saveLocation" class="btn">Save</button>
         </form>
     </div>
 </section>

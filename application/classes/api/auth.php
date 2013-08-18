@@ -28,7 +28,7 @@ class Api_Auth extends Api {
               'username'     => \Arr::get($post, 'username'),
               'password'     => \Arr::get($post, 'password'),
               'state'        => \Arr::get($post, 'state'),
-              'redirect_uri' => 'http://' . RT::BASE_URL,
+              'redirect_uri' => 'http://' . RT::CLIENT_REDIRECT,
               'grant_type'   => parent::PASSWORD
             ], HTTP_Request::POST);
 

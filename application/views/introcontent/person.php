@@ -1,5 +1,5 @@
 <?php $interact = isset($interactions) ? $interactions : NULL; ?>
-<ul class="small-block-grid-4 visible-phone" id="phoneProfileNav" data-bind="with:RTApp.cp">
+<ul class="small-block-grid-4 visible-phone grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp">
     <li data-bind="css : {active : RTApp.ca() === 'info'}"><a href="#" data-bind="attr : {href : uri() + '/info'}"><i class="sideNavIcon icon-info-sign"></i>&nbsp;About</a></li>
     <li data-bind="css : {active : RTApp.ca() === 'feed'}"><a href="#" data-bind="attr : {href : uri() + '/feed'}"><i class="sideNavIcon icon-list-alt"></i>&nbsp;Feed</a></li>
     <li data-bind="css : {active : RTApp.ca() === 'listings'}"><a href="#" data-bind="attr : {href : uri() + '/listings'}"><i class="sideNavIcon icon-list"></i>&nbsp;Listings</a></li>

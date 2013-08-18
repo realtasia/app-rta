@@ -1,5 +1,5 @@
 <div class="contentArea" data-bind="css:{centerContent: RTApp.isLargerThanDefault, 'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}, style:{marginLeft: RTApp.centerView}">
-    <ul class="small-block-grid-4" id="phoneProfileNav" data-bind="with:RTApp.cp">
+    <ul class="small-block-grid-4 grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp">
         <li data-bind="css : {active : currentEdit() === 'picture'}"><a href="#" data-bind="click:changeEdit.bind($data, 'picture')"><i class="sideNavIcon icon-camera-retro"></i>&nbsp;Picture</a></li>
         <li data-bind="css : {active : currentEdit() === 'account'}"><a href="#" data-bind="click:changeEdit.bind($data, 'account')"><i class="sideNavIcon icon-cogs"></i>&nbsp;Account</a></li>
         <li data-bind="css : {active : currentEdit() === 'bio'}"><a href="#" data-bind="click:changeEdit.bind($data, 'bio')"><i class="sideNavIcon icon-phone"></i>&nbsp;Contact</a></li>

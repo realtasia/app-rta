@@ -1,6 +1,6 @@
 function Searcher() {
-    var self, estatecache = [], childcache = [], localitycache = [], buildingcache = [], o =
-            'ajaxStatus ajaxData s sector building estate child locality property_type locationForm showEstateForm';
+    var self, estatecache = [], childcache = [], buildingcache = [], o =
+            'ajaxStatus ajaxData s sector building estate child locality property_type locationForm showEstateForm showAdvanced';
     RTC.MakeObsFromArray.call(this, o);
     self = this;
     self.ajaxStatus('success');
@@ -10,18 +10,12 @@ function Searcher() {
     }, this);
     self.sector('01');
     self.singpostType = ko.observableArray();
-    self.auth = function() {
-        return {access_token: window['RTApp'].at(), state: window['RTApp'].st()};
-    };
     self.getEstates = function(request, response) {
         if (request) {
-            var params = self.auth();
-            params.url = '/locations/estates/';
-            params.term = request.term;
             if (request.term in estatecache) {
                 return response(estatecache[ request.term ]);
             }
-            return RTC.GetApi({}, params).done(function(r) {
+            return RTC.GetApi({}, {url: '/locations/estates/', term: request.term}).done(function(r) {
                 if (r.data && r.data.length > 0) {
                     estatecache[ request.term ] = r.data;
                     return response(r.data);
@@ -29,47 +23,41 @@ function Searcher() {
             });
         }
     };
-    self.addEstate = function(event, ui) {
+    self.addEstate = function(e, ui) {
         if (ui && ui.item) {
             self.estate(ui.item.value);
         }
         return !1;
     };
     self.getChildren = function(request, response) {
-        var params = self.auth();
-        params.url = '/locations/child/';
-        params.term = request.term;
         if (request.term in childcache) {
             return response(childcache[ request.term ]);
         }
-        return RTC.GetApi({}, params).done(function(r) {
+        return RTC.GetApi({}, {url: '/locations/child/', term: request.term}).done(function(r) {
             if (r.data && r.data.length > 0) {
                 childcache[ request.term ] = r.data;
                 return response(r.data);
             }
         });
     };
-    self.addChild = function(event, ui) {
+    self.addChild = function(e, ui) {
         if (ui.item) {
             self.child(ui.item.value);
         }
         return !1;
     };
     self.getBuilding = function(request, response) {
-        var params = self.auth();
-        params.url = '/locations/building/';
-        params.term = request.term;
         if (request.term in buildingcache) {
             return response(buildingcache[ request.term ]);
         }
-        return RTC.GetApi({}, params).done(function(r) {
+        return RTC.GetApi({}, {url: '/locations/building/', term: request.term}).done(function(r) {
             if (r.data && r.data.length > 0) {
                 buildingcache[ request.term ] = r.data;
                 return response(r.data);
             }
         });
     };
-    self.addBuilding = function(event, ui) {
+    self.addBuilding = function(e, ui) {
         if (ui.item) {
             self.building(ui.item.value);
         }
@@ -77,17 +65,17 @@ function Searcher() {
     };
     self.results = ko.mapping.fromJS([]);
     self.search = function() {
-        var params = self.auth();
-        params.url = '/locations/search/';
-        params.sector = self.sector();
-        params.child = self.child();
-        params.estate = self.estate();
-        params.building = self.building();
-        params.singpostType = self.singpostType();
-        params.locality = self.locality();
-        params.property_type = self.property_type();
-        params.s = self.s();
-        return RTC.GetApi({}, params).done(function(r) {
+        return RTC.GetApi({}, {
+            url: '/locations/search/',
+            sector: self.sector(),
+            child: self.child(),
+            estate: self.estate(),
+            building: self.building(),
+            singpostType: self.singpostType(),
+            locality: self.locality(),
+            property_type: self.property_type(),
+            s: self.s()
+        }).done(function(r) {
             self.results([]);
             self.selected([]);
             if (r.data && r.data.length > 0) {
@@ -97,25 +85,27 @@ function Searcher() {
             }
         });
     };
+    self.toggleAdvancedSearch = function() {
+        return self.showAdvanced(!self.showAdvanced());
+    }
     self.selected = ko.observableArray();
     self.addId = function(d, e) {
-        e.currentTarget.checked ? self.selected.push(d._id()) : self.selected.remove(d._id());
-        return true;
+        var s = self.selected;
+        return e.target.checked ? s.push(d._id()) : s.remove(d._id());
     };
     self.addIds = function(d, e) {
-        $(e.currentTarget).closest('table').find('input:checkbox').prop('checked', e.currentTarget.checked);
-        ko.utils.arrayForEach(self.results(), function(i) {
-            e.currentTarget.checked ? self.selected.push(i._id()) : self.selected.remove(i._id());
-        });
-        return true;
+        $(e.target).closest('table').find('input:checkbox').prop('checked', e.target.checked);
+        return ko.utils.arrayForEach(self.results(), function(i) {
+            return self.addId(i, e);
+        }), !0;
     };
     self.modifyEstate = function() {
-        var params = self.auth();
-        params.url = '/locations/modifyestate/';
-        //params.ids = self.selected();
-        params.estate = self.estate();
-        params.sector = self.sector();
-        return RTC.GetApi({}, params).done(function(r) {
+        return RTC.GetApi({}, {
+            url: '/locations/modifyestate/',
+            estate: self.estate(),
+            sectors: self.sector(),
+            s: self.s()
+        }).done(function(r) {
             if (r && r.status === 'success') {
                 ko.utils.arrayForEach(self.selected(), function(id) {
                     var match = ko.utils.arrayFirst(self.results(), function(item) {
@@ -146,7 +136,7 @@ function Searcher() {
     self.selectedEntries = ko.computed(function() {
         return self.selected().length;
     });
-    self.createLocation = function(d, e) {
+    self.createLocation = function(d) {
         self.locationForm(new Location(ko.toJS(d)));
         var S = ko.utils.extend(RTC.CBSettings, {
             width: "480px", href: '/assets/admin/createLocation.html', height: "auto",
@@ -157,13 +147,14 @@ function Searcher() {
         });
         return $.colorbox(S);
     };
-    self.saveLocation = function(d, e) {
-        var params = self.auth();
-        params.url = '/locations/createlocation/';
-        params.data = ko.toJS(d);
-        params.ids = self.selected();
-        params.sectors = self.sector();
-        return RTC.PostApi({}, params).done(function(r) {
+    self.saveLocation = function(d) {
+        return RTC.PostApi({}, {
+            url: '/locations/createlocation/',
+            data: ko.toJS(d),
+            ids: self.selected(),
+            sectors: self.sector(),
+            s: self.s()
+        }).done(function(r) {
             if (r && r.status === 'success') {
                 $('.ui-dialog-titlebar-close').trigger('click');
                 self.selected([]);
@@ -172,33 +163,39 @@ function Searcher() {
     };
 }
 
-function Row(params) {
-    params = params || {};
-    ko.mapping.fromJS(params, {}, this);
+function Updater() {
+}
+
+function HistoryViewer() {
+}
+
+function Row(p) {
+    p = p || {};
+    ko.mapping.fromJS(p, {}, this);
     var self = this;
-    this.fullAdd = ko.computed(function() {
+    self.fullAdd = ko.computed(function() {
         return self.number() + ' ' + self.street();
     });
-    this.isChildLocation = ko.computed(function() {
+    self.isChildLocation = ko.computed(function() {
         return ko.isObservable(self.child);
     });
 }
 
-function Location(params) {
-    params = params || {};
-    var self = this;
-    this.id = ko.observable();
-    this.name = ko.observable(params.child ? params.child : params.building);
-    this.estate = ko.observable(params.estate || null);
-    this.property_type = ko.observable(params.property_type || null);
-    this.type = ko.observable('location');
-    this.subtype = ko.observable(params.property_type || null);
-    this.content = ko.observable();
-    this.subtypes = ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"];
-    this.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
-    this.aptTypes = ['Condominium', 'Walkup', 'Apartment'];
-    this.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House"];
-    this.propertyTypes = ko.computed(function() {
+function Location(p) {
+    p = p || {};
+    var self, o = 'id name estate type subtype content property_type';
+    RTC.MakeObsFromArray.call(this, o);
+    self = this;
+    self.name(p.child ? p.child : p.building);
+    self.estate(p.estate);
+    self.property_type(p.property_type);
+    self.type('location');
+    self.subtype(p.subtype);
+    self.subtypes = ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"];
+    self.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
+    self.aptTypes = ['Condominium', 'Walkup', 'Apartment'];
+    self.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House"];
+    self.propertyTypes = ko.computed(function() {
         var t = this, s = t.subtype();
         switch (s) {
             case 'Private Apartments':
@@ -206,17 +203,57 @@ function Location(params) {
                 return t.aptTypes;
             case 'Private Landed':
                 return t.landedTypes;
-            case 'HDB':
-                return t.hdbTypes;
         }
-        return [];
-    }, this);
+        return null;
+    }, self);
 
 }
 
+function AdminLocations() {
+    var self, o = 'updater searcher history selected locationName name1 name2 locationSubtype';
+    RTC.MakeObsFromArray.call(this, o);
+    self = this;
+
+    self.searcher(new Searcher);
+    self.location = new Location;
+    self.tabs = ko.observableArray([
+        {vm: self.updater(), view: 'Updater', name: 'To Research'},
+        {vm: self.history(), view: 'History', name: 'Your History'},
+        {vm: self.searcher(), view: 'Searcher', name: 'RealT Search'}
+    ]);
+    self.selected(self.tabs()[0]);
+
+    self.name1("Reflections@Keppel Bay");
+    self.name2("Reflections @ Keppel Bay");
+
+    self.locationNameEditor = new editableTemplate({
+        isEditing:true, fieldsTemplate: 'locationName', text:self.locationName,
+        content:{
+            name1: self.name1, name2: self.name2, editableValue:self.locationName
+        }
+    });
+
+    self.locationSubtypeEditor = new editableTemplate({
+        isEditing:true, fieldsTemplate: 'locationSubtype', text:self.locationSubtype,
+        content:{
+            subtypes: self.location.subtypes, editableValue:self.locationSubtype
+        }
+    });
+}
+
+function editableTemplate(params){
+    params = params || {};
+    var self = this;
+    self.content = ko.observable(params.content);
+    self.isEditing = ko.observable(params.isEditing);
+    self.fieldsTemplate = params.fieldsTemplate;
+    self.text = params.text;
+    self.toggleEditing = function(){
+        return self.isEditing(!self.isEditing());
+    };
+    self.text.subscribe(function(v){return v && self.isEditing(false);});
+}
+
 $(document).ready(function() {
-    window.RTApp['adminLocations'](new Searcher());
-//        var al = $('#adminlocations').get(0);
-//        ko.unapplyBindings(al);
-//        ko.applyBindings(window['searcher'], al);
+    return window.RTApp['adminLocations'](new AdminLocations);
 });
