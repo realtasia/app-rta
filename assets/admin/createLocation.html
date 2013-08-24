@@ -14,15 +14,17 @@
             <input type="text" data-bind="value:name" name="name" placeholder="Name">
             <label class="control-label">Estate</label>
             <input type="text" data-bind="value:estate" name="estate" placeholder="Estate">
-            <label class="control-label">Type</label>
-            <input type="text" data-bind="value:type" name="type" placeholder="Type">
             <label class="control-label">Sub Type</label>
             <select data-bind="options: subtypes, value: subtype, optionsCaption: 'Choose a subtype'" name="subtype"></select>
             <label class="control-label">Property Type</label>
             <select data-bind="enable:propertyTypes, options: propertyTypes, value:property_type, optionsCaption: 'Choose a propertytype'" name="proptype"></select>
-            <label class="control-label">Content</label>
-            <textarea type="text" data-bind="value:content" name="content" placeholder="Content"></textarea>
-            <button type="submit" data-bind="click:$parent.saveLocation" class="btn">Save</button>
+            <!--<label class="control-label">Content</label>-->
+            <!--<textarea type="text" data-bind="value:content" name="content" placeholder="Content"></textarea>-->
+            <input type="hidden" data-bind="value:type" name="type" placeholder="Type">
+            <div data-bind="if: $data.create">
+                <button type="submit" data-bind="click:$data.create" class="btn">Save</button>
+            </div>
+
         </form>
     </div>
 </section>

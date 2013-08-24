@@ -86,14 +86,21 @@
 
 <div class="well well-small" data-bind="visible:!processing(), flash:!processing()">
     <div style="margin-top:10px;" class=clearfix;>
-        <textarea style="background-color:#fff !important;" placeholder="Type in additional info/comments" data-bind="expand:true"></textarea>
+        <textarea style="background-color:#fff !important;" placeholder="Type in additional info/comments" data-bind="expand:true, value:strayComments"></textarea>
     </div>
     <div class="btn-toolbar clearfix">
         <div class="btn-group">
-            <button class="btn btn-primary btn-medium" data-bind="click:createLocation">Create New Location</button>
+            <label> <small class="muted">Mark this as: </small> <select class="webkitSelect" data-bind="value:strayStatus">
+                <option value="SUCCESS">Success - All checked out</option>
+                <option value="REVIEW">Success - But still needs review</option>
+                <option value="INVALID">Invalid - Not enough info</option>
+                <option value="NEW">Reset to original</option>
+            </select>
+            <button class="btn btn-info btn-small" data-bind="click:updateStray"><i class="icon-save"></i> Update</button></label>
         </div>
+        <hr>
         <div class="btn-group">
-            <button class="btn btn-danger btn-medium" data-bind="click:invalidateLocation">Invalid/Not Enough Info</button>
+            <button class="btn btn-primary btn-small" data-bind="click:popupLocation"><i class="icon-file-text"></i> Create Location</button>
         </div>
     </div>
 </div>

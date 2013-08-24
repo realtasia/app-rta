@@ -182,6 +182,8 @@ function Location(p) {
     RTC.MakeObsFromArray.call(this, o);
     self = this;
     self.name(p.child ? p.child : p.building);
+    if(!self.name())
+        self.name(p.name);
     self.estate(p.estate);
     self.property_type(p.property_type);
     self.type('location');
@@ -201,17 +203,19 @@ function Location(p) {
         }
         return null;
     }, self);
+    self.create = null;
 
 }
 
 function Straylocations() {
-    var self, o = 'debug debugData foundSingpostIds showSingpost singpost record updater strayName postalName strayAddress postalAddress currentPage postalIDs currentMessage processing total googleQuery siteQuery showRecordDetail skip changePage';
+    var self, o = 'debug debugData foundSingpostIds showSingpost singpost record updater strayName postalName strayAddress postalAddress currentPage postalIDs currentMessage processing total googleQuery siteQuery showRecordDetail skip locationForm strayStatus strayComments';
     RTC.MakeObsFromArray.call(this, o);
     self = this;
-    self.debug(false)
-    self.skip(0)
+    self.debug(false);
+    self.skip(0);
+    self.strayStatus("SUCCESS");
     self.googleOptions = ko.observableArray();
-    self.f = "name address estate subtype ids";
+    self.f = "name address estate subtype";
     self.siteQuery("site:condo.singaporeexpats.com");
     self.subtypes = new Location().subtypes;
     self.getSingpost = function(v) {
@@ -264,22 +268,48 @@ function Straylocations() {
         var url = 'http://www.google.com.sg/search?hl=en&q=', q = self.googleQuery() + ' ' + self.siteQuery();
         return window.open(url + escape(q));
     };
+    self.popupLocation = function() {
+        self.locationForm(new Location(ko.toJS(self.final)));
+        self.locationForm().create = self.createLocation.bind(self);
+        var S = ko.utils.extend(RTC.CBSettings, {
+            width: "480px", href: '/assets/admin/createLocation.html', height: "auto",
+            onComplete: function() {
+                ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
+                return $.colorbox.resize();
+            }
+        });
+        return $.colorbox(S);
+    };
     self.createLocation = function(){
+        self.processing(true);
         return RTC.PostApi({}, {
             url: '/locations/createlocation/',
             data: ko.toJS(self.final),
             ids: self.foundSingpostIds()
         }).done(function(r) {
-            return RTC.isSuccess(r) && console.log(r);
-        });
+            if(RTC.isSuccess(r)){
+                var msg = "Yay! Location created. " + r.data.postal_updated + " postal code(s) were updated to reflect this;";
+                return $.bootstrapGrowl(msg, {type: 'success'});
+            }
+        }).error(function(r) {
+            return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me... I love you.', {type: 'error'});
+        }).always(function(){return self.processing(false) && $.colorbox.close();});
     };
-    self.invalidateLocation = function(){
+    self.updateStray = function(){
+
+//        updatestray
+        if(!self.record())
+            return false;
+
         return RTC.PostApi({}, {
             url: '/locations/updatestray/',
-            id: self.record._id,
-            status: "INVALID"
+            id: self.record()._id,
+            status: self.strayStatus(),
+            message: self.strayComments()
         }).done(function(r) {
-            return RTC.isSuccess(r) && console.log(r);
+            return RTC.isSuccess(r) && $.bootstrapGrowl('Thanks! This record has been updated.', {type: 'success'});
+        }).error(function(r) {
+            return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me... I love you.', {type: 'error'});
         });
     }
     self.toggleDebug = function(){return self.debug(!self.debug());};
@@ -394,11 +424,16 @@ function Straylocations() {
         }
 
         if(row.other_name){
-            var s = self.strayName() || "";
-            if(!self.postalName()){
-                self.postalName(row.other_name.ucfirst());
-            }
+            var s = self.strayName() || "", t;
             row.other_name = row.other_name.toLowerCase() === s.toLowerCase() ? null : row.other_name;
+            if(row.other_name){
+                t = row.other_name.split(" ");
+                RTC.forEach(t, function(i){return t[t.indexOf(i)] = i.ucfirst()});
+                row.other_name = t.join(" ");
+                if(!self.postalName()){
+                    self.postalName(row.other_name);
+                }
+            }
         }
 
         self.postalName() && self.googleOptions.push(self.postalName());
@@ -408,10 +443,9 @@ function Straylocations() {
         }
 
         msg = '<span class="text-info">'+v.total+'</span>&nbsp;matches(s) found in SingPost';
-
         self.currentMessage(msg);
     });
-    self.changePage.extend({throttle:1e3});
+    self.changePage = ko.observable().extend({throttle:750});
     self.changePage.subscribe(function(v){
         if(v <= 0 || v > self.total())
             return false;
