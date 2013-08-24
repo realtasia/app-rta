@@ -1,14 +1,14 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-ini_set('session.cookie_lifetime', 0);
-ini_set("session.cache_expire", 0);
+ini_set('session.cookie_lifetime', Date::WEEK * 2);
+ini_set("session.cache_expire", Date::WEEK * 2);
 
 /**
  * The parent Controller for all other controllers unless otherwise specified.
  *
  * @author Jason Nathan
- * @package RealtAsia API
- * @subpackage
+ * @package RealtAsia APP
+ * @category Controllers
  * @version 1.0
  * @copyright 2012 Realtasia Pte Ltd
  */
@@ -175,6 +175,10 @@ abstract class Controller_Auth extends Controller_Template {
             $params = $this->request->post();
             $type   = HTTP_Request::POST;
         }
+        // if there is still no url, we cannot continue
+        if (!\Arr::get($params, 'url'))
+          return parent::json_response([]);
+
 
         $url = strpos($params['url'], 'http') === 0 ? $params['url'] : 'http://' . RT::API_SERVER . $params['url'];
         $r   = Request::factory($url);
@@ -185,10 +189,10 @@ abstract class Controller_Auth extends Controller_Template {
         else
             $r->query($params)->method(HTTP_Request::GET);
 
-        $this->response->headers('Content-type', 'application/json');
-
         // a little ambiguous but this method returns JSON when given a Kohana_Request object.
-        return $this->response->body(Api::request($r));
+        $json= Api::request($r);
+        //die($json);
+        return parent::json_response($json);
     }
 
     /**
@@ -514,7 +518,7 @@ abstract class Controller_Auth extends Controller_Template {
 
     /**
      * Estracts the needed changed info of a given user so the UI can be kept
-     * updated. Sets this in a session for continuous comparisons
+     * updated. Saves this in a session for continuous comparisons
      * @param array $cu
      * @return type
      */

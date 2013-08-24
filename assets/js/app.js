@@ -451,7 +451,7 @@ RT["App"].prototype = {
             }
         }.bind(t);
 
-        t.load = function(s, p) {
+        this.load = function(s, p) {
             if (!t.at())
                 return !1;
             p.access_token = t.at();

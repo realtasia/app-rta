@@ -1,13 +1,11 @@
-<?php
-
-defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') or die('No direct script access.');
 
 /**
  * API Request Utility Helper.
  *
  * @author Jason Nathan
  * @package RealtAsia App
- * @subpackage Helper
+ * @category Helpers
  * @version 1.0
  * @copyright 2013 Realtasia Pte Ltd
  *

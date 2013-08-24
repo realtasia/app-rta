@@ -294,7 +294,7 @@ RT["Com"] = {
         };
         return function(a, c, h) {
             var f = RT.Com.DateFormat;
-            1 === arguments.length && ("[object String]" == Object.prototype.toString.call(a) && !/\d/.test(a)) && (c = a, a = void 0);
+            1 === arguments.length && ("[object String]" === Object.prototype.toString.call(a) && !/\d/.test(a)) && (c = a, a = void 0);
             a = a ? new Date(a) : new Date;
             if (isNaN(a))
                 throw SyntaxError("invalid date");
@@ -1143,9 +1143,9 @@ RT["handlers"] = {
         }
     },
     radioButton: {
-        init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        init: function(element, valueAccessor, allBindingsAccessor) {
             var value = valueAccessor(), e = $(element), nv = ko.unwrap(allBindingsAccessor().value),
-                    clickHandler = function() {
+                    handler = function() {
                         return function() {
                             e.parent().children().each(function() {
                                 return $(this).removeClass("active");
@@ -1154,8 +1154,8 @@ RT["handlers"] = {
                         };
                     };
             value() === nv && e.addClass('active');
-            return ko.bindingHandlers.click.init(element, clickHandler, allBindingsAccessor, viewModel, bindingContext);
-        },
+            return ko.bindingHandlers.click.init(element, handler, allBindingsAccessor);
+        }
     }
 };
 
@@ -1164,8 +1164,9 @@ RT["handlers"] = {
  *  Author:     Jason Nathan
  *
  *  Sets some plugin defaults and some basic support checks
+ *
+ *  @param $ jQuery
  */
-;
 (function($) {
     /**
      * autocomplete highlight results
@@ -1215,6 +1216,9 @@ RT["handlers"] = {
         }, settings.interval);
         return this;
     };
+    function defaultToWhiteSpace(characters){
+        return characters ? characters.replace(/([-.*+?^${}()|[\]\/\\])/g, '\\$1') : '\\s';
+    };
     !String.prototype.trim && (String.prototype.trim = function(characters) {
         characters = defaultToWhiteSpace(characters);
         return this ? this.replace(new RegExp('\^' + characters + '+|' + characters + '+$', 'g'), '') : '';
@@ -1247,7 +1251,8 @@ RT["handlers"] = {
         return (template + pruneStr).length > str.length ? str : str.slice(0, template.length) + pruneStr;
     });
     !String.prototype.ucfirst && (String.prototype.ucfirst = function() {
-        return this.charAt(0).toUpperCase() + this.slice(1);
+        var l = this.toLowerCase();
+        return l.charAt(0).toUpperCase() + l.slice(1);
     });
     !String.prototype.stripTags && (String.prototype.stripTags = function(allowed) {
         allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('');
@@ -1299,8 +1304,10 @@ RT["handlers"] = {
  *  Runtime Function: KO defaults & defs
  *  Author:     Jason Nathan
  *
+ *@param ko knockout
+ *@param RT RT object
+ *@param $ jQuery
  */
-;
 (function(ko, RT, $) {
     ko.utils.extend(ko.bindingHandlers, RT.handlers);
     delete RT.handlers;
@@ -1359,7 +1366,7 @@ RT["handlers"] = {
         }
     };
 
-    // ko binding tick (for clocks)
+    // ko binding tick (for clocks) - currently not used
     (function() {
         var mins = new Date().getMinutes(), secs = mins * 60,
                 minSpan = $(document.createElement('span')).css('padding', '5px 10px'),
@@ -1392,7 +1399,7 @@ RT["handlers"] = {
                 $(e).append(minSpan).append(":").append(secSpan);
             }
         };
-    })();
+    });
     //RT Modal && ko binding RTModal
     (function() {
         RT.Modal = function(options) {
@@ -1430,7 +1437,7 @@ RT["handlers"] = {
             };
             self.slideRight = function(d, e) {
                 return self.nextThing();
-            }
+            };
             self.previousThing = function() {
                 "use strict";
                 var t = this, prevIndex;
@@ -1609,15 +1616,14 @@ RT["handlers"] = {
             }
         };
     })();
-    //RT ConfirmDialog && ko binding RTModal
+    //RT ConfirmDialog
     (function() {
         /**
          *
          * colorbox - with onComplete bind of a simple VM with ok and cancel functions
          *
-         * @param {type} data
-         * @param {type} element
-         * @returns {undefined}
+         * @param {Object} options
+         * @returns {void};
          */
         RT.ConfirmDialog = function(options) {
             options = options || {};
@@ -1631,7 +1637,7 @@ RT["handlers"] = {
                 typeof options.cancel === 'function' && options.cancel();
                 return $.colorbox.close();
             };
-        }
+        };
 
         ko["bindingHandlers"]["confirmDialog"] = {
             init: function(vm) {
@@ -1645,7 +1651,7 @@ RT["handlers"] = {
                 });
                 return $.colorbox(s);
             }
-        }
+        };
 
     })();
 

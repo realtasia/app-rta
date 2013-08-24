@@ -1,8 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+
 /*
- * @package		PayPal IPN
+ * Paypal callback controller
+ *
  * @author      Pap Tamas
+ * @author      Jason Nathan
+ * @package		RealtAsia APP
  * @copyright   (c) 2012-2013 Pap Tamas
+ * @category    Controllers
  * @website		https://github.com/paptamas/kohana-paypal-ipn
  * @license		http://www.opensource.org/licenses/isc-license.txt
  *

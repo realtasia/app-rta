@@ -4,7 +4,7 @@
  * Description of client
  *
  * @author Jason Nathan
- * @package RealtAsia API
+ * @package RealtAsia APP
  * @subpackage
  * @version 1.0
  * @copyright 2012 Realtasia Pte Ltd
@@ -118,7 +118,7 @@ class Controller_Location extends Controller_Auth {
         $req  = Api::request('/listing/search/', $this->listings_query());
         //die($req);
         $data = $req->get_data();
-        if ($data::success())
+        if ($req::success())
         {
             if ($this->auto_render)
             {

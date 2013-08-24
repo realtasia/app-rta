@@ -5,7 +5,7 @@
 return [
     'default' => [
         'database'  => 'db',
-        'server'    => RT::MONGOSDB,
+        'server'    => RT::MONGOS,
         'options'   => [],
         'profiling' => FALSE
     ]

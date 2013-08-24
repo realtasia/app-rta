@@ -9,6 +9,9 @@
  * you style it.
  *
  * @author   Corey Worrell
+ * @author   Jason Nathan
+ * @package  RealtAsia APP
+ * @category Helpers
  * @homepage http://coreyworrell.com
  * @version  1.1
  */

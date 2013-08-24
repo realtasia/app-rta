@@ -3,11 +3,11 @@
  * HTML helper class. Provides generic methods for generating various HTML
  * tags and making output HTML safe.
  *
- * @package    Kohana
- * @category   Helpers
- * @author     Kohana Team
- * @copyright  (c) 2007-2011 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @author Jason Nathan
+ * @package RealtAsia APP
+ * @category Helpers
+ * @version 1.0
+ * @copyright 2013 Realtasia Pte Ltd
  */
 class HTML extends Kohana_HTML {
     public static function javascript($vars)

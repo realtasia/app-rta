@@ -40,7 +40,7 @@
         <span class="parentDesc">
             <a class="smallCaps" href="<?php echo!empty($company) ? $company['uri'] : '' ?>"><?php echo!empty($company) ? ucwords(strtolower($company['name'])) : '' ?></a>
         </span>
-        <blockquote><?php echo $message ?></blockquote>
+        <?php if(isset($message)):?><blockquote><?php echo $message ?></blockquote><?php endif;?>
     </div>
     <div class="media visible-phone">
         <div class="pull-left">
@@ -54,7 +54,7 @@
                 ?>
                 <a class="smallCaps" href="<?php echo!empty($company) ? $company['uri'] : '' ?>"><?php echo!empty($company) ? ucwords(strtolower($company['name'])) : '' ?></a>
             </h5>
-            <blockquote style="display:none;" data-bind="visible:RTApp.ca() === 'info'"><?php echo $message ?></blockquote>
+            <?php if(isset($message)):?><blockquote style="display:none;" data-bind="visible:RTApp.ca() === 'info'"><?php echo $message ?></blockquote><?php endif;?>
         </div>
     </div>
     <div class="pageInfo clearfix" style="display:none;" data-bind="visible:$root.cpIsCu() ||$data.interactions">

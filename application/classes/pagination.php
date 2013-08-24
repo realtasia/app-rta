@@ -1,7 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 /**
- * @author jason
+ * A simple pagination helper
+ *
+ * @author Jason Nathan
+ * @package RealtAsia APP
+ * @category Helpers
+ * @version 1.0
+ * @copyright 2013 Realtasia Pte Ltd
  */
 class Pagination
 {

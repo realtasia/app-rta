@@ -6,8 +6,8 @@ defined('SYSPATH') or die('No direct script access.');
  * Description of single
  *
  * @author Jason Nathan
- * @package RealtAsia API
- * @subpackage
+ * @package RealtAsia APP
+ * @category Controllers
  * @version 1.0
  * @copyright 2012 Realtasia Pte Ltd
  */

@@ -3,9 +3,8 @@
  * A utility Class to help with meta tags
  *
  * @author Jason Nathan
- * @category RealtAsia
- * @package RT_Helpers
- * @subpackage Metatag
+ * @package RealtAsia APP
+ * @category Helpers
  * @version 1.0
  * @copyright 2013 Realtasia Pte Ltd
  */

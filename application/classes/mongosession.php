@@ -1,8 +1,9 @@
 <?php
 /**
  * @author            Nick Ilyin nick.ilyin@gmail.com
+ * @package          RealtAsia APP
  * @version            v0.1
- * @description        Changes PHP's behaviour with sessions by using Mongo as a data
+ * @description      Changes PHP's behaviour with sessions by using Mongo as a data
  *                    storage solution for PHP sessions. Safely does things by locking
  *                    sessions while using them. Currently requires 1 database in mongo
  *                    and 2 collections. Please use collections that don't already exist

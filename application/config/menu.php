@@ -3,7 +3,7 @@
  * Description of menu.php
  *
  * @author Jason Nathan
- * @package RealtAsia API
+ * @package RealtAsia APP
  * @subpackage
  * @version 1.0
  * @copyright 2012 Realtasia Pte Ltd

@@ -6,9 +6,8 @@ ini_set('memory_limit', '512M');
  * Media Controller for media file uploads management
  *
  * @author Jason Nathan
- * @category RealtAsia
- * @package RT_Controller
- * @subpackage Media
+ * @package RealtAsia APP
+ * @category Controllers
  * @version 1.0
  * @copyright 2012 Realtasia Pte Ltd
  */

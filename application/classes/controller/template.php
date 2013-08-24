@@ -1,16 +1,14 @@
-<?php
-
-defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') or die('No direct script access.');
 
 /**
  *
  * Copied from Kohana template Controller. Adds profiling to this controller
  *
  * @author Jason Nathan
- * @package Realtasia
- * @subpackage Controller
- * @version 0.8
- * @copyright 2011 Realtasia Pte Ltd
+ * @package RealtAsia APP
+ * @category Controllers
+ * @version 1.0
+ * @copyright 2012 Realtasia Pte Ltd
  */
 class Controller_Template extends Controller {
 
@@ -50,6 +48,11 @@ class Controller_Template extends Controller {
         $this->response->headers('Content-type', 'application/json')->body($res->execute());
     }
 
+    /**
+     * Simple method to create a cache key for the current request so that it
+     *
+     * @return string
+     */
     protected function build_cache_key()
     {
         $query  = $this->request->query();
@@ -64,6 +67,15 @@ class Controller_Template extends Controller {
         return $uri;
     }
 
+    /**
+     * While this method works, the request is still processed before returning
+     * the cached HTML - kinda defeats the purpose. However, since it still
+     * compresses the output, it will work so long as $cacheable is false
+     *
+     * @param mixed Response|string $html to render
+     * @param string $key
+     * @return string
+     */
     public static function min_lite($html, $key = NULL)
     {
         if ($key)
@@ -85,6 +97,11 @@ class Controller_Template extends Controller {
         return $html;
     }
 
+    /**
+     * This method compresses HTML output and sets no0cache for JSON responses
+     *
+     * @return parent::after()
+     */
     public function after()
     {
         /* Profiling******************************************************** */
@@ -103,23 +120,42 @@ class Controller_Template extends Controller {
         //Profiler::stop($ba);
     }
 
+    /**
+     * Removes whitespaces. I am aware of the computation cost of regex but HTML
+     * responses are heavy in RTA, and this does significantly reduce response
+     * size
+     *
+     * @param string $o
+     * @return string
+     */
     public static function sanitize($o)
     {
-        $search  = array(
+        $search  = [
             '/\>[^\S ]+/s', //strip whitespaces after tags, except space
             '/[^\S ]+\</s', //strip whitespaces before tags, except space
             '/(\s)+/s'  // shorten multiple whitespace sequences
-        );
-        $replace = array(
+        ];
+        $replace = [
             '>',
             '<',
             '\\1'
-        );
+        ];
         return preg_replace($search, $replace, $o);
     }
 
     /**
      * Utility methods used in various Controllers to perform respective searches
+     */
+
+    /**
+     * This method extracts '_ids' or 'object_ids' for a standard interaction
+     * request. Normally complemented with the latter method of retrieving
+     * people objects.
+     *
+     * @param string $url
+     * @param array $query
+     * @param boolean $object_ids
+     * @return array
      */
     protected function get_interactor_ids($url, array $query = array(), $object_ids = false)
     {
@@ -140,10 +176,16 @@ class Controller_Template extends Controller {
             }
         }
 
-        return $ids;
+        return (array) $ids;
     }
 
-    protected function get_people_by_ids($ids)
+    /**
+     * Extracts people with an API call using the given ids.
+     *
+     * @param array $ids
+     * @return string JSON
+     */
+    protected function get_people_by_ids(array $ids = array())
     {
         $data = [];
 
@@ -161,14 +203,14 @@ class Controller_Template extends Controller {
             }
         }
 
-        if ($this->auto_render)
-        {
-            $this->pagination = Pagination::factory($data);
-            $this->template->set('cl', $data);
-            $this->template->set('clt', 'people');
-            $this->content    = View::factory('people')->set('cl', $data);
-            return $this->content->set('introcontent', View::Factory("introcontent/location"));
-        }
+//        if ($this->auto_render)
+//        {
+//            $this->pagination = Pagination::factory($data);
+//            $this->template->set('cl', $data);
+//            $this->template->set('clt', 'people');
+//            $this->content    = View::factory('people')->set('cl', $data);
+//            return $this->content->set('introcontent', Kohana::find_file('views', "introcontent/location"));
+//        }
 
         return self::json_response([]);
     }
@@ -189,12 +231,20 @@ class Controller_Template extends Controller {
             'skip'         => ((int) Arr::get($query, 'page', 1) - 1) * 10,
             'filter'       => \Arr::get($query, 'filter', 'All'),
             'sort'         => 'active',
+            'state'        => $state,
             'access_token' => $this->token()
         ];
 
         return Arr::merge($defaults, $query);
     }
 
+    /**
+     * Parses request & sets query parameters for people searches. Used in
+     * multiple controllers where there is a need to paginate & serve people
+     * objects.
+     *
+     * @return array
+     */
     protected function people_search()
     {
         $query  = $this->request->query();
@@ -237,6 +287,13 @@ class Controller_Template extends Controller {
         return Arr::overwrite($defaults, $query);
     }
 
+    /**
+     * Parses request & sets query parameters for location searches. Used in
+     * multiple controllers where there is a need to paginate & serve location
+     * objects.
+     *
+     * @return array
+     */
     protected function locations_search()
     {
         $query         = $this->search_defaults();
@@ -275,6 +332,13 @@ class Controller_Template extends Controller {
         return Arr::overwrite($defaults, $query);
     }
 
+    /**
+     * Parses request & sets query parameters for listing searches. Used in
+     * multiple controllers where there is a need to paginate & serve listing
+     * objects.
+     *
+     * @return array
+     */
     protected function listings_search()
     {
         $query = $this->search_defaults();
@@ -306,6 +370,13 @@ class Controller_Template extends Controller {
         return \Arr::merge($query, ['listing' => array_filter($params)]);
     }
 
+    /**
+     * Utility mehtod that parses/validates a string and returns a number. Used
+     * in listing searches/creations.
+     *
+     * @param type $v
+     * @return int
+     */
     protected static function checkNumberField($v)
     {
         switch (true)
@@ -322,6 +393,14 @@ class Controller_Template extends Controller {
         return floatval(str_replace(',', '', $v));
     }
 
+    /**
+     * These three lines were repeated over and over. This utility mehthod
+     * condenses that
+     *
+     * @param string $url
+     * @param array $query
+     * @return Response
+     */
     protected function _keyword($url, $query)
     {
         $this->auto_render = false;
@@ -329,6 +408,13 @@ class Controller_Template extends Controller {
         return $this->response->body(Api::request($url, $query)->as_json());
     }
 
+    /**
+     t* Similarly, These lines were repeated over and over. This utility method
+     * condenses that.
+     *
+     * @param mixed String|Api_Response|Array $json
+     * @return Response
+     */
     protected function json_response($json)
     {
         if ($json instanceof Api_Response)
@@ -340,5 +426,4 @@ class Controller_Template extends Controller {
         $this->response->headers('Content-type', 'application/json');
         return $this->response->body($json);
     }
-
 }

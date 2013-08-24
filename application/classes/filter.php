@@ -3,9 +3,10 @@
  * Filter Form Helper (Search Forms).
  *
  * @author Jason Nathan
- * @package realtasia-beta-0.8
- * @subpackage Helper
- * @copyright 2011 Realtasia Pte Ltd
+ * @package RealtAsia APP
+ * @category Helpers
+ * @version 1.0
+ * @copyright 2013 Realtasia Pte Ltd
  */
 class Filter
 {
