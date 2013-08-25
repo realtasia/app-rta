@@ -4263,4 +4263,10 @@ jQuery(document).ready(function($) {
         e.prepend('<i class="icon-spinner icon-spin"></i>&nbsp;');
         return true;
     });
+    if(!RTC.getCookie('oneMapToken')){
+        $.getJSON("http://www.onemap.sg/API/services.svc/getToken", {accessKEY:'uUIUv3WGXhA9qJCTsWHIfUq2aFkMM0vsEY4BdyKO2CQxQNQ7QKZ/gzwcRBg+IcRDGorwiHPs6ddKUM7hHeglIVLUZ4xjPtKV|mv73ZvjFcSo='}, function(r){
+            RTC.setCookie('oneMapToken', r.GetToken[0].NewToken, 1);
+        });
+    }
+
 });

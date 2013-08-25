@@ -208,14 +208,25 @@ function Location(p) {
 }
 
 function Straylocations() {
-    var self, o = 'debug debugData foundSingpostIds showSingpost singpost record updater strayName postalName strayAddress postalAddress currentPage postalIDs currentMessage processing total googleQuery siteQuery showRecordDetail skip locationForm strayStatus strayComments';
+    var self, o = 'debug debugData strayFilter foundSingpostIds showSingpost singpost record updater strayName postalName strayAddress postalAddress currentPage postalIDs currentMessage processing total googleQuery siteQuery showRecordDetail skip locationForm strayStatus strayComments';
     RTC.MakeObsFromArray.call(this, o);
     self = this;
     self.debug(false);
     self.skip(0);
     self.strayStatus("SUCCESS");
+    self.strayFilter("NEW");
     self.googleOptions = ko.observableArray();
-    self.f = "name address estate subtype";
+    self.strayFilters = [
+        {label:'New', value:'NEW', count:ko.observable(0), enable:null, title:'Show only records that have not been processed'},
+        {label:'Completed', value:'SUCCESS', count:ko.observable(0), enable:null, title:'Show successfully processed records that have no problems'},
+        {label:'Needs Review', value:'REVIEW', count:ko.observable(0), enable:null, title:'Show records that marked as "Need Review"'},
+        {label:'Invalid', value:'INVALID', count:ko.observable(0), enable:null, title:'Show records marked incompleted/invalid'}
+    ];
+    RTC.forEach(self.strayFilters, function(i){
+        i.enable = ko.computed(function(){return this.count() !== 0;}, i);
+    });
+    self.strayFiltersMap = 'NEW INVALID SUCCESS REVIEW'.split(" ");
+    self.f = "name estate subtype exists processing";
     self.siteQuery("site:condo.singaporeexpats.com");
     self.subtypes = new Location().subtypes;
     self.getSingpost = function(v) {
@@ -231,15 +242,24 @@ function Straylocations() {
             if(RTC.isSuccess(r)){
                 self.singpost(r.data);
             }
-            return r.data.debugData && self.debugData(ko.toJSON(r.data.debugData, null, 2))
+            return r.data.debugData && self.debugData(ko.toJSON(r.data.debugData, null, 2));
         }).always(function(){return self.processing(false);});
+    };
+    self._mapFilter = function(filter){
+        switch(filter){
+            case "Completed": return "SUCCESS";
+            case "Needs Review": return "REVIEW";
+            case "Invalid": return "INVALID";
+        }
+        return "NEW";
     }
     self._get = function(url, skip) {
         return RTC.GetApi({}, {
             url: url,
-            skip: skip || 0
-        });
-    }
+            skip: skip || 0,
+            status: self.strayFilter()
+        }).done(function(){self.getCount();});
+    };
     self.processingMessages = "Searching SingPost for match...";
     self.currentMessage(self.processingMessages);
     self.processing(true);
@@ -307,11 +327,11 @@ function Straylocations() {
             status: self.strayStatus(),
             message: self.strayComments()
         }).done(function(r) {
-            return RTC.isSuccess(r) && $.bootstrapGrowl('Thanks! This record has been updated.', {type: 'success'});
+            return RTC.isSuccess(r) && $.bootstrapGrowl('Thanks! This record has been updated.', {type: 'success'}) && self.getCount();
         }).error(function(r) {
             return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me... I love you.', {type: 'error'});
         });
-    }
+    };
     self.toggleDebug = function(){return self.debug(!self.debug());};
     self.toggleRecordDetail = function(){return self.showRecordDetail(!self.showRecordDetail());};
     self.recordHasDetails = ko.computed(function(){
@@ -329,14 +349,41 @@ function Straylocations() {
         return t ? true : false;
 
     }, self);
+    self.locationIsValid = ko.computed(function(){
+        var f = this.final || {};
+        if(!f.name() || !f.subtype() || !f.estate()){
+            return false;
+        }
+        return true;
+    }, self);
 
     self.toggleSingpost = function(){
         return self.showSingpost(!self.showSingpost());
     };
 
     self.getCount = function() {
-        return self._get('/locations/countstrays/').done(function(r) {
-            return RTC.isSuccess(r) && self.total(r.data.total);
+        var _fetch = function(f){
+            return RTC.GetApi({}, {
+                url: '/locations/countstrays/',
+                status: f
+            });
+        }, t = self, c = t.strayFilters;
+        RTC.forEach(t.strayFiltersMap, function(filter){
+            var res = _fetch(filter);
+            res && res.done(function(r){
+                var field = ko.utils.arrayFirst(c, function(item) {
+                    return item.value === filter;
+                });
+                if(RTC.isSuccess(r)){
+                    if(t.strayFilter() === filter){
+                        t.total(r.data.total);
+                    }
+                    if(field){
+                        field.count(r.data.total);
+                    }
+                }
+
+            });
         });
     };
 
@@ -388,15 +435,13 @@ function Straylocations() {
      */
     self.skip.subscribe(function(v){
         var t = self;
-        console.log({
-            ltt: v < t.total(),
-            zom: v >= 0,
-            lgc: !!(v && (v >= 0) && (v < t.total()))
-        })
         return typeof v === 'number' && v >= 0 && v < t.total() && t.reset() && t._get('/locations/getstray', v).done(function(r) {
             return RTC.isSuccess(r) && t.record(r.data);
         }) || false;
     });
+    self.strayFilter.subscribe(function(v){
+        return v && this.skip.valueHasMutated();
+    }, self);
     self.record.subscribe(self.getSingpost);
     self.record.subscribe(function(v) {
         if (!v)
@@ -407,6 +452,25 @@ function Straylocations() {
         v.postal && self.googleOptions.push('Singapore ' +  v.postal);
         v.type && self.final.subtype(v.type);
     }, self);
+    self.final.name.subscribe(function(v){
+        if(!v)
+            return false;
+
+            self.final.processing(true);
+        var res = RTC.GetApi({},{
+            url:'/locations/fetchlocation',
+            name:v
+        });
+
+        res.done(function(r){
+            if(RTC.isSuccess(r)){
+                var exists = r.data.name === v;
+                self.final.exists(exists);
+                exists && self.final.subtype(r.data.subtype)
+                       && self.final.estate(r.data.parent.name);
+            }
+        }).always(function(){self.final.processing(null)});
+    });
     self.singpost.subscribe(function(v) {
         if (!v)
             return false;
@@ -417,19 +481,16 @@ function Straylocations() {
 
         row.estate && self.final.estate(row.estate) && (row.estateUrl = "/location/estate/" + row.estate.toLowerCase());
 
-        self.postalName(typeof row.child === 'string' ? row.child.ucfirst() : row.building && row.building.ucfirst());
+        self.postalName(typeof row.child === 'string' ? row.child.ucwords() : row.building && row.building.ucwords());
 
         if(row.source){
-            row.colorbox = {iframe:true, href:row.source, width:"99%", height:600, top:0,fastIframe:true};
+            row.colorbox = {iframe:true, href:row.source, width:"90%", height:550, top:0,fastIframe:true};
         }
 
         if(row.other_name){
-            var s = self.strayName() || "", t;
-            row.other_name = row.other_name.toLowerCase() === s.toLowerCase() ? null : row.other_name;
+            var s = self.strayName() || "";
+            row.other_name = row.other_name.toLowerCase() === s.toLowerCase() ? null : row.other_name.ucwords();
             if(row.other_name){
-                t = row.other_name.split(" ");
-                RTC.forEach(t, function(i){return t[t.indexOf(i)] = i.ucfirst()});
-                row.other_name = t.join(" ");
                 if(!self.postalName()){
                     self.postalName(row.other_name);
                 }
@@ -442,7 +503,7 @@ function Straylocations() {
             self.foundSingpostIds(v.ids);
         }
 
-        msg = '<span class="text-info">'+v.total+'</span>&nbsp;matches(s) found in SingPost';
+        msg = '<span class="text-info">'+v.total+'</span>&nbsp;record(s) found in SingPost';
         self.currentMessage(msg);
     });
     self.changePage = ko.observable().extend({throttle:750});
@@ -481,7 +542,7 @@ function editableTemplate(params) {
     self.content = ko.observable(params.content);
     self.isEditing = ko.observable(params.isEditing);
     self.fieldsTemplate = params.fieldsTemplate;
-    self.text = params.text;
+    self.text = RTC.MakeObs(params.text);
     self.toggleEditing = function() {
         return self.isEditing(!self.isEditing());
     };

@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-08-24 02:58:12 
+   Compiled at: 2013-08-25 17:05:19 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1257,6 +1257,11 @@ RT["handlers"] = {
         var l = this.toLowerCase();
         return l.charAt(0).toUpperCase() + l.slice(1);
     });
+    !String.prototype.ucwords && (String.prototype.ucwords = function() {
+        var t = this.toLowerCase().split(" ");
+        RTC.forEach(t, function(i){return t[t.indexOf(i)] = i.ucfirst();});
+        return t.join(" ");
+    });
     !String.prototype.stripTags && (String.prototype.stripTags = function(allowed) {
         allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('');
         var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
@@ -1661,7 +1666,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-08-24 02:58:12 
+   Compiled at: 2013-08-25 17:05:19 
 ================================ */
 RT["App"] = function() {
     "use strict";
@@ -5928,5 +5933,11 @@ jQuery(document).ready(function($) {
         e.prepend('<i class="icon-spinner icon-spin"></i>&nbsp;');
         return true;
     });
+    if(!RTC.getCookie('oneMapToken')){
+        $.getJSON("http://www.onemap.sg/API/services.svc/getToken", {accessKEY:'uUIUv3WGXhA9qJCTsWHIfUq2aFkMM0vsEY4BdyKO2CQxQNQ7QKZ/gzwcRBg+IcRDGorwiHPs6ddKUM7hHeglIVLUZ4xjPtKV|mv73ZvjFcSo='}, function(r){
+            RTC.setCookie('oneMapToken', r.GetToken[0].NewToken, 1);
+        });
+    }
+
 });
 

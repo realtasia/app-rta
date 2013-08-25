@@ -15,10 +15,12 @@
 
 <!--Updater-->
 <script type="text/html" id="Updater">
+<div data-bind="template:'strayFilter'"></div>
+<hr>
 <div class="outerBox contentArea niceBG">
     <ul class="pager noMargTopBtm" style="display:block;margin-top:0;">
         <li class="previous">
-            <a href="#" class="shadowMild" data-bind="click:previous"><i class="icon-caret-left" data-bind="css:{'icon-2x':RTApp.isSmallerThanTablet}"></i>&nbsp;<span class="hidden-phone">Previous</span></a>
+            <a href="#" class="shadowMild" data-bind="click:previous, title:'Go to previous \'Stray\' record.'"><i class="icon-caret-left" data-bind="css:{'icon-2x':RTApp.isSmallerThanTablet}"></i>&nbsp;<span class="hidden-phone">Previous</span></a>
         </li>
         <li class="centralize" style="display:inline-block">
             <div data-bind="flash:!record(), visible:!record()"><i class="icon-spin icon-spinner icon-2x"></i></div>
@@ -30,7 +32,7 @@
             </h6>
         </li>
         <li class="next">
-            <a href="#" class="shadowMild" data-bind="click:next, css:{'disabled':currentPage() === total()}"><span class="hidden-phone">Next</span>&nbsp;<i class="icon-caret-right" data-bind="css:{'icon-2x':RTApp.isSmallerThanTablet}"></i></a>
+            <a href="#" class="shadowMild" data-bind="click:next, css:{'disabled':currentPage() === total(), title:'Go to next \'Stray\' record.'}"><span class="hidden-phone">Next</span>&nbsp;<i class="icon-caret-right" data-bind="css:{'icon-2x':RTApp.isSmallerThanTablet}"></i></a>
         </li>
     </ul>
     <div class="container-fluid" data-bind="with:record" style="min-height:140px;">
@@ -42,7 +44,7 @@
                         <span data-bind="text:$data.street"></span> <span data-bind="text:$data.postal ? ', ' + $data.postal : ''"></span>
                     </small>
                 </h2>
-                <a class="btn btn-link" href="#" data-bind="click:$parent.toggleRecordDetail, visible:$parent.recordHasDetails" style="padding:0">More
+                <a class="btn btn-link" href="#" data-bind="click:$parent.toggleRecordDetail, visible:$parent.recordHasDetails, title:'Show all available details for this'" style="padding:0">More
                     <i class="icon-caret-down" data-bind="visible:$parent.showRecordDetail"></i>
                     <i class="icon-caret-right" data-bind="visible:!$parent.showRecordDetail()"></i>
                 </a>
@@ -70,44 +72,55 @@
 </div>
 
 <div data-bind="template:'adminAlertBox'"></div>
-<div style="margin-bottom:10px" data-bind="visible:singpost">
-    <a class="btn btn-link" href="#" data-bind="click:toggleSingpost" style="padding:0">Show Singpost result
-        <i class="icon-caret-down" data-bind="visible:showSingpost"></i>
-        <i class="icon-caret-right" data-bind="visible:!showSingpost()"></i>
-    </a>
-</div>
-
 
 <div data-bind="template:{name:'singpostData', data:singpost, if:singpost}"></div>
-<div data-bind="visible:!processing(), flash:!processing()">
-    <div class="outerBox contentArea" data-bind="template:{name:'editTemplate', data:locationNameEditor}"></div>
-    <div class="outerBox contentArea" data-bind="template:{name:'editTemplate', data:locationSubtypeEditor}"></div>
+<div data-bind="visible:!processing(), flash:!processing()" class="well well-small niceBG2">
+    <h4>Update Location</h4>
+    <div class="contentArea noBorder" data-bind="template:{name:'editTemplate', data:locationNameEditor}"></div>
+    <div class="contentArea noBorder" data-bind="template:{name:'editTemplate', data:locationSubtypeEditor}"></div>
+    <div class="row-fluid">
+        <div class="span2">
+            <button class="btn btn-primary btn-small" data-bind="enable:locationIsValid,click:popupLocation">
+                <i data-bind="css:{'icon-edit':final.exists, 'icon-file-text':!final.exists()}"></i> <span data-bind="text:final.exists() ? 'Edit' : 'New'"></span> Location
+            </button>
+        </div>
+        <div class="span10 muted">
+            <i class="icon-spin icon-spinner" data-bind="visible:final.processing"></i>
+            <small data-bind="visible:final.processing, flash:final.processing"> Checking to see if a location exists</small>
+            <small data-bind="visible:final.exists"> Location exists! Click to make changes</small>
+        </div>
+    </div>
 </div>
 
-<div class="well well-small" data-bind="visible:!processing(), flash:!processing()">
-    <div style="margin-top:10px;" class=clearfix;>
-        <textarea style="background-color:#fff !important;" placeholder="Type in additional info/comments" data-bind="expand:true, value:strayComments"></textarea>
+<div class="well well-small niceBG2" data-bind="visible:!processing(), flash:!processing()">
+    <h4>Update Stray</h4>
+    <div style="margin-top:10px;" class="clearfix">
+        <textarea class="span6" style="background-color:#fff !important;" placeholder="Type in additional info/comments" data-bind="expand:true, value:strayComments"></textarea>
+<label class="inline"> <small class="muted">Mark this as: </small> <select class="webkitSelect" data-bind="value:strayStatus">
+                <optgroup label="Success">
+                    <option value="SUCCESS">Everything checked out</option>
+                </optgroup>
+                <optgroup label="Needs Review">
+                    <option value="REVIEW">Location created but needs review</option>
+                </optgroup>
+                <optgroup label="Invalid">
+                    <option value="INVALID">Not enough info / No residences in building</option>
+                </optgroup>
+                <optgroup label="Reset">
+                    <option value="NEW">Reset the status (becomes "New")</option>
+                </optgroup>
+            </select></label>
     </div>
     <div class="btn-toolbar clearfix">
         <div class="btn-group">
-            <label> <small class="muted">Mark this as: </small> <select class="webkitSelect" data-bind="value:strayStatus">
-                <option value="SUCCESS">Success - All checked out</option>
-                <option value="REVIEW">Success - But still needs review</option>
-                <option value="INVALID">Invalid - Not enough info</option>
-                <option value="NEW">Reset to original</option>
-            </select>
-            <button class="btn btn-info btn-small" data-bind="click:updateStray"><i class="icon-save"></i> Update</button></label>
-        </div>
-        <hr>
-        <div class="btn-group">
-            <button class="btn btn-primary btn-small" data-bind="click:popupLocation"><i class="icon-file-text"></i> Create Location</button>
+            <button class="btn btn-info btn-small" data-bind="click:updateStray"><i class="icon-save"></i> Update</button>
         </div>
     </div>
 </div>
 <hr>
 <button class="btn btn-mini" data-bind="click:toggleDebug">Debug</button>
 <div class="well" data-bind="visible:debug">
-    <h3>Debug Data:</h3>
+    <h4>Debug Data:</h4>
     <pre data-bind="text:debugData"></pre>
 </div>
 
@@ -283,13 +296,13 @@
 
 <!--edit template-->
 <script type="text/html" id="editTemplate">
-<a href="#" style="display:block" class="text-success capitalise" data-bind="click:toggleEditing, flash:!isEditing()"><i class="icon-ok"></i> <span data-bind="text:text"></span></a>
+<a href="#" style="display:block" class="text-success capitalise underline" data-bind="click:toggleEditing, flash:!isEditing(), title:'Click to edit'"><i class="icon-ok"></i> <span data-bind="text:text"></span></a>
 <div data-bind="flash:isEditing, template:{name:fieldsTemplate, data:content}"></div>
 </script>
 
 <!--location name-->
 <script type="text/html" id="locationName">
-<input class="fullscap" type="text" data-bind="value:editableValue" placeholder="Choose a name or type one in...">
+<input type="text" data-bind="value:editableValue" placeholder="Choose a name or type one in...">
 <ul data-bind="visible:strayName() || postalName()">
     <li data-bind="visible:strayName"><a style="display:block;padding:5px" class="capitalise" href="#" data-bind="value:strayName, text:strayName, radioButton:editableValue, click:$parent.stopEditing"></a></li>
     <li data-bind="visible:postalName"><a style="display:block;padding:5px" class="capitalise" href="#" data-bind="value:postalName, text:postalName, radioButton:editableValue, click:$parent.stopEditing"></a></li>
@@ -298,14 +311,33 @@
 
 <!--location subtype-->
 <script type="text/html" id="locationSubtype">
-<select style="-webkit-appearance:menulist" data-bind="options: subtypes, value:editableValue, optionsCaption: 'Choose a Location Type'" name="subtype"></select>
+<!--ko foreach: subtypes-->
+    <label class="radio inline"><input type="radio" name="locationSubtype"data-bind="value:$data, checked: $parent.editableValue, click:$parent.stopEditing" /> <span data-bind="text:$data"></span></label>
+<!--/ko-->
+</script>
+<!--stray Filter-->
+<script type="text/html" id="strayFilter">
+<label class="radio inline small " style="padding-left:0">Filter Results: </label>
+<!--ko foreach: strayFilters-->
+    <label class="radio inline small" data-bind="title:$data.title">
+        <input type="radio" name="strayFilter" data-bind="
+            value:$data.value,
+            checked: $parent.strayFilter,
+            enable: $data.enable" />
+        <span data-bind="text:$data.label + ' (' + $data.count() + ')'"></span>
+    </label>
+<!--/ko-->
 </script>
 
 <!--alert box-->
 <script type="text/html" id="adminAlertBox">
-<div class="alert" data-bind="css:{'alert-info':hasSingpost}">
+<div class="alert" data-bind="css:{'alert-success':hasSingpost}">
     <i class="icon-spin icon-spinner" data-bind="visible:processing"></i>
-    <span data-bind="html:currentMessage"></span>
+    <span data-bind="html:currentMessage"></span> &middot;
+    <a href="#" data-bind="click:toggleSingpost,visible:singpost" style="padding:0">Show
+        <i class="icon-caret-down" data-bind="visible:showSingpost"></i>
+        <i class="icon-caret-right" data-bind="visible:!showSingpost()"></i>
+    </a>
 </div>
 </script>
 
@@ -313,7 +345,6 @@
 
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    $.getScript("https://maps.googleapis.com/maps/api/js?key=[REDACTED]&sensor=false");
     return $.getScript("/assets/js/adminlocations.js", function() {
         if (!RTApp.user() || (RTApp.user() && !RTApp.user().isAdmin())) {
             window.location = "/";
@@ -325,7 +356,7 @@ jQuery(document).ready(function($) {
 
 <style type='text/css'>
     .niceBG{
-        background-image: url("http://bradjasper.com/subtle-patterns-bookmarklet/patterns/triangles_pattern.png");
+        background-image: url("http://bradjasper.com/subtle-patterns-bookmarklet/patterns/lightpaperfibers.png");
         background-repeat: repeat;
         background-size: auto auto;
         text-shadow: 1px 1px 1px #eee;
@@ -343,6 +374,15 @@ jQuery(document).ready(function($) {
         vertical-align: top;
         width: 50px;
     }
+    .small{font-size:85%;}
+    .niceBG2{
+        background-image: url("http://bradjasper.com/subtle-patterns-bookmarklet/patterns/tiny_grid.png");
+        background-repeat: repeat;
+        background-size: auto auto;
+    }
+    .noBorder{border:0 none;}
+    .underline{text-decoration: underline}
+    select{text-shadow:none !important;}
 </style>
 
 <script type="text/html" id="singpostData">

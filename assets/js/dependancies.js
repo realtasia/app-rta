@@ -1254,6 +1254,11 @@ RT["handlers"] = {
         var l = this.toLowerCase();
         return l.charAt(0).toUpperCase() + l.slice(1);
     });
+    !String.prototype.ucwords && (String.prototype.ucwords = function() {
+        var t = this.toLowerCase().split(" ");
+        RTC.forEach(t, function(i){return t[t.indexOf(i)] = i.ucfirst();});
+        return t.join(" ");
+    });
     !String.prototype.stripTags && (String.prototype.stripTags = function(allowed) {
         allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('');
         var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
