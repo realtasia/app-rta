@@ -251,7 +251,7 @@
     </article>
 </script>
 <script type="text/html" id="postComments">
-    <div class="indentedComment widgetOuterBox">
+    <div class="indentedComment">
         <ul class="commentList commentBG" data-bind="attr:{id : 'forPost' + _id()}">
             <!--ko if : comments().length-->
             <!--ko foreach : comments-->
@@ -260,7 +260,7 @@
                 slideIn:hasMore,
                 css:{contentNoBottom:($index() === ($parent.comments().length - 1))}">
                 <div class="commentInline">
-                    <button class="close" type="button" style="display:none" data-bind="visible:commentOptions, click:$parent.deleteComment">&times;</button>
+                    <button class="close" type="button" style="display:none" data-bind="visible:commentOptions, click:$parent.deleteComment"><i class="icon-remove"></i></button>
                     <div class="media">
                         <div class="commentThumb visible-desktop pull-left">
                             <img data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40px" height="40px">
@@ -296,7 +296,7 @@
                             <img data-bind="getAvatar:{context:RTApp.user, size:40}, attr:{alt:RTApp.user().name}" width="40px" height="40px" />
                         </div>
                         <div class="commentTextarea">
-                            <button class="close" type="button" data-bind="click:destroyComment, visible:commentSubmit">&times;</button>
+                            <button class="close" type="button" data-bind="click:destroyComment, visible:commentSubmit"><i class="icon-remove"></i></button>
                             <form action="" style="width:100%" method="post" class="comment-form">
                                 <textarea data-bind="click:showCommentSubmit, value:commentText, expand:true, valueUpdate:'afterkeydown'" class="commentInput contentArea expand20-200" placeholder="Your comment" style="width:95%"></textarea>
                             </form>

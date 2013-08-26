@@ -17,7 +17,7 @@
     </ul>
 </div> <!-- post action links -->
 <?php if ($counts['comments'] > 0): ?>
-    <div class="indentedComment widgetOuterBox">
+    <div class="indentedComment">
         <ul class="commentList contentArea commentBG" id="forPost<?php echo $_id ?>">
             <?php echo View::factory('loops/single/comment')->set('comments', $comments); ?>
         </ul> <!-- comments -->

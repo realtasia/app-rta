@@ -11,11 +11,11 @@
                     <a href="#"   data-bind="click:createTestimonial, title:'Write a Review'"><i class="action16 postTestimonial"></i>Review</a></li>
             </ul>
             <div class="statusFormTA" style="position:relative;padding-right:10px">
-                <button class="close" data-bind="click:destroy, visible:postAreaButton" style="position:absolute;top:0;right:0">&times;</button>
+                <button class="close" data-bind="click:destroy, visible:postAreaButton" style="position:absolute;top:0;right:0"><i class="icon-remove"></i></button>
                 <textarea id="statusFormTextarea" placeholder="" data-bind="attr:{placeholder:prompt}, click:init, value:message, valueUpdate:'afterkeydown', expand : true"></textarea>
             </div>
             <div class="statusFormTA contentArea" style="display:none" data-bind="visible:hasLink">
-                <button class="close" type="button" data-bind="click:closePreview">&times;</button>
+                <button class="close" type="button" data-bind="click:closePreview"><i class="icon-remove"></i></button>
                 <p class="contentArea" data-bind="text:message"></p>
                 <div style="text-align:center;margin:0 auto" data-bind="visible:loading"><i class="icon-spinner icon-spin icon-3x"></i>
 </div>
@@ -79,7 +79,7 @@
                 <div class="container-fluid" style="padding:0 2px">
                     <div class="row-fluid">
                         <div class="statusFormTA relative clearfix span10" data-bind="style:{'min-height':postBoxHeight}">
-                            <button class="close" type="button" data-bind="click:destroy, visible:showButtons">&times;</button>
+                            <button class="close" type="button" data-bind="click:destroy, visible:showButtons"><i class="icon-remove"></i></button>
                             <textarea id="statusFormTextarea" placeholder="" data-bind="attr:{placeholder:prompt}, click:init, value:message, valueUpdate:'afterkeydown', expand : true"></textarea>
                         </div>
                         <div class="span2" style='margin-left:5px'>
@@ -98,7 +98,7 @@
                 </div>
             </form>
             <div class="outerBox contentArea statusFormTA" style="display:none;margin-top:5px;" data-bind="visible:hasLink">
-                <button class="close" type="button" data-bind="click:closePreview">&times;</button>
+                <button class="close" type="button" data-bind="click:closePreview"><i class="icon-remove"></i></button>
                 <p class="contentArea" data-bind="html:RT.Com.nl2br(message())"></p>
                 <div style="text-align:center;margin:0 auto" data-bind="visible:loading"><i class="icon-spinner icon-spin icon-3x"></i></div>
                 <article class="media contentArea" style="min-height:100px;display:none" data-bind="visible:externalFields, with:externalFields">

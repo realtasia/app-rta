@@ -191,7 +191,7 @@ function Location(p) {
     self.subtypes = ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"];
     self.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
     self.aptTypes = ['Condominium', 'Walkup', 'Apartment'];
-    self.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House"];
+    self.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"];
     self.propertyTypes = ko.computed(function() {
         var t = this, s = t.subtype();
         switch (s) {

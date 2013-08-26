@@ -35,7 +35,7 @@
             </ul>
         </div>
     </section>
-    <section class="infoContent" style="display:<?php echo \Arr::get($info, 'achievements') ? 'block' : 'none' ?>">
+    <section class="infoContent outerBox" style="display:<?php echo \Arr::get($info, 'achievements') ? 'block' : 'none' ?>">
         <h4 class="contentArea noMargTopBtm"><i class="icon-trophy"></i> Awards & Achievements</p></h4>
         <div class="leftPadding">
             <ul class="infoLists">
@@ -50,7 +50,7 @@
         </div>
     </section>
     <!--<section class="infoContent" style="display:<?php //echo empty($info['social']) ? 'none' : 'block'  ?>">
-        <h6 class="wrapperHeader"><img alt="Social src="/img/png/glyphicons_043_group.png" /><p>Social Connections</p></h6>
+        <h6 class="wrapperHeader"><img alt="Social" src="/img/png/glyphicons_043_group.png" /><p>Social Connections</p></h6>
         <div class="leftPadding">
             <ul class="infoLists">
                 <li id="socialImgs">
@@ -61,4 +61,9 @@
             </ul>
         </div>
     </section>-->
+    <div data-bind="if:cpIsCu" class="alert alert-info" style="margin:20px auto">
+        <button class="close" onclick="return $(this).parent().fadeOut()"><i class="icon-remove"></i></button>
+        <h5  class="noMrgTop"><i class="icon-info-sign"></i> Change what is shown here</h5>
+        <p><a href="#edit" style="text-decoration: underline">Edit</a> your profile to add information to your about page. You can also change your <a href="#settings" style="text-decoration: underline">privacy settings</a> to add/hide sensitive information.</p>
+    </div>
 </section>

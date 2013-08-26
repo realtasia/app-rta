@@ -16,7 +16,7 @@ RT["Admin"] = function() {
                 request_type: "admin_get_users",
                 url: "/user/update/" + RTApp.user()._id()
             };
-            type && (p.type = type) || (p.type = !0);
+            p.type = type || !0;
             token && (p.token = token);
             (s = RTC.GetApi(s, p)) && s.done(function(r) {
                 return RTC.isSuccess(r) && self.counts(r.data);
@@ -25,6 +25,7 @@ RT["Admin"] = function() {
                 return self.getCounts(type);
             }, 5e3));
         }
+        return true;
     };
     self.hideCounts = function(data, event) {
         "use strict";
@@ -61,7 +62,7 @@ RT["Admin"] = function() {
         p.request_type = "admin_change_status";
         p.status = data.status() === "active" ? "pending" : "active";
         return RTC.PostApi(s, p) && s.done(function(r) {
-            return RTC.isSuccess(r) && data.status(p.status);
+            return RTC.isSuccess(r) && data.status(p.status) && $.bootstrapGrowl('User activated successfully', {type: 'success'});
         });
     };
     self.makeAdmin = function(data, event) {
@@ -158,7 +159,7 @@ RT["Admin"].prototype = {
             request_type: "admin_change_role",
             role: role
         })) && a.done(function(r) {
-            return RTC.isSuccess(r) && data.roles([p.role]);
+            return RTC.isSuccess(r) && data.roles([role]) && $.bootstrapGrowl('User role updated to ' + role, {type: 'success'});
         });
     },
     terminateUser: function(data) {
@@ -169,7 +170,7 @@ RT["Admin"].prototype = {
             request_type: "admin_change_status",
             status: "terminated"
         })) && a.done(function(r) {
-            return RTC.isSuccess(r) && data.status(p.status);
+            return RTC.isSuccess(r) && data.status("terminated") && $.bootstrapGrowl('User status is now terminated', {type: 'success'});
         });
     }
 };

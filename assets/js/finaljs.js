@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-08-25 17:05:19 
+   Compiled at: 2013-08-26 09:25:27 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1666,7 +1666,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-08-25 17:05:19 
+   Compiled at: 2013-08-26 09:25:27 
 ================================ */
 RT["App"] = function() {
     "use strict";
@@ -1713,6 +1713,7 @@ RT["App"] = function() {
             case 'settings':
             case 'media':
             case 'conversations':
+            case 'leads':
                 return true;
         }
         return false;
@@ -2120,7 +2121,22 @@ RT["App"].prototype = {
                 });
             }
         }.bind(t);
-
+        t.admin.subscribe(function(){
+            "use strict";
+            var trg = $("#adminContent");
+            if (!RTC.processing) {
+                RTC.processing = !0;
+                if (!!trg.find("#adminContentSessions").length) {
+                    return;
+                }
+                trg.load("/assets/admin/sessions.html", function() {
+                    ko.cleanNode(trg[0]);
+                    RTC.processing = !1;
+                    return ko.applyBindings(this, trg[0]);
+                });
+            }
+            return;
+        }, this);
         this.load = function(s, p) {
             if (!t.at())
                 return !1;
@@ -2252,7 +2268,7 @@ RT["App"].prototype = {
             }, t);
         })(t);
         t.user.subscribe(handleUser);
-        t.user() && handleUser(t.user());
+        t.user() && t.user.valueHasMutated();
         //$(".pager").hide();
 
         routie({
@@ -2276,6 +2292,9 @@ RT["App"].prototype = {
             'media': function() {
                 t.ca('media');
                 return t.initMediaLibrary();
+            },
+            'leads': function() {
+                t.ca('leads');
             }
         });
     },

@@ -56,7 +56,7 @@
                 </div>
             </form>
             <div class="outerBox contentArea statusFormTA" style="display:none;margin-top:5px;" data-bind="visible:hasLink">
-                <button class="close" type="button" data-bind="click:closePreview">&times;</button>
+                <button class="close" type="button" data-bind="click:closePreview"><i class="icon-remove"></i></button>
                 <p class="contentArea" data-bind="html:RT.Com.nl2br(message())"></p>
                 <div style="text-align:center;margin:0 auto" data-bind="visible:loading"><i class="icon-spinner icon-spin icon-3x"></i></div>
                 <article class="media contentArea" style="min-height:100px;display:none" data-bind="visible:externalFields, with:externalFields">
