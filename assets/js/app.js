@@ -454,7 +454,7 @@ RT["App"].prototype = {
         t.admin.subscribe(function(){
             "use strict";
             var trg = $("#adminContent");
-            if (!RTC.processing) {
+            if (!RTC.processing && this.ca() === 'leads') {
                 RTC.processing = !0;
                 if (!!trg.find("#adminContentSessions").length) {
                     return;
@@ -496,9 +496,8 @@ RT["App"].prototype = {
                 d = arguments[2];
                 args = arguments[1];
             }
-            RTC.log('performingAction', ko.toJS(d));
             var a = new RT['Actions'](t);
-            return a && a[action](d, args) || $.bootstrapGrowl('Sorry, you don\'t have permission to perfom this action', {type: 'warning'});
+            return a && a[action](d, args) || $.bootstrapGrowl('<i class="icon-exclamation-sign"></i> Sorry, you don\'t have permission to perfom this action.', {type: 'warning'});
         };
         (function(RT, RTC) {
             RTC.forEach("Page Testimonial Album Listing Attachment".split(" "), function(i) {
@@ -994,10 +993,10 @@ RT["singleAttachment"] = function(currentAlbum) {
 
 RT["Actions"] = function(t) {
     var self = this;
-    self.submit = function(p, d) {
+    self.submit = function(p, d, noOpaque) {
         var s = {
             beforeSend: function() {
-                $("#" + d._id()).addClass("opaque");
+                !noOpaque && $("#" + d._id()).addClass("opaque");
             }
         };
         s = RTC.PostApi(s, p);
@@ -1024,7 +1023,7 @@ RT["Actions"] = function(t) {
             message: d.commentText(),
             status: 'active'
         };
-        return c && (c = self.submit(p, d)) && c.done(function(r) {
+        return c && (c = self.submit(p, d, true)) && c.done(function(r) {
             if (RTC.isSuccess(r)) {
                 c = new RT.Comment(r.data);
                 c.hasMore(true);
@@ -1034,7 +1033,8 @@ RT["Actions"] = function(t) {
                 d.counts.comments(d.counts.comments() + 1);
                 $(".commentInput").css("height", "25px");
             }
-        });
+        })
+                || $.bootstrapGrowl('<i class="icon-exclamation-sign"></i> Please type in a comment.', {type: 'warning'});;
     };
     self.delete = function(d) {
         var c = true, p = {
@@ -1247,13 +1247,17 @@ RT["Post"] = function() {
             return t.isHidden(false);
         });
     };
-    this.deleteComment = function() {
-        "use strict";
-        var d = arguments[0],
+    this.deleteComment = function(d) {
+        console.log('HERE');
+        return ko.bindingHandlers.confirmDialog.init(new RT.ConfirmDialog({
+            message: "Deleting this comment is permanent.",
+            ok: function() {
                 p = {url: d.actions && d.actions["delete"] && d.actions["delete"]()};
-        return (p = RTC.PostApi({}, p)) && p.done(function(r) {
-            return RTC.isSuccess(r) && t.comments.remove(d) && t.counts.comments(t.counts.comments() - 1);
-        });
+                return (p = RTC.PostApi({}, p)) && p.done(function(r) {
+                    return RTC.isSuccess(r) && t.comments.remove(d) && t.counts.comments(t.counts.comments() - 1);
+                });
+            }
+        }));
     };
     this.destroyComment = function() {
         return this.commentSubmit(false) && this.commentText(null);
@@ -1802,7 +1806,7 @@ RT["Comment"].prototype = {
         return this.canDelete() && this.commentOptions(!0);
     },
     hideCommentOptions: function() {
-        return this.canDelete() && this.commentOptions(!0);
+        return this.canDelete() && this.commentOptions(!1);
     }
 };
 RT["Conversations"] = function() {
@@ -4224,6 +4228,9 @@ jQuery(document).ready(function($) {
         t.parent().addClass('active');
         return true;
     })
+            .on("click", ".person-info-guide > .close", function(){
+                $(this).parent().fadeOut();
+            })
             .on("mouseenter", '.hasHoverButtons', function() {
         $(this).find('.imageBar').fadeIn();
     })
@@ -4250,6 +4257,14 @@ jQuery(document).ready(function($) {
                         );
         return !0;
     })
+            .on('keypress', '.commentInput', function(e){
+                var k = e.keyCode, p = $(e.target || e.currentTarget).parent("form");
+                if(k === 13 && !e.shiftKey){
+                    e.preventDefault();
+                    return RTApp.performAction('comment', ko.dataFor(this), null), true;
+                }
+                return  true;
+            })
             .removeClass("no-js");
     $('#theLoop')
             .on("mouseenter", ".getHoverCardUser", function(e) {

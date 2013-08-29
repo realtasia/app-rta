@@ -73,9 +73,9 @@
                             </a>
                         </span>
                         <ul class="nav mainNavPhone hidden-desktop" style="font-size:110%">
-                            <li style="display:none;" data-bind="visible:RTApp.user"><a href="#" data-bind="attr:{href:RTApp.user() && RTApp.user().uri}"><i class="icon-home"></i></a></li>
-                            <li style="display:none;" data-bind="visible:RTApp.user"><a href="/logout"><i class="icon-off"></i></a></li>
-                            <li style="display:none;" data-bind="visible:!RTApp.user()"><a href="/loginbasic"><i class="icon-signin"></i></a></li>
+                            <li style="display:none;" data-bind="visible:RTApp.user"><a href="#" data-bind="attr:{href:RTApp.user() && RTApp.user().uri}, title:'Go to your Profile Page'"><i class="icon-home"></i></a></li>
+                            <li style="display:none;" data-bind="visible:RTApp.user"><a href="/logout" data-bind="title:'Log Out'"><i class="icon-signout"></i></a></li>
+                            <li style="display:none;" data-bind="visible:!RTApp.user()"><a href="/loginbasic" data-bind="title:'Log In'"><i class="icon-signin"></i></a></li>
                         </ul>
                         <div class="nav-collapse navbar-responsive-collapse collapse" style="height:0;z-index:1">
                             <ul class="nav" style="background:#484747;margin-bottom:-2px">
@@ -83,21 +83,20 @@
                             </ul>
                             <ul class="nav pull-right" style="padding-bottom:0;background:#484747;z-index:1">
                                 <!--ko if: user-->
-                                <li style="display:none;" data-bind="visible:user, title:'This feature is not enabled yet'">
-                                    <a href="#" class="hidden-desktop">Notifications</a>
-                                    <a href="#" class="visible-desktop" style="padding:5px 5px 5px 5px;position:relative"><i class="app notification"></i></a></li>
-                                <li style="display:none;" class="dropdown" data-bind="visible:user, with:user">
-                                    <a href="#" class="hidden-desktop" data-bind="attr:{href:uri()+'/conversations'}">Messages</a>
-                                    <a href="#" id="messagesLink" class="dropdown-toggle visible-desktop" data-toggle="dropdown" style="padding:5px 5px 5px 5px;position:relative" data-bind="click:clearMessageCount">
+                                <li style="display:none;margin-right:20px" data-bind="visible:user, title:'This feature is not enabled yet'">
+                                    <a href="#" class="visible-desktop clearfix RTNotify"><i class="icon-exclamation"></i></a></li>
+                                <li style="display:none;margin-right:10px" class="dropdown" data-bind="visible:user, with:user">
+                                    <a href="#" class="hidden-desktop" data-bind="attr:{href:uri()+'/conversations'}, title:'View Messages'"><span><i class="icon-envelope hidden-desktop"></i></span> Messages <span class="badge badge-important pull-right" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span></a>
+                                    <a href="#" id="messagesLink" class="dropdown-toggle visible-desktop RTNotify clearfix" data-toggle="dropdown" data-bind="click:clearMessageCount">
                                         <span class="badge badge-important" style="position:absolute;top:1px;right:0" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span>
-                                        <i class="app inbox"></i>
+                                        <i class="icon-envelope" style="font-size:90%;vertical-align: bottom;"></i>
                                     </a>
                                     <ul class="dropdown-menu span4 clearfix" style="padding:0">
                                         <li><a href="#" id="inboxHeader" class="clearfix" data-bind="attr:{href:uri() + '/conversations'}"><small class="pull-right"><b>Go to Inbox</b></small></a></li>
                                     </ul>
                                 </li>
-                                <li style="display:none;" data-bind="visible:user, with:user" style="padding:0">
-                                    <div class="dropdown visible-desktop" id="accountDiv" class="media">
+                                <li style="display:none;" data-bind="visible:user, with:user" style="padding:0" class="visible-desktop">
+                                    <div class="dropdown" id="accountDiv" class="media">
                                         <span class="pull-left">
                                             <img alt="LoginThumb" width="40" height="40" src="" id="navBarProfilePhoto" data-bind="getAvatar : {context : $data, size : 40}">
                                         </span>
@@ -106,29 +105,33 @@
                                         </a>
                                     </div>
                                 </li>
-                                <li style="display:none;" class=" " data-bind="visible:user, with:user">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" style="margin-top:3px; cursor:pointer">More <b class="caret"></b></a>
+                                <li style="display:none;" class="visible-desktop" data-bind="visible:user, with:user">
+                                    <a class="dropdown-toggle visible-desktop" id="desktop-more-link" data-toggle="dropdown" style="margin-top:3px; cursor:pointer">More <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#settings" data-bind="title:'Change your personal settings', href: $data.uri() + '#settings'" class="navSettings" style="padding-left:7px"><i class="icon icon-wrench"></i> Settings</a></li>
                                         <!--ko if:isAdmin-->
                                         <li class="dropdown-submenu"><a href="#" data-bind="title:'Change your personal settings'" class="navSettings" style="padding-left:7px"><i class="icon icon-user"></i> Admin</a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="#" data-bind="attr:{href : uri() + '/leads'}"><i class="action16 wizard"></i> Sessions</a></li>
-                                                <li><a data-bind="attr:{href:uri() + '/adminlocations'}">Locations</a></li>
-                                                <li><a href="#">Posts</a></li>
-                                                <li><a href="#">Feedback</a></li>
+                                                <li><a href="#" data-bind="attr:{href : uri() + '/leads'}"><i class="icon-dollar"></i> Sales</a></li>
+                                                <li><a data-bind="attr:{href:uri() + '/adminlocations'}"><i class="icon-compass"></i> Locations</a></li>
+<!--                                                <li><a href="#"><i class="icon-list-alt"></i> Posts</a></li>
+                                                <li><a href="#"><i class="icon-comments-alt"></i> Feedback</a></li>-->
                                             </ul>
                                         </li>
                                         <!--/ko-->
                                         <li class="divider"></li>
-                                        <li><a href="/logout" id="navLogOut" style="padding-left:7px"><i class="icon icon-off"></i> Log Out</a></li>
+                                        <li><a href="/logout" id="navLogOut" style="padding-left:7px" data-bind="title:'Log Out'"><i class="icon-signout"></i> Log Out</a></li>
                                     </ul>
                                 </li>
+                                <li class="hidden-desktop"><a href="#" data-bind="attr:{href : user().uri() + '/leads'}"><i class="icon-dollar hidden-desktop"></i> Admin Sales</a></li>
+                                <li class="hidden-desktop"><a data-bind="attr:{href:user().uri() + '/adminlocations'}"><i class="icon-compass hidden-desktop"></i> Admin Locations</a></li>
+                                <!--<li class="hidden-desktop"><a href="#"><i class="icon-list-alt"></i> Admin Posts</a></li>-->
+                                <!--<li class="hidden-desktop"><a href="#"><i class="icon-comments-alt"></i> Admin Feedback</a></li>-->
                                 <!--/ko-->
                                 <!--ko ifnot: user-->
-                                <li><a href="/#Register">Register</a></li>
+                                <li><a href="/#Register"><i class="icon-hand-right"></i> Register</a></li>
                                 <li class="verticle-divider"></li>
-                                <li><a href="/loginbasic" data-bind="click: initLoginForm">Log In</a></li>
+                                <li><a href="/loginbasic" data-bind="click: initLoginForm"><i class="icon-signin"></i> Log In</a></li>
                                 <!--/ko-->
                             </ul>
                         </div><!-- /.nav-collapse -->

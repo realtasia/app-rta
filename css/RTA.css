@@ -341,7 +341,8 @@ a.thumbnail{
     background: radial-gradient(at center, ellipse cover, rgba(247,247,247,1) 0%,rgba(243,243,243,1) 100%);
 }
 
-.commentBG:not(.commentForm) {
+/*.commentBG:not(.commentForm) {*/
+.commentBG {
     border-top: 1px solid #FFFFFF;
 }
 
@@ -387,6 +388,7 @@ LI.commentActions {
     text-align: left;
     color: #444;
     line-height: 1.5;
+    display:inline-block;
 }
 
 .commentBody {

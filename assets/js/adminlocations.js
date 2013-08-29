@@ -1,4 +1,4 @@
-function Searcher() {
+RT["Admin"]['Searcher'] = function() {
     var self, estatecache = [], childcache = [], buildingcache = [], o =
             'ajaxStatus ajaxData s sector building estate child locality property_type locationForm showEstateForm showAdvanced';
     RTC.MakeObsFromArray.call(this, o);
@@ -80,7 +80,7 @@ function Searcher() {
             self.selected([]);
             if (RTC.isSuccess(r) && r.data.length > 0) {
                 return ko.mapping.fromJS(r.data, {create: function(o) {
-                        return new Row(o.data);
+                        return new RT.Admin.Row(o.data);
                     }}, self.results);
             }
         });
@@ -135,7 +135,7 @@ function Searcher() {
         return self.selected().length;
     });
     self.createLocation = function(d) {
-        self.locationForm(new Location(ko.toJS(d)));
+        self.locationForm(new RT.Admin.Location(ko.toJS(d)));
         var S = ko.utils.extend(RTC.CBSettings, {
             width: "480px", href: '/assets/admin/createLocation.html', height: "auto",
             onComplete: function() {
@@ -158,13 +158,13 @@ function Searcher() {
     };
 }
 
-function Updater() {
+RT["Admin"]['Updater'] = function() {
 }
 
-function HistoryViewer() {
+RT["Admin"]['HistoryViewer'] = function() {
 }
 
-function Row(p) {
+RT["Admin"]['Row'] = function(p) {
     p = p || {};
     ko.mapping.fromJS(p, {}, this);
     var self = this;
@@ -176,38 +176,7 @@ function Row(p) {
     });
 }
 
-function Location(p) {
-    p = p || {};
-    var self, o = 'id name estate type subtype content property_type';
-    RTC.MakeObsFromArray.call(this, o);
-    self = this;
-    self.name(p.child ? p.child : p.building);
-    if(!self.name())
-        self.name(p.name);
-    self.estate(p.estate);
-    self.property_type(p.property_type);
-    self.type('location');
-    self.subtype(p.subtype);
-    self.subtypes = ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"];
-    self.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
-    self.aptTypes = ['Condominium', 'Walkup', 'Apartment'];
-    self.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"];
-    self.propertyTypes = ko.computed(function() {
-        var t = this, s = t.subtype();
-        switch (s) {
-            case 'Private Apartments':
-            case 'Serviced Apartments':
-                return t.aptTypes;
-            case 'Private Landed':
-                return t.landedTypes;
-        }
-        return null;
-    }, self);
-    self.create = null;
-
-}
-
-function Straylocations() {
+RT["Admin"]['Straylocations'] = function() {
     var self, o = 'debug debugData strayFilter foundSingpostIds showSingpost singpost record updater strayName postalName strayAddress postalAddress currentPage postalIDs currentMessage processing total googleQuery siteQuery showRecordDetail skip locationForm strayStatus strayComments';
     RTC.MakeObsFromArray.call(this, o);
     self = this;
@@ -228,7 +197,7 @@ function Straylocations() {
     self.strayFiltersMap = 'NEW INVALID SUCCESS REVIEW'.split(" ");
     self.f = "name estate subtype exists processing";
     self.siteQuery("site:condo.singaporeexpats.com");
-    self.subtypes = new Location().subtypes;
+    self.subtypes = new RT.Admin.Location().subtypes;
     self.getSingpost = function(v) {
         if (!v)
             return false;
@@ -289,7 +258,7 @@ function Straylocations() {
         return window.open(url + escape(q));
     };
     self.popupLocation = function() {
-        self.locationForm(new Location(ko.toJS(self.final)));
+        self.locationForm(new RT.Admin.Location(ko.toJS(self.final)));
         self.locationForm().create = self.createLocation.bind(self);
         var S = ko.utils.extend(RTC.CBSettings, {
             width: "480px", href: '/assets/admin/createLocation.html', height: "auto",
@@ -362,29 +331,19 @@ function Straylocations() {
     };
 
     self.getCount = function() {
-        var _fetch = function(f){
-            return RTC.GetApi({}, {
-                url: '/locations/countstrays/',
-                status: f
-            });
-        }, t = self, c = t.strayFilters;
-        RTC.forEach(t.strayFiltersMap, function(filter){
-            var res = _fetch(filter);
-            res && res.done(function(r){
-                var field = ko.utils.arrayFirst(c, function(item) {
-                    return item.value === filter;
+        var t = self, res = RTC.GetApi({}, { url: '/locations/countstrays/'});
+        res && res.done(function(r){
+            if(RTC.isSuccess(r)){
+                return RTC.forEach(t.strayFiltersMap, function(f){
+                    var c = ko.utils.arrayFirst(t.strayFilters, function(i) {
+                        return i.value === f;
+                    }), v = r.data[f] || 0;
+                    
+                    return c && c.count(v) && t.strayFilter() === f && t.total(v);
                 });
-                if(RTC.isSuccess(r)){
-                    if(t.strayFilter() === filter){
-                        t.total(r.data.total);
-                    }
-                    if(field){
-                        field.count(r.data.total);
-                    }
-                }
-
-            });
+            }
         });
+        return;
     };
 
     self.next = function() {
@@ -400,7 +359,7 @@ function Straylocations() {
     };
 
     self.init = function() {
-        self.getCount();
+        //self.getCount();
         self._get('/locations/getstray').done(function(r) {
             return RTC.isSuccess(r) && self.record(r.data);
         });
@@ -409,21 +368,21 @@ function Straylocations() {
     /**
      * Form
      */
-    self.locationNameEditor = new editableTemplate({
+    self.locationNameEditor = new RT.Admin.editableTemplate({
         isEditing: true, fieldsTemplate: 'locationName', text: self.final.name,
         content: {
             strayName: self.strayName, postalName: self.postalName, editableValue: self.final.name
         }
     });
 
-    self.locationAddressEditor = new editableTemplate({
+    self.locationAddressEditor = new RT.Admin.editableTemplate({
         isEditing: true, fieldsTemplate: 'locationName', text: self.final.address,
         content: {
             strayAddress: self.strayAddress, postalAddress: self.postalAddress, editableValue: self.final.address
         }
     });
 
-    self.locationSubtypeEditor = new editableTemplate({
+    self.locationSubtypeEditor = new RT.Admin.editableTemplate({
         isEditing: true, fieldsTemplate: 'locationSubtype', text: self.final.subtype,
         content: {
             subtypes: self.subtypes, editableValue: self.final.subtype
@@ -519,14 +478,14 @@ function Straylocations() {
 
 }
 
-function AdminLocations() {
+RT["Admin"]['AdminLocations'] = function() {
     var self, o = 'strays searcher history selected locationName name1 name2 locationSubtype';
     RTC.MakeObsFromArray.call(this, o);
     self = this;
 
-    self.searcher(new Searcher);
-    self.location = new Location;
-    self.strays(new Straylocations);
+    self.searcher(new RT.Admin.Searcher);
+    self.location = new RT.Admin.Location;
+    self.strays(new RT.Admin.Straylocations);
     self.strays().init();
     self.tabs = ko.observableArray([
         {vm: self.strays(), view: 'Updater', name: 'To Research'},
@@ -536,7 +495,7 @@ function AdminLocations() {
     self.selected(self.tabs()[0]);
 }
 
-function editableTemplate(params) {
+RT["Admin"]['editableTemplate'] = function(params) {
     params = params || {};
     var self = this;
     self.content = ko.observable(params.content);
@@ -552,4 +511,35 @@ function editableTemplate(params) {
     self.text.subscribe(function(v) {
         return v && self.stopEditing();
     });
+}
+
+RT["Admin"]['Location'] = function(p) {
+    p = p || {};
+    var self, o = 'id name estate type subtype content property_type';
+    RTC.MakeObsFromArray.call(this, o);
+    self = this;
+    self.name(p.child ? p.child : p.building);
+    if(!self.name())
+        self.name(p.name);
+    self.estate(p.estate);
+    self.property_type(p.property_type);
+    self.type('location');
+    self.subtype(p.subtype);
+    self.subtypes = ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"];
+    self.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
+    self.aptTypes = ['Condominium', 'Walkup', 'Apartment'];
+    self.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"];
+    self.propertyTypes = ko.computed(function() {
+        var t = this, s = t.subtype();
+        switch (s) {
+            case 'Private Apartments':
+            case 'Serviced Apartments':
+                return t.aptTypes;
+            case 'Private Landed':
+                return t.landedTypes;
+        }
+        return null;
+    }, self);
+    self.create = null;
+
 }

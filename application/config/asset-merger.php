@@ -7,9 +7,9 @@ return array(
 		Assets::JAVASCRIPT => DOCROOT.'assets'.DIRECTORY_SEPARATOR.'js'.DIRECTORY_SEPARATOR,
 		Assets::STYLESHEET => DOCROOT.'css'.DIRECTORY_SEPARATOR,
 	),
-//	'processor'  => array(
+	'processor'  => array(
 //		Assets::STYLESHEET => 'cssmin',
-//		Assets::JAVASCRIPT => 'jsminplus',
-//	),
+//		Assets::JAVASCRIPT => 'googleclosure',
+	),
 	'docroot' => DOCROOT
 );

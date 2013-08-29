@@ -59,12 +59,12 @@
     <article class="contentArea widgetContentBG relative location" data-bind="event: {mouseover: showPostSettings, mouseleave: hidePostSettings}">
     <!--ko if:$root.cuIsAdmin-->
     <div class="postSettings" data-bind="visible:postSettings">
-    <div style="margin-right:10px"><a href="#">edit location</a> | <a href="#">edit estate</a></div>
+    <div style="margin-right:10px;font-size:90%"><a href="#" class="ael">edit location</a> | <a href="#" class="aee">edit estate</a></div>
     </div> <!-- post settings -->
     <!--/ko-->
     <section class="media">
     <a class="pull-left" href="#" data-bind="attr:{title:name}">
-    <div style="width:90px;height:90px" class="img-"><i class="hovercards" data-bind="attr:{'class':iconClass}"></i></div>
+    <div style="width:90px;height:auto" class="img-polaroid"><i class="hovercards" data-bind="attr:{'class':iconClass}"></i></div>
     </a>
     <div class="contentBottom media-body media-details">
     <h3 class="media-heading hidden-phone">

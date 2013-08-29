@@ -2,7 +2,7 @@
 <li class="widgetOuterBox" id="<?php echo $_id ?>">
     <article class="contentArea widgetContentBG relative media location">
         <a class="pull-left" href="#">
-            <div style="width:90px;height:90px"><i class="hovercards <?php echo Arr::get($cssClass, $subtype, '') ?>"></i></div>
+            <div style="width:90px;height:auto" class="img-polaroid"><i class="hovercards <?php echo Arr::get($cssClass, $subtype, '') ?>"></i></div>
         </a>
         <div class="contentBottom media-body media-details">
             <h3 class="media-heading">

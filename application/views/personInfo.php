@@ -17,7 +17,7 @@
                 </li>
                 <li style="display:<?php echo \Arr::get($info, 'languages') ? 'block' : 'none' ?>">
                     <label class="infoYear">&nbsp;Languages&nbsp;</label>
-                    <span class="infoDetail"><?php echo implode(', ', \Arr::get($info, 'languages', [])) ?></span>
+                    <span class="infoDetail"><?php echo htmlentities(implode(', ', \Arr::get($info, 'languages', []))) ?></span>
                 </li>
             </ul>
         </div>
@@ -28,8 +28,8 @@
             <ul class="infoLists">
                 <?php foreach (\Arr::get($info, 'education', []) as $item): ?>
                     <li>
-                        <span class="infoYear">&nbsp;<?php echo $item['date'] ?>&nbsp;</span>
-                        <span class="infoDetail"><?php echo $item['value'] ?></span>
+                        <span class="infoYear">&nbsp;<?php echo (string) $item['date'] ?>&nbsp;</span>
+                        <span class="infoDetail"><?php echo htmlentities($item['value'], ENT_COMPAT, 'UTF-8') ?></span>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -61,9 +61,9 @@
             </ul>
         </div>
     </section>-->
-    <div data-bind="if:cpIsCu" class="alert alert-info" style="margin:20px auto">
-        <button class="close" onclick="return $(this).parent().fadeOut()"><i class="icon-remove"></i></button>
-        <h5  class="noMrgTop"><i class="icon-info-sign"></i> Change what is shown here</h5>
-        <p><a href="#edit" style="text-decoration: underline">Edit</a> your profile to add information to your about page. You can also change your <a href="#settings" style="text-decoration: underline">privacy settings</a> to add/hide sensitive information.</p>
+    <div data-bind="if:cpIsCu" class="alert alert-info person-info-guide" style="margin:20px auto;">
+        <button class="close"><i class="icon-remove"></i></button>
+        <h5 class="noMrgTop"><i class="icon-info-sign" style="font-size:18px"></i> Change what is shown here</h5>
+        <p><a href="#edit" style="text-decoration: underline;">Edit</a> your profile to add information to your about page. You can also change your <a href="#settings" style="text-decoration: underline">privacy settings</a> to add/hide sensitive information.</p>
     </div>
 </section>

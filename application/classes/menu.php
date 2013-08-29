@@ -110,7 +110,7 @@ class Menu {
 
             if($icon)
             {
-                $icon = '<i class="' . $icon . '"></i>&nbsp;';
+                $icon = '<span><i class="' . $icon . ' hidden-desktop"></i><span>&nbsp;';
             }
 
             $menu .= '<li' . $attrs . '>' . HTML::anchor($item['url'], $icon . $item['title']);

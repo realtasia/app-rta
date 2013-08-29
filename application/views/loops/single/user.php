@@ -1,7 +1,7 @@
 <li class="widgetOuterBox" id="<?php echo $_id ?>">
     <article class="contentArea widgetContentBG relative person">
         <section class="media">
-            <a class="pull-left" href="<?php echo $uri?>" style="width:85px;height:85px;margin-right:20px">
+            <a class="pull-left" href="<?php echo $uri?>" style="width:85px;height:auto;margin-right:20px">
                 <img alt="<?php echo $name?>" class="img-polaroid" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/90", $avatar) : 'http://' .$api . "/avatar/$_id" . "/90"); ?>" width="90" height="90">
             </a>
             <div class="contentBottom media-body media-details">

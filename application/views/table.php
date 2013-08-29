@@ -95,8 +95,9 @@
 <div class="well well-small niceBG2" data-bind="visible:!processing(), flash:!processing()">
     <h4>Update Stray</h4>
     <div style="margin-top:10px;" class="clearfix">
-        <textarea class="span6" style="background-color:#fff !important;" placeholder="Type in additional info/comments" data-bind="expand:true, value:strayComments"></textarea>
-<label class="inline"> <small class="muted">Mark this as: </small> <select class="webkitSelect" data-bind="value:strayStatus">
+        <textarea class="span6" style="background-color:#fff !important;" placeholder="Type in additional info/comments" data-bind="value:strayComments, expand:true"></textarea>
+        <label class="inline"> <small class="muted">Mark this as: </small>
+            <select class="webkitSelect" data-bind="value:strayStatus">
                 <optgroup label="Success">
                     <option value="SUCCESS">Everything checked out</option>
                 </optgroup>
@@ -126,8 +127,7 @@
 
 </script>
 
-<script type="text/html" id="History">
-</script>
+<script type="text/html" id="History"></script>
 <!--Searcher-->
 <script type="text/html" id="Searcher">
 <h2 class="visible-phone">This does not work properly on small screens</h2>
@@ -345,11 +345,21 @@
 
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    return $.getScript("/assets/js/adminlocations.js", function() {
-        if (!RTApp.user() || (RTApp.user() && !RTApp.user().isAdmin())) {
-            window.location = "/";
+    var hasUser=false,isAdmin=false;
+    return RTApp.user.subscribe(function(v){
+        if(v && !hasUser){
+            RTApp.admin.subscribe(function(a){
+                if(a && !isAdmin){
+                    $.getScript("/assets/js/adminlocations.js", function() {
+                        return RTApp['adminLocations'](new RT.Admin.AdminLocations) || false;
+                    });
+                    return (isAdmin = true), true;
+                }
+                return false;
+            });
+            return (hasUser = true), true;
         }
-        return RTApp['adminLocations'](new AdminLocations);
+        return false;
     });
 });
 </script>

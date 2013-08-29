@@ -894,7 +894,10 @@ RT["handlers"] = {
     },
     expand: {
         init: function(element) {
-            $(element).css('height', 25).autosize().trigger('autosize');
+            $(element).css('height', 25).autosize().trigger('autosize.resize');
+        },
+        update: function(element){
+            $(element).trigger('autosize.resize');
         }
     },
     colorbox: {

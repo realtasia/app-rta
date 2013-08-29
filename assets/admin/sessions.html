@@ -5,11 +5,11 @@
 
 <script type="text/html" id="adminUserBlock">
     <table class="table" id="adminTable" data-bind="visible: RTApp.ca() === 'leads'">
-        <thead><tr><th>
+        <thead><tr><th style="padding:0 0 10px 0;width:auto;">
         <form class="form-inline RTASearch clearfix" style="margin:0;padding:0;position:relative">
             <div class="input-append input-prepend">
-                <span class="add-on" data-bind="text:usersType().ucwords() + ' users'" style="font-size:11px"></span>
-                <input class="span3" placeholder="Search name, number or email" type="text" name="s">
+                <span class="add-on" data-bind="text:usersType().ucwords() + ' users'" style="font-size:11px;padding:8px 9px 0 0;width:102px"></span>
+                <input class="span1" placeholder="Search name, number or email" type="text" name="s">
                 <button class="btn" type="button" data-bind="click:searchUsers">Search</button>
             </div>
         </form>

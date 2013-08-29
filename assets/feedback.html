@@ -17,24 +17,24 @@
                     <fieldset data-bind="flash: selectedOption()==='compliment'">
                         <legend>Share a compliment.</legend>
                         <label><b>Go ahead, make us smile. :)</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Share with us how we are doing, we really appreciate it.'">?</a></label>
-                        <textarea data-bind="expand:true, value: reportOne" placeholder="Please provide as much detail as you can"></textarea>
+                        <textarea data-bind="value: reportOne, expand:true" placeholder="Please provide as much detail as you can"></textarea>
                     </fieldset>
                     <fieldset data-bind="flash: selectedOption()==='question'">
                         <legend>Ask a question</legend>
                         <label><b>Please be as detailed as possible.</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'We will post this question to one of our administrators, and will reply to you via email.'">?</a></label>
-                        <textarea data-bind="expand:true, value: reportOne" placeholder="Please provide as much detail as you can"></textarea>
+                        <textarea data-bind="value: reportOne, expand:true" placeholder="Please provide as much detail as you can"></textarea>
                     </fieldset>
                     <fieldset data-bind="flash: selectedOption()==='idea'">
                         <legend>Share an idea</legend>
                         <label><b>Tell us more!</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Do share your idea with us, we will keep you updated.'">?</a></label>
-                        <textarea data-bind="expand:true, value: reportOne" placeholder="Please provide as much detail as you can"></textarea>
+                        <textarea data-bind="value: reportOne, expand:true" placeholder="Please provide as much detail as you can"></textarea>
                     </fieldset>
                     <fieldset data-bind="flash: selectedOption()==='problem'">
                         <legend>Report a problem</legend>
                         <label><b>What were you doing / intended to do</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Please tell us, with as much detail as possible, what exactly you were doing.'">?</a></label>
-                        <textarea data-bind="expand:true, value: reportOne" placeholder="Please provide as much detail as you can"></textarea>
+                        <textarea data-bind="value: reportOne, expand:true" placeholder="Please provide as much detail as you can"></textarea>
                         <label><b>What happened / did not happen</b><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Please tell us, with as much detail as possible, what happened instead.'">?</a></label>
-                        <textarea data-bind="expand:true, value: reportTwo" placeholder="Please provide as much detail as you can"></textarea>
+                        <textarea data-bind="value: reportTwo, expand:true" placeholder="Please provide as much detail as you can"></textarea>
                         <br>
                         <label class="checkbox inline">
                             <input type="checkbox" name="optionRefresh" data-bind="checked: optionRefresh" checked>Still occurs even after refreshing the page.

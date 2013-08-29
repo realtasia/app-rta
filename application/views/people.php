@@ -58,7 +58,7 @@
         <li class="widgetOuterBox" data-bind="attr:{id : _id}">
         <article class="contentArea widgetContentBG relative person">
         <section class="media">
-        <a class="pull-left hidden-phone" href="#" style="width:85px;height:85px;margin-right:20px" data-bind="attr:{title:name, href : uri}">
+        <a class="pull-left hidden-phone" href="#" style="width:85px;height:auto;margin-right:20px" data-bind="attr:{title:name, href : uri}">
         <img class="img-polaroid" data-bind="getAvatar : {context:$data, size:90},alt:{title:name}" width="90" height="90">
         </a>
         <a class="visible-phone clearfix" href="#" style="width:auto;height:40px;margin-right:5px;margin-bottom:10px;float:left" data-bind="attr:{title:name, href : uri}">
