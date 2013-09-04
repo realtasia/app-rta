@@ -175,7 +175,6 @@ class Controller_Template extends Controller {
                     $ids[] = $v[$object_ids ? 'object_id' : '_id'];
             }
         }
-
         return (array) $ids;
     }
 
@@ -191,6 +190,9 @@ class Controller_Template extends Controller {
 
         if (!empty($ids))
         {
+//            return $this->json_response(\Arr::merge($this->people_query(), [
+//                    'include_ids' => $ids
+//            ]));
             $req = Api::request("/user", \Arr::merge($this->people_query(), [
                     'include_ids' => $ids
             ]));
@@ -223,7 +225,7 @@ class Controller_Template extends Controller {
     protected function search_defaults()
     {
         $query         = $this->request->query();
-        $query['sort'] = \Arr::get($query, 'sort', '') === 'Newest' ? 'popular' : 'active';
+        //$query['sort'] = \Arr::get($query, 'sort', '') === 'Newest' ? 'popular' : 'active';
 
         $state = \Arr::get($query, 'state');
 
@@ -297,9 +299,9 @@ class Controller_Template extends Controller {
     protected function locations_search()
     {
         $query         = $this->search_defaults();
-        $query['sort'] = \Arr::get($query, 'sort', 'active');
-
-        switch ($query['sort'])
+        $sort = \Arr::get($query, 'sort', 'active');
+        //die(json_encode($sort));
+        switch ($sort)
         {
             case 'Last Active': $query['sort'] = 'active';
                 break;

@@ -6,30 +6,30 @@
 (function(e, t) {
     function i(t, i) {
         var a, n, r, o = t.nodeName.toLowerCase();
-        return"area" === o ? (a = t.parentNode, n = a.name, t.href && n && "map" === a.nodeName.toLowerCase() ? (r = e("img[usemap=#" + n + "]")[0], !!r && s(r)) : !1) : (/input|select|textarea|button|object/.test(o) ? !t.disabled : "a" === o ? t.href || i : i) && s(t)
+        return"area" === o ? (a = t.parentNode, n = a.name, t.href && n && "map" === a.nodeName.toLowerCase() ? (r = e("img[usemap=#" + n + "]")[0], !!r && s(r)) : !1) : (/input|select|textarea|button|object/.test(o) ? !t.disabled : "a" === o ? t.href || i : i) && s(t);
     }
     function s(t) {
         return e.expr.filters.visible(t) && !e(t).parents().addBack().filter(function() {
-            return"hidden" === e.css(this, "visibility")
-        }).length
+            return"hidden" === e.css(this, "visibility");
+        }).length;
     }
     var a = 0, n = /^ui-id-\d+$/;
     e.ui = e.ui || {}, e.extend(e.ui, {version: "1.10.3", keyCode: {BACKSPACE: 8, COMMA: 188, DELETE: 46, DOWN: 40, END: 35, ENTER: 13, ESCAPE: 27, HOME: 36, LEFT: 37, NUMPAD_ADD: 107, NUMPAD_DECIMAL: 110, NUMPAD_DIVIDE: 111, NUMPAD_ENTER: 108, NUMPAD_MULTIPLY: 106, NUMPAD_SUBTRACT: 109, PAGE_DOWN: 34, PAGE_UP: 33, PERIOD: 190, RIGHT: 39, SPACE: 32, TAB: 9, UP: 38}}), e.fn.extend({focus: function(t) {
             return function(i, s) {
-                return"number" == typeof i ? this.each(function() {
+                return "number" == typeof i ? this.each(function() {
                     var t = this;
                     setTimeout(function() {
-                        e(t).focus(), s && s.call(t)
-                    }, i)
-                }) : t.apply(this, arguments)
-            }
+                        e(t).focus(), s && s.call(t);
+                    }, i);
+                }) : t.apply(this, arguments);
+            };
         }(e.fn.focus), scrollParent: function() {
             var t;
             return t = e.ui.ie && /(static|relative)/.test(this.css("position")) || /absolute/.test(this.css("position")) ? this.parents().filter(function() {
-                return/(relative|absolute|fixed)/.test(e.css(this, "position")) && /(auto|scroll)/.test(e.css(this, "overflow") + e.css(this, "overflow-y") + e.css(this, "overflow-x"))
+                return/(relative|absolute|fixed)/.test(e.css(this, "position")) && /(auto|scroll)/.test(e.css(this, "overflow") + e.css(this, "overflow-y") + e.css(this, "overflow-x"));
             }).eq(0) : this.parents().filter(function() {
-                return/(auto|scroll)/.test(e.css(this, "overflow") + e.css(this, "overflow-y") + e.css(this, "overflow-x"))
-            }).eq(0), /fixed/.test(this.css("position")) || !t.length ? e(document) : t
+                return/(auto|scroll)/.test(e.css(this, "overflow") + e.css(this, "overflow-y") + e.css(this, "overflow-x"));
+            }).eq(0), /fixed/.test(this.css("position")) || !t.length ? e(document) : t;
         }, zIndex: function(i) {
             if (i !== t)
                 return this.css("zIndex", i);
@@ -37,17 +37,17 @@
                 for (var s, a, n = e(this[0]); n.length && n[0] !== document; ) {
                     if (s = n.css("position"), ("absolute" === s || "relative" === s || "fixed" === s) && (a = parseInt(n.css("zIndex"), 10), !isNaN(a) && 0 !== a))
                         return a;
-                    n = n.parent()
+                    n = n.parent();
                 }
-            return 0
+            return 0;
         }, uniqueId: function() {
             return this.each(function() {
-                this.id || (this.id = "ui-id-" + ++a)
-            })
+                this.id || (this.id = "ui-id-" + ++a);
+            });
         }, removeUniqueId: function() {
             return this.each(function() {
                 n.test(this.id) && e(this).removeAttr("id")
-            })
+            });
         }}), e.extend(e.expr[":"], {data: e.expr.createPseudo ? e.expr.createPseudo(function(t) {
             return function(i) {
                 return!!e.data(i, t)
@@ -1661,8 +1661,7 @@
             }, Back: function(t) {
                 return t * t * (3 * t - 2)
             }, Bounce: function(t) {
-                for (var e, i = 4; ((e = Math.pow(2, --i)) - 1) / 11 > t; )
-                    ;
+                for (var e, i = 4; ((e = Math.pow(2, --i)) - 1) / 11 > t; );
                 return 1 / Math.pow(4, 3 - i) - 7.5625 * Math.pow((3 * e - 2) / 22 - t, 2)
             }}), t.each(e, function(e, i) {
             t.easing["easeIn" + e] = i, t.easing["easeOut" + e] = function(t) {
@@ -1670,8 +1669,8 @@
             }, t.easing["easeInOut" + e] = function(t) {
                 return.5 > t ? i(2 * t) / 2 : 1 - i(-2 * t + 2) / 2
             }
-        })
-    }()
+        });
+    }();
 })(jQuery);
 (function(t) {
     t.effects.effect.slide = function(e, i) {
@@ -3537,7 +3536,7 @@
         }})
 }(jQuery);
 
-/*!
+/**
  * jQuery Transit - CSS3 transitions and transformations
  * (c) 2011-2012 Rico Sta. Cruz <rico@ricostacruz.com>
  * MIT Licensed.

@@ -15,13 +15,14 @@
                     </a>
                 </div> <!-- phone profile thumb -->
                 <div class="postTitle">
-                    <a href="/<?php echo $post['user']['_id']?>" class="personHoverCard"><?php echo $post['user']['name']?></a> <?php echo $post['generated_title']?>
+                    <a href="/<?php echo $post['user']['_id']?>" class="personHoverCard"><?php echo $post['user']['name']?></a>
+                    <span><?php echo $post['generated_title']?></span><small class="muted">
+                        <time title="<?php echo date('c', $post['created'])?>"><?php echo Date::fuzzy_span( $post['created']);?></time></small>
                     <?php if ($post['type'] === 'post' || $post['type'] === 'wallpost'){$post['type'] = 'post'; echo "<p class='post-content'>".Arr::get($post, 'excerpt')."</p>";}?>
                     <?php if ($post['type'] === 'testimonial'):?>
                         <div class="clearfix" style="margin:10px auto">
                             <blockquote><p><?php echo $post['excerpt']?></p><small><cite><?php echo $post['user']['name']?></cite></small></blockquote>
                     <?php endif;?>
-                    <small class="muted"><time title="<?php echo date('c', $post['created'])?>"><?php echo Date::fuzzy_span( $post['created']);?></time></small>
                 </div> <!-- post Title -->
                 <?php echo View::factory('loops/single/' . $post['type'], (array) $post) ?>
                 <?php echo View::factory('loops/comments', $post) ?>

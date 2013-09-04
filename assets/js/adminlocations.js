@@ -186,13 +186,15 @@ RT["Admin"]['Straylocations'] = function() {
     self.strayFilter("NEW");
     self.googleOptions = ko.observableArray();
     self.strayFilters = [
-        {label:'New', value:'NEW', count:ko.observable(0), enable:null, title:'Show only records that have not been processed'},
-        {label:'Completed', value:'SUCCESS', count:ko.observable(0), enable:null, title:'Show successfully processed records that have no problems'},
-        {label:'Needs Review', value:'REVIEW', count:ko.observable(0), enable:null, title:'Show records that marked as "Need Review"'},
-        {label:'Invalid', value:'INVALID', count:ko.observable(0), enable:null, title:'Show records marked incompleted/invalid'}
+        {label: 'New', value: 'NEW', count: ko.observable(0), enable: null, title: 'Show only records that have not been processed'},
+        {label: 'Completed', value: 'SUCCESS', count: ko.observable(0), enable: null, title: 'Show successfully processed records that have no problems'},
+        {label: 'Needs Review', value: 'REVIEW', count: ko.observable(0), enable: null, title: 'Show records that marked as "Need Review"'},
+        {label: 'Invalid', value: 'INVALID', count: ko.observable(0), enable: null, title: 'Show records marked incompleted/invalid'}
     ];
-    RTC.forEach(self.strayFilters, function(i){
-        i.enable = ko.computed(function(){return this.count() !== 0;}, i);
+    RTC.forEach(self.strayFilters, function(i) {
+        i.enable = ko.computed(function() {
+            return this.count() !== 0;
+        }, i);
     });
     self.strayFiltersMap = 'NEW INVALID SUCCESS REVIEW'.split(" ");
     self.f = "name estate subtype exists processing";
@@ -208,17 +210,22 @@ RT["Admin"]['Straylocations'] = function() {
         return RTC.GetApi({}, {
             url: url, name: v.name, street: v.street, postal: v.postal
         }).done(function(r) {
-            if(RTC.isSuccess(r)){
+            if (RTC.isSuccess(r)) {
                 self.singpost(r.data);
             }
             return r.data.debugData && self.debugData(ko.toJSON(r.data.debugData, null, 2));
-        }).always(function(){return self.processing(false);});
+        }).always(function() {
+            return self.processing(false);
+        });
     };
-    self._mapFilter = function(filter){
-        switch(filter){
-            case "Completed": return "SUCCESS";
-            case "Needs Review": return "REVIEW";
-            case "Invalid": return "INVALID";
+    self._mapFilter = function(filter) {
+        switch (filter) {
+            case "Completed":
+                return "SUCCESS";
+            case "Needs Review":
+                return "REVIEW";
+            case "Invalid":
+                return "INVALID";
         }
         return "NEW";
     }
@@ -227,21 +234,25 @@ RT["Admin"]['Straylocations'] = function() {
             url: url,
             skip: skip || 0,
             status: self.strayFilter()
-        }).done(function(){self.getCount();});
+        }).done(function() {
+            self.getCount();
+        });
     };
     self.processingMessages = "Searching SingPost for match...";
     self.currentMessage(self.processingMessages);
     self.processing(true);
     self.currentPage(1);
-    self.hasSingpost = ko.computed(function(){return !!this.singpost();}, self);
+    self.hasSingpost = ko.computed(function() {
+        return !!this.singpost();
+    }, self);
     self.final = {};
     RTC.MakeObsFromArray.call(self.final, self.f);
 
-    self.reset = function(){
-        var setNull = function(o, k){
+    self.reset = function() {
+        var setNull = function(o, k) {
             return o.hasOwnProperty(k) && typeof o[k] === 'function' && o[k](null);
         },
-            obs = 'record singpost strayName postalName';
+                obs = 'record singpost strayName postalName';
         self.currentMessage(self.processingMessages);
         self.locationNameEditor.isEditing(true);
         self.locationSubtypeEditor.isEditing(true);
@@ -253,7 +264,7 @@ RT["Admin"]['Straylocations'] = function() {
         });
         return true;
     };
-    self.searchExternal = function(){
+    self.searchExternal = function() {
         var url = 'http://www.google.com.sg/search?hl=en&q=', q = self.googleQuery() + ' ' + self.siteQuery();
         return window.open(url + escape(q));
     };
@@ -269,25 +280,27 @@ RT["Admin"]['Straylocations'] = function() {
         });
         return $.colorbox(S);
     };
-    self.createLocation = function(){
+    self.createLocation = function() {
         self.processing(true);
         return RTC.PostApi({}, {
             url: '/locations/createlocation/',
             data: ko.toJS(self.final),
             ids: self.foundSingpostIds()
         }).done(function(r) {
-            if(RTC.isSuccess(r)){
+            if (RTC.isSuccess(r)) {
                 var msg = "Yay! Location created. " + r.data.postal_updated + " postal code(s) were updated to reflect this;";
                 return $.bootstrapGrowl(msg, {type: 'success'});
             }
         }).error(function(r) {
             return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me... I love you.', {type: 'error'});
-        }).always(function(){return self.processing(false) && $.colorbox.close();});
+        }).always(function() {
+            return self.processing(false) && $.colorbox.close();
+        });
     };
-    self.updateStray = function(){
+    self.updateStray = function() {
 
 //        updatestray
-        if(!self.record())
+        if (!self.record())
             return false;
 
         return RTC.PostApi({}, {
@@ -301,15 +314,19 @@ RT["Admin"]['Straylocations'] = function() {
             return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me... I love you.', {type: 'error'});
         });
     };
-    self.toggleDebug = function(){return self.debug(!self.debug());};
-    self.toggleRecordDetail = function(){return self.showRecordDetail(!self.showRecordDetail());};
-    self.recordHasDetails = ko.computed(function(){
+    self.toggleDebug = function() {
+        return self.debug(!self.debug());
+    };
+    self.toggleRecordDetail = function() {
+        return self.showRecordDetail(!self.showRecordDetail());
+    };
+    self.recordHasDetails = ko.computed(function() {
         var possibilities = 'top type tenure developer', r = self.record(), t;
-        if(!r)
+        if (!r)
             return false;
         console.log({hasrecord: !!r});
-        RTC.forEach(possibilities.split(" "), function(i){
-            if(r.hasOwnProperty(i)){
+        RTC.forEach(possibilities.split(" "), function(i) {
+            if (r.hasOwnProperty(i)) {
                 console.log({hasMore: true});
                 return t = true;
             }
@@ -318,27 +335,27 @@ RT["Admin"]['Straylocations'] = function() {
         return t ? true : false;
 
     }, self);
-    self.locationIsValid = ko.computed(function(){
+    self.locationIsValid = ko.computed(function() {
         var f = this.final || {};
-        if(!f.name() || !f.subtype() || !f.estate()){
+        if (!f.name() || !f.subtype() || !f.estate()) {
             return false;
         }
         return true;
     }, self);
 
-    self.toggleSingpost = function(){
+    self.toggleSingpost = function() {
         return self.showSingpost(!self.showSingpost());
     };
 
     self.getCount = function() {
-        var t = self, res = RTC.GetApi({}, { url: '/locations/countstrays/'});
-        res && res.done(function(r){
-            if(RTC.isSuccess(r)){
-                return RTC.forEach(t.strayFiltersMap, function(f){
+        var t = self, res = RTC.GetApi({}, {url: '/locations/countstrays/'});
+        res && res.done(function(r) {
+            if (RTC.isSuccess(r)) {
+                return RTC.forEach(t.strayFiltersMap, function(f) {
                     var c = ko.utils.arrayFirst(t.strayFilters, function(i) {
                         return i.value === f;
                     }), v = r.data[f] || 0;
-                    
+
                     return c && c.count(v) && t.strayFilter() === f && t.total(v);
                 });
             }
@@ -359,9 +376,25 @@ RT["Admin"]['Straylocations'] = function() {
     };
 
     self.init = function() {
-        //self.getCount();
-        self._get('/locations/getstray').done(function(r) {
-            return RTC.isSuccess(r) && self.record(r.data);
+        var aL = !!$('#adminLocations').length;
+        if (aL) {
+            return self._get('/locations/getstray').done(function(r) {
+                return RTC.isSuccess(r) && self.record(r.data);
+            });
+        }
+        return $(document).on('click', '.ael', function() {
+            var d = ko.dataFor(this);
+            d.estate = d.parent.name;
+            self.locationForm(new RT.Admin.Location(ko.toJS(l)));
+            self.locationForm().create = null;
+            var S = ko.utils.extend(RTC.CBSettings, {
+                width: "480px", href: '/assets/admin/createLocation.html', height: "auto",
+                onComplete: function() {
+                    ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
+                    return $.colorbox.resize();
+                }
+            });
+            return $.colorbox(S);
         });
     };
 
@@ -392,14 +425,14 @@ RT["Admin"]['Straylocations'] = function() {
     /**
      * Subscriptionss
      */
-    self.skip.subscribe(function(v){
+    self.skip.subscribe(function(v) {
         var t = self;
         return typeof v === 'number' && v >= 0 && v < t.total() && t.reset() && t._get('/locations/getstray', v).done(function(r) {
             return RTC.isSuccess(r) && t.record(r.data);
         }) || false;
     });
-    self.strayFilter.subscribe(function(v){
-        return v && this.skip.valueHasMutated();
+    self.strayFilter.subscribe(function(v) {
+        return v && self.currentPage(1) && self.skip() === 0 ? self.skip.valueHasMutated() : self.skip(0);
     }, self);
     self.record.subscribe(self.getSingpost);
     self.record.subscribe(function(v) {
@@ -408,49 +441,52 @@ RT["Admin"]['Straylocations'] = function() {
 
         self.strayName(v.name);
         self.googleOptions([v.name, v.street]);
-        v.postal && self.googleOptions.push('Singapore ' +  v.postal);
+        v.postal && self.googleOptions.push('Singapore ' + v.postal);
         v.type && self.final.subtype(v.type);
     }, self);
-    self.final.name.subscribe(function(v){
-        if(!v)
+    self.final.name.subscribe(function(v) {
+        if (!v)
             return false;
 
-            self.final.processing(true);
-        var res = RTC.GetApi({},{
-            url:'/locations/fetchlocation',
-            name:v
+        self.final.processing(true);
+        var res = RTC.GetApi({}, {
+            url: '/locations/fetchlocation',
+            name: v
         });
 
-        res.done(function(r){
-            if(RTC.isSuccess(r)){
+        res.done(function(r) {
+            if (RTC.isSuccess(r)) {
                 var exists = r.data.name === v;
                 self.final.exists(exists);
                 exists && self.final.subtype(r.data.subtype)
-                       && self.final.estate(r.data.parent.name);
+                        && self.final.estate(r.data.parent.name);
             }
-        }).always(function(){self.final.processing(null)});
+        }).always(function() {
+            self.final.processing(null)
+        });
     });
     self.singpost.subscribe(function(v) {
         if (!v)
             return false;
         var row = v.data || {}, msg, sEdit = self.locationSubtypeEditor.isEditing;
 
-        v.namefound && (self.final.name(self.strayName()) && self.locationNameEditor.isEditing(false)) || self.final.name(null);;
+        v.namefound && (self.final.name(self.strayName()) && self.locationNameEditor.isEditing(false)) || self.final.name(null);
+        ;
         row.type && (self.final.subtype(row.type) && sEdit(false)) || self.final.subtype(null) && sEdit(true);
 
         row.estate && self.final.estate(row.estate) && (row.estateUrl = "/location/estate/" + row.estate.toLowerCase());
 
         self.postalName(typeof row.child === 'string' ? row.child.ucwords() : row.building && row.building.ucwords());
 
-        if(row.source){
-            row.colorbox = {iframe:true, href:row.source, width:"90%", height:550, top:0,fastIframe:true};
+        if (row.source) {
+            row.colorbox = {iframe: true, href: row.source, width: "90%", height: 550, top: 0, fastIframe: true};
         }
 
-        if(row.other_name){
+        if (row.other_name) {
             var s = self.strayName() || "";
             row.other_name = row.other_name.toLowerCase() === s.toLowerCase() ? null : row.other_name.ucwords();
-            if(row.other_name){
-                if(!self.postalName()){
+            if (row.other_name) {
+                if (!self.postalName()) {
                     self.postalName(row.other_name);
                 }
             }
@@ -458,19 +494,19 @@ RT["Admin"]['Straylocations'] = function() {
 
         self.postalName() && self.googleOptions.push(self.postalName());
 
-        if(v.ids){
+        if (v.ids) {
             self.foundSingpostIds(v.ids);
         }
 
-        msg = '<span class="text-info">'+v.total+'</span>&nbsp;record(s) found in SingPost';
+        msg = '<span class="text-info">' + v.total + '</span>&nbsp;record(s) found in SingPost';
         self.currentMessage(msg);
     });
-    self.changePage = ko.observable().extend({throttle:750});
-    self.changePage.subscribe(function(v){
-        if(v <= 0 || v > self.total())
+    self.changePage = ko.observable().extend({throttle: 750});
+    self.changePage.subscribe(function(v) {
+        if (v <= 0 || v > self.total())
             return false;
 
-        self.skip(v-1);
+        self.skip(v - 1);
         self.currentPage(v);
     });
 
@@ -515,13 +551,25 @@ RT["Admin"]['editableTemplate'] = function(params) {
 
 RT["Admin"]['Location'] = function(p) {
     p = p || {};
-    var self, o = 'id name estate type subtype content property_type';
+    var self, o = 'id name estate type subtype content property_type parent';
     RTC.MakeObsFromArray.call(this, o);
     self = this;
     self.name(p.child ? p.child : p.building);
-    if(!self.name())
+    if (!self.name()) {
         self.name(p.name);
+    }
     self.estate(p.estate);
+
+    if (p.parent) {
+        self.parent(p.parent);
+        if (!p.estate) {
+            self.estate(p.parent.name);
+        }
+        self.changeEstate = ko.observable(false);
+        self.modifyEstate = function(){
+            return self.changeEstate(!self.changeEsate());
+        };
+    }
     self.property_type(p.property_type);
     self.type('location');
     self.subtype(p.subtype);

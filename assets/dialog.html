@@ -2,15 +2,19 @@
     <header class="titleBar">
         <div class="contentArea titleBarBG">
             <button type="button" class="close" aria-hidden="true" data-bind="click : cancel">×</button>
-            <h6><i class="icon-warning-sign"></i> <span data-bind="text:title"></span></h6>
+            <h4><i class="icon-warning-sign"></i> <span data-bind="text:title"></span></h4>
         </div>
     </header>
-    <div class="contentArea clearfix">
-        <p data-bind="html: message"></p>
-        <hr>
-        <div class="btn-group pull-right clearfix">
-            <button class="btn btn-medium btn-primary" data-bind="click: ok"><i class="icon-ok"></i> Okay</button>
-            <button class="btn btn-medium" data-bind="click: cancel"><i class="icon-remove"></i> Cancel</button>
-        </div>
-    </div>
+    <section class="RTAWindowContainer">
+        <section class="RTAWindowContent noSidebar">
+            <div class="contentArea clearfix">
+                <p data-bind="html: message"></p>
+                <hr>
+                <div class="btn-group pull-right clearfix">
+                    <button class="btn btn-medium btn-primary" data-bind="click: ok"><i class="icon-ok"></i> Okay</button>
+                    <button class="btn btn-medium" data-bind="click: cancel"><i class="icon-remove"></i> Cancel</button>
+                </div>
+            </div>
+        </section>
+    </section>
 </section>

@@ -13,7 +13,7 @@
                 </h3>
                 <ul class="unstyled" style="font-size:90%;">
                     <?php if (!empty($company)): ?>
-                        <li><strong>Works at</strong> <a  href="<?php echo Arr::get($company, 'uri') ?>" title="<?php echo "View " . Arr::get($company, 'name') . "'s profile"?>"><?php echo Arr::get($company, 'name') ?></a></li>
+                        <li><strong>Works at</strong> <a  href="<?php echo ucfirst(Arr::get($company, 'uri', '')) ?>" title="<?php echo "View " . Arr::get($company, 'name') . "'s profile"?>"><?php echo Arr::get($company, 'name') ?></a></li>
                     <?php endif; ?>
                     <?php if (Arr::get($roles, 'agent')): ?>
                         <li><strong>Listings</strong> <a href="<?php echo $uri ?>/listings"><?php echo Arr::get($counts, 'listings', 0)?></a></li>

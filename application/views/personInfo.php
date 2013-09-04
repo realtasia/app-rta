@@ -1,6 +1,6 @@
 <section>
     <section class="infoContent">
-        <h4 class="contentArea noMargTopBtm"><i class="icon-phone-sign"></i> Personal & Contact Details</h4>
+        <h4 class="contentArea noMargTopBtm widgetContentBG"><i class="icon-phone-sign"></i> Personal & Contact Details</h4>
         <div class="leftPadding">
             <ul class="infoLists">
                 <li style="display:<?php echo empty($info['telephone']['mobile']) ? 'none' : 'block' ?>">
@@ -23,7 +23,7 @@
         </div>
     </section>
     <section class="infoContent" style="display:<?php echo \Arr::get($info, 'education') ? 'block' : 'none' ?>">
-        <h4 class="contentArea noMargTopBtm"><i class="icon-certificate"></i> Education & Certification</h4>
+        <h4 class="contentArea noMargTopBtm widgetContentBG"><i class="icon-certificate"></i> Education & Certification</h4>
         <div class="leftPadding">
             <ul class="infoLists">
                 <?php foreach (\Arr::get($info, 'education', []) as $item): ?>
@@ -36,7 +36,7 @@
         </div>
     </section>
     <section class="infoContent outerBox" style="display:<?php echo \Arr::get($info, 'achievements') ? 'block' : 'none' ?>">
-        <h4 class="contentArea noMargTopBtm"><i class="icon-trophy"></i> Awards & Achievements</p></h4>
+        <h4 class="contentArea noMargTopBtm widgetContentBG"><i class="icon-trophy"></i> Awards & Achievements</p></h4>
         <div class="leftPadding">
             <ul class="infoLists">
                 <ul class="infoLists">
@@ -61,9 +61,9 @@
             </ul>
         </div>
     </section>-->
-    <div data-bind="if:cpIsCu" class="alert alert-info person-info-guide" style="margin:20px auto;">
-        <button class="close"><i class="icon-remove"></i></button>
+    <div data-bind="if:cpIsCu" class="alert RTHelpBox" style="margin:20px auto;">
+        <button class="close" onclick="return $(this).parent().fadeOut(), !1;"><i class="icon-remove"></i></button>
         <h5 class="noMrgTop"><i class="icon-info-sign" style="font-size:18px"></i> Change what is shown here</h5>
-        <p><a href="#edit" style="text-decoration: underline;">Edit</a> your profile to add information to your about page. You can also change your <a href="#settings" style="text-decoration: underline">privacy settings</a> to add/hide sensitive information.</p>
+        <p><a href="#edit" style="text-decoration: underline;">Edit</a> your profile to add information to your about page. You can also change your <a href="#settings" style="text-decoration: underline">privacy settings</a> to show/hide sensitive information.</p>
     </div>
 </section>

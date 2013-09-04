@@ -1,7 +1,7 @@
 <section class="RTAWindow slimWidth" id="listingCreationWizard">
     <header class="titleBar">
         <div class="contentArea titleBarBG">
-            <h6>Listing Wizard <small>- Completed: <span class="number" data-bind="text: currentStep() / totalSteps * 100 + '%'"></span></small></h6>
+            <h4>Listing Wizard <small>- Completed: <span class="number" data-bind="text: currentStep() / totalSteps * 100 + '%'"></span></small></h4>
             <div class="RTprogressbar">
                 <div data-bind="style:{width: currentStep() / totalSteps * 100 + '%'}"></div>
             </div>

@@ -50,7 +50,7 @@
                 <header class="titleBar">
                     <div class="contentArea titleBarBG">
                         <button type="button" class="close" aria-hidden="true" data-bind="click:$parent.stopEditingAlbum">&times;</button>
-                        <h6>Upload</h6>
+                        <h4>Upload</h4>
                     </div>
                 </header>
                 <section class="RTAWindowContainer">

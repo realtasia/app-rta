@@ -55,59 +55,54 @@
         </div>
     </div>
     <script type="text/html" id="userTemplate">
-        <li class="widgetOuterBox" data-bind="attr:{id : _id}">
+    <li class="widgetOuterBox" data-bind="attr:{id : _id}">
         <article class="contentArea widgetContentBG relative person">
-        <section class="media">
-        <a class="pull-left hidden-phone" href="#" style="width:85px;height:auto;margin-right:20px" data-bind="attr:{title:name, href : uri}">
-        <img class="img-polaroid" data-bind="getAvatar : {context:$data, size:90},alt:{title:name}" width="90" height="90">
-        </a>
-        <a class="visible-phone clearfix" href="#" style="width:auto;height:40px;margin-right:5px;margin-bottom:10px;float:left" data-bind="attr:{title:name, href : uri}">
-        <img class="img-polaroid" data-bind="getAvatar : {context:$data, size:40},alt:{title:name}" width="40" height="40">
-        </a>
-        <div class="media-body media-details">
-        <h3 class="media-heading clearfix">
-        <a  data-bind="attr:{href : uri}, title:'See ' + name() + '\'s Profile', text:name, qtip: RTApp.getUserHoverCard" class="personHoverCard tipsRight" style="display:inline-block"></a>&nbsp;
-        <a href="#">
-        <small class="muted" data-bind="text:(roles.indexOf('admin')!==-1) ? 'Realt Staff': 'Realt ' + roles()[0].ucfirst()"></small>
-        </a>
-        </h3>
-        <ul class="unstyled" style="font-size:90%;">
-        <!--ko if : hasCompany()-->
-        <li><strong>Works at</strong> <a data-bind="text:company.name, attr:{href:company.uri}, title:'See ' + company.name() + '\'s Profile'"></a></li>
-        <!--/ko-->
-        <!--ko if : roles.indexOf('agent')!==-1-->
-        <li><strong>Listings</strong> <a data-bind="text:counts.listings, attr:{href : uri() + '/listings'}"></a></li>
-        <!--/ko-->
-        <li><strong>Joined</strong> <time data-bind="dateText:created, datePattern:'dS mmm yyyy'"></time></li>
-        <li><strong>Last Active</strong> <time data-bind="timeago:modified"></time></li>
-        </ul>
-        </div>
-        </section>
-        <div class="postActions">
-        <ul class="postActionButtons">
-        <!--ko if:interactable-->
-        <li class="hasActiveState" data-bind="if:isSubscribable, css:{active:subscribing}, hoverClass: 'hovering'">
-        <a  class="subscribe-link" href="#" data-bind="title:(subscribing() ? 'Stop Subscribing to ' : 'Subscribe to ') + name() + '\'s Activity'"><i class="action20 subscribe"></i></a>
-        </li>
-        <li class="hasActiveState" data-bind="css:{active:liking}, hoverClass: 'hovering'">
-        <a class="like-link"  data-bind="title:(liking() ? 'Stop Liking ' : 'Like ') + name() + '\'s Profile'" href="#"><i class="action20 like"></i></a>
-        </li>
-        <!--/ko-->
-        </ul>
-        <ul class="postActionInfo" data-bind="if:$data.connections">
-        <li data-bind="hoverClass: 'hovering'">
-        <a  data-bind="attr:{href : uri() + '/subscribers'}, title: 'View ' + name() + '\'s Subscribers'" class="subscriberHoverCard"><i class="info16 people"></i><span data-bind="text:counts.subscribers"></span>
-        </a></li>
-        <li data-bind="hoverClass: 'hovering'">
-        <a  data-bind="attr:{href : uri() + '/subscribers'}, title: 'View ' + name() + '\'s Likes'" data-bind="attr:{href : uri() + '/likers'}" class="likerHoverCard"><i class="action16 likeSmall"></i><span data-bind="text:counts.likers"></span>
-        </a></li>
-        </ul>
-        </div> <!-- postActions -->
+            <section class="media">
+                <a class="pull-left hidden-phone" href="#" style="width:85px;height:auto;margin-right:20px" data-bind="attr:{title:name, href : uri}">
+                    <img class="img-polaroid" data-bind="getAvatar : {context:$data, size:90},alt:{title:name}" width="90" height="90">
+                </a>
+                <a class="visible-phone clearfix" href="#" style="width:auto;height:40px;margin-right:5px;margin-bottom:10px;float:left" data-bind="attr:{title:name, href : uri}">
+                    <img class="img-polaroid" data-bind="getAvatar : {context:$data, size:40},alt:{title:name}" width="40" height="40">
+                </a>
+                <div class="media-body media-details">
+                    <h3 class="media-heading clearfix">
+                        <a  data-bind="attr:{href : uri}, title:'See ' + name() + '\'s Profile', text:name, qtip: RTApp.getUserHoverCard" class="personHoverCard tipsRight" style="display:inline-block"></a>&nbsp;
+                        <a href="#">
+                            <small class="muted" data-bind="text:(roles.indexOf('admin')!==-1) ? 'Realt Staff': 'Realt ' + roles()[0].ucfirst()"></small>
+                        </a>
+                    </h3>
+                    <ul class="unstyled" style="font-size:90%;">
+                        <!--ko if : hasCompany()-->
+                        <li><strong>Works at</strong> <a data-bind="text:company.name, attr:{href:company.uri}, title:'See ' + company.name() + '\'s Profile'"></a></li>
+                        <!--/ko-->
+                        <!--ko if : roles.indexOf('agent')!==-1-->
+                        <li><strong>Listings</strong> <a data-bind="text:counts.listings, attr:{href : uri() + '/listings'}"></a></li>
+                        <!--/ko-->
+                        <li><strong>Joined</strong> <time data-bind="dateText:created, datePattern:'dS mmm yyyy'"></time></li>
+                        <li><strong>Last Active</strong> <time data-bind="timeago:modified"></time></li>
+                    </ul>
+                </div>
+            </section>
+            <div class="postActions">
+                <ul class="postActionButtons">
+                    <!--ko if:interactable-->
+                    <li class="hasActiveState" data-bind="if:isSubscribable, css:{active:subscribing}, hoverClass: 'hovering'">
+                        <a  class="subscribe-link" href="#" data-bind="title:(subscribing() ? 'Stop Subscribing to ' : 'Subscribe to ') + name() + '\'s Activity'"><i class="action20 subscribe"></i></a>
+                    </li>
+                    <li class="hasActiveState" data-bind="css:{active:liking}, hoverClass: 'hovering'">
+                        <a class="like-link"  data-bind="title:(liking() ? 'Stop Liking ' : 'Like ') + name() + '\'s Profile'" href="#"><i class="action20 like"></i></a>
+                    </li>
+                    <!--/ko-->
+                </ul>
+                <ul class="postActionInfo" data-bind="if:$data.connections">
+                    <li data-bind="hoverClass: 'hovering'">
+                        <a  data-bind="attr:{href : uri() + '/subscribers'}, title: 'View ' + name() + '\'s Subscribers'" class="subscriberHoverCard"><i class="info16 people"></i><span data-bind="text:counts.subscribers"></span>
+                        </a></li>
+                    <li data-bind="hoverClass: 'hovering'">
+                        <a  data-bind="attr:{href : uri() + '/subscribers'}, title: 'View ' + name() + '\'s Likes'" data-bind="attr:{href : uri() + '/likers'}" class="likerHoverCard"><i class="action16 likeSmall"></i><span data-bind="text:counts.likers"></span>
+                        </a></li>
+                </ul>
+            </div> <!-- postActions -->
         </article>
-        </li>
+    </li>
     </script>
-    <?php
-    if (isset($introcontent))
-    {
-        include APPPATH . 'views/loops/loops.html';
-    }?>

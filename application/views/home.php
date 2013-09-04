@@ -38,7 +38,7 @@
             <ul class="nav centralize" id="mainSubMenu">
                 <li><a href="#Features" data-target="#contentCarousel" data-slide-to="0">Features</a></li>
                 <li><a data-target="#contentCarousel" href="#FAQContent" data-slide-to="1" id="FAQTab">FAQ</a></li>
-                <li><a data-target="#contentCarousel" href="#Register" id="registerTab" data-slide-to="2" data-bind="click:initRegForm">Register</a></li>
+                <li data-bind="visible:!RTApp.user()"><a data-target="#contentCarousel" href="#Register" id="registerTab" data-slide-to="2" data-bind="click:initRegForm">Register</a></li>
             </ul>
             <div class="carousel-inner">
                 <div class="active item relative" id="Features" style="margin-top:10px;">

@@ -226,8 +226,8 @@
                     <textarea id="aboutme" placeholder="Say something about yourself" data-bind="value:editables.aboutme, expand:true"></textarea>
                     <span class="help-block" data-bind="validationMessage: editables.aboutme"></span>
                 </div>
-            </div> <!--languages-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.aboutme">
+            </div> <!--about me-->
+            <div class="control-group row-fluid" data-bind="validationElement: editables.info.gender">
                 <label class="control-label" for="gender">Gender</label>
                 <div class="span12" style="margin-left:0;">
                     <label class="radio inline ">
@@ -239,31 +239,55 @@
                 </div>
             </div> <!--gender-->
         </fieldset>
-        <fieldset data-bind="flash : currentEdit() === 'bio'"> <legend>Certification & Education <small class="pull-right"><a class="hasHoverState" href="#" data-bind="click:$root.addEducation"><i class="action16 plusCircleBG"></i></a></small></legend>
+        <fieldset data-bind="flash : currentEdit() === 'bio'"> <legend>Certification & Education <small class="pull-right"><a class="hasHoverState" href="#" data-bind="click:$root.addEducation"><i class="icon-plus-sign"></i> <span class="small hidden-phone">Add</span></a></small></legend>
             <!--ko foreach : editables.info.education-->
             <div class="span2" style="margin:0">
                 <div class="control-group row-fluid" data-bind="validationElement:date">
                     <select class="span12" style="margin-left:0;" data-bind="options: $parent.makeYear(), value: date, validationElement:date"></select>
                     <span class="help-block" data-bind="validationMessage: date"></span>
-                </div> <!--edu-->
+                </div>
             </div>
             <div class="span10">
                 <div class="control-group row-fluid" data-bind="validationElement:value">
                     <div class="input-append" style="width:89%">
                         <input type="text" autocomplete="off" placeholder="Enter details, e.g. 'CEHA'" data-bind="value : value, valueUpdate: 'afterkeydown', event : {keypress:$root.addEducation}">
-                        <a href="#" class="hasHoverState" data-bind="click:$root.removeEducation" style="padding-left:10px"><i class="action16 xCircleBG"></i></a>
+                        <a href="#" class="hasHoverState" data-bind="click:$root.removeEducation" style="padding-left:10px"><i class="icon-remove-sign"></i></a>
                         <a href="#" class="label label-inverse help-text" data-bind="title:'Type in the details of your cert/degree.'" style="vertical-align: middle">?</a>
                     </div>
                     <span class="help-block" data-bind="validationMessage: value"></span>
                 </div>
             </div>
             <!--/ko-->
+        </fieldset> <!--edu-->
+        <fieldset data-bind="flash : currentEdit() === 'bio'"> <legend>QRCode & VCARD <small class="pull-right"><a class="hasHoverState" href="#" data-bind="click:$root.regenerateVcard"><i class="icon-refresh icon-spin" data-bind="css:{'icon-spin':$root.vcardsIsGenerating}"></i> <span class="small hidden-phone">Regenerate</span></a></small></legend>
+            <div class="alert RTHelpBox">
+                <button class="close" onclick="return $(this).parent().fadeOut(), !1;"><i class="icon-remove"></i></button>
+                <h5 class="noMrgTop"><i class="icon-info-sign" style="font-size:18px"></i> Public contact card information.</h5>
+                <p>Choose what information you would like to include in your scannable QRCode / mobile VCARD. Then click on regenerate when you're finished.<small> <em><a href="#" onclick="return $('#vcardHelpBlock').slideToggle(), !1;">*Click here</a> for more info</em></small>
+                    <div style="font-size:90%;display:none" id="vcardHelpBlock">
+                        <hr>
+                        A vcard is a file that contains contact information. It can be downloaded and added to a User's mobile phone.
+                        <ul>
+                            <li>Name & Gender is included by default.</li>
+                            <li>This is <strong>not affected</strong> by privacy settings.</li>
+                        </ul>
+                    </div>
+                </p>
+            </div>
+            <div class="row-fluid" data-bind="css:{'opaque': $root.vcardsIsGenerating}">
+                <div class="span12 btn-check" data-bind="foreach: editables.vcard">
+                    <button class="btn btn-small" data-bind="css:{'btn-inverse':checked}, disable:!enable, title:title, click:$parent.toggleVcardField">
+                        <i class="control" data-bind="switchClass:{removeAdd:['icon-check', 'icon-unchecked'], val:checked}"></i>
+                        <span data-bind="text: label"></span>
+                    </button>
+                </div>
+            </div>
         </fieldset>
         <!--/ko-->
         <fieldset data-bind="if : currentEdit() === 'company', flash : currentEdit() === 'company'"><legend>Agency & Licensing Information</legend>
             <!--ko if : userType() === 'user'-->
             <div class="span12" style="margin-left:0;"><label class="checkbox">
-                    <input value="agent" data-bind="checked : checkUser" type="checkbox" /> Click if you are a Real Estate Agent.<a href="#" class="label label-inverse help-text" data-bind="title:'If you are an agent, we will direct you to a payment page where you can upgrade your account to create listings and enable other features.'">?</a></label>
+                <input value="agent" data-bind="checked : checkUser" type="checkbox" /> Click if you are a Real Estate Agent.<a href="#" class="label label-inverse help-text" data-bind="title:'If you are an agent, we will direct you to a payment page where you can upgrade your account to create listings and enable other features.'">?</a></label>
             </div>
             <!--/ko-->
             <!--ko if : userType() !== 'user' || checkUser()-->
@@ -293,7 +317,7 @@
             <!--/ko-->
             <!--/ko-->
         </fieldset>
-        <fieldset data-bind="if : currentEdit() === 'company' && editables.roles.indexOf('agent') !== -1"><legend>Awards & Achievements <small class="pull-right"><a class="hasHoverState" href="#" data-bind="click:$root.addAchievement"><i class="action16 plusCircleBG"></i></a></small></legend>
+        <fieldset data-bind="if : currentEdit() === 'company' && editables.roles.indexOf('agent') !== -1"><legend>Awards & Achievements <small class="pull-right"><a class="hasHoverState" href="#" data-bind="click:$root.addAchievement"><i class="icon-plus-sign"></i> <span class="small hidden-phone">Add</span></a></small></legend>
             <!--ko foreach : editables.info.achievements-->
             <div class="span2" style="margin:0">
                 <div class="control-group row-fluid" data-bind="validationElement:date">
@@ -305,7 +329,7 @@
                 <div class="control-group row-fluid" data-bind="validationElement:value">
                     <div class="input-append" style="width:94.5%">
                         <input type="text" autocomplete="off" placeholder="Enter details, e.g. 'Top Director'" data-bind="value : value, valueUpdate: 'afterkeydown', event : {keypress:$root.addAchievement}">
-                        <a href="#" class="hasHoverState" data-bind="click:$root.removeAchievement" style="padding-left:10px"><i class="action16 xCircleBG"></i></a>
+                        <a href="#" class="hasHoverState" data-bind="click:$root.removeAchievement" style="padding-left:10px"><i class="icon-remove-sign"></i></a>
                         <a href="#" class="label label-inverse help-text" data-bind="title:'Achievements and awards show in your info page. Examples \'Top Director\'. \'Team Builder\' etc'" style="vertical-align: middle">?</a>
                     </div>
                     <span class="help-block" data-bind="validationMessage: value"></span>
@@ -315,4 +339,5 @@
         </fieldset>
     </form>
 </div>
+<style type="text/css">.btn-check .btn{text-transform: uppercase;margin:5px auto;}.hasHoverState i{font-size: 18px;vertical-align: middle;}i.control{display: inline-block;text-align: left;width: 16px !important;}.small{font-size:90%}</style>
 <script type="text/javascript">var Languages = ['Abkhazian', 'Afar', 'Afrikaans', 'Akan', 'Albanian', 'Amharic', 'Arabic', 'Aragonese', 'Armenian', 'Assamese', 'Avaric', 'Avestan', 'Aymara', 'Azerbaijani', 'Bambara', 'Bashkir', 'Basque', 'Belarusian', 'Bengali', 'Bihari', 'Bislama', 'Bokmal', 'Bosnian', 'Breton', 'Bulgarian', 'Burmese', 'Catalan', 'Central Khmer', 'Chamorro', 'Chechen', 'Chewa', 'Chinese', 'Church Slavic', 'Chuvash', 'Cornish', 'Corsican', 'Cree', 'Croatian', 'Czech', 'Danish', 'Dhivehi', 'Dutch', 'Dzongkha', 'English', 'Esperanto', 'Estonian', 'Ewe', 'Faroese', 'Fijian', 'Finnish', 'French', 'Fulah', 'Gaelic', 'Galician', 'Ganda', 'Georgian', 'German', 'Gikuyu', 'Greek', 'Greenlandic', 'Guarani', 'Gujarati', 'Haitian', 'Hausa', 'Hebrew', 'Herero', 'Hindi', 'Hiri Motu', 'Hungarian', 'Icelandic', 'Ido', 'Igbo', 'Indonesian', 'Interlingua', 'Inuktitut', 'Inupiaq', 'Irish', 'Italian', 'Japanese', 'Javanese', 'Kannada', 'Kanuri', 'Kashmiri', 'Kazakh', 'Kinyarwanda', 'Komi', 'Kongo', 'Korean', 'Kurdish', 'Kwanyama', 'Kyrgyz', 'Lao', 'Latin', 'Latvian', 'Letzeburgesch', 'Limburgan', 'Lingala', 'Lithuanian', 'Luba-Katanga', 'Macedonian', 'Malagasy', 'Malay', 'Malayalam', 'Maltese', 'Manx', 'Maori', 'Marathi', 'Marshallese', 'Moldavian', 'Mongolian', 'Nauru', 'Navajo', 'Ndonga', 'Nepali', 'North Ndebele', 'Northern Sami', 'Norwegian', 'Norwegian Nynorsk', 'Occidental', 'Occitan', 'Ojibwa', 'Oriya', 'Oromo', 'Ossetian', 'Pali', 'Persian', 'Polish', 'Portuguese', 'Punjabi', 'Pushto', 'Quechua', 'Romanian', 'Romansh', 'Rundi', 'Russian', 'Samoan', 'Sango', 'Sanskrit', 'Sardinian', 'Serbian', 'Shona', 'Sichuan Yi', 'Sindhi', 'Sinhalese', 'Slovak', 'Slovenian', 'Somali', 'Southern Sotho', 'South Ndebele', 'Spanish', 'Sundanese', 'Swahili', 'Swati', 'Swedish', 'Tagalog', 'Tahitian', 'Tajik', 'Tamil', 'Tatar', 'Telugu', 'Thai', 'Tibetan', 'Tigrinya', 'Tonga', 'Tsonga', 'Tswana', 'Turkish', 'Turkmen', 'Twi', 'Ukrainian', 'Urdu', 'Uyghur', 'Uzbek', 'Venda', 'Vietnamese', 'VolapÃ¼k', 'Walloon', 'Welsh', 'Western Frisian', 'Wolof', 'Xhosa', 'Yiddish', 'Yoruba', 'Zhuang', 'Zulu'];</script>

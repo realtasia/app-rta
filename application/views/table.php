@@ -12,7 +12,6 @@
     </div>
 </div>
 
-
 <!--Updater-->
 <script type="text/html" id="Updater">
 <div data-bind="template:'strayFilter'"></div>
@@ -341,28 +340,7 @@
 </div>
 </script>
 
-
-
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    var hasUser=false,isAdmin=false;
-    return RTApp.user.subscribe(function(v){
-        if(v && !hasUser){
-            RTApp.admin.subscribe(function(a){
-                if(a && !isAdmin){
-                    $.getScript("/assets/js/adminlocations.js", function() {
-                        return RTApp['adminLocations'](new RT.Admin.AdminLocations) || false;
-                    });
-                    return (isAdmin = true), true;
-                }
-                return false;
-            });
-            return (hasUser = true), true;
-        }
-        return false;
-    });
-});
-</script>
+<script type="text/javascript">jQuery(document).ready(function(){RTApp && RTApp.initLocations();});</script>
 
 <style type='text/css'>
     .niceBG{

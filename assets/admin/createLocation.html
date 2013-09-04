@@ -1,30 +1,54 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="http://jjpc.net/common/css/final/css/jquery-ui-boostrap.css" />
+    <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/icons.css" />
+    <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/RTA.css" />
+    <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/style.css" />
+</head>
 <section class="RTAWindow clearfix" id="locationForm" style="height:99%;margin:0 auto;">
     <header class="titleBar">
         <div class="contentArea titleBarBG">
             <button type="button" class="close" aria-hidden="true" data-bind="click : function(){return $.colorbox.close()}">&times;</button>
-            <h6><i class="icon-compass"></i> Location Form</h6>
+            <h4><i class="icon-compass"></i> Location Form</h4>
         </div>
     </header>
-    <div title="Create Location" class="contentArea">
-        <form>
-            <p class="text-error" data-bind="visible: $root.isError">
-                <strong data-bind="text: $root.ajaxMessage"> </strong>
-            </p>
-            <label class="control-label">Name</label>
-            <input type="text" data-bind="value:name" name="name" placeholder="Name">
-            <label class="control-label">Estate</label>
-            <input type="text" data-bind="value:estate" name="estate" placeholder="Estate">
-            <label class="control-label">Sub Type</label>
-            <select data-bind="options: subtypes, value: subtype, optionsCaption: 'Choose a subtype'" name="subtype"></select>
-            <label class="control-label">Property Type</label>
-            <select data-bind="enable:propertyTypes, options: propertyTypes, value:property_type, optionsCaption: 'Choose a propertytype'" name="proptype"></select>
-            <!--<label class="control-label">Content</label>-->
-            <!--<textarea type="text" data-bind="value:content" name="content" placeholder="Content"></textarea>-->
-            <input type="hidden" data-bind="value:type" name="type" placeholder="Type">
-            <div data-bind="if: $data.create">
-                <button type="submit" data-bind="click:$data.create" class="btn">Save</button>
+    <section class="RTAWindowContainer">
+        <section class="RTAWindowContent noSidebar">
+            <div title="Create Location" class="contentArea">
+                <form>
+                    <fieldset>
+                        <legend><small>Location Details</small></legend>
+                        <p class="text-error" data-bind="visible: $root.isError">
+                            <strong data-bind="text: $root.ajaxMessage"> </strong>
+                        </p>
+                        <label class="control-label">Name</label>
+                        <input type="text" data-bind="value:name" name="name" placeholder="Name">
+                        <label class="control-label">Sub Type</label>
+                        <select data-bind="options: subtypes, value: subtype, optionsCaption: 'Choose a subtype'" name="subtype"></select>
+                        <label class="control-label">Property Type</label>
+                        <select data-bind="enable:propertyTypes, options: propertyTypes, value:property_type, optionsCaption: 'Choose a propertytype'" name="proptype"></select>
+                    </fieldset>
+                    <br>
+                    <fieldset>
+                        <legend><small>Modify Estate</small></legend>
+                        <h5 data-bind="ifnot: $data.changeEstate">
+                            <span data-bind="text: $data.parent.name() || $data.estate()">Some super long estate name</span>
+                            <small><a href="#"  style="padding-left:10px" data-bind="click: $data.modifyEstate"><i class="icon-edit-sign"></i> Change</a></small>
+                        </h5>
+                        <div data-bind="if: $data.changeEstate">
+                            <small class="text-warning">
+                                <i class="icon-warning-sign"></i> Changing the Estate name will affect all 'child' locations within the Estate.
+                                <a href="#" data-bind="click: $data.modifyEstate"><i class="icon-ban-circle"></i>  Cancel</a>
+                            </small>
+                            <input type="text" data-bind="value:  $data.parent.name() || $data.estate()" name="estate" placeholder="Estate">
+                        </div>
+                    </fieldset>
+                    <input type="hidden" data-bind="value:type" name="type" placeholder="Type">
+                    <div data-bind="if: $data.create">
+                        <button type="submit" data-bind="click:$data.create" class="btn">Save</button>
+                    </div>
+                </form>
             </div>
-
-        </form>
-    </div>
+        </section>
+    </section>
 </section>

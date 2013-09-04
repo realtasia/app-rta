@@ -119,4 +119,5 @@
     </div>
     <!--/ko-->
 </section>
-<?php include APPPATH . 'views/loops/loops.html' ?>
+
+<?php include_once APPPATH . 'views/loops/loops.html'; ?>

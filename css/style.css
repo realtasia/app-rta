@@ -119,7 +119,8 @@ HR {
 
 .titleBarBG {
     background-color: #666;
-    color:fff;
+    color:#fff;
+    /*border-bottom:1px solid #eee;*/
 }
 
 .badge-blue {
@@ -289,7 +290,6 @@ textarea {
     border-radius:0;
     padding:10px;
     display:inline-block;
-    -webkit-appearance: none;
     width:100%;
     -moz-box-sizing:    border-box;
     -webkit-box-sizing: border-box;
@@ -1148,6 +1148,7 @@ UL.thumbnailGallery .thumbnail {
 #rightbar H5.sideBarHeader A {
     color: #5C5C5C;
     line-height: 1.9;
+    text-shadow: 1px 1px 1px #fff;
 }
 
 #rightbar #adminCountWidget A {
@@ -1522,44 +1523,6 @@ DIRECTORY*/
     padding-right: 2px;
 }
 
-#theLoop {
-    margin: 20px 0 0;
-    padding: 0;
-    /*background-color: #FFFFFF;*/
-    position: relative;
-}
-
-#theLoop A {
-    color: #368AC9;
-}
-
-#theLoop > .relative.media {
-    min-height: 115px;
-    background: #fff;
-    border: 1px solid #ccc;
-    font-size: 95%;
-}
-#theLoop > .relative.media .relative.media{
-    border-top:1px solid #eee;
-}
-#theLoop .post-content > a {
-    display:block;
-    font-size:90%;
-    padding:2px;
-    font-family:"Open Sans";
-
-}
-#theLoop .post-content > a:hover {
-    background: #eee;
-    text-shadow: 1px 1px 1px #fff;
-
-}
-#theLoop .commentInline .media {
-    min-height: 0 !important;
-    height: auto;
-    margin: 0px;
-}
-#theLoop .commentInline button.close{font-size: 95%;}
 .dropdown-menu LI > A,.dropdown-menu LI > A:focus,.dropdown-menu .active > A,.dropdown-menu .active > A:focus {
     font-weight: normal !important;
     color: #666 !important;
@@ -1760,6 +1723,49 @@ BUTTON.close {
     position: absolute;
 }
 
+#theLoop {
+    margin: 20px 0 0;
+    padding: 0;
+    /*background-color: #FFFFFF;*/
+    position: relative;
+}
+
+#theLoop A {
+    color: #368AC9;
+}
+
+#theLoop > .relative.media {
+    min-height: 115px;
+    background: #fff;
+    border: 1px solid #ccc;
+    font-size: 95%;
+}
+#theLoop > .relative.media .relative.media{
+    border-top:1px solid #eee;
+}
+#theLoop .post-content > a {
+    display:block;
+    font-size:90%;
+    padding:2px;
+    font-family:"Open Sans";
+
+}
+#theLoop .post-content > a:hover {
+    background: #eee;
+    text-shadow: 1px 1px 1px #fff;
+
+}
+#theLoop .commentInline .media {
+    min-height: 0 !important;
+    height: auto;
+    margin: 0px;
+}
+#theLoop .commentInline button.close{font-size: 95%;}
+#theLoop .postTitle > A, #rtModal .postTitle > A{
+    font-weight: bold;
+    color: #F37400;
+}
+
 .postActionButtons,.postActionInfo,.postComments,.commentInline,.newPostButtons,.newPostMediaButtons,.membersInline {
     list-style: none;
     vertical-align: top;
@@ -1915,10 +1921,6 @@ BUTTON.close {
     text-align: left;
 }
 
-#theLoop .postTitle > A, #rtModal .postTitle > A, A.commentAuthor {
-    font-weight: bold;
-    color: #F37400;
-}
 
 UL.dropdown-menu LI A {
     font-weight: normal;
@@ -2085,13 +2087,6 @@ BLOCKQUOTE {
     right: 0px;
 }
 
-.postActions {
-    border-top: 1px solid #E2E3E4;
-    width: 100%;
-    position: relative;
-    padding-bottom: 20px;
-}
-
 .postActions I {
     /*+opacity:60%;*/
     filter: alpha(opacity=60);
@@ -2213,6 +2208,9 @@ Info Content*/
     background-color: #FFFFFF;
     margin: 5px 0 5px 1px;
     padding: 5px 0;
+    box-shadow: 1px 1px 1px #ddd;
+    border-top: 1px solid #eee;
+    border-left: 1px solid #eee;
 }
 
 .infoContent .control-group {
@@ -2236,9 +2234,10 @@ Info Content*/
 .infoContent .leftPadding {
     padding-left: 20px;
 }
-
+.infoContent h4{border-bottom:1px solid #ddd;margin-top:-10px !important;text-shadow:1px 1px 1px #fff;}
 .infoLists {
     margin-left: 0;
+    margin-top:10px;
     background-color: #FFFFFF;
     position: relative;
 }
@@ -2549,38 +2548,40 @@ UL.commentList B {
 .RTAWindow.fatWidth {
     width: 65%;
 }
-.RTAWindow .titleBar {
+.titleBar {
     height: auto;
     padding: 0;
     margin: 0;
     border-top: 1px solid #999;
+    /*border-bottom: 1px solid #666;*/
 }
 
 .titleBar *,.windowMenu * {
-    text-shadow: 1px 1px 1px #EEEEEE;
     text-align: center;
 }
-.titleBar H6, .titleBar H6 span{
-    color: #ddd;
+.windowMenu * {
+    text-shadow: 1px 1px 1px #EEEEEE;
+}
+.titleBar H4, .titleBar H4 span{
+    color: #fff;
     position: relative;
     margin: 0px;
     text-shadow: -1px -1px 1px #000 !important;
+    padding:2px;
+    height:auto;
 }
-.titleBar H6{font-size:1.3em;}
-.titleBar H6 .close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: #ddd;
-    float: right;
+.titleBar .close {
     position: relative;
-    left: -5px;
-    top: 0px;
-    font-size: 3em;
+    color: #fff;
+    float: right;
+    text-shadow: 1px 1px 1px #000000;
+    font-size: 2em;
+    vertical-align: middle;
 }
 
 .titleBar .contentArea {
     border: 0 none;
+    padding:6px;
 }
 
 .windowMenuBar {
@@ -2745,17 +2746,20 @@ INPUT#birthday {
     margin-left: 0px;
     line-height: 1.3;
     font-size: 0.99em;
-}/*[clearfix]*/.RTAWindowContainer .RTAWindowContent {
-    display: inline-block;
+}/*[clearfix]*/
+.RTAWindowContainer .RTAWindowContent {
     position: relative;
-    /*[disabled]max-height:550px;*/
     min-height: 250px;
-    /*[disabled]width:84%;*//*[disabled]margin:0 0 0 16%;*/
     overflow: hidden;
     overflow-x: hidden;
     padding: 0px;
     height: auto;
+    box-shadow: 1px 1px 2px #555 inset;
 }
+#dialogContent .RTAWindowContainer .RTAWindowContent{
+    min-height:0 !important;
+}
+.RTAWindowContainer .RTAWindowContent .contentArea{border-top:none;}
 
 #uploadPopUp {
     overflow: hidden;
@@ -2935,7 +2939,6 @@ INPUT#birthday {
 }
 
 #theLoop .RTAWindowContainer .RTAWindowContent {
-    display: inline-block;
     position: relative;
     max-height: 0;
     min-height: 0;
@@ -3564,6 +3567,23 @@ abbr {
     padding: 0;
 }
 
+#interactorList li.media:first-child{
+    padding-top:0;
+    margin-top:0;
+}
+
+#interactorList li.media{
+    padding:5px 0;
+    margin-top:5px;
+    border-bottom:1px solid #eee;
+}
+#interactorList > li.media .postActionButtons LI{
+    padding-top:0;
+}
+#interactorList > li.media .postActions{
+    padding-bottom:0;
+    border-top:0 none;
+}
 li.active .messageContent small {
     color: white;
 }
@@ -4337,3 +4357,10 @@ a.RTNotify{
 }
 a.RTNotify:hover{background-color: #ddd !important;}
 a.RTNotify i{ color:#555}
+.RTHelpBox{
+    box-shadow:1px 1px 3px #C1E1E7;
+    position:relative;
+}
+.RTHelpBox h5{position: absolute; top:5px;left:5px}
+.RTHelpBox p{margin:20px 0 0 10px}
+.RTHelpBox i{vertical-align:middle}

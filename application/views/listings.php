@@ -16,7 +16,7 @@
             </div> <!-- intro content -->
         <?php
         endif;
-        include APPPATH . 'views/loops/loops.html';
+        include_once APPPATH . 'views/loops/loops.html';
         ?>
         <div class="outerBox centerWidth relative" style="margin-top:10px;">
             <div class="visible-phone centralize" data-bind="with:Search">
@@ -182,87 +182,87 @@
     </div>
     <!--/ko-->
     <!--ko if:Search().showingMobileSearch-->
-    <!--ko with:Search().formFields-->
-    <section id="listingsSearchMobile" style="display:none" data-bind="flash:$parent.Search().showingMobileSearch">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner" style="border-radius: 0">
-                <ul class="nav pull-left">
-                    <li><a href="#" data-bind="click:$parent.Search().toggleMobileListingSearch"><i class="icon-ok icon-2x"></i></a></li>
-                </ul>
+        <!--ko with:Search().formFields-->
+        <section id="listingsSearchMobile" style="display:none" data-bind="flash:$parent.Search().showingMobileSearch">
+            <div class="navbar navbar-inverse">
+                <div class="navbar-inner" style="border-radius: 0">
+                    <ul class="nav pull-left">
+                        <li><a href="#" data-bind="click:$parent.Search().toggleMobileListingSearch"><i class="icon-ok icon-2x"></i></a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <form class="contentArea mobileForm" style="margin-bottom: 0;font-size:110%" data-bind="submit:$parent.Search().toggleMobileListingSearch">
-            <label class="listingSearchLabel bold"><i style="font-weight: bolder; color: rgb(153, 153, 153); font-style: normal; padding-right: 5px;">&#36;</i>Asking Price</label>
-            <input class="span12" type="text" placeholder="1,500" data-bind="value:priceLow, valueUpdate:'afterkeydown'"/>
-            <input class="span12" type="text" placeholder="2m" data-bind="value:priceHigh, valueUpdate:'afterkeydown'"/>
-            <label class="listingSearchLabel bold"><i class="info16 bedrooms"></i>Rooms</label>
-            <select data-bind="value:roomsLow" class="span12">
-                <option href="#" data-bind="click:updateRoomsHigh">STUDIO</option>
-                <option href="#" data-bind="click:updateRoomsHigh">1 Room</option>
-                <option href="#" data-bind="click:updateRoomsHigh">2 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">3 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">4 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">5 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">6 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">7 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">8 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">9+ Rooms</option>
-            </select>
-            <select data-bind="value:roomsHigh, optionsCaption:'9+ Rooms'" class="span12">
-                <option href="#" data-bind="click:updateRoomsHigh">STUDIO</option>
-                <option href="#" data-bind="click:updateRoomsHigh">1 Room</option>
-                <option href="#" data-bind="click:updateRoomsHigh">2 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">3 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">4 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">5 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">6 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">7 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">8 Rooms</option>
-                <option href="#" data-bind="click:updateRoomsHigh">9+ Rooms</option>
-            </select>
-            <label class="listingSearchLabel bold"><i class="info16 sqft"></i>Built-Up Size</label>
-            <select data-bind="value:builtLow, optionsCaption: 'From Size'" class="span12">
-                <option href="#" data-bind="click:updateBuiltLow">0 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">500 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">1,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">2,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">3,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">4,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">5,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">6,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">7,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltLow">8,000 sqft</option>
-            </select>
-            <select data-bind="value:builtHigh" class="span12">
-                <option href="#" data-bind="click:updateBuiltHigh">500 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">1,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">2,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">3,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">4,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">5,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">6,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">7,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">8,000 sqft</option>
-                <option href="#" data-bind="click:updateBuiltHigh">9,000+ sqft</option>
-            </select>
-        </form>
-    </section>
-    <style type="text/css">
-        form.mobileForm{margin:auto 5px;background:#fff;}
-        .mobileForm input[type="text"], .mobileForm select{
-            -webkit-appearance: none;
-            font-size:110% !important;
-            padding:10px;
-            border-color:#aaa;
-            box-shadow:1px 1px 3px #ddd inset !important;
-            height:auto;
-            border-radius: 0;
-            cursor:default;
-            line-height: 1;
-            white-space:pre;
-            -webkit-box-align:center;
-            -webkit-rtl-ordering: logical;
-        }
-    </style>
-    <!--/ko-->
+            <form class="contentArea mobileForm" style="margin-bottom: 0;font-size:110%" data-bind="submit:$parent.Search().toggleMobileListingSearch">
+                <label class="listingSearchLabel bold"><i style="font-weight: bolder; color: rgb(153, 153, 153); font-style: normal; padding-right: 5px;">&#36;</i>Asking Price</label>
+                <input class="span12" type="text" placeholder="1,500" data-bind="value:priceLow, valueUpdate:'afterkeydown'"/>
+                <input class="span12" type="text" placeholder="2m" data-bind="value:priceHigh, valueUpdate:'afterkeydown'"/>
+                <label class="listingSearchLabel bold"><i class="info16 bedrooms"></i>Rooms</label>
+                <select data-bind="value:roomsLow" class="span12">
+                    <option href="#" data-bind="click:updateRoomsHigh">STUDIO</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">1 Room</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">2 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">3 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">4 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">5 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">6 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">7 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">8 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">9+ Rooms</option>
+                </select>
+                <select data-bind="value:roomsHigh, optionsCaption:'9+ Rooms'" class="span12">
+                    <option href="#" data-bind="click:updateRoomsHigh">STUDIO</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">1 Room</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">2 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">3 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">4 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">5 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">6 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">7 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">8 Rooms</option>
+                    <option href="#" data-bind="click:updateRoomsHigh">9+ Rooms</option>
+                </select>
+                <label class="listingSearchLabel bold"><i class="info16 sqft"></i>Built-Up Size</label>
+                <select data-bind="value:builtLow, optionsCaption: 'From Size'" class="span12">
+                    <option href="#" data-bind="click:updateBuiltLow">0 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">500 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">1,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">2,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">3,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">4,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">5,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">6,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">7,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltLow">8,000 sqft</option>
+                </select>
+                <select data-bind="value:builtHigh" class="span12">
+                    <option href="#" data-bind="click:updateBuiltHigh">500 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">1,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">2,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">3,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">4,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">5,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">6,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">7,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">8,000 sqft</option>
+                    <option href="#" data-bind="click:updateBuiltHigh">9,000+ sqft</option>
+                </select>
+            </form>
+        </section>
+        <style type="text/css">
+            form.mobileForm{margin:auto 5px;background:#fff;}
+            .mobileForm input[type="text"], .mobileForm select{
+                -webkit-appearance: none;
+                font-size:110% !important;
+                padding:10px;
+                border-color:#aaa;
+                box-shadow:1px 1px 3px #ddd inset !important;
+                height:auto;
+                border-radius: 0;
+                cursor:default;
+                line-height: 1;
+                white-space:pre;
+                -webkit-box-align:center;
+                -webkit-rtl-ordering: logical;
+            }
+        </style>
+        <!--/ko-->
     <!--/ko-->

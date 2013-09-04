@@ -67,8 +67,8 @@ RT["Com"] = {
         return val.toString().replace(/,/g, '');
     },
     MakePrice: function(str) {
-        str = String(str);
         "use strict";
+        str = String(str);
         var u = RT.Com, d = u.RemoveCommas(str), num = parseFloat(d), r = null,
                 unit = d.replace(num, '').toLowerCase(), units = ['k', 'm', 'b', 't'];
         if (units.indexOf(unit) !== -1) {
@@ -197,28 +197,28 @@ RT["Com"] = {
     },
     setInputWidths: function() {
         return true;
-        return setTimeout(function() {
-            var divs = $('.input-prepend'), w = divs.closest('form').find('input'),
-                    x = 0, a, xtr = 0;
-            w.each(function() {
-                if (this.id !== "s" && $(this).width() > x) {
-                    x = $(this).width();
-                }
-            });
-            divs.each(function() {
-                var t = $(this), i, s;
-                if (t.is(':visible')) {
-                    a = t.find('.add-on');
-                    a.each(function() {
-                        s = $(this);
-                        xtr += s.width() + parseInt(s.css('padding-left')) + parseInt(s.css('padding-right'));
-                    });
-                    console.log({x: x, xtr: xtr});
-                    i = t.find('input');
-                    i.attr("id") !== 's' && i.css('width', x - xtr - 1 + 'px') && (xtr = 0);
-                }
-            });
-        }, 1);
+//        return setTimeout(function() {
+//            var divs = $('.input-prepend'), w = divs.closest('form').find('input'),
+//                    x = 0, a, xtr = 0;
+//            w.each(function() {
+//                if (this.id !== "s" && $(this).width() > x) {
+//                    x = $(this).width();
+//                }
+//            });
+//            divs.each(function() {
+//                var t = $(this), i, s;
+//                if (t.is(':visible')) {
+//                    a = t.find('.add-on');
+//                    a.each(function() {
+//                        s = $(this);
+//                        xtr += s.width() + parseInt(s.css('padding-left')) + parseInt(s.css('padding-right'));
+//                    });
+//                    console.log({x: x, xtr: xtr});
+//                    i = t.find('input');
+//                    i.attr("id") !== 's' && i.css('width', x - xtr - 1 + 'px') && (xtr = 0);
+//                }
+//            });
+//        }, 1);
     },
     PageHandler: function(direction) {
         "use strict";
@@ -821,7 +821,7 @@ RT["handlers"] = {
     },
     title: {
         init: function(element, vA, binds) {
-            if (!binds().qtip) {
+            if (!binds().qtip && ko.unwrap(vA())) {
                 var b = ko.unwrap(binds()), position = b.position || "top",
                         offsetY = position === 'top' ? 30 : -50;
                 $(element).tooltipster({
@@ -838,7 +838,7 @@ RT["handlers"] = {
             }
         },
         update: function(element, vA, binds) {
-            return !binds().qtip && $(element).tooltipster("update", ko.unwrap(vA()));
+            return !binds().qtip && ko.unwrap(vA()) && $(element).tooltipster("update", ko.unwrap(vA()));
         }
     },
     helpText: {
@@ -1158,6 +1158,16 @@ RT["handlers"] = {
                     };
             value() === nv && e.addClass('active');
             return ko.bindingHandlers.click.init(element, handler, allBindingsAccessor);
+        }
+    },
+    switchClass:{
+        init: function(element, valueAccessor){
+            var v = ko.unwrap(valueAccessor()), e=$(element), c = v.removeAdd;
+            return v.val() && e.switchClass(c[1], c[0]) || e.switchClass(c[0], c[1]);
+        },
+        update: function(element, valueAccessor){
+            var v = ko.unwrap(valueAccessor()), e=$(element), c = v.removeAdd;
+            return v.val() && e.switchClass(c[1], c[0]) || e.switchClass(c[0], c[1]);
         }
     }
 };

@@ -341,6 +341,18 @@ RT["App"].prototype = {
     hideListingsSearch: function() {
         return this.displayListingsSearch(false);
     },
+    initLocations: function(){
+        var isA=false, t = this;
+        t.admin.subscribe(function(a){
+            if(a && !isA){
+                $.getScript("/assets/js/adminlocations.js", function() {
+                    return t['adminLocations'](new RT.Admin.AdminLocations) || false;
+                });
+                return (isA = true), true;
+            }
+            return false;
+        });
+    },
     getQuery: function() {
         "use strict";
         var t = this, s = jQuery("form.RTASearch"), p, l = window.location, d = t.Search();
@@ -385,9 +397,16 @@ RT["App"].prototype = {
     },
     resetNewResults: function() {
         "use strict";
-        var t = this, p = t.getNewResults();
+        var t = this, p, newS;
+
+        if(arguments && arguments.length === 3){
+            newS = arguments[2].item.value;
+            $("#s").val(newS);
+            t.Search().formFields.s(newS);
+        }
+
+        p = t.getNewResults();
         t.currentPage(1);
-        arguments && arguments.length === 3 && jQuery("#s").val(arguments[2].item.value);
         return p && p.done(function() {
             return t.initPager();
         });
@@ -1204,9 +1223,9 @@ RT["Post"] = function() {
         "use strict";
         var self = this, s;
         return this.counts.comments() > 2 && (s = new RTC.GetApi({}, {
-            skip: this.currentCommentCount(),
-            limit: 50,
-            url: this.connections.comments()
+            skip: this.currentCommentSkip(),
+            limit: this.currentCommentLimit(),
+            url: self.connections.comments()
         })) && s.done(function(r) {
             if (RTC.isSuccess(r)) {
                 return self.comments.insertAll(ko.utils.arrayMap(r.data, function(c) {
@@ -1334,6 +1353,7 @@ RT["Post"].prototype = new RTC.Loop;
 RT["Post"].prototype.extend(function() {
     var o = "hasRich hasVideo postSettings editMode isHidden isReported message isTrashed hasHidden isEmbeddedVideo isEmbeddedRich isLoadingIframe commentSubmit commentText";
     RTC.MakeObsFromArray.call(this, o);
+    this.commentLimit = 50;
     this.hasDetails = ko.computed(function() {
         "use strict";
         var link = RTC.GetObsVal(this.link);
@@ -1393,8 +1413,31 @@ RT["Post"].prototype.extend(function() {
         return this.canComment() && (this.comments().length >= 1 || this.interactable());
     }, this);
     this.currentCommentCount = ko.computed(function() {
-        return this.isPost() && this.comments && this.comments().length;
+        return this.isPost() && this.comments && this.comments().length || 0;
     }, this);
+    this.currentCommentLimit = ko.computed(function(){
+        if(!this.isPost() || !this.comments){
+            return false;
+        }
+        var total = this.counts.comments(), current = this.currentCommentCount(),
+        diff = total - current, cl = this.commentLimit;
+        if(diff > cl){
+            return cl;
+        }
+        return diff;
+    }, this);
+    this.currentCommentSkip = ko.computed(function(){
+        if(!this.isPost() || !this.comments){
+            return false;
+        }
+        var total = this.counts.comments(), current = this.currentCommentCount(),
+        diff = total - current, cl = this.commentLimit;
+        if(diff > cl){
+            return total - cl - current;
+        }
+        return 0;
+    }, this);
+
     this.getRichCss = ko.computed(function() {
         if (this.hasRich()) {
             var ext = RTC.GetObsVal(this.link.src).split(".");
@@ -1903,8 +1946,7 @@ RT["Conversations"] = function() {
 };
 RT["Sorter"] = function() {
     "use strict";
-    var p = arguments[0] || {}, t = this, ff = ["priceLow", "priceHigh", "builtLow",
-        "builtHigh", "roomsLow", "roomsHigh", "s"];
+    var p = arguments[0] || {}, t = this, ff = "priceLow priceHigh builtLow builtHigh roomsLow roomsHigh s";
     this.sorters = p.sorters || ["Popular", "Newest"];
     this.sortedBy = p.sortedBy || ko.observable(this.sorters[0]);
     this.filters = p.filters || ["All Activity"];
@@ -1954,26 +1996,31 @@ RT["Sorter"] = function() {
             return ff.updateObswithEl(ff.roomsHigh, e);
         }
     };
-    RTC.forEach(ff, function(n) {
+    RTC.MakeObsFromArray.call(this.formFields, ff);
+    RTC.forEach(ff.split(" "), function(n) {
         var tff = t.formFields;
-        tff[n] = ko.observable();
         return (n !== 's') && tff[n].subscribe(function(v) {
             return tff[n](RTC.MakePrice(v));
         }, t);
     });
+    this.keywordText = ko.computed(function(){
+        var s = ko.toJS(this.formFields.s);
+        return s && s.length > 1 && s || null;
+    }, this);
     this.formChanges = ko.computed(function() {
-// This evaluation logic is exactly the same as before
+    // This evaluation logic is exactly the same as before
         var f = ko.toJS(this.formFields) || {};
-        f["s"] = (function(f) {
-            return f.s && f.s.length > 1 && f.s || "";
-        })(f);
-        RTC.forEach(["updateBuiltHigh", "updateBuiltLow", "updateObswithEl", "updateRoomsHigh", "updateRoomsLow", "updateType"], function(i) {
+        f["s"] = this.keywordText();
+        RTC.forEach("updateBuiltHigh updateBuiltLow updateObswithEl updateRoomsHigh updateRoomsLow updateType".split(" "), function(i) {
             return f.hasOwnProperty(i) && delete f[i];
         });
         return f;
+    }, this);
+    this.throttledChanges = ko.computed(function(){
+        return this.formChanges();
     }, this).extend({throttle: 1000});
-    this.formChanges.subscribe(function(v) {
-        v && RTApp.resetNewResults.call(RTApp);
+    this.throttledChanges.subscribe(function(v) {
+        return v && RTApp.resetNewResults.call(RTApp);
     });
     this.toggleMobileListingSearch = function() {
         var s = t.showingMobileSearch;
@@ -2368,7 +2415,8 @@ RT["Forms"] = {
     },
     Info: function() {
         "use strict";
-        var self = this, A = RTApp, user = A.user(), o = "isSaving checkUser smsVerify mobileVerify companyLabel changePassword dimensions uploadStatus uploadProgress uploadMessage tempUpload originalWidth originalHeight savingCrop userType uploadSettings";
+        var self = this, A = RTApp, user = A.user(), vcard = user.vcard && user.vcard() || [],
+        o = "isSaving checkUser smsVerify mobileVerify companyLabel changePassword dimensions uploadStatus uploadProgress uploadMessage tempUpload originalWidth originalHeight savingCrop userType uploadSettings";
         RTC.MakeObsFromArray.call(self, o);
         RTC.MakeObsFromArray.apply(self, ["isUniqueUsername isUniqueEmail isUniquePhone isOldPasswordValid", !0]);
         self.autoSaveMessage = ko.computed(function() {
@@ -2456,8 +2504,26 @@ RT["Forms"] = {
                 throttle: 600
             }),
             confirmPassword: ko.observable(""),
-            roles: ko.observableArray(user.roles())
+            roles: ko.observableArray(user.roles()),
+            vcard:ko.observableArray()
         };
+        self.editables.vcard([
+            {value:'mobile', enable:true, checked:  ko.observable(false), label: 'Mobile', title: null},
+            {value:'email', enable:true, checked:  ko.observable(false), label: 'Email', title: null},
+            {value:'uri', enable:true, checked:  ko.observable(false), label: 'RealtAsia Profile Page', title: "Selecting this will make: <br> <strong>http://" + RT.APP_SERVER + user.uri() + '/</strong> <br>your website address in your VCARD'},
+            {value:'company', enable:!!self.editables.company(), checked:  ko.observable(false), label: 'Agency / Company', title: null},
+            {value:'designation', enable:!!self.editables.designation(), checked:  ko.observable(false), label: 'Designation', title: null},
+            {value:'birthday', enable:!!self.editables.info.birthday(), checked:  ko.observable(false), label: 'Birthday', title: !self.editables.info.birthday() && 'You have not updated your birthday.'},
+            {value:'about', enable:!!self.editables.aboutme(), checked:  ko.observable(false), label: 'About Me', title: null}
+        ]);
+        if(!!vcard.length){
+            RTC.forEach(vcard, function(c){
+                var f = ko.utils.arrayFirst(self.editables.vcard(), function(i){
+                    return i.value === c;
+                }), m = f && self.editables.vcard()[self.editables.vcard().indexOf(f)] || null;
+                return m && m.checked(true);
+            });
+        }
     },
     Settings: function() {
         "use strict";
@@ -3285,14 +3351,13 @@ RT["Forms"]["Info"].prototype = {
         return window.location = RTApp.user().uri();
     },
     saveAndExit: function() {
-        "use strict";
         var s, t = this, p = t.toJS(), logout = !!p.password;
         if (t.isSavable() && !t.isSaving()) {
             t.isSaving(!0);
             p.request_type = "update_info";
             return (s = RTC.PostApi({}, {
                 JSON: ko.toJSON(p),
-                url: "/user/update/" + ko.toJS(t._id)
+                url: "/user/update/" + ko.toJS(RTApp.user()._id)
             })) && s.done(function(r) {
                 if (RTC.isSuccess(r)) {
                     t.editables.commit();
@@ -3331,6 +3396,24 @@ RT["Forms"]["Info"].prototype = {
     addSocial: function() {
         this.editables.info.social.push(new RTC.SocialField());
     },
+    regenerateVcard: function(){
+        var s, t = this;
+        if (!t.vcardsIsGenerating()) {
+            t.vcardsIsGenerating(!0);
+            return (s = RTC.PostApi({}, {
+                request_type:"regenerate_qrcode",
+                vcard: ko.toJS(t.vcardSelected()),
+                url: "/user/update/" + ko.toJS(RTApp.user()._id)
+            })) && s.done(function(r) {
+                if (RTC.isSuccess(r)) {
+                    RTC.Renew();
+                    console.log({html : r.data.html});
+                }
+            }).always(function(){
+                return t.vcardsIsGenerating(!1);
+            });
+        }
+    },
     cancel: function() {
         "use strict";
         var t = this, p = {url: "/media/delete/", file: t.tempUpload()};
@@ -3355,6 +3438,9 @@ RT["Forms"]["Info"].prototype = {
         });
     },
     getCompany: RTC.GetCompany,
+    toggleVcardField: function(v){
+        return v.checked(!v.checked());
+    },
     sourceLang: function(request, response) {
         Languages && response($.ui.autocomplete.filter(Languages, request.term.split(/,\s*/).pop()));
     },
@@ -3370,6 +3456,9 @@ RT["Forms"]["Info"].prototype = {
         } else {
             tmp.currentPassword = null;
         }
+        RTC.forEach(tmp.vcard, function(i){
+            tmp.vcard[tmp.vcard.indexOf(i)] = [{value:i.value, checked:i.checked}]
+        });
 //        for (i = 0, j = tmp.info.education.length; i < j; i++) {
 //            itm = tmp.info.education[i];
 //            tmp.info.education[i] = item;
@@ -3402,6 +3491,17 @@ RT["Forms"]["Info"].prototype = {
         self.errors = ko.validatedObservable(this.editables, {
             deep: !0
         });
+        self.vcardsIsGenerating = ko.observable(false);
+        self.vcardSelected = ko.computed(function(){
+            var t = this, e = t.editables, v = e && e.vcard, ret = [];
+            if(!v || typeof v !== 'function'){
+                return false;
+            }
+            RTC.forEach( v(), function(item){
+                item.checked() && ret.push(item.value);
+            });
+            return ret;
+        }, self);
         self.name = ko.computed(function() {
             return this.editables.first_name().ucfirst() + " " + this.editables.last_name().ucfirst();
         }, self);
@@ -3456,7 +3556,7 @@ RT["Forms"]["Info"].prototype = {
                 }},
             p = {url: "/verify_sms", to: val};
             return (s = RTC.Post(s, p)) && s.done(function(b) {
-                return RTC.isSuccess(r) && self.mobileVerify(!0);
+                return RTC.isSuccess(b) && self.mobileVerify(!0);
             }).always(function() {
                 se.smstoken("");
             }) && s;
