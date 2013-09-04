@@ -11,7 +11,7 @@
                 </div>
                 <!--/ko-->
                 <div class="row-fluid" style="margin-top:10px">
-                    <button href="#" data-bind="" class="span12 btn btn-mini" style="text-align: left"><i class="icon-qrcode"></i><span>&nbsp;QRcode</span></button>
+                    <a target="_blank" href="<?php echo (Arr::get($cp, 'uri')) . '/vcard'; ?>" class="btn btn-small" style="color:#000"><i class="icon-phone"></i>&nbsp;Scan vcard</a>
                 </div>
             </div>
         </div>

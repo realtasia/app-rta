@@ -199,8 +199,17 @@ RT["App"].prototype = {
                 return t.Search(new RT.Searches.Locations());
         }
     },
-    scanBarCode: function() {
-//jQuery("#barCodeBox").modal("show");
+    scanBarCode: function(d) {
+        if(d.user() && d.cp()){
+            var s = ko.utils.extend(RT.Com.CBSettings, {
+                href: '/assets/qrcode.html', height: "auto", width: "55%", maxWidth: '95%', minWidth: '500px',
+                    onComplete: function() {
+                        ko.applyBindings(d, document.getElementById("qrcodeContent"));
+                        return $.colorbox.resize();
+                    }
+            });
+            return $.colorbox(s);
+        }
     },
     initLoginForm: function() {
         "use strict";

@@ -109,6 +109,7 @@ Kohana::modules([
     'image'        => MODPATH . 'image', // Image manipulation
     'purifier'     => MODPATH . 'purifier', // HTML purifier
     'asset-merger' => MODPATH . 'asset-merger', // Asset Management
+    'qrcode'       => MODPATH . 'qrcode',        // QRCode generator
 ]);
 
 Cookie::$domain = FALSE;

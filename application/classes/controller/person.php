@@ -282,13 +282,84 @@ class Controller_Person extends Controller_Auth {
 
     public function action_qrcode()
     {
-        $id = $this->request->param('id');
-        $f  = ['name', 'info', 'email', 'settings.privacy', 'avatar'];
-        $u  = Document::factory('user', $id);
-        if ($u->load(null, array_fill_keys(array_reverse($f), 1)))
-        {
+        $this->auto_render = false;
+        $cp = (array) $this->cp;
+        $msg = $this->logged_in() && (string) \Arr::get((array)$this->get_cu(), '_id') === (string) \Arr::get($cp, "_id")
+          ? 'novcard.self' : 'novcard.other';
+        $vcard = \Arr::get($cp, "vcard");
 
+        if(!$vcard)
+            return parent::json_response([
+                'status' => 'fail',
+                'data'  => [
+                    'message' => Kohana::message('user', $msg)
+                ]
+            ]);
+        return $this->response->headers('Content-type', 'image/png')
+             ->body(QRcode::instance()->png("http://" . RT::APP_SERVER . \Arr::get($this->cp, 'uri') . '/vcard'));
+
+    }
+
+    public function action_vcard()
+    {
+        $this->auto_render = false;
+        $cp = (array) $this->cp;
+        $msg = $this->logged_in() && (string) \Arr::get((array)$this->get_cu(), '_id') === (string) \Arr::get($cp, "_id")
+          ? 'novcard.self' : 'novcard.other';
+        $vcard = \Arr::get($cp, "vcard");
+
+        if(!$vcard)
+            return parent::json_response([
+                'status' => 'fail',
+                'data'  => [
+                    'message' => Kohana::message('user', $msg)
+                ]
+            ]);
+
+        $return = [
+            'BEGIN:VCARD','VERSION:2.1'
+        ];
+        $return[] = "N:" . \Arr::get($cp, 'last_name') .';'. \Arr::get($cp, 'first_name');
+        $return[] = "GENDER:" . strtoupper(substr(\Arr::path($cp, 'info.gender'), 0, 1));
+        $return[] = "REV:" . date("Ymd", Arr::get($cp, 'modified', 0));
+
+        foreach ($vcard as $field)
+        {
+            switch ($field)
+            {
+                case 'mobile':
+                    $return[] = 'TEL;CELL:' . Arr::path($cp, 'info.telephone.mobile');
+                    break;
+                case 'birthday':
+                    $return[] = 'BDAY:' . date("Ymd", Arr::path($cp, 'info.birthday', 0));
+                    break;
+                case 'email':
+                    $return[] = 'EMAIL:' . Arr::get($cp, 'email');
+                    break;
+                case 'company':
+                    $return[] = 'ORG:' . Arr::path($cp, 'company.name');
+                    break;
+                case 'designation':
+                    $return[] = 'TITLE:' . Arr::get($cp, 'designation');
+                    break;
+                case 'uri':
+                    $return[] = 'URL:http://' . RT::APP_SERVER . Arr::get($cp, 'uri');
+                    break;
+                case 'about':
+                    $return[] = 'NOTE:' . Arr::get($cp, 'message');
+                    break;
+            }
         }
+        $return[] = "PHOTO;JPEG:" . 'http://' . \Arr::get($cp, 'avatar');
+        $return[] = "END:VCARD";
+
+        $return = implode("\n", $return);
+
+        return $this->response->headers([
+            'Content-Type' => 'text/x-vcard',
+            'Content-Disposition' => 'attachment; filename=' . strtolower(\Arr::get($cp, 'name')) . '.vcf',
+            'Content-length' => strlen($return)
+        ])->body($return);
     }
 
     public function action_conversations()
