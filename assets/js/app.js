@@ -202,7 +202,7 @@ RT["App"].prototype = {
     scanBarCode: function(d) {
         if(d.user() && d.cp()){
             var s = ko.utils.extend(RT.Com.CBSettings, {
-                href: '/assets/qrcode.html', height: "auto", width: "55%", maxWidth: '95%', minWidth: '500px',
+                href: '/assets/qrcode.html', height: "auto", width: "auto", maxWidth: '95%', minWidth: '500px',
                     onComplete: function() {
                         ko.applyBindings(d, document.getElementById("qrcodeContent"));
                         return $.colorbox.resize();
@@ -406,10 +406,15 @@ RT["App"].prototype = {
     },
     resetNewResults: function() {
         "use strict";
-        var t = this, p, newS;
+        var t = this, p, args = arguments, newS;
 
-        if(arguments && arguments.length === 3){
-            newS = arguments[2].item.value;
+        // bug to fix autocomplete not closing on Search
+        if(args && args.length === 2 && args[1] && args[1].hasOwnProperty('type') && args[1].type === 'click'){
+            $('#s').autocomplete( "close" );
+        }
+
+        if(args && args.length === 3){
+            newS = args[2].item.value;
             $("#s").val(newS);
             t.Search().formFields.s(newS);
         }
@@ -767,7 +772,7 @@ RT["ControllerLibrary"] = function() {
     self.initPager = function() {
         "use strict";
         var p = $("#loadAttachments"), exists = p.data() && !!p.data().waypointsWaypointsIds;
-        console.log(self.selectedAlbum())
+        //console.log(self.selectedAlbum())
         if (self.selectedAlbum() && self.selectedAlbum().hasNextPage()) {
             return exists && p.waypoint("enable") || p.waypoint(RTC.AlbumHandler.bind(this), {offset: 'bottom-in-view'});
         }
@@ -803,7 +808,7 @@ RT["ControllerLibrary"] = function() {
     (function(a) {
         var p = {url: a.cp().uri() + '/media'};
         return a.cp() && (p = new RTC.Get({}, p)) && p.done(function(r) {
-            RTC.isSuccess(r) && ko.mapping.fromJS(r.data, {}, self) && console.log(ko.toJS(self));
+            RTC.isSuccess(r) && ko.mapping.fromJS(r.data, {}, self);
             self.mediaCount = ko.computed(function() {
                 var c = this.counts;
                 return c.documents() + c.pictures() + c.videos();
@@ -1276,7 +1281,7 @@ RT["Post"] = function() {
         });
     };
     this.deleteComment = function(d) {
-        console.log('HERE');
+        //console.log('HERE');
         return ko.bindingHandlers.confirmDialog.init(new RT.ConfirmDialog({
             message: "Deleting this comment is permanent.",
             ok: function() {
@@ -1307,7 +1312,7 @@ RT["Post"] = function() {
     };
     this.getVideoThumbnail = function() {
         "use strict";
-        var img = $(document.createElement("img"));
+        var img = $(RTC.NewDom("img"));
         img.css({
             "background-image": "url(" + this.picture() + ")",
             "background-repeat": "repeat",
@@ -1320,7 +1325,7 @@ RT["Post"] = function() {
         return img[0].outerHTML;
     };
     this.getRichThumbnail = function() {
-        var i = jQuery(document.createElement("i"));
+        var i = jQuery(RTC.NewDom("i"));
         i.addClass("attachment");
         i.addClass(this.getRichCss());
         return i[0].outerHTML;
@@ -1329,7 +1334,7 @@ RT["Post"] = function() {
     this.embedVideo = function() {
         "use strict";
         if (this.hasVideo()) {
-            var iframe = $(document.createElement("iframe"));
+            var iframe = $(RTC.NewDom("iframe"));
             iframe.attr(ko.toJS(this.mediainfo));
             iframe.css('border', 'none');
             return this.isEmbeddedVideo(iframe);
@@ -1337,7 +1342,7 @@ RT["Post"] = function() {
     };
     this.embedDoc = function() {
         if (this.hasRich()) {
-            var iframe = $(document.createElement("iframe"));
+            var iframe = $(RTC.NewDom("iframe"));
             iframe.attr(ko.toJS(this.mediainfo));
             iframe.css('border', 'none');
             return this.isEmbeddedRich(iframe);
@@ -1354,7 +1359,7 @@ RT["Post"] = function() {
         return RTApp.createMessage.call(t);
     };
     this.getSubscribers = function() {
-        console.log(this);
+        //console.log(this);
     };
     RTC.Loop.apply(this, arguments);
 };
@@ -1369,8 +1374,8 @@ RT["Post"].prototype.extend(function() {
         return link && link.hasOwnProperty("src") || false;
     }, this);
     this.providerInfo = ko.computed(function() {
-        var t = this, hl = !!t.hasDetails(), i = document.createElement('img'),
-                s = $(document.createElement('span')), u, p = hl && t.link.provider;
+        var t = this, hl = !!t.hasDetails(), i = RTC.NewDom('img'),
+                s = $(RTC.NewDom('span')), u, p = hl && t.link.provider;
         if (hl) {
             u = p.url().match(/uri=/) ? p.url().replace(/^[^=]*=/, '') : p.url();
             i.width = "16";
@@ -1738,7 +1743,7 @@ RT["Attachment"] = function() {
         var i, t = this, d = t.dimensions(), el = t._id() && $("fullPreview" + t._id());
         if (!el.length) {
             if (t.hasRich() || t.hasVideo()) {
-                i = jQuery(document.createElement("iframe")).attr({
+                i = jQuery(RTC.NewDom("iframe")).attr({
                     src: t.mediainfo.src(),
                     frameborder: 0,
                     width: d.width,
@@ -1746,7 +1751,7 @@ RT["Attachment"] = function() {
                     id: "fullPreview" + t._id()
                 });
             } else if (t.hasOwnProperty("picture") && t.picture()) {
-                i = jQuery(document.createElement("img"));
+                i = jQuery(RTC.NewDom("img"));
                 i.attr({
                     src: "//" + t.picture(),
                     alt: t.excerpt() || t.name() || "Picture",
@@ -1767,7 +1772,7 @@ RT["Attachment"] = function() {
             if (t.hasRich()) {
                 e = RTC.GetObsVal(t.link.src).split(".");
                 e && (e = e.pop().toLowerCase());
-                i = $(document.createElement("i")).addClass('attachment').attr('id', t._id() + (s || 110));
+                i = $(RTC.NewDom("i")).addClass('attachment').attr('id', t._id() + (s || 110));
                 switch (e) {
                     case "doc":
                     case "docx":
@@ -1792,7 +1797,7 @@ RT["Attachment"] = function() {
                         break;
                 }
             } else if (t.hasOwnProperty("picture") && t.picture()) {
-                i = $(document.createElement("img"));
+                i = $(RTC.NewDom("img"));
                 a.length === 0 && (a = 110);
                 i.css({
                     height: a,
@@ -2270,22 +2275,32 @@ RT["Forms"] = {
             required: !0,
             minLength: 3,
             pattern: {
-                params: "^[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$",
-                message: 'Your username can be seperated with a dot(.), a hyphen(-) or an underscore(_). e.g. "user-name" or "UserName" is VALID but "username-" or "-username" IS NOT. Please try again.'
+                params: RTC.Validation.username.invalid.rule,
+                message: RTC.Validation.username.invalid.message
             },
             validation: {
                 validator: function() {
                     return self.isUniqueUsername();
                 },
-                message: "This username is taken, please try another"
+                message: RTC.Validation.username.notUnique.message
             }
         });
         self.username.extend({
             validation: {
                 validator: function(v) {
-                    return !v.match("admin|realtasia|support|rta|customer|member|people|location|listing|username");
+                    var splits = v.split("."), valid = true;
+                    splits = splits.concat(v.split("-"));
+                    splits = splits.concat(v.split("_"));
+
+                    if(!!splits.length){
+                        RTC.forEach(splits, function(split){
+                            return split.match(RTC.Validation.username.restricted.rule) && valid && (valid=!1);
+                        });
+                        return valid;
+                    }
+                    return !v.match(RTC.Validation.username.restricted.rule);
                 },
-                message: "Sorry, your username contains restricted words. Please try again"
+                message: RTC.Validation.username.restricted.message
             }
         });
         self.mobile.extend({
@@ -2294,15 +2309,15 @@ RT["Forms"] = {
         self.mobile.extend({
             number: !0,
             minLength: {
-                message: "Please enter a valid Singapore Mobile number",
+                message: RTC.Validation.mobile.invalid.message,
                 params: 8
             },
             maxLength: {
-                message: "Please enter a valid Singapore Mobile number",
+                message: RTC.Validation.mobile.invalid.message,
                 params: 8
             },
             min: {
-                message: "Please enter a valid Singapore Mobile number",
+                message: RTC.Validation.mobile.invalid.message,
                 params: 8e7
             },
             required: !0,
@@ -2310,7 +2325,7 @@ RT["Forms"] = {
                 validator: function() {
                     return self.isUniquePhone();
                 },
-                message: "This number has already been registered."
+                message: RTC.Validation.mobile.notUnique.message
             }
         });
         self.mobile.subscribe(self.validateMobile, self);
@@ -2574,8 +2589,8 @@ RT["Forms"] = {
             throttle: 600
         });
         this.providerInfo = ko.computed(function() {
-            var t = this, hl = !!t.externalFields(), i = document.createElement('img'),
-                    s = $(document.createElement('span')), u, p = hl && t.externalFields().link.provider;
+            var t = this, hl = !!t.externalFields(), i = RTC.NewDom('img'),
+                    s = $(RTC.NewDom('span')), u, p = hl && t.externalFields().link.provider;
             if (hl) {
                 u = p.url.match(/uri=/) ? p.url.replace(/^[^=]*=/, '') : p.url;
                 i.width = "16";
@@ -2791,7 +2806,7 @@ RT["Forms"] = {
     },
     Attachment: function(params, album, lib) {
         "use strict";
-        console.log(ko.toJS(params));
+        //console.log(ko.toJS(params));
         var self = this, page, id;
         params = params || {};
         id = params._id || params.id;
@@ -3085,7 +3100,7 @@ RT["Forms"] = {
         };
         T.uploadOptionText = ko.computed(function() {
             var t = this, l = t.mediaLib, sa = l && l() ? l().selectedAlbum : false,
-                    i = $(document.createElement('i')), s = $(document.createElement('span'));
+                    i = $(RTC.NewDom('i')), s = $(RTC.NewDom('span'));
             if (sa && sa()) {
                 i.addClass("icon-upload");
                 s.text(" Upload more files").prepend(i);
@@ -3397,6 +3412,7 @@ RT["Forms"]["Info"].prototype = {
     },
     checkMobileVerify: function() {
         "use strict";
+        //removing mobile validation
         var t = this, c = RTC.MobileVerify(t.editables.smstoken());
         return c && c.done(function(r) {
             return RTC.isFailure(r) && t.smsVerify(!1) || t.smsVerify(!0) && t.mobileVerify(!1);
@@ -3416,7 +3432,7 @@ RT["Forms"]["Info"].prototype = {
             })) && s.done(function(r) {
                 if (RTC.isSuccess(r)) {
                     RTC.Renew();
-                    console.log({html : r.data.html});
+                    //console.log({html : r.data.html});
                 }
             }).always(function(){
                 return t.vcardsIsGenerating(!1);
@@ -3642,40 +3658,41 @@ RT["Forms"]["Info"].prototype = {
             var k = e.keyCode || e.which;
             return k === 13 && self.saveAndExit() || !0;
         };
-        se.info.telephone.mobile.subscribe(function() {
-            if (se.info.telephone.mobile.hasChanged()) {
-                se.smstoken.extend({
-                    number: !0,
-                    minLength: 4,
-                    maxLength: 4,
-                    required: !0,
-                    validation: {
-                        validator: function() {
-                            return self.smsVerify();
-                        },
-                        message: "This SMS token is invalid, please try again."
-                    }
-                });
-            } else {
-                se.smstoken.rules([]);
-            }
-        });
-        se.smstoken.subscribe(this.checkMobileVerify, this);
+        // removing mobile sms verification
+//        se.info.telephone.mobile.subscribe(function() {
+//            if (se.info.telephone.mobile.hasChanged()) {
+//                se.smstoken.extend({
+//                    number: !0,
+//                    minLength: 4,
+//                    maxLength: 4,
+//                    required: !0,
+//                    validation: {
+//                        validator: function() {
+//                            return self.smsVerify();
+//                        },
+//                        message: "This SMS token is invalid, please try again."
+//                    }
+//                });
+//            } else {
+//                se.smstoken.rules([]);
+//            }
+//        });
+//        se.smstoken.subscribe(this.checkMobileVerify, this);
         se.info.telephone.mobile.subscribe(function() {
             if (se.info.telephone.mobile.hasChanged()) {
                 self.checkUniquePhone(se.info.telephone.mobile());
                 se.info.telephone.mobile.extend({
                     number: !0,
                     minLength: {
-                        message: "Please enter a valid Singapore Mobile number",
+                        message: RTC.Validation.mobile.invalid.message,
                         params: 8
                     },
                     maxLength: {
-                        message: "Please enter a valid Singapore Mobile number",
+                        message: RTC.Validation.mobile.invalid.message,
                         params: 8
                     },
                     min: {
-                        message: "Please enter a valid Singapore Mobile number",
+                        message: RTC.Validation.mobile.invalid.message,
                         params: 8e7
                     },
                     required: !0,
@@ -3683,7 +3700,7 @@ RT["Forms"]["Info"].prototype = {
                         validator: function() {
                             return self.isUniquePhone();
                         },
-                        message: "This number has already been registered."
+                        message: RTC.Validation.mobile.invalid.message
                     }
                 });
             } else {
@@ -3730,22 +3747,33 @@ RT["Forms"]["Info"].prototype = {
                     required: !0,
                     minLength: 3,
                     pattern: {
-                        params: "^[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$",
-                        message: 'Your username can be seperated with a dot(.), a hyphen(-) or an underscore(_). e.g. "user-name" or "UserName" is VALID but "username-" or "-username" IS NOT. Please try again.'
+                        params: RTC.Validation.username.invalid.rule,
+                        message: RTC.Validation.username.invalid.message
                     },
                     validation: {
                         validator: function() {
                             return self.isUniqueUsername();
                         },
-                        message: "This username is taken, please try another"
+                        message: RTC.Validation.username.notUnique.message
                     }
                 });
                 se.username.extend({
                     validation: {
                         validator: function() {
-                            return !se.username().match("admin|^realtasia|^support|^rta|^customer|^member|people|^location|^listing|^usernam|^post|^album|^attachment|^comment|^moderat|^" + se.info.telephone.mobile());
+                            var splits = se.username().split("."), valid = true;
+                            splits = splits.concat(se.username().split("-"));
+                            splits = splits.concat(se.username().split("_"));
+
+                            if(!!splits.length){
+                                RTC.forEach(splits, function(split){
+                                    return split.match(RTC.Validation.username.restricted.rule) && valid && (valid=!1);
+                                });
+                                return valid;
+                            }
+
+                            return !se.username().match(RTC.Validation.username.restricted.rule + "|^" + se.info.telephone.mobile());
                         },
-                        message: "Sorry, your username contains restricted words. Please try again"
+                        message: RTC.Validation.username.restricted.message
                     }
                 });
                 se.uri("/" + se.username());
@@ -3875,7 +3903,7 @@ RT["Forms"]["Login"].prototype = {
         var t = this, a = RTApp, loc = window.location, s, $ = window.jQuery, l = "#rtLoginLoader", p = {
             url: "/login", username: RTApp.user().username(), password: t.password(), remember: $("#login_remember").is(":checked")
         }, redirect = RTC.parseGets('redirect_to');
-        console.log(redirect);
+        //console.log(redirect);
         if (!t.password.isValid())
             return t.errors.showAllMessages(), !1;
         return (s = RTC.Post({loading: l}, p)) && s.done(function(r) {
@@ -3946,7 +3974,7 @@ RT["Forms"]["Post"].prototype = {
     },
     videoThumb: function() {
         "use strict";
-        var img = $(document.createElement("img"));
+        var img = $(RTC.NewDom("img"));
         img.css({
             "background-image": "url(" + this.externalFields().picture + ")",
             "background-repeat": "repeat",
@@ -4089,7 +4117,7 @@ RT["Forms"]["Post"].prototype = {
             e.link.type === 'video' && self.hasVideo(!0);
             if (e.link.type === "rich") {
                 self.hasRich(!0);
-                var i = document.createElement("iframe"), info = e.mediainfo;
+                var i = RTC.NewDom("iframe"), info = e.mediainfo;
                 i.width = info.width;
                 i.height = info.height;
                 i.frameborder = "0";
@@ -4263,6 +4291,7 @@ RT["Forms"]["Registration"].prototype = {
         });
     }
 };
+
 window.RTApp = new RT.App;
 delete RT.App;
 jQuery(document).ready(function($) {

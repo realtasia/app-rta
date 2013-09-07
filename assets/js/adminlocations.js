@@ -158,12 +158,6 @@ RT["Admin"]['Searcher'] = function() {
     };
 }
 
-RT["Admin"]['Updater'] = function() {
-}
-
-RT["Admin"]['HistoryViewer'] = function() {
-}
-
 RT["Admin"]['Row'] = function(p) {
     p = p || {};
     ko.mapping.fromJS(p, {}, this);
@@ -199,7 +193,7 @@ RT["Admin"]['Straylocations'] = function() {
     self.strayFiltersMap = 'NEW INVALID SUCCESS REVIEW'.split(" ");
     self.f = "name estate subtype exists processing";
     self.siteQuery("site:condo.singaporeexpats.com");
-    self.subtypes = new RT.Admin.Location().subtypes;
+    self.subtypes = RT.Admin.staticLocationArrays.subtypes;
     self.getSingpost = function(v) {
         if (!v)
             return false;
@@ -275,7 +269,9 @@ RT["Admin"]['Straylocations'] = function() {
             width: "480px", href: '/assets/admin/createLocation.html', height: "auto",
             onComplete: function() {
                 ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
-                return $.colorbox.resize();
+                return setTimeout(function(){
+                                        return $.colorbox.resize();
+                                    }, 200);
             }
         });
         return $.colorbox(S);
@@ -382,16 +378,17 @@ RT["Admin"]['Straylocations'] = function() {
                 return RTC.isSuccess(r) && self.record(r.data);
             });
         }
-        return $(document).on('click', '.ael', function() {
+        $(document).on('click', '.ael', function() {
             var d = ko.dataFor(this);
-            d.estate = d.parent.name;
-            self.locationForm(new RT.Admin.Location(ko.toJS(l)));
+            self.locationForm(new RT.Admin.Location(d));
             self.locationForm().create = null;
             var S = ko.utils.extend(RTC.CBSettings, {
-                width: "480px", href: '/assets/admin/createLocation.html', height: "auto",
+                width: "480px", href: '/assets/admin/createLocation.html', height: "100%",
                 onComplete: function() {
                     ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
-                    return $.colorbox.resize();
+                    return setTimeout(function(){
+                        return $.colorbox.resize();
+                    }, 200);
                 }
             });
             return $.colorbox(S);
@@ -520,7 +517,7 @@ RT["Admin"]['AdminLocations'] = function() {
     self = this;
 
     self.searcher(new RT.Admin.Searcher);
-    self.location = new RT.Admin.Location;
+    self.location = RT.Admin.staticLocationArrays;
     self.strays(new RT.Admin.Straylocations);
     self.strays().init();
     self.tabs = ko.observableArray([
@@ -551,43 +548,53 @@ RT["Admin"]['editableTemplate'] = function(params) {
 
 RT["Admin"]['Location'] = function(p) {
     p = p || {};
-    var self, o = 'id name estate type subtype content property_type parent';
+    var self, o = 'id name estate type subtype content property_type';
     RTC.MakeObsFromArray.call(this, o);
     self = this;
     self.name(p.child ? p.child : p.building);
-    if (!self.name()) {
-        self.name(p.name);
+    if (!self.name() && p.name) {
+        ko.isObservable(p.name) && (self.name = p.name) || self.name(p.name);
     }
     self.estate(p.estate);
 
     if (p.parent) {
-        self.parent(p.parent);
+        self.parent = p.parent;
+
         if (!p.estate) {
             self.estate(p.parent.name);
         }
-        self.changeEstate = ko.observable(false);
-        self.modifyEstate = function(){
-            return self.changeEstate(!self.changeEsate());
-        };
     }
-    self.property_type(p.property_type);
+    self.changeEstate = ko.observable(false);
+    self.changeEstate.subscribe(function(){
+        return setTimeout(function(){
+            console.log('resize triggered')
+            return $.colorbox.resize();
+        }, 1);
+    });
+    self.modifyEstate = function(){
+        return self.changeEstate(!self.changeEstate());
+    };
+    ko.isObservable(p.property_type) && (self.property_type = p.property_type) || self.property_type(p.property_type);
+    ko.isObservable(p.subtype) && (self.subtype = p.subtype) || self.subtype(p.subtype);
     self.type('location');
-    self.subtype(p.subtype);
-    self.subtypes = ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"];
-    self.hdbTypes = ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"];
-    self.aptTypes = ['Condominium', 'Walkup', 'Apartment'];
-    self.landedTypes = ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"];
+    self.static = RT.Admin.staticLocationArrays;
     self.propertyTypes = ko.computed(function() {
         var t = this, s = t.subtype();
         switch (s) {
             case 'Private Apartments':
             case 'Serviced Apartments':
-                return t.aptTypes;
+                return t.static.aptTypes;
             case 'Private Landed':
-                return t.landedTypes;
+                return t.static.landedTypes;
         }
         return null;
     }, self);
     self.create = null;
+};
 
-}
+RT["Admin"]["staticLocationArrays"] = {
+    subtypes : ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"],
+    hdbTypes : ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"],
+    aptTypes : ['Condominium', 'Walkup', 'Apartment'],
+    landedTypes : ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"]
+};

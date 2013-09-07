@@ -113,6 +113,16 @@ class Controller_Person extends Controller_Auth {
         $this->content = View::factory('personEdit');
     }
 
+    public function action_billing()
+    {
+        if (!parent::logged_in() || (string) $this->cp['_id'] !== $this->cu->_id)
+        {
+            $this->request->redirect();
+        }
+
+        $this->content = View::factory('billing');
+    }
+
     public function action_media()
     {
         if ($this->auto_render === TRUE)

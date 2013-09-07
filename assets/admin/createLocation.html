@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/RTA.css" />
     <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/style.css" />
 </head>
-<section class="RTAWindow clearfix" id="locationForm" style="height:99%;margin:0 auto;">
+<section class="RTAWindow clearfix" id="locationForm" style="margin:0 auto;height:auto">
     <header class="titleBar">
         <div class="contentArea titleBarBG">
             <button type="button" class="close" aria-hidden="true" data-bind="click : function(){return $.colorbox.close()}">&times;</button>
@@ -22,9 +22,9 @@
                             <strong data-bind="text: $root.ajaxMessage"> </strong>
                         </p>
                         <label class="control-label">Name</label>
-                        <input type="text" data-bind="value:name" name="name" placeholder="Name">
+                        <input type="text" data-bind="value:$data.name" name="name" placeholder="Name">
                         <label class="control-label">Sub Type</label>
-                        <select data-bind="options: subtypes, value: subtype, optionsCaption: 'Choose a subtype'" name="subtype"></select>
+                        <select data-bind="options: static.subtypes, value: subtype, optionsCaption: 'Choose a subtype'" name="subtype"></select>
                         <label class="control-label">Property Type</label>
                         <select data-bind="enable:propertyTypes, options: propertyTypes, value:property_type, optionsCaption: 'Choose a propertytype'" name="proptype"></select>
                     </fieldset>
@@ -32,7 +32,7 @@
                     <fieldset>
                         <legend><small>Modify Estate</small></legend>
                         <h5 data-bind="ifnot: $data.changeEstate">
-                            <span data-bind="text: $data.parent.name() || $data.estate()">Some super long estate name</span>
+                            <span data-bind="text: $data.parent && $data.parent.name() || $data.estate()"></span>
                             <small><a href="#"  style="padding-left:10px" data-bind="click: $data.modifyEstate"><i class="icon-edit-sign"></i> Change</a></small>
                         </h5>
                         <div data-bind="if: $data.changeEstate">
@@ -40,7 +40,7 @@
                                 <i class="icon-warning-sign"></i> Changing the Estate name will affect all 'child' locations within the Estate.
                                 <a href="#" data-bind="click: $data.modifyEstate"><i class="icon-ban-circle"></i>  Cancel</a>
                             </small>
-                            <input type="text" data-bind="value:  $data.parent.name() || $data.estate()" name="estate" placeholder="Estate">
+                            <input type="text" data-bind="value: $data.parent && $data.parent.name() || $data.estate()" name="estate" placeholder="Estate">
                         </div>
                     </fieldset>
                     <input type="hidden" data-bind="value:type" name="type" placeholder="Type">

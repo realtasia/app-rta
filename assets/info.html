@@ -101,21 +101,21 @@
         </fieldset> <!-- picture -->
         <fieldset data-bind="if : currentEdit() === 'account', flash : currentEdit() === 'account'">
             <legend data-bind="css:{smallFont:RTApp.isSmallerThanTablet}">Account Information</legend>
-            <div class="control-group row-fluid" data-bind="validationElement: editables.first_name">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.first_name">
                 <label class="control-label" for="first_name">First Name<a href="#" class="label label-inverse help-text" data-bind="title:'Please enter your given name.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <input type="text" autocomplete="off" id="first_name" placeholder="Enter your first name" data-bind="value : editables.first_name, valueUpdate: 'afterkeydown', event : {keypress:checkEnter}">
-                    <span class="help-block" data-bind="validationMessage: editables.first_name"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.first_name"></span>
                 </div>
             </div> <!--first name-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.last_name">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.last_name">
                 <label class="control-label" for="last_name">Last Name<a href="#" class="label label-inverse help-text" data-bind="title:'Please enter your surname.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <input type="text" autocomplete="off" id="last_name" placeholder="Enter your last name" data-bind="value : editables.last_name, valueUpdate: 'afterkeydown', event : {keypress:checkEnter}">
-                    <span class="help-block" data-bind="validationMessage: editables.last_name"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.last_name"></span>
                 </div>
             </div> <!--last name-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.username">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.username">
                 <label class="control-label" for="username">Username<a href="#" class="label label-inverse help-text" data-bind="title:'Your username is also your private URL. Please <strong>refrain</strong> from using your mobile number'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <div class="input-prepend input-append input-group">
@@ -125,10 +125,10 @@
                             <img src="/images/16.gif" style="display:none" id="usernameLoading" />
                         </span>
                     </div>
-                    <span class="help-block" data-bind="validationMessage: editables.username"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.username"></span>
                 </div>
             </div> <!--user name-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.email">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.email">
                 <label class="control-label" for="email">Email<a href="#" class="label label-inverse help-text" data-bind="title:'We use this email address for all RealtAsia updates. You can set another email address for notifications in your settings page.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <div class="input-append input-group">
@@ -137,10 +137,10 @@
                             <img src="/images/16.gif" style="display:none" id="emailLoading" />
                         </span>
                     </div>
-                    <span class="help-block" data-bind="validationMessage: editables.email"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.email"></span>
                 </div>
             </div> <!--email-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.info.telephone.mobile">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.info.telephone.mobile">
                 <label class="control-label" for="imobile">Mobile<a href="#" class="label label-inverse help-text" data-bind="title:'Please have your mobile with you. We will send you a verification SMS shortly.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <div class="input-prepend input-append input-group">
@@ -150,11 +150,11 @@
                             <img src="/images/16.gif" style="display:none" id="iphoneLoading" />
                         </span>
                     </div>
-                    <span class="help-block" data-bind="validationMessage: editables.info.telephone.mobile"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.info.telephone.mobile"></span>
                 </div>
             </div> <!--mobile-->
             <!--ko if : mobileVerify-->
-            <div class="control-group row-fluid info" data-bind="validationElement: editables.smstoken">
+            <div class="control-group row-fluid info" data-bind="RTAValidationEle: editables.smstoken">
                 <label class="control-label" for="ismstoken">SMS Token<a href="#" class="label label-inverse help-text" data-bind="title:'Enter the verification code you received. If you have waited longer than 1 minute, please send and SMS to +65 90220964 with \'No Verify\' in the body'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <div class="input-append input-group">
@@ -163,11 +163,11 @@
                             <img src="/images/16.gif" style="display:none" id="iverifyLoading" />
                         </span>
                     </div>
-                    <span class="help-block" data-bind="validationMessage: editables.smstoken"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.smstoken"></span>
                 </div>
             </div> <!--mobile verify-->
             <!--/ko-->
-            <div class="control-group row-fluid" data-bind="validationElement: changePassword">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: changePassword">
                 <div class="span12" style="margin-left:0;">
                     <label class="checkbox" data-bind="visible:!changePassword()">
                         <input type="checkbox" name="changePassword" id="changePassword" data-bind="checked: changePassword"> Change Password?
@@ -176,7 +176,7 @@
                 </div>
             </div> <!--change password-->
             <!--ko if : changePassword-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.currentPassword">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.currentPassword">
                 <label class="control-label" for="currentPassword">Current Password<a href="#" class="label label-inverse help-text" data-bind="title:'Your existing password is needed.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <div class="input-append input-group">
@@ -185,49 +185,49 @@
                             <img src="/images/16.gif" style="display:none" id="passwordLoading" />
                         </span>
                     </div>
-                    <span class="help-block" data-bind="validationMessage: editables.currentPassword"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.currentPassword"></span>
                 </div>
             </div>
-            <div class="control-group row-fluid" data-bind="validationElement: editables.password">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.password">
                 <label class="control-label" for="password">New Password<a href="#" class="label label-inverse help-text" data-bind="title:'Please choose a strong password.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <input type="password" id="password" placeholder="Enter a new password" data-bind="value : editables.password, valueUpdate: 'afterkeydown'">
-                    <span class="help-block" data-bind="validationMessage: editables.password"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.password"></span>
                 </div>
             </div>
-            <div class="control-group row-fluid" data-bind="validationElement: editables.confirmPassword">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.confirmPassword">
                 <label class="control-label" for="confirmPassword">Confirm Password</label>
                 <div class="span12" style="margin-left:0;">
                     <input type="password" id="confirmPassword" placeholder="Confirm your password" data-bind="value : editables.confirmPassword, valueUpdate: 'afterkeydown'">
-                    <span class="help-block" data-bind="validationMessage: editables.confirmPassword"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.confirmPassword"></span>
                 </div>
             </div>
             <!--/ko-->
         </fieldset> <!-- account -->
         <!--ko if : currentEdit() === 'bio'-->
         <fieldset data-bind="flash : currentEdit() === 'bio'"><legend data-bind="css:{smallFont:RTApp.isSmallerThanTablet}">Bio Data</legend>
-            <div class="control-group row-fluid" data-bind="validationElement: editables.info.birthday">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.info.birthday">
                 <label class="control-label" for="birthday">Birthday<a href="#" class="label label-inverse help-text" data-bind="title:'We need your birthday for statistics. You can choose to hide this info in your privacy settings'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <input size="16" readonly="readonly" id="ebirthday" data-bind="datepicker: editables.info.birthday, datepickerOptions : {changeMonth : true, changeYear : true, yearRange : '1920:2012', dateFormat: 'dd-M-yy'}" type="text">
-                    <span class="help-block" data-bind="validationMessage: editables.info.birthday"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.info.birthday"></span>
                 </div>
             </div> <!--birthday-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.info.languages">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.info.languages">
                 <label class="control-label" for="languages">Languages<a href="#" class="label label-inverse help-text" data-bind="title:'Type in languages that you speak separated by commas.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <textarea id="languages" placeholder="Enter languages you know" data-bind="value:editables.info.languages().join(', '), expand:true, autoComplete : { source: sourceLang, select: addLang, minLength: 0},event:{change:checkEmptyLang}"></textarea>
-                    <span class="help-block" data-bind="validationMessage: editables.info.languages"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.info.languages"></span>
                 </div>
             </div> <!--languages-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.aboutme">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.aboutme">
                 <label class="control-label" for="aboutme">About me<a href="#" class="label label-inverse help-text" data-bind="title:'This text shows in your profile page below your name.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <textarea id="aboutme" placeholder="Say something about yourself" data-bind="value:editables.aboutme, expand:true"></textarea>
-                    <span class="help-block" data-bind="validationMessage: editables.aboutme"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.aboutme"></span>
                 </div>
             </div> <!--about me-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.info.gender">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.info.gender">
                 <label class="control-label" for="gender">Gender</label>
                 <div class="span12" style="margin-left:0;">
                     <label class="radio inline ">
@@ -242,19 +242,19 @@
         <fieldset data-bind="flash : currentEdit() === 'bio'"> <legend>Certification & Education <small class="pull-right"><a class="hasHoverState" href="#" data-bind="click:$root.addEducation"><i class="icon-plus-sign"></i> <span class="small hidden-phone">Add</span></a></small></legend>
             <!--ko foreach : editables.info.education-->
             <div class="span2" style="margin:0">
-                <div class="control-group row-fluid" data-bind="validationElement:date">
-                    <select class="span12" style="margin-left:0;" data-bind="options: $parent.makeYear(), value: date, validationElement:date"></select>
-                    <span class="help-block" data-bind="validationMessage: date"></span>
+                <div class="control-group row-fluid" data-bind="RTAValidationEle:date">
+                    <select class="span12" style="margin-left:0;" data-bind="options: $parent.makeYear(), value: date, RTAValidationEle:date"></select>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: date"></span>
                 </div>
             </div>
             <div class="span10">
-                <div class="control-group row-fluid" data-bind="validationElement:value">
+                <div class="control-group row-fluid" data-bind="RTAValidationEle:value">
                     <div class="input-append" style="width:89%">
                         <input type="text" autocomplete="off" placeholder="Enter details, e.g. 'CEHA'" data-bind="value : value, valueUpdate: 'afterkeydown', event : {keypress:$root.addEducation}">
                         <a href="#" class="hasHoverState" data-bind="click:$root.removeEducation" style="padding-left:10px"><i class="icon-remove-sign"></i></a>
                         <a href="#" class="label label-inverse help-text" data-bind="title:'Type in the details of your cert/degree.'" style="vertical-align: middle">?</a>
                     </div>
-                    <span class="help-block" data-bind="validationMessage: value"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: value"></span>
                 </div>
             </div>
             <!--/ko-->
@@ -292,26 +292,26 @@
             <!--/ko-->
             <!--ko if : userType() !== 'user' || checkUser()-->
             <div class="span12" style="margin-left:0;" data-bind="if:editables.roles.indexOf('user') !== -1"><p class="muted">All fields are required. <a href="#" data-bind="click:cancelCheckUser">Cancel</a></p></div>
-            <div class="control-group row-fluid" data-bind="validationElement: editables.company">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.company">
                 <label class="control-label" for="company">Company<a href="#" class="label label-inverse help-text" data-bind="title:'Your updates are automatically included in your company page.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <input type="text" autocomplete="off" id="company" placeholder="Enter your company name" data-bind="value : companyLabel, valueUpdate: 'afterkeydown', autoComplete : { source: getCompany, select: addCompany, change:resetCompany, delay: 500, minLength: 2 }, event : {keypress:checkEnter}">
-                    <span class="help-block" data-bind="validationMessage: editables.company"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.company"></span>
                 </div>
             </div>
-            <div class="control-group row-fluid" data-bind="validationElement: editables.designation">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.designation">
                 <label class="control-label" for="designation">Designation<a href="#" class="label label-inverse help-text" data-bind="title:'Your designation shows beside your name.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <input type="text" autocomplete="off" id="fdesignation" placeholder="Enter your designation" data-bind="value : editables.designation, valueUpdate: 'afterkeydown', event : {keypress:checkEnter}">
-                    <span class="help-block" data-bind="validationMessage: editables.designation"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.designation"></span>
                 </div>
             </div>
             <!--ko if : userType() === 'agent'-->
-            <div class="control-group row-fluid" data-bind="validationElement: editables.license">
+            <div class="control-group row-fluid" data-bind="RTAValidationEle: editables.license">
                 <label class="control-label" for="license">License<a href="#" class="label label-inverse help-text" data-bind="title:'Please provide your CEA license number as required by law.'">?</a></label>
                 <div class="span12" style="margin-left:0;">
                     <input type="text" autocomplete="off" id="flicense" placeholder="Enter your cea license" data-bind="value : editables.license, valueUpdate: 'afterkeydown', event : {keypress:checkEnter}">
-                    <span class="help-block" data-bind="validationMessage: editables.license"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: editables.license"></span>
                 </div>
             </div>
             <!--/ko-->
@@ -320,19 +320,19 @@
         <fieldset data-bind="if : currentEdit() === 'company' && editables.roles.indexOf('agent') !== -1"><legend>Awards & Achievements <small class="pull-right"><a class="hasHoverState" href="#" data-bind="click:$root.addAchievement"><i class="icon-plus-sign"></i> <span class="small hidden-phone">Add</span></a></small></legend>
             <!--ko foreach : editables.info.achievements-->
             <div class="span2" style="margin:0">
-                <div class="control-group row-fluid" data-bind="validationElement:date">
-                    <select class="span12" style="margin-left:0;" data-bind="options: $parent.makeYear(), value: date, validationElement:date"></select>
-                    <span class="help-block" data-bind="validationMessage: date"></span>
+                <div class="control-group row-fluid" data-bind="RTAValidationEle:date">
+                    <select class="span12" style="margin-left:0;" data-bind="options: $parent.makeYear(), value: date, RTAValidationEle:date"></select>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: date"></span>
                 </div> <!--achievement date-->
             </div>
             <div class="span10">
-                <div class="control-group row-fluid" data-bind="validationElement:value">
+                <div class="control-group row-fluid" data-bind="RTAValidationEle:value">
                     <div class="input-append" style="width:94.5%">
                         <input type="text" autocomplete="off" placeholder="Enter details, e.g. 'Top Director'" data-bind="value : value, valueUpdate: 'afterkeydown', event : {keypress:$root.addAchievement}">
                         <a href="#" class="hasHoverState" data-bind="click:$root.removeAchievement" style="padding-left:10px"><i class="icon-remove-sign"></i></a>
                         <a href="#" class="label label-inverse help-text" data-bind="title:'Achievements and awards show in your info page. Examples \'Top Director\'. \'Team Builder\' etc'" style="vertical-align: middle">?</a>
                     </div>
-                    <span class="help-block" data-bind="validationMessage: value"></span>
+                    <span class="help-block" title="Okay" data-bind="RTAValidationMsg: value"></span>
                 </div>
             </div>
             <!--/ko-->

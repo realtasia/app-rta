@@ -199,6 +199,7 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <form id="newRegForm" class="form-large">
+                                        <label class="control-label" for="imobile">Mobile<a href="#" class="label label-inverse help-text" data-bind="title:'Please have your mobile with you. We will send you a verification SMS shortly.'">?</a></label>
                                         <div class="control-group row-fluid" data-bind="RTAValidationEle: mobile">
                                             <div class="span6">
                                                 <div class="input-prepend input-group">
@@ -208,14 +209,17 @@
                                             </div>
                                             <div class="span6"><span class="help-inline" title="Number is Valid" data-bind="RTAValidationMsg: mobile"></span></div>
                                         </div>
+                                        <label class="control-label" for="first_name">First Name<a href="#" class="label label-inverse help-text" data-bind="title:'Please enter your given name.'">?</a></label>
                                         <div class="control-group row-fluid" data-bind="RTAValidationEle: first_name">
                                             <div class="span6"><input type="text" name="first_name" placeholder="Your first name e.g 'John'" data-bind="value: first_name, valueUpdate: 'afterkeydown'"></div>
                                             <div class="span6"><span class="help-inline" title="First Name is Okay" data-bind="RTAValidationMsg: first_name"></span></div>
                                         </div>
+                                        <label class="control-label" for="last_name">Last Name<a href="#" class="label label-inverse help-text" data-bind="title:'Please enter your surname.'">?</a></label>
                                         <div class="control-group row-fluid" data-bind="RTAValidationEle: last_name">
                                             <div class="span6"><input type="text" name="last_name" placeholder="Your last name e.g 'Doe'" data-bind="value: last_name, valueUpdate: 'afterkeydown'"></div>
                                             <div class="span6"><span class="help-inline" title="Last Name is Okay" data-bind="RTAValidationMsg: last_name"></span></div>
                                         </div>
+                                        <label class="control-label" for="username">Username<a href="#" class="label label-inverse help-text" data-bind="title:'Your username is also your private URL. Please <strong>refrain</strong> from using your mobile number'">?</a></label>
                                         <div class="control-group row-fluid" data-bind="RTAValidationEle: username">
                                             <div class="span6">
                                                 <div class="input-prepend input-group">
@@ -225,14 +229,17 @@
                                             </div>
                                             <div class="span6"><span class="help-inline" title="Username is valid" data-bind="RTAValidationMsg: username"></span></div>
                                         </div>
+                                        <label class="control-label" for="email">Email<a href="#" class="label label-inverse help-text" data-bind="title:'We use this email address for all RealtAsia updates. You can set another email address for notifications in your settings page.'">?</a></label>
                                         <div class="control-group row-fluid" data-bind="RTAValidationEle: email">
                                             <div class="span6"><input type="text" name="email" autocomplete="off" data-bind="value: email, valueUpdate: 'afterkeydown'" placeholder="Your email e.g. 'johndoe@example.com'"></div>
                                             <div class="span6"><span class="help-inline" title="Email is valid" data-bind="RTAValidationMsg: email"></span></div>
                                         </div>
+                                        <label class="control-label" for="password">New Password<a href="#" class="label label-inverse help-text" data-bind="title:'Please choose a strong password.'">?</a></label>
                                         <div class="control-group row-fluid" data-bind="RTAValidationEle: password">
                                             <div class="span6"><input type="password" autocomplete="off" data-bind="value: password, valueUpdate: 'afterkeydown'" name="password" placeholder="Password"></div>
                                             <div class="span6"><span class="help-inline" title="Password Okay" data-bind="RTAValidationMsg: password"></span></div>
                                         </div>
+                                        <label class="control-label" for="confirmPassword">Confirm Password</label>
                                         <div class="control-group row-fluid" data-bind="RTAValidationEle: confirmPassword">
                                             <div class="span6"><input type="password" name="confirmPassword" data-bind="value: confirmPassword, valueUpdate: 'afterkeydown'" placeholder="Re-enter your password"></div>
                                             <div class="span6"><span class="help-inline" title="Passwords Match" data-bind="RTAValidationMsg: confirmPassword"></span></div>

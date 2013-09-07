@@ -9,8 +9,6 @@
 //  return true;
 //};
 
-
-
 /**
  *  Lib:        Common Utilities
  *  Author:     Jason Nathan
@@ -162,7 +160,7 @@ RT["Com"] = {
         }) || $.Deferred().reject().promise();
     },
     Field: function() {
-        this.icon = $(document.createElement('i'));
+        this.icon = $(RTC.NewDom('i'));
     },
     SocialField: function() {
         var cls = 'social26 ', self = this;
@@ -284,6 +282,9 @@ RT["Com"] = {
         // safari bug
         target = target.nodeType === 3 ? target.parentNode : target;
         return target;
+    },
+    NewDom: function(d) {
+        return document.createElement(d)
     },
     DateFormat: function() {
         var j = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g, k = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g, s = /[^-+\dA-Z]/g, d = function(a, c) {
@@ -498,6 +499,8 @@ RT["Com"] = {
             }
             return RTC.log('polls', ko.toJS(cu));
         }).always(function() {
+            window['console']['log'] = function() {
+            };
             return cu && setTimeout(RTC.poll, 3e4);
         });
     },
@@ -608,6 +611,25 @@ RT["Com"] = {
     },
     Obstract: function(o, k) {
         return RT.Com.GetObsVal(RT.Com.arrGet(o, k));
+    },
+    Validation: {
+        username: {
+            restricted: {
+                rule: "admin|^realtasia|^support|^rta|^customer|^member|people|^location|^listing|^usernam|^post|^album|^attachment|^comment|^fuck|^moderat|^help|^finance",
+                message: "Sorry, your username contains restricted words. Please try again."
+            },
+            invalid: {
+                rule: "^[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$",
+                message: 'Your username can be seperated with a dot(.), a hyphen(-) or an underscore(_). e.g. "user-name" or "UserName" is VALID but "username-" or "-username" IS NOT. Please try again.'
+            },
+            notUnique: {
+                message: "This username is taken, please try another."
+            }
+        },
+        mobile: {
+            invalid: {message: "Please enter a valid Singapore Mobile number"},
+            notUnique: {message: "This number has already been registered."}
+        }
     }
 };
 window["RTC"] = RT["Com"];
@@ -896,7 +918,7 @@ RT["handlers"] = {
         init: function(element) {
             $(element).css('height', 25).autosize().trigger('autosize.resize');
         },
-        update: function(element){
+        update: function(element) {
             $(element).trigger('autosize.resize');
         }
     },
@@ -1022,15 +1044,14 @@ RT["handlers"] = {
     RTAValidationMsg: {// individual error message, if modified or post binding
         update: function(element, valueAccessor) {
             var obsv = valueAccessor(),
-                    i = $(document.createElement('i')), d = $(document.createElement('div')),
-                    val = ko.unwrap(obsv),
+                    i = $(RTC.NewDom('i')), d = $(RTC.NewDom('div')),
                     success = function() {
                 var c = i.clone();
                 return d.empty().append(c.addClass('icon-ok')).html() + "&nbsp;" + ($(element).data('title') || element.title);
             },
                     error = function() {
                 var c = i.clone();
-                return d.empty().append(c.addClass('icon-warning-sign')).html() + "&nbsp;" + obsv.error;
+                return d.empty().append(c.addClass('icon-warning-sign')).html() + "&nbsp;" + obsv.error();
             },
                     info = function() {
                 var c = i.clone();
@@ -1062,15 +1083,16 @@ RT["handlers"] = {
     RTAValidationEle: {
         update: function(element, valueAccessor) {
             var obsv = valueAccessor(),
-                    val = ko.unwrap(obsv),
                     isModified = false,
-                    isValid = false;
+                    isValid = false,
+                    cssSettingsAccessor, toggleClasses, origTitle, elementTitle,
+                    errorMsgTitleAccessor;
             obsv.extend({validatable: true});
             isModified = obsv.isModified();
             isValid = obsv.isValid();
             // create an evaluator function that will return something like:
             // css: { validationElement: true }
-            var cssSettingsAccessor = function() {
+            cssSettingsAccessor = function() {
                 var css = {success: false, error: false, info: false};
                 if (isModified) {
                     if (isValid) {
@@ -1082,16 +1104,17 @@ RT["handlers"] = {
                     }
                 }
                 return css;
-            }, toggleClasses = function(cls, obj) {
+            };
+            toggleClasses = function(cls, obj) {
                 for (var p in obj) {
                     obj[p] = (p === cls);
                 }
             };
             //add or remove class on the element;
             ko.bindingHandlers.css.update(element, cssSettingsAccessor);
-            var origTitle = $(element).data('orig-title'),
-                    elementTitle = element.title;
-            var errorMsgTitleAccessor = function() {
+            origTitle = $(element).data('orig-title');
+            elementTitle = element.title;
+            errorMsgTitleAccessor = function() {
                 if (isModified) {
                     if (!isValid) {
                         return {title: obsv.error, 'data-orig-title': origTitle || elementTitle};
@@ -1100,7 +1123,7 @@ RT["handlers"] = {
                     }
                 }
             };
-            ko.bindingHandlers.attr.update(element, errorMsgTitleAccessor);
+            return ko.bindingHandlers.attr.update(element, errorMsgTitleAccessor);
         }
     },
     animateActive: {
@@ -1149,24 +1172,24 @@ RT["handlers"] = {
         init: function(element, valueAccessor, allBindingsAccessor) {
             var value = valueAccessor(), e = $(element), nv = ko.unwrap(allBindingsAccessor().value),
                     handler = function() {
-                        return function() {
-                            e.parent().children().each(function() {
-                                return $(this).removeClass("active");
-                            });
-                            return e.addClass("active") && value(nv);
-                        };
-                    };
+                return function() {
+                    e.parent().children().each(function() {
+                        return $(this).removeClass("active");
+                    });
+                    return e.addClass("active") && value(nv);
+                };
+            };
             value() === nv && e.addClass('active');
             return ko.bindingHandlers.click.init(element, handler, allBindingsAccessor);
         }
     },
-    switchClass:{
-        init: function(element, valueAccessor){
-            var v = ko.unwrap(valueAccessor()), e=$(element), c = v.removeAdd;
+    switchClass: {
+        init: function(element, valueAccessor) {
+            var v = ko.unwrap(valueAccessor()), e = $(element), c = v.removeAdd;
             return v.val() && e.switchClass(c[1], c[0]) || e.switchClass(c[0], c[1]);
         },
-        update: function(element, valueAccessor){
-            var v = ko.unwrap(valueAccessor()), e=$(element), c = v.removeAdd;
+        update: function(element, valueAccessor) {
+            var v = ko.unwrap(valueAccessor()), e = $(element), c = v.removeAdd;
             return v.val() && e.switchClass(c[1], c[0]) || e.switchClass(c[0], c[1]);
         }
     }
@@ -1192,7 +1215,7 @@ RT["handlers"] = {
     $.ui.autocomplete.prototype._renderItem = function(u, i) {
         "use strict";
         var t = this.term.split(' ').join('|'), n = i.label.replace(new RegExp("(" + t + ")", "gi"), "<b>$1</b>");
-        return $(document.createElement('li')).data("item.autocomplete", i).append("<a>" + n + "</a>").appendTo(u);
+        return $(RTC.NewDom('li')).data("item.autocomplete", i).append("<a>" + n + "</a>").appendTo(u);
     };
     !$.support.transition && ($.fn.transition = $.fn.animate);
     $.fn.listenForChange = function(options) {
@@ -1229,9 +1252,10 @@ RT["handlers"] = {
         }, settings.interval);
         return this;
     };
-    function defaultToWhiteSpace(characters){
+    function defaultToWhiteSpace(characters) {
         return characters ? characters.replace(/([-.*+?^${}()|[\]\/\\])/g, '\\$1') : '\\s';
-    };
+    }
+    ;
     !String.prototype.trim && (String.prototype.trim = function(characters) {
         characters = defaultToWhiteSpace(characters);
         return this ? this.replace(new RegExp('\^' + characters + '+|' + characters + '+$', 'g'), '') : '';
@@ -1269,7 +1293,9 @@ RT["handlers"] = {
     });
     !String.prototype.ucwords && (String.prototype.ucwords = function() {
         var t = this.toLowerCase().split(" ");
-        RTC.forEach(t, function(i){return t[t.indexOf(i)] = i.ucfirst();});
+        RTC.forEach(t, function(i) {
+            return t[t.indexOf(i)] = i.ucfirst();
+        });
         return t.join(" ");
     });
     !String.prototype.stripTags && (String.prototype.stripTags = function(allowed) {
@@ -1280,7 +1306,7 @@ RT["handlers"] = {
         });
     });
     !String.prototype.escapeText && (String.prototype.escapeText = function() {
-        return document.createElement('div').appendChild(document.createTextNode(this)).innerHTML;
+        return RTC.NewDom('div').appendChild(document.createTextNode(this)).innerHTML;
     });
     !Array.prototype.indexOf && (Array.prototype.indexOf = function(obj, start) {
         for (var i = (start || 0), j = this.length; i < j; i++) {
@@ -1331,8 +1357,7 @@ RT["handlers"] = {
     delete RT.handlers;
     ko["validateIfChanged"] = function(value) {
         //private variables
-        var changedVal = ko.observable(value),
-                initialValue = value,
+        var changedVal = ko.observable(value), initialValue = value,
                 //act exactly like a regular observable
                 result = ko.computed({
             //return the changed observable
@@ -1384,40 +1409,6 @@ RT["handlers"] = {
         }
     };
 
-    // ko binding tick (for clocks) - currently not used
-    (function() {
-        var mins = new Date().getMinutes(), secs = mins * 60,
-                minSpan = $(document.createElement('span')).css('padding', '5px 10px'),
-                secSpan = $(document.createElement('span')).css('padding', '5px 10px'),
-                t = this;
-        t.minutes = function() {
-            var m = Math.floor(secs % 3600 / 60);
-            return m < 10 ? "0" + m : m;
-        };
-        t.seconds = function() {
-            var s = Math.ceil(secs % 3600 % 60);
-            return s < 10 ? "0" + s : s;
-        };
-        t.decrement = function() {
-            if (secs >= 0) {
-                secSpan.text(t.seconds());
-                minSpan.text(t.minutes());
-                secs--;
-                setTimeout(t.decrement.bind(t), 1000);
-            }
-        };
-        ko["bindingHandlers"]["tick"] = {
-            init: function() {
-                t.decrement.call(t);
-                return {'controlsDescendantBindings': true};
-            },
-            update: function(e, Accessor) {
-                "use strict";
-                //var vm = Accessor(), uw = ko.unwrap(vm);
-                $(e).append(minSpan).append(":").append(secSpan);
-            }
-        };
-    });
     //RT Modal && ko binding RTModal
     (function() {
         RT.Modal = function(options) {
@@ -1672,5 +1663,52 @@ RT["handlers"] = {
         };
 
     })();
+    // simple method to keep the footer fixed to the bottom
+    (function() {
+        var w = $(window), fixFooter = function() {
+            var $footer = $("#mainFooter"),
+                    fHeight = $footer.height(),
+                    fTop = (w.scrollTop() + w.height() - fHeight) + "px";
 
+            return ($(document.body).height() + fHeight) < w.height()
+                    && $footer.css({position: "absolute"}).animate({top: fTop})
+                    || $footer.css({position: "static"});
+        };
+        fixFooter();
+        w.scroll(fixFooter).resize(fixFooter);
+    })();
+    // ko binding tick (for clocks) - currently not used
+    (function() {
+        var mins = new Date().getMinutes(), secs = mins * 60,
+                minSpan = $(RTC.NewDom('span')).css('padding', '5px 10px'),
+                secSpan = $(RTC.NewDom('span')).css('padding', '5px 10px'),
+                t = this;
+        t.minutes = function() {
+            var m = Math.floor(secs % 3600 / 60);
+            return m < 10 ? "0" + m : m;
+        };
+        t.seconds = function() {
+            var s = Math.ceil(secs % 3600 % 60);
+            return s < 10 ? "0" + s : s;
+        };
+        t.decrement = function() {
+            if (secs >= 0) {
+                secSpan.text(t.seconds());
+                minSpan.text(t.minutes());
+                secs--;
+                setTimeout(t.decrement.bind(t), 1000);
+            }
+        };
+        ko["bindingHandlers"]["tick"] = {
+            init: function() {
+                t.decrement.call(t);
+                return {'controlsDescendantBindings': true};
+            },
+            update: function(e, Accessor) {
+                "use strict";
+                //var vm = Accessor(), uw = ko.unwrap(vm);
+                $(e).append(minSpan).append(":").append(secSpan);
+            }
+        };
+    });
 })(ko, RT, jQuery);

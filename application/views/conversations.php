@@ -2,7 +2,7 @@
 <!--<pre data-bind="text:ko.toJSON(user().connections)"></pre>-->
 <!--<pre data-bind="text:ko.toJSON(user().actions)"></pre>-->
 
-<section class="contentArea container-fluid clearfix" id="libraryMobile" data-bind="with:inbox">
+<section class="contentArea centerContent clearfix" id="messages" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet}, with:inbox">
     <div class="navbar navbar-subcontrol" data-bind="style:{marginTop:RTApp.isSmallerThanTablet ? '0' : '10px'}" style="margin-left: 10px;margin-right: 10px;">
         <div class="navbar-inner">
             <div class="container">

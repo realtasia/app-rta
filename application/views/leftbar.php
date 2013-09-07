@@ -7,11 +7,11 @@
             <div class="media-body">
                 <!--ko if : user-->
                 <div class="row-fluid" style="display:none" data-bind="visible:user().isAdmin || user().isAgent">
-                    <button href="#" data-bind="click:initListings" class="span12 btn btn-mini btn-rta"><i class="icon-plus-sign"></i><span>&nbsp;New Listing</span></button>
+                    <a href="#" data-bind="click:initListings" class="span12 btn btn-mini btn-rta"><i class="icon-plus-sign"></i>&nbsp;New Listing</a>
                 </div>
                 <!--/ko-->
                 <div class="row-fluid" style="margin-top:10px">
-                    <a target="_blank" href="<?php echo (Arr::get($cp, 'uri')) . '/vcard'; ?>" class="btn btn-small" style="color:#000"><i class="icon-phone"></i>&nbsp;Scan vcard</a>
+                    <a target="_blank" href="<?php echo (Arr::get($cp, 'uri')) . '/vcard'; ?>" class="span12 btn btn-mini" style="text-align: left"><i class="icon-phone"></i>&nbsp;Get VCARD</a>
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                         <!--ko ifnot: cpIsCu-->
                         <?php //if(isset($links['Media'])):?>
                         <!--                    <li data-bind="hoverClass: 'hovering'">
-                                                <a id="sidenavMedia" href="<?php //echo $links['Media'];  ?>"><i class="info16 images"></i>&nbsp;Media</a>
+                                                <a id="sidenavMedia" href="<?php //echo $links['Media'];   ?>"><i class="info16 images"></i>&nbsp;Media</a>
                                             </li>-->
                         <?php //endif;?>
                         <?php if (isset($links['Testimonials'])): ?>
