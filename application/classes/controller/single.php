@@ -13,11 +13,6 @@ defined('SYSPATH') or die('No direct script access.');
  */
 class Controller_Single extends Controller_Auth {
 
-    public function before()
-    {
-        return parent::before();
-    }
-
     public function action_parseurl()
     {
         $this->auto_render = false;
@@ -29,12 +24,12 @@ EOD;
         {
             $key     = '3ec47f021d4e11e1ae874040d3dc5c07';
             $r       = Request::factory('http://api.embed.ly/1/oembed')
-              ->query(array(
-                'key'      => $key,
-                'url'      => $matches[0],
-                'maxwidth' => 600,
-                'autoplay' => true
-            ));
+                        ->query(array(
+                          'key'      => $key,
+                          'url'      => $matches[0],
+                          'maxwidth' => 600,
+                          'autoplay' => true
+                      ));
             $results = json_decode($r->execute(), true);
 
             if (!isset($results['url']))
@@ -113,10 +108,10 @@ EOD;
             return parent::get_people_by_ids($ids);
     }
 
-    protected function people_query()
-    {
-        return parent::people_search();
-    }
+//    protected function people_query()
+//    {
+//        return parent::people_search();
+//    }
 
     public function after()
     {

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Description of client
+ * Methods declared here are for static pages that do not require secure actions
  *
  * @author Jason Nathan
  * @package RealtAsia APP
@@ -23,37 +23,38 @@ class Controller_Home extends Controller_Auth {
             return $this->{"action_" . str_replace('-', '_', $static)}();
     }
 
+    /**
+     * Displays the home page
+     *
+     * @return View::factory('home')
+     */
     public function action_index()
     {
         return $this->content = View::factory('home');
     }
 
+    /**
+     * Displays non-ajax login page
+     *
+     * @return View::factory('forms/login')
+     */
     public function action_loginbasic()
     {
         return $this->content = View::factory('forms/login');
     }
 
-    public function action_lightbox()
-    {
-        $this->content = View::factory('lightbox');
-    }
-
+    /**
+     * Displays access denied pretty page
+     *
+     * @return View::factory('forms/login')
+     */
     public function action_accessDenied()
     {
         $this->content = View::factory('access_denied');
     }
 
-    public function after()
-    {
-//        if ($this->request->action() !== 'api')
-//        {
-            return parent::after();
-//        }
-    }
-
     public function action_test()
     {
-        //$this->content = View::factory('table');
         $this->content = View::factory('test');
     }
 

@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 /**
- * Description of client
+ * Okay. these controllers are for UI and are in major need of comments
  *
  * @author Jason Nathan
  * @package RealtAsia APP
@@ -294,8 +294,19 @@ class Controller_Person extends Controller_Auth {
     {
         $this->auto_render = false;
         $cp = (array) $this->cp;
-        $msg = $this->logged_in() && (string) \Arr::get((array)$this->get_cu(), '_id') === (string) \Arr::get($cp, "_id")
-          ? 'novcard.self' : 'novcard.other';
+        if(!$this->logged_in())
+        {
+            $msg = 'novcard.unauthorised';
+        }
+        elseif((string) \Arr::get((array)$this->get_cu(), '_id') === (string) \Arr::get($cp, "_id"))
+        {
+            $msg = 'novcard.self';
+        }
+        else
+        {
+            $msg = 'novcard.other';
+        }
+
         $vcard = \Arr::get($cp, "vcard");
 
         if(!$vcard)
@@ -407,6 +418,32 @@ class Controller_Person extends Controller_Auth {
     protected function listings_query()
     {
         return Arr::merge(['user_id' => $this->cp['_id']], parent::listings_search());
+    }
+
+    protected function leftbar_links()
+    {
+        $items   = ['feed', 'info', 'media', 'testimonials', 'listings', 'subscriptions'];
+        $route   = Route::name($this->request->route());
+        $methods = get_class_methods($this);
+        $uri     = $uri     = $this->request->param('username');
+        $links   = [];
+
+        foreach ($methods as $method)
+        {
+            if (strpos($method, 'action_') === 0)
+            {
+                $meth = substr($method, strlen('action_'));
+                if (in_array($meth, $items))
+                {
+                    $links[ucfirst($meth)] = URL::site("$uri/$meth", 'http');
+                    if ($meth === 'media')
+                    {
+                        $links[ucfirst($meth)] = URL::site("$uri#$meth", 'http');
+                    }
+                }
+            }
+        }
+        return $links;
     }
 
     /* ***************************************

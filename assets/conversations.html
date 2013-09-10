@@ -1,0 +1,122 @@
+<section class="contentArea centerContent clearfix" id="conversationsMobile" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet}">
+    <div data-bind="slideTemplate:{name:'page', data:currentPage, if: currentPage}"></div>
+    <a href="#" data-bind="visible:!currentPage(), click:function(){return currentIndex(1);}">Show Library</a>
+</section> <!--library main page-->
+
+<script type="text/html" id="page">
+    <div class="navbar navbar-subcontrol">
+    <div class="navbar-inner">
+    <ul class="nav pull-left" data-bind="with: backLink">
+    <li>
+    <a href="#" data-bind="click: $data.action, title:$data.title, position:'bottom', href: uri">
+    <i data-bind="attr:{ 'class': $data.icon}"></i>
+    </a>
+    </li>
+    <li class="divider-vertical"></li>
+    </ul>
+    <h4 data-bind="text:$data.name"></h4>
+    <ul class="nav pull-right" data-bind="foreach:rightLinks">
+    <li class="divider-vertical"></li>
+    <li>
+    <a href="#" data-bind="click: $data.action, title:$data.title, position:'bottom', href: $data.uri">
+    <i data-bind="attr:{ 'class': $data.icon}"></i>
+    </a>
+    </li>
+    </ul>
+    </div>
+    </div>
+    <ul class="breadcrumb" style="border-radius:0;margin:-20px 0 20px 0;font-size:90%" data-bind="template:{name:'crumbs', foreach:$parent.history}"></ul>
+    <div data-bind="template:content" style="border-top:1px solid #eee;padding:10px"></div>
+</script> <!--page-->
+
+
+<script type="text/html" id="conversationList">
+    <ul class="media-list" id="conversationView" data-bind="foreach:$data">
+    <li data-bind="css:{'alert alert-info' : unread() === RTApp.user()._id()}, click:selectedConversation">
+    <a class="media" href="#">
+    <div class="pull-left">
+    <img data-bind="getAvatar : {context:$data.recipient, size:40}, attr:{alt:recipient.name}" width="40px" height="40px">
+    </div>
+    <div class="media-body">
+    <h5 style="margin:1px;"><span data-bind="text:recipient.name"></span> <small class="text-info pull-right" style="margin-top:5px;"><time data-bind="timeago:modified"></time></small></h5>
+    <p class="messageContent clearfix">
+    <small class="text-info span12">
+    <i class="icon-reply" style="color:#999" data-bind="visible:lastMessage._id() === RTApp.user()._id()"></i>
+    &nbsp;<span data-bind="text:excerpt"></span>
+    </small>
+    </p>
+    </div>
+    </a>
+    </li>
+    </ul>
+</script> <!--conversationList-->
+<div id="newConversation" data-bind="with:RTApp.inbox().newMessage">
+    <section class="RTAWindow"style="min-width:550px;">
+        <header class="titleBar">
+            <div class="contentArea titleBarBG">
+                <button type="button" class="close" aria-hidden="true" onclick="$.colorbox.close()">×</button>
+                <h4><i class="icon-info-sign"></i> New Message</h4>
+            </div>
+        </header>
+        <section class="RTAWindowContainer">
+            <section class="RTAWindowContent noSidebar">
+                <div class="contentArea clearfix">
+                    <div class="alert RTHelpBox">
+                        <button class="close" onclick="return $(this).parent().fadeOut('fast', function() {
+                            return $.colorbox.resize();
+                        }), !1;"><i class="icon-remove"></i></button>
+                        <h5 class="noMrgTop"><i class="icon-info-sign" style="font-size:18px"></i> Messaging in RealtAsia.</h5>
+                        <p> You can send messages to all RealtAsia users who have allowed it in their privacy settings. This also includes people in your existing message list.
+                            <br><small><em>You can manage your own privacy by editing your <a href="#" target="_blank" data-bind="href:RTApp.user().uri() + '#settings'">settings.</a></em></small>
+                        </p>
+                    </div>
+                    <div class="contentArea clearfix">
+                        <div class="row-fluid">
+                            <label class="span1">To: </label>
+                            <div class="offset1">
+                                <span data-bind="visible:!receipient(), flash:!receipient()"><input data-bind="autoComplete : {
+                                                                                                    source: getReceipients,
+                                                                                                    delay: 500, minLength:2
+                                                                                                    }, event:{
+                                                                                                    autocompleteselect: setReceipient
+                                                                                                    }, value:s" id="sR" type="text" placeholder="Type a name"></span>
+                                <span data-bind="reverse: receipient, with: receipient">
+                                    <a class="personHoverCard btn btn-link" data-bind="qtip: RTApp.getUserHoverCard" style="padding-left:0">
+                                        <img class="img-polaroid" width="16px" height="16px" data-bind="getAvatar : {context: $data, size:16}, attr:{alt: $data.name}">
+                                        <span data-bind="text: $data.name" style="text-shadow:1px 1px 1px #ddd"></span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <label class="span1">Message: </label>
+                            <div class="offset1 RTForm">
+                                <textarea id="newMessageText" data-bind="expand: 55" placeholder="Type your message"></textarea>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <label class="span1"></label>
+                            <div class="btn-toolbar offset1">
+                                <button class="btn btn-primary"><i class="icon-share-alt"></i> Submit</button>
+                                <button class="btn btn-inverse"><i class="icon-ban-circle"></i> Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </section>
+</div>
+<!--newConversation-->
+
+<script type="text/html" id="crumbs">
+    <li data-bind="css:{active:($index() + 1) === $root.history().length}">
+    <!--ko if: $index() + 1 === $root.history().length-->
+    <span data-bind="text:name"></span>
+    <!--/ko-->
+    <!--ko ifnot: $index() + 1 === $root.history().length-->
+    <a href="#" data-bind="text:name, href: hashURL, click:backLink.action || function(){return true;}"></a>
+    <span class="divider" style="padding:0">/</span>
+    <!--/ko-->
+    </li>
+</script> <!--crumbs-->

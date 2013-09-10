@@ -79,7 +79,7 @@
                             </div>
                         </section>
                     </div>
-                    <div class="span3 clearfix" style="margin-left:5px;height:auto;width:25%" data-bind="style:{width:RTApp.isSmallerThanTablet ? 'auto' : '25%'}">
+                    <div class="span3 clearfix" style="margin-left:5px;height:auto;width:25%" data-bind="style:{width:RTApp.isSmallerThanTablet() ? 'auto' : '25%'}">
                         <address data-bind="with:locationDetails" style="padding:5px 0">
                             <label data-bind="text:name" class="label label-info"></label>
                             <p class="alert alert-info" data-bind="visible:$parent.subtype" style="padding:3px;">

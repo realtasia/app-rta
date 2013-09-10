@@ -112,6 +112,13 @@
     </div>
     <!--/ko-->
 </section>
+<section id="conversationContent" style="display:none" data-bind="visible:RTApp.ca() === 'conversations', flash:RTApp.ca() === 'conversations'">
+    <!--ko if:RTApp.isJSAction-->
+    <div class="centralize" style="margin:15% auto; color:#999;">
+        <i class="icon-spin icon-spinner icon-5x"></i>
+    </div>
+    <!--/ko-->
+</section>
 <section id="adminContent" style="display:none" data-bind="visible:RTApp.cuIsAdmin() && RTApp.ca() === 'leads', flash:RTApp.ca() === 'leads'">
     <!--ko if:RTApp.isJSAction-->
     <div class="centralize" style="margin:15% auto; color:#999;">

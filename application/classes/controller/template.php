@@ -108,14 +108,16 @@ class Controller_Template extends Controller {
         //$ba = Profiler::start('Controller', 'Template ' . __function__);
         /*         * **************************************************************** */
         $this->auto_render = !$this->request->is_ajax();
+        $this->response->headers('Server', 'RealTX-0.2');
         if ($this->auto_render)
         {
             $this->response->body(static::min_lite($this->template, $this->build_cache_key()));
             return parent::after();
             //$this->response->body($this->template->render());
         }
-        $this->request->headers('Cache-Control', 'no-cache');
-        $this->request->headers('Expires', time() - Date::WEEK);
+        // so json responses have no cache. @todo will review this later.
+        $this->response->headers('Cache-Control', 'no-cache');
+        $this->response->headers('Expires', time() - Date::WEEK);
         return parent::after();
         //Profiler::stop($ba);
     }
@@ -131,16 +133,62 @@ class Controller_Template extends Controller {
     public static function sanitize($o)
     {
         $search  = [
-            '/\>[^\S ]+/s', //strip whitespaces after tags, except space
-            '/[^\S ]+\</s', //strip whitespaces before tags, except space
-            '/(\s)+/s'  // shorten multiple whitespace sequences
+            '/\>[^\S ]+/s', //get whitespaces after tags, except space
+            '/[^\S ]+\</s', //get whitespaces before tags, except space
+            '/(\s)+/s'      // search multiple whitespace sequences
         ];
-        $replace = [
-            '>',
-            '<',
-            '\\1'
-        ];
+        $replace = [ '>','<', '\\1'];
         return preg_replace($search, $replace, $o);
+    }
+
+    /**
+     * This method returns an array of links to be used in the rightbar. For now,
+     * the right bar in Realtasia differs very little from Controller to Controller.
+     * So it is declared here.
+     *
+     * @return array
+     */
+    protected function rightbar_links()
+    {
+        $items   = ['likers', 'subscribers'];
+        $route   = Route::name($this->request->route());
+        $methods = get_class_methods($this);
+        $uri     = '';
+        $links   = [];
+
+        switch ($route)
+        {
+            case 'location':
+                $uri = [
+                    'controller' => $route,
+                    'subtype'    => $this->request->param('subtype'),
+                    'slug'       => $this->request->param('slug')
+                ];
+                break;
+            default:
+                $uri = $this->request->param('username');
+                break;
+        }
+        foreach ($methods as $method)
+        {
+            if (strpos($method, 'action_') === 0)
+            {
+                $meth = substr($method, strlen('action_'));
+                if (in_array($meth, $items))
+                {
+                    if (is_array($uri))
+                    {
+                        $uri['action']         = $meth;
+                        $links[ucfirst($meth)] = Route::get($route)->uri($uri);
+                    }
+                    else
+                    {
+                        $links[ucfirst($meth)] = URL::site("$uri/$meth", 'http');
+                    }
+                }
+            }
+        }
+        return $links;
     }
 
     /**
@@ -396,6 +444,34 @@ class Controller_Template extends Controller {
     }
 
     /**
+     * Utility method to return ajax responses. Sets headers and JSON Encodes
+     * the data. Status can be INT or string. Either way translates to a string
+     * "error" or "success"
+     *
+     * @param String|INT $status the success\error status to send
+     * @param mixed $data array|string|object of data to return
+     * @return \Response
+     */
+    public function ajax_response($status, $data)
+    {
+        $this->auto_render = false;
+        if(is_numeric($status))
+        {
+            if($status === 200)
+                $status = "success";
+
+            $status = "error";
+        }
+
+        $this->response->headers('Content-type', 'application/json');
+        return $this->response->body(json_encode([
+            'session' => Session::instance()->get("api"),
+            'status'  => $status,
+            'data'    => $data
+        ]));
+    }
+
+    /**
      * These three lines were repeated over and over. This utility mehthod
      * condenses that
      *
@@ -411,7 +487,7 @@ class Controller_Template extends Controller {
     }
 
     /**
-     t* Similarly, These lines were repeated over and over. This utility method
+     * Similarly, These lines were repeated over and over. This utility method
      * condenses that.
      *
      * @param mixed String|Api_Response|Array $json

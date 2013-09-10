@@ -79,7 +79,6 @@
             echo isset($cp) ? 'RT.cp="' . base64_encode(json_encode($cp)) . '";' : '';
             echo isset($cl) ? 'RT.cl="' . base64_encode(json_encode($cl)) . '";' : '';
             ?></script>
-            <!--<script src="http://www.mapquestapi.com/sdk/js/v7.0.s/mqa.toolkit.js?key=Fmjtd%7Cluub256121%2C8a%3Do5-9u8l5u "></script>-->
             <?php
             //if ( ! Fragment::load('assets', Date::YEAR, true)):
             echo Assets::factory('deps')

@@ -922,15 +922,6 @@ LABEL .close {
     margin: 0px;
 }
 
-.ui-autocomplete {
-    max-height: 350px;
-    overflow-y: auto;
-    /* prevent horizontal scrollbar */
-    overflow-x: hidden;
-    /*+border-radius:0px;*/
-    border-radius: 0px;
-}
-
 .inplaceLabel {
     padding: 5px;
     margin: 0;
@@ -1229,12 +1220,7 @@ UI Tooltips
     border-color: rgba(0, 0, 0, 0.2);
     border-style: solid;
     border-width: 1px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius:1px !important;
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding;
     background-clip: padding-box;
@@ -1532,4 +1518,8 @@ html {
 	-o-transform: scale(1.1, 1.1);
 	-ms-transform: scale(1.1, 1.1);
 	transform: scale(1.1, 1.1);
+}
+
+.nav-tabs > .active > a {
+    box-shadow: 1px 1px 1px #EEEEEE inset;
 }

@@ -85,9 +85,6 @@ RT["Admin"]['Searcher'] = function() {
             }
         });
     };
-    self.toggleAdvancedSearch = function() {
-        return self.showAdvanced(!self.showAdvanced());
-    }
     self.selected = ko.observableArray();
     self.addId = function(d, e) {
         var s = self.selected;
@@ -193,7 +190,7 @@ RT["Admin"]['Straylocations'] = function() {
     self.strayFiltersMap = 'NEW INVALID SUCCESS REVIEW'.split(" ");
     self.f = "name estate subtype exists processing";
     self.siteQuery("site:condo.singaporeexpats.com");
-    self.subtypes = RT.Admin.staticLocationArrays.subtypes;
+    self.subtypes = RTC.locationArrays.subtypes;
     self.getSingpost = function(v) {
         if (!v)
             return false;
@@ -295,11 +292,8 @@ RT["Admin"]['Straylocations'] = function() {
     };
     self.updateStray = function() {
 
-//        updatestray
-        if (!self.record())
-            return false;
-
-        return RTC.PostApi({}, {
+//      updatestray
+        return self.record() && RTC.PostApi({}, {
             url: '/locations/updatestray/',
             id: self.record()._id,
             status: self.strayStatus(),
@@ -307,28 +301,16 @@ RT["Admin"]['Straylocations'] = function() {
         }).done(function(r) {
             return RTC.isSuccess(r) && $.bootstrapGrowl('Thanks! This record has been updated.', {type: 'success'}) && self.getCount();
         }).error(function(r) {
-            return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me... I love you.', {type: 'error'});
+            return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me... I love you Lizzie bb... thanks for all your help...', {type: 'error'});
         });
-    };
-    self.toggleDebug = function() {
-        return self.debug(!self.debug());
-    };
-    self.toggleRecordDetail = function() {
-        return self.showRecordDetail(!self.showRecordDetail());
     };
     self.recordHasDetails = ko.computed(function() {
         var possibilities = 'top type tenure developer', r = self.record(), t;
-        if (!r)
-            return false;
-        console.log({hasrecord: !!r});
-        RTC.forEach(possibilities.split(" "), function(i) {
-            if (r.hasOwnProperty(i)) {
-                console.log({hasMore: true});
-                return t = true;
-            }
+        r && RTC.forEach(possibilities.split(" "), function(i) {
+            return r.hasOwnProperty(i) && (t = true);
         });
 
-        return t ? true : false;
+        return !!t;
 
     }, self);
     self.locationIsValid = ko.computed(function() {
@@ -338,11 +320,6 @@ RT["Admin"]['Straylocations'] = function() {
         }
         return true;
     }, self);
-
-    self.toggleSingpost = function() {
-        return self.showSingpost(!self.showSingpost());
-    };
-
     self.getCount = function() {
         var t = self, res = RTC.GetApi({}, {url: '/locations/countstrays/'});
         res && res.done(function(r) {
@@ -517,7 +494,7 @@ RT["Admin"]['AdminLocations'] = function() {
     self = this;
 
     self.searcher(new RT.Admin.Searcher);
-    self.location = RT.Admin.staticLocationArrays;
+    self.location = RTC.locationArrays;
     self.strays(new RT.Admin.Straylocations);
     self.strays().init();
     self.tabs = ko.observableArray([
@@ -535,12 +512,9 @@ RT["Admin"]['editableTemplate'] = function(params) {
     self.isEditing = ko.observable(params.isEditing);
     self.fieldsTemplate = params.fieldsTemplate;
     self.text = RTC.MakeObs(params.text);
-    self.toggleEditing = function() {
-        return self.isEditing(!self.isEditing());
-    };
-    self.stopEditing = function() {
-        return self.isEditing(false);
-    };
+//    self.stopEditing = function() {
+//        return self.isEditing(false);
+//    };
     self.text.subscribe(function(v) {
         return v && self.stopEditing();
     });
@@ -571,13 +545,10 @@ RT["Admin"]['Location'] = function(p) {
             return $.colorbox.resize();
         }, 1);
     });
-    self.modifyEstate = function(){
-        return self.changeEstate(!self.changeEstate());
-    };
     ko.isObservable(p.property_type) && (self.property_type = p.property_type) || self.property_type(p.property_type);
     ko.isObservable(p.subtype) && (self.subtype = p.subtype) || self.subtype(p.subtype);
     self.type('location');
-    self.static = RT.Admin.staticLocationArrays;
+    self.static = RTC.locationArrays;
     self.propertyTypes = ko.computed(function() {
         var t = this, s = t.subtype();
         switch (s) {
@@ -590,11 +561,4 @@ RT["Admin"]['Location'] = function(p) {
         return null;
     }, self);
     self.create = null;
-};
-
-RT["Admin"]["staticLocationArrays"] = {
-    subtypes : ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"],
-    hdbTypes : ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"],
-    aptTypes : ['Condominium', 'Walkup', 'Apartment'],
-    landedTypes : ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"]
 };

@@ -84,7 +84,7 @@ Route::set('default', function($uri) {
               'static'     => trim($uri, '/')
           ];
 
-      if (in_array(trim($uri, '/'), ['login', 'logout', 'api', 'verify_sms', 'get_verification', 'checkAuth', 'renew', 'accessdenied', 'lightbox', 'poll', 'success', 'cancel', 'loginbasic', 'test', 'sessionapi', 'sessioncu']))
+      if (in_array(trim($uri, '/'), ['login', 'logout', 'api', 'verify_sms', 'get_verification', 'checkAuth', 'renew', 'accessdenied', 'poll', 'loginbasic']))
           return [
               'controller' => 'home',
               'action'     => trim($uri, '/')

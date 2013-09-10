@@ -33,12 +33,12 @@
                         <legend><small>Modify Estate</small></legend>
                         <h5 data-bind="ifnot: $data.changeEstate">
                             <span data-bind="text: $data.parent && $data.parent.name() || $data.estate()"></span>
-                            <small><a href="#"  style="padding-left:10px" data-bind="click: $data.modifyEstate"><i class="icon-edit-sign"></i> Change</a></small>
+                            <small><a href="#"  style="padding-left:10px" data-bind="reverse: $data.changeEstate"><i class="icon-edit-sign"></i> Change</a></small>
                         </h5>
                         <div data-bind="if: $data.changeEstate">
                             <small class="text-warning">
                                 <i class="icon-warning-sign"></i> Changing the Estate name will affect all 'child' locations within the Estate.
-                                <a href="#" data-bind="click: $data.modifyEstate"><i class="icon-ban-circle"></i>  Cancel</a>
+                                <a href="#" data-bind="reverse: $data.changeEstate"><i class="icon-ban-circle"></i>  Cancel</a>
                             </small>
                             <input type="text" data-bind="value: $data.parent && $data.parent.name() || $data.estate()" name="estate" placeholder="Estate">
                         </div>

@@ -163,7 +163,8 @@ abstract class Controller_Auth extends Controller_Template {
     }
 
     /**
-     * Proxy method to API
+     * Proxy method to query the API. Used for ajax calls. Just to solve
+     * cross-domain issues and other reap other benefits
      */
     public function action_api()
     {
@@ -274,7 +275,10 @@ abstract class Controller_Auth extends Controller_Template {
     }
 
     /**
-     * renew user session
+     * This is called via ajax to re-get the current user data from the API. Normally
+     * because a user updated something
+     *
+     * @uses self::renew()
      */
     public function action_renew()
     {
@@ -284,6 +288,10 @@ abstract class Controller_Auth extends Controller_Template {
         return $this->response->body(Api::response()->as_json());
     }
 
+    /**
+     * This deletes the current user data stored in the session and queries the
+     * API for fresh credentials.
+     */
     public function renew()
     {
         $this->cu_id = (string) Arr::get((array) $this->cu, '_id');
@@ -292,6 +300,12 @@ abstract class Controller_Auth extends Controller_Template {
         $this->get_cu();
     }
 
+    /**
+     * This does the same thing as the above except it gets fresh Client
+     * credentials instead. (No user)
+     *
+     * @return \Response
+     */
     public function action_renew_client()
     {
         $this->client();
@@ -383,25 +397,6 @@ abstract class Controller_Auth extends Controller_Template {
         return false;
     }
 
-    public function ajax_response($status, $data)
-    {
-        $this->auto_render = false;
-        if(is_numeric($status))
-        {
-            if($status === 200)
-                $status = "success";
-
-            $status = "error";
-        }
-
-        $this->response->headers('Content-type', 'application/json');
-        return $this->response->body(json_encode([
-            'session' => Session::instance()->get("api"),
-            'status'  => $status,
-            'data'    => $data
-        ]));
-    }
-
     /**
      * Placeholder
      */
@@ -448,75 +443,6 @@ abstract class Controller_Auth extends Controller_Template {
         //var_dump($this->cu);
     }
 
-    protected function leftbar_links()
-    {
-        $items   = ['feed', 'info', 'media', 'testimonials', 'listings', 'subscriptions'];
-        $route   = Route::name($this->request->route());
-        $methods = get_class_methods($this);
-        $uri     = $uri     = $this->request->param('username');
-        $links   = [];
-
-        foreach ($methods as $method)
-        {
-            if (strpos($method, 'action_') === 0)
-            {
-                $meth = substr($method, strlen('action_'));
-                if (in_array($meth, $items))
-                {
-                    $links[ucfirst($meth)] = URL::site("$uri/$meth", 'http');
-                    if ($meth === 'media')
-                    {
-                        $links[ucfirst($meth)] = URL::site("$uri#$meth", 'http');
-                    }
-                }
-            }
-        }
-        return $links;
-    }
-
-    protected function rightbar_links()
-    {
-        $items   = ['likers', 'subscribers'];
-        $route   = Route::name($this->request->route());
-        $methods = get_class_methods($this);
-        $uri     = '';
-        $links   = [];
-
-        switch ($route)
-        {
-            case 'location':
-                $uri = [
-                    'controller' => $route,
-                    'subtype'    => $this->request->param('subtype'),
-                    'slug'       => $this->request->param('slug')
-                ];
-                break;
-            default:
-                $uri = $this->request->param('username');
-                break;
-        }
-        foreach ($methods as $method)
-        {
-            if (strpos($method, 'action_') === 0)
-            {
-                $meth = substr($method, strlen('action_'));
-                if (in_array($meth, $items))
-                {
-                    if (is_array($uri))
-                    {
-                        $uri['action']         = $meth;
-                        $links[ucfirst($meth)] = Route::get($route)->uri($uri);
-                    }
-                    else
-                    {
-                        $links[ucfirst($meth)] = URL::site("$uri/$meth", 'http');
-                    }
-                }
-            }
-        }
-        return $links;
-    }
-
     /**
      * Estracts the needed changed info of a given user so the UI can be kept
      * updated. Saves this in a session for continuous comparisons
@@ -535,8 +461,8 @@ abstract class Controller_Auth extends Controller_Template {
 
 
     /**
-     * @todo get rid of these tester functions
-     */
+     * get rid of these tester functions
+
     public function action_sessionapi()
     {
         print_r(Session::instance()->get("api"));
@@ -548,4 +474,6 @@ abstract class Controller_Auth extends Controller_Template {
         print_r(Session::instance()->get("cu"));
         die();
     }
+     *
+     */
 }

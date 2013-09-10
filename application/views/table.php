@@ -43,7 +43,7 @@
                         <span data-bind="text:$data.street"></span> <span data-bind="text:$data.postal ? ', ' + $data.postal : ''"></span>
                     </small>
                 </h2>
-                <a class="btn btn-link" href="#" data-bind="click:$parent.toggleRecordDetail, visible:$parent.recordHasDetails, title:'Show all available details for this'" style="padding:0">More
+                <a class="btn btn-link" href="#" data-bind="reverse:$parent.showRecordDetail, visible:$parent.recordHasDetails, title:'Show all available details for this'" style="padding:0">More
                     <i class="icon-caret-down" data-bind="visible:$parent.showRecordDetail"></i>
                     <i class="icon-caret-right" data-bind="visible:!$parent.showRecordDetail()"></i>
                 </a>
@@ -118,7 +118,7 @@
     </div>
 </div>
 <hr>
-<button class="btn btn-mini" data-bind="click:toggleDebug">Debug</button>
+<button class="btn btn-mini" data-bind="reverse: debug">Debug</button>
 <div class="well" data-bind="visible:debug">
     <h4>Debug Data:</h4>
     <pre data-bind="text:debugData"></pre>
@@ -131,7 +131,7 @@
 <script type="text/html" id="Searcher">
 <h2 class="visible-phone">This does not work properly on small screens</h2>
 <section id="adminlocations" class="container-fluid hidden-phone">
-    <a href="#" style="padding:10px 0;display:block" data-bind="click:toggleAdvancedSearch"><i class="icon-search"></i> <span data-bind="text:showAdvanced() ? 'Hide' : 'Show'"></span> Advanced Search</a>
+    <a href="#" style="padding:10px 0;display:block" data-bind="reverse: showAdvanced"><i class="icon-search"></i> <span data-bind="text:showAdvanced() ? 'Hide' : 'Show'"></span> Advanced Search</a>
     <form id="query" style="display:none" data-bind="visible:showAdvanced">
         <fieldset>
             <legend class="widgetContentBG"><h6 style="margin-left:10px">SingPost Postal Sectors</h6></legend>
@@ -295,7 +295,7 @@
 
 <!--edit template-->
 <script type="text/html" id="editTemplate">
-<a href="#" style="display:block" class="text-success capitalise underline" data-bind="click:toggleEditing, flash:!isEditing(), title:'Click to edit'"><i class="icon-ok"></i> <span data-bind="text:text"></span></a>
+<a href="#" style="display:block" class="text-success capitalise underline" data-bind="reverse: isEditing, flash:!isEditing(), title:'Click to edit'"><i class="icon-ok"></i> <span data-bind="text:text"></span></a>
 <div data-bind="flash:isEditing, template:{name:fieldsTemplate, data:content}"></div>
 </script>
 
@@ -303,15 +303,15 @@
 <script type="text/html" id="locationName">
 <input type="text" data-bind="value:editableValue" placeholder="Choose a name or type one in...">
 <ul data-bind="visible:strayName() || postalName()">
-    <li data-bind="visible:strayName"><a style="display:block;padding:5px" class="capitalise" href="#" data-bind="value:strayName, text:strayName, radioButton:editableValue, click:$parent.stopEditing"></a></li>
-    <li data-bind="visible:postalName"><a style="display:block;padding:5px" class="capitalise" href="#" data-bind="value:postalName, text:postalName, radioButton:editableValue, click:$parent.stopEditing"></a></li>
+    <li data-bind="visible:strayName"><a style="display:block;padding:5px" class="capitalise" href="#" data-bind="value:strayName, text:strayName, radioButton:editableValue, reverse:$parent.isEditing"></a></li>
+    <li data-bind="visible:postalName"><a style="display:block;padding:5px" class="capitalise" href="#" data-bind="value:postalName, text:postalName, radioButton:editableValue, reverse:$parent.isEditing"></a></li>
 </ul>
 </script>
 
 <!--location subtype-->
 <script type="text/html" id="locationSubtype">
 <!--ko foreach: subtypes-->
-    <label class="radio inline"><input type="radio" name="locationSubtype"data-bind="value:$data, checked: $parent.editableValue, click:$parent.stopEditing" /> <span data-bind="text:$data"></span></label>
+    <label class="radio inline"><input type="radio" name="locationSubtype"data-bind="value:$data, checked: $parent.editableValue, reverse:$parent.isEditing" /> <span data-bind="text:$data"></span></label>
 <!--/ko-->
 </script>
 <!--stray Filter-->
@@ -333,7 +333,7 @@
 <div class="alert" data-bind="css:{'alert-success':hasSingpost}">
     <i class="icon-spin icon-spinner" data-bind="visible:processing"></i>
     <span data-bind="html:currentMessage"></span> &middot;
-    <a href="#" data-bind="click:toggleSingpost,visible:singpost" style="padding:0">Show
+    <a href="#" data-bind="reverse: showSingpost,visible:singpost" style="padding:0">Show
         <i class="icon-caret-down" data-bind="visible:showSingpost"></i>
         <i class="icon-caret-right" data-bind="visible:!showSingpost()"></i>
     </a>

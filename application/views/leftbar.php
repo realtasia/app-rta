@@ -18,7 +18,7 @@
         <div class="outerBox visible-desktop">
             <div class="contentArea newWidgetContentBG">
                 <img alt="User Profile Photo"  src="<?php echo (Arr::get($cp, 'avatar') ? 'http://' . str_replace($cp['_id'], $cp['_id'] . "/150", $cp['avatar']) : 'http://' . $api . "/avatar/{$cp['_id']}" . "/150"); ?>" id="bigProfilePhoto" title="<?php echo $cp['name'] ?>" data-bind="title:cp().name">
-                <p id="barcodeProfile"><a href="#" data-bind="click:scanBarCode" class="responsiveIconLink" style="color:#000"><i class="icon-qrcode"></i></a><span>&nbsp;&nbsp;Scan <a href="#" data-bind="click:scanBarCode">eContact Card</a></span>.</p><div class="modal square hide fade" id="barCodeBox" style="display:none;"><img alt="User Contact Card" src="/images/121126183535.png" /></div>
+                <p id="barcodeProfile"><a href="#" data-bind="click:scanBarCode" class="responsiveIconLink" style="color:#000"><i class="icon-qrcode"></i></a><span>&nbsp;&nbsp;Scan <a href="#" data-bind="click:scanBarCode">eContact Card</a></span>.</p>
             </div>
         </div>
         <div class="visible-desktop">

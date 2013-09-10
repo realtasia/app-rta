@@ -13,7 +13,7 @@
  *  Lib:        Common Utilities
  *  Author:     Jason Nathan
  */
-RT["Com"] = {
+RT.Com = {
     /**
      * @param s hash for settings
      * @param p hash for params to send
@@ -138,7 +138,7 @@ RT["Com"] = {
                 return a.dataFilter && "function" === typeof a.dataFilter && a.dataFilter.apply(this, arguments) || data;
             },
             beforeSend: function() {
-                a.beforeSend && "function" === typeof a.beforeSend && a.beforeSend.call();
+                a.beforeSend && "function" === typeof a.beforeSend && a.beforeSend();
                 a.loading && jQuery(a.loading).show();
             },
             complete: function() {
@@ -148,15 +148,15 @@ RT["Com"] = {
         a.timeout && (o.timeout = a.timeout);
         return c && c.url && jQuery.ajax(o)
                 .done(function(a) {
-            a && window.RTApp.ajaxStatus(a.status) && window.RTApp.ajaxData(a.data);
-            a && ((a.data && a.data.message === 'Access Denied' && d && !d.user() && window.location.reload()) || (a.session && a.session.access_token && d && d.hasOwnProperty('at') && d.at(a.session.access_token)));
-        })
+                    a && window.RTApp.ajaxStatus(a.status) && window.RTApp.ajaxData(a.data);
+                    a && ((a.data && a.data.message === 'Access Denied' && d && !d.user() && window.location.reload()) || (a.session && a.session.access_token && d && d.hasOwnProperty('at') && d.at(a.session.access_token)));
+                })
                 .always(function() {
-            a.loading && jQuery(a.loading).hide();
-        })
+                    a.loading && jQuery(a.loading).hide();
+                })
                 .fail(function(a) {
-            window.RTApp.ajaxStatus('error');
-            window.RTApp.ajaxData(a);
+                    RTApp.ajaxStatus('error');
+                    RTApp.ajaxData(a);
         }) || $.Deferred().reject().promise();
     },
     Field: function() {
@@ -604,13 +604,20 @@ RT["Com"] = {
         self.goTo = function(cb, page) {
             var ci = self.currentIndex, h = self.history;
             page = page || 1;
-            typeof cb === 'function' && h.push(cb());
+            console.log(typeof cb)
+            typeof cb === 'function' && h.push(cb()) || h.push(cb);
             return ci(page);
         };
         self.init();
     },
     Obstract: function(o, k) {
         return RT.Com.GetObsVal(RT.Com.arrGet(o, k));
+    },
+    locationArrays:{
+        subtypes : ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"],
+        hdbTypes : ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"],
+        aptTypes : ['Condominium', 'Walkup', 'Apartment'],
+        landedTypes : ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"]
     },
     Validation: {
         username: {
@@ -639,6 +646,14 @@ RTC["PageInterface"].prototype = new RTC.Base;
 RTC["Loop"].prototype = new RTC.Base;
 
 RT["handlers"] = {
+    reverse:{
+        init: function(e, vA, allBindingsAccessor, context){
+            var obs = vA(), rev = function(){
+                return function(){return obs(!obs());}
+            };
+            return ko.bindingHandlers.click.init(e, rev, allBindingsAccessor, context);
+        }
+    },
     map: {
         init: function(element, vA) {
             var data = ko.unwrap(vA()), geo = ko.toJS(data.geo),
@@ -915,8 +930,9 @@ RT["handlers"] = {
         }
     },
     expand: {
-        init: function(element) {
-            $(element).css('height', 25).autosize().trigger('autosize.resize');
+        init: function(element, va) {
+            va = ko.unwrap(va) || 25
+            $(element).css('height', va).autosize().trigger('autosize.resize');
         },
         update: function(element) {
             $(element).trigger('autosize.resize');

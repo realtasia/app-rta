@@ -14,7 +14,7 @@
             <ul class="nav mainNavPhone hidden-desktop" style="font-size:110%">
                 <li style="display:none;" data-bind="visible:RTApp.user"><a href="#" data-bind="attr:{href:RTApp.user() && RTApp.user().uri}, title:'Go to your Profile Page'"><i class="icon-home"></i></a></li>
                 <li style="display:none;" data-bind="visible:RTApp.user"><a href="/logout" data-bind="title:'Log Out'"><i class="icon-signout"></i></a></li>
-                <li style="display:none;" data-bind="visible:!RTApp.user()"><a href="/loginbasic" data-bind="title:'Log In'"><i class="icon-signin"></i></a></li>
+                <li style="display:none;" data-b ind="visible:!RTApp.user()"><a href="/loginbasic" data-bind="title:'Log In'"><i class="icon-signin"></i></a></li>
             </ul>
             <div class="nav-collapse navbar-responsive-collapse collapse" style="height:0;z-index:1">
                 <ul class="nav" style="background:#484747;margin-bottom:-2px">
@@ -26,13 +26,13 @@
                     <li style="display:none;margin-right:20px" data-bind="visible:user, title:'This feature is not enabled yet'">
                         <a href="#" class="visible-desktop clearfix RTNotify"><i class="icon-exclamation"></i></a></li>
                     <li style="display:none;margin-right:10px" class="dropdown" data-bind="visible:user, with:user">
-                        <a href="#" class="hidden-desktop" data-bind="attr:{href:uri()+'/conversations'}, title:'View Messages'"><span><i class="icon-envelope hidden-desktop"></i></span> Messages <span class="badge badge-important pull-right" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span></a>
+                        <a href="#" class="hidden-desktop" data-bind="attr:{href:uri()+'#conversations'}, title:'View Messages', click:function(){return $('.collapse').collapse('toggle'), true;}"><span><i class="icon-envelope hidden-desktop"></i></span> Messages <span class="badge badge-important pull-right" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span></a>
                         <a href="#" id="messagesLink" class="dropdown-toggle visible-desktop RTNotify clearfix" data-toggle="dropdown" data-bind="click:clearMessageCount">
                             <span class="badge badge-important" style="position:absolute;top:1px;right:0" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span>
                             <i class="icon-envelope" style="font-size:90%;vertical-align: bottom;"></i>
                         </a>
                         <ul class="dropdown-menu span4 clearfix" style="padding:0">
-                            <li><a href="#" id="inboxHeader" class="clearfix" data-bind="attr:{href:uri() + '/conversations'}"><small class="pull-right"><b>Go to Inbox</b></small></a></li>
+                            <li><a href="#" id="inboxHeader" class="clearfix" data-bind="attr:{href:uri() + '#conversations'}"><small class="pull-right"><b>Go to Inbox</b></small></a></li>
                         </ul>
                     </li>
                     <li style="display:none;" data-bind="visible:user, with:user" style="padding:0" class="visible-desktop">
@@ -46,7 +46,7 @@
                         </div>
                     </li>
                     <li style="display:none;" class="visible-desktop" data-bind="visible:user, with:user">
-                        <a class="dropdown-toggle visible-desktop" id="desktop-more-link" data-toggle="dropdown" style="margin-top:3px; cursor:pointer">More <b class="caret"></b></a>
+                        <a class="dropdown-toggle visible-desktop" id="desktop-more-link" data-toggle="dropdown" style="margin-top:1px; cursor:pointer">More <b class="caret"></b></a>
                         <ul class="dropdown-menu" id="mainMoreNav">
                             <li><a href="#settings" data-bind="title:'Change your personal settings', href: $data.uri() + '#settings'" class="navSettings" style="padding-left:7px"><i class="icon-wrench"></i> Settings</a></li>
                             <li><a href="/billing" data-bind="title:'View account details', href: $data.uri() + '/billing'" class="navSettings" style="padding-left:7px"><i class="icon-cog"></i> Account / Billing</a></li>

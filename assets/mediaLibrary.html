@@ -1,6 +1,6 @@
 <section class="contentArea centerContent clearfix" id="libraryMobile" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet}">
     <div data-bind="slideTemplate:{name:'page', data:currentPage, if: currentPage}"></div>
-    <a href="#" data-bind="visible:!currentPage(), click:function(){return currentIndex(1);}">Show Library</a>
+    <a href="#" data-bind="visible:!currentPage(), click:function(){return currentIndex(1);}">Show Messages</a>
 </section> <!--library main page-->
 
 <script type="text/html" id="page">
@@ -14,7 +14,7 @@
             </li>
             <li class="divider-vertical"></li>
         </ul>
-        <h4 style="margin:7px auto 0 auto;display:inline-block" data-bind="text:$data.name"></h4>
+        <h4 data-bind="text:$data.name"></h4>
         <ul class="nav pull-right" data-bind="foreach:rightLinks">
             <li class="divider-vertical"></li>
             <li>
@@ -32,7 +32,7 @@
 <script type="text/html" id="albumsList">
 <ul class="media-list" id="albumView" data-bind="foreach:$data">
     <li class="media">
-        <a class="clearfix" href="#" data-bind="click:seeAlbum, href: libraryURL">
+        <a class="clearfix" href="#" data-bind="click:seeAlbum, href: hashURL">
             <div class="pull-left">
                 <span data-bind="html:getThumbnail(90)"></span>
             </div>
@@ -48,7 +48,7 @@
 <script type="text/html" id="pictureList">
 <div>
     <!--ko foreach:$data-->
-    <a class="thumbnail grid" data-bind="click:seeAttachment, href: libraryURL">
+    <a class="thumbnail grid" data-bind="click:seeAttachment, href: hashURL">
         <span data-bind="html:getAttachmentThumb(150)"></span>
     </a>
     <!--/ko-->
@@ -105,7 +105,7 @@
     <span data-bind="text:name"></span>
     <!--/ko-->
     <!--ko ifnot: $index() + 1 === $root.history().length-->
-    <a href="#" data-bind="text:name, href: libraryURL, click:backLink.action || function(){return true;}"></a>
+    <a href="#" data-bind="text:name, href: hashURL, click:backLink.action || function(){return true;}"></a>
     <span class="divider" style="padding:0">/</span>
     <!--/ko-->
 </li>
