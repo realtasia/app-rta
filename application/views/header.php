@@ -1,7 +1,7 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
     <div class="navbar-inner inner">
         <div class="container">
-            <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar collapsed pull-left">
+            <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar collapsed pull-left hidden-desktop">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -26,13 +26,13 @@
                     <li style="display:none;margin-right:20px" data-bind="visible:user, title:'This feature is not enabled yet'">
                         <a href="#" class="visible-desktop clearfix RTNotify"><i class="icon-exclamation"></i></a></li>
                     <li style="display:none;margin-right:10px" class="dropdown" data-bind="visible:user, with:user">
-                        <a href="#" class="hidden-desktop" data-bind="attr:{href:uri()+'#conversations'}, title:'View Messages', click:function(){return $('.collapse').collapse('toggle'), true;}"><span><i class="icon-envelope hidden-desktop"></i></span> Messages <span class="badge badge-important pull-right" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span></a>
+                        <a href="#" class="hidden-desktop" data-bind="href:uri() + '#conversations', title:'View Messages', click:function(){return $('.collapse').collapse('toggle'), true;}"><span><i class="icon-envelope hidden-desktop"></i></span> Messages <span class="badge badge-important pull-right" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span></a>
                         <a href="#" id="messagesLink" class="dropdown-toggle visible-desktop RTNotify clearfix" data-toggle="dropdown" data-bind="click:clearMessageCount">
-                            <span class="badge badge-important" style="position:absolute;top:1px;right:0" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span>
+                            <span class="badge badge-important" style="position:absolute;top:-5px;right:-5px" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span>
                             <i class="icon-envelope" style="font-size:90%;vertical-align: bottom;"></i>
                         </a>
                         <ul class="dropdown-menu span4 clearfix" style="padding:0">
-                            <li><a href="#" id="inboxHeader" class="clearfix" data-bind="attr:{href:uri() + '#conversations'}"><small class="pull-right"><b>Go to Inbox</b></small></a></li>
+                            <li><a href="#" id="inboxHeader" class="clearfix" data-bind="href:uri() + '#conversations'"><small class="pull-right"><b>Go to Inbox</b></small></a></li>
                         </ul>
                     </li>
                     <li style="display:none;" data-bind="visible:user, with:user" style="padding:0" class="visible-desktop">

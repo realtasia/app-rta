@@ -108,10 +108,10 @@ EOD;
             return parent::get_people_by_ids($ids);
     }
 
-//    protected function people_query()
-//    {
-//        return parent::people_search();
-//    }
+    protected function people_query()
+    {
+        return parent::people_search();
+    }
 
     public function after()
     {

@@ -265,6 +265,8 @@ RT.Com = {
                 return new RT.Testimonial(data);
             case 'listing':
                 return new RT.Listing(data);
+            case 'conversation':
+                return new RT.Conversation(data);
             default:
                 return new RT.Page(data);
         }
@@ -948,10 +950,40 @@ RT["handlers"] = {
         }
     },
     scroll: {
-        init: function(ele, val) {
-            var v = ko.unwrap(val());
-            v.height = v.height || RTApp.viewport.height() * .8 + 'px';
-            return $(ele).slimScroll(v);
+        init: function(e, va, allBindings, vm, context) {
+            var d = ko.unwrap(va()), p = ko.unwrap(context).$parent;
+            console.log(d);
+            return $(e).addClass("customScroll").mCustomScrollbar({
+                enable: true,
+                theme: "dark-thick",
+                contentTouchScroll: true,
+                autoHideScrollbar: true,
+                scrollInertia: 200,
+                advanced:{
+                    updateOnContentResize: true,
+                    updateOnBrowserResize: true
+                },
+                callbacks:{
+                    onTotalScrollBackOffset:30,
+                    onTotalScrollBack: function(){
+                        if(!!d.length){
+                            this.messagesPrepended(d[0]._id());
+                        }
+                        return this.getMessages.call(this);
+                    }.bind(p)
+                }
+            });
+
+        },
+        update: function(e, va, allBindings, vm, context){
+            var p = ko.unwrap(context).$parent, id = p.messagesPrepended();
+            if(id){
+                p.messagesPrepended(null);
+                return $(e).mCustomScrollbar("scrollTo", '#message' + id, {
+                    scrollInertia: 200
+                });
+            }
+
         }
     },
     qtip: {
@@ -1410,6 +1442,22 @@ RT["handlers"] = {
     ko.observableArray.fn["pushAll"] = function(items) {
         this.push.apply(this, items);
     };
+
+    ko.observableArray.fn["addToSet"] = function(item, remove, key){
+        if(!key){
+            key = '_id';
+        }
+        var f = ko.utils.arrayFirst(this(), function(i){
+            return RTC.GetObsVal(i[key]) === RTC.GetObsVal(item[key]);
+        });
+
+        if(!f){
+            this.unshift(item);
+            return true;
+        }
+        remove && this.remove(item);
+        return false;
+    };
     ko.unapplyBindings = function(node, remove) {
         var $node = $(node);
         // unbind events
@@ -1516,7 +1564,7 @@ RT["handlers"] = {
                 v && RTApp.currentSlideShow(self) || RTApp.currentSlideShow(null);
             }, self);
             self.currentIndex.subscribe(function(v) {
-                var t = this, currentTotal = typeof t.items === 'function' && t.items().length,
+                var t = this, currentTotal = typeof t.items === 'function' && t.items().length || 0,
                         v1 = v === currentTotal, v2 = (v + 1) === currentTotal, v3 = v === 0;
                 if (currentTotal !== t.total() && (v1 || v2 || v3)) {
                     var ajax = typeof t.loadMore === 'function' && t.loadMore();

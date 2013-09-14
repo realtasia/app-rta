@@ -33,13 +33,14 @@ class Controller_Listings extends Controller_Auth {
             return $this->content = View::factory('listings')->set('cl', $data);
         }
 
+        //return parent::json_response(parent::listings_search());
         return parent::json_response($req);
     }
 
     public function action_keyword()
     {
         $this->auto_render = false;
-        return parent::json_response(Api::request('/page/listingkeyword/', $this->query()));
+        return parent::json_response(Api::request('/listing/keyword/', $this->request->query()));
     }
 
     public function after()

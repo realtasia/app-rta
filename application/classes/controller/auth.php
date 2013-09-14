@@ -258,7 +258,7 @@ abstract class Controller_Auth extends Controller_Template {
             $cmp  = $cuPoll;
             $data = $ncu->get_data();
             ksort($data);
-            //return $this->response->body($ncu);
+            //return parent::json_response($cmp);
             if ($cmp !== $data)
             {
                 $cuArr    = array_merge($cu, $data);

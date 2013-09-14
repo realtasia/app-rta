@@ -53,7 +53,7 @@
 
 <script type="text/html" id="rightbarThumbs">
     <li class = "smallNail" ><div class = "thumbnail">
-            <a href="#" data-bind="title:'View ' + name() + '\'s Profile', attr:{href : '/' + _id()}"  style="width:35px;height:35px"><img alt="Thumbnails" data-bind="getAvatar : {context : $data, size : 40}, attr : {alt : name}" width="35px" height="35px" /></a></div>
+            <a href="#" data-bind="title:'View ' + name() + '\'s Profile', href : '/' + _id()"  style="width:35px;height:35px"><img alt="Thumbnails" data-bind="getAvatar : {context : $data, size : 40}, attr : {alt : name}" width="35px" height="35px" /></a></div>
     </li>
 </script>
 <script type="text/html" id="adminCounts">

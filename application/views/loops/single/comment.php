@@ -3,7 +3,7 @@
     <?php foreach ($comments as $comment): ?>
         <li class="commentContentArea commentBG">
             <div class="commentInline media-list">
-                <button class="close" type="button" style="display:none"><i class="icon-remove"></i></button>
+                <button class="close" aria-hidden="true" type="button" style="display:none"><i class="icon-remove"></i></button>
                 <div class="media">
                     <div class="commentThumb visible-desktop pull-left">
                         <img alt="<?php echo $comment['user']['name'] ?>" width="40" height="40" src="<?php echo 'http://' . $api . "/avatar/{$comment['user']['_id']}/40"; ?>" />

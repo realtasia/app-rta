@@ -49,7 +49,7 @@
             <section class="RTAWindow" data-bind="visible:$data" style="display:none;">
                 <header class="titleBar">
                     <div class="contentArea titleBarBG">
-                        <button type="button" class="close" aria-hidden="true" data-bind="click:$parent.stopEditingAlbum">&times;</button>
+                        <button type="button" class="close" aria-hidden="true" data-bind="click:$parent.stopEditingAlbum"><i class="icon-remove"></i></button>
                         <h4>Upload</h4>
                     </div>
                 </header>
@@ -105,7 +105,7 @@
                                             </div>
                                             <!--/ko-->
                                             <!--ko ifnot:isUploading-->
-                                            <button type="button" class="close" data-bind="click:$parents[1].deleteFile">&times;</button>
+                                            <button type="button" class="close" aria-hidden="true" data-bind="click:$parents[1].deleteFile"><i class="icon-remove"></i></button>
                                             <label>
                                                 <span data-bind="text:name"></span>
                                             </label>

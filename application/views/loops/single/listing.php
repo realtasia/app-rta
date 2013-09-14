@@ -19,9 +19,9 @@
             <span>$<?php echo number_format($listing['price']) ?></span>
         </span>
         <ul class="nav">
-            <li><i class="info16 sqft"></i> <span style="color: #2691D4;"><?php echo number_format($listing['built_size']) ?> sqft</span></li>
+            <li><i class="info16 sqft"></i> <span style="color: #2691D4;"><?php echo number_format(\Arr::get($listing, 'built_size', 0)) ?> sqft</span></li>
             <li><i class="info16 bathrooms"></i> <span style="color: #2691D4;"><?php echo $listing['rooms'] ?> bedrooms</span></li>
-            <li><i class="info16 bedrooms"></i> <span style="color: #2691D4;"><?php echo $listing['baths'] ?>3 bathrooms</span></li>
+            <li><i class="info16 bedrooms"></i> <span style="color: #2691D4;"><?php echo $listing['baths'] ?> bathrooms</span></li>
         </ul>
         <p><?php echo $excerpt ?></p>
     </div> <!-- listings content -->

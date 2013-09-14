@@ -115,7 +115,7 @@ class Controller_Location extends Controller_Auth {
         if ($this->request->param('id') === 'keyword')
             return $this->action_keyword();
 
-        $req  = Api::request('/listing/search/', $this->listings_query());
+        $req  = Api::request('/post/listings/', $this->listings_query());
         //die($req);
         $data = $req->get_data();
         if ($req::success())

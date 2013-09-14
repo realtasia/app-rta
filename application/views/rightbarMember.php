@@ -71,7 +71,7 @@
 
 <script type="text/html" id="rightbarThumbs">
     <li class="smallNail" >
-        <a class="thumbnail tipsLeft" href="#" data-bind="title:'View ' + name() + '\'s Profile', attr:{href : '/' + _id()}, qtip: RTApp.getUserHoverCard"  style="width:40px;height:40px">
+        <a class="thumbnail tipsLeft" href="#" data-bind="title:'View ' + name() + '\'s Profile', href : '/' + _id(), qtip: RTApp.getUserHoverCard"  style="width:40px;height:40px">
             <img  alt="User Thumbnails" data-bind="getAvatar : {context : $data, size : 40}, attr : {alt : name}" width="40px" height="40px" />
         </a>
     </li>

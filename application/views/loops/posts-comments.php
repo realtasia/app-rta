@@ -3,7 +3,7 @@
 <article class="postFeed media relative" id="<?php echo $post['_id'];?>">
             <div class="pull-left hidden-phone">
                 <span style="width:60px">
-                    <a href="/<?php echo $post['user']['_id']?>" title="/<?php echo $post['user']['name']?>" class="drop-shadow curved">
+                    <a href="/<?php echo $post['user']['_id']?>" title="/<?php echo $post['user']['name']?>" class="drop-shadow curved thumbnail">
                         <img style="width:60px; height:60px;" width="60" height="60" alt="<?php echo $post['user']['name']?>" width="50" height="50" src="<?php echo'http://' .$api . "/avatar/{$post['user']['_id']}/90"; ?>" />
                     </a>
                 </span>

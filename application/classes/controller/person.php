@@ -201,7 +201,8 @@ class Controller_Person extends Controller_Auth {
         if ($this->request->param('id') === 'keyword')
             return $this->action_keyword();
 
-        $req  = Api::request('/listing/search/', $this->listings_query());
+        $req  = Api::request('/post/listings/', $this->listings_query());
+
         //die($req);
         $data = $req::get_data();
         if ($req::success())
@@ -214,6 +215,7 @@ class Controller_Person extends Controller_Auth {
                 $this->content    = View::factory('listings')->set('cl', $data);
                 return $this->content->set('introcontent', Kohana::find_file('views', 'introcontent/person'));
             }
+            //return parent::json_response($this->listings_query());
             return parent::json_response($req);
         }
     }
@@ -417,7 +419,7 @@ class Controller_Person extends Controller_Auth {
 
     protected function listings_query()
     {
-        return Arr::merge(['user_id' => $this->cp['_id']], parent::listings_search());
+        return array_merge(parent::listings_search(), ['user_id' => (string) $this->cp['_id']]);
     }
 
     protected function leftbar_links()
@@ -510,3 +512,29 @@ class Controller_Person extends Controller_Auth {
     }
 
 }
+
+
+
+/*
+{ "skip": 0,
+ * "filter": "All",
+ * "sort": "active",
+ * "state": null,
+ * "access_token": "[REDACTED]",
+ * "listing": { "type": "Sale" },
+ * "user_id": "513db6386c0199680c00005b"
+ *
+ *
+{"skip":0,
+ * "filter":"All",
+ * "sort":"active",
+ * "state":"7c3674e5ceb644519814cab2fb87774d92cc8660",
+ * "access_token":"[REDACTED]",
+ * "type":"Sale",
+ * "s":"",
+ * "url":"\/listings",
+ * "user_id":"513db6386c0199680c00005b",
+ * "page":"1",
+ * "listing":{"type":"Sale"}
+}
+ */

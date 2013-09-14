@@ -12,7 +12,7 @@
     </div>
     <hr>
     <div class="alert RTHelpBox">
-        <button class="close" onclick="return $(this).parent().fadeOut(), !1;"><i class="icon-remove"></i></button>
+        <button class="close" aria-hidden="true" onclick="return $(this).parent().fadeOut(), !1;"><i class="icon-remove"></i></button>
         <h5 class="noMrgTop"><i class="icon-info-sign" style="font-size:18px"></i> Important Notes.</h5>
         <p>
             Your current package is on an "Extended Preview Scheme".<br> <small><em>For more information, please have a look at your package terms by clicking on the package id below.</em></small>

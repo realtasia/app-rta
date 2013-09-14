@@ -57,7 +57,7 @@
             <section class="hoverCard contentArea" style="padding:5px">
                 <div class="media">
                     <div class="pull-left">
-                        <a href="#" data-bind="attr:{title:name}">
+                        <a href="#" data-bind="title:name, href:'/' + _id()">
                             <img data-bind="getAvatar : {context:$data, size:90},alt:{title:name}" width="90" height="90">
                         </a>
                     </div>

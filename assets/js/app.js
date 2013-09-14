@@ -22,14 +22,14 @@ RT.App = function() {
         return this.user() && this.user().isAdmin();
     }, self);
     self.cpIsCu = ko.computed(function() {
-        return !this.user() || !this.cp() ? !1 : this.user()._id() === this.cp()._id();
+        var t = this;
+        return (t.user() && t.cp() && t.user()._id() === t.cp()._id()) || !1;
     }, self);
     self.cpIsUser = ko.computed(function() {
         return this.cp() && this.cp().hasOwnProperty("first_name");
     }, self);
     self.cpuIsCu = ko.computed(function() {
-        "use strict";
-        var cp = this.cp() || {}, user = RTC.GetObsVal(cp.user), cu = self.user();
+        var cp = this.cp() || {}, user = RTC.GetObsVal(cp.user), cu = this.user();
         return user && cu && user.hasOwnProperty("_id") && user._id() === cu._id();
     }, self);
     self.cl = ko.mapping.fromJS([]);
@@ -49,7 +49,6 @@ RT.App = function() {
         return false;
     }, this);
     self.interactors = function() {
-        "use strict";
         var t = this, a = arguments[0] || {};
         t.items = ko.observableArray();
         t.interactable = ko.observable();
@@ -130,16 +129,11 @@ RT.App = function() {
         width: ko.observable($(window).width()),
         height: ko.observable($(window).height())
     };
+
     self.feedback = {
-        visibility: ko.observable(false),
-        selectedOption: ko.observable('compliment'),
         selectOption: function(d) {
             return RTApp.feedback.reportOne("") && RTApp.feedback.selectedOption(d);
         },
-        optionSignout: ko.observable(false),
-        optionRefresh: ko.observable(false),
-        reportOne: ko.observable(""),
-        reportTwo: ko.observable(""),
         submit: function() {
             var a = RTApp, n = navigator, e = {
                 appCodeName: n.appCodeName,
@@ -171,6 +165,12 @@ RT.App = function() {
             return m.join("\n");
         }
     };
+    o = "visibility selectedOption reportOne optionSignout optionRefresh reportTwo";
+    RTC.MakeObsFromArray.call(self.feedback, o);
+    self.feedback.selectedOption('compliment');
+    self.feedback.reportOne("");
+    self.feedback.reportTwo("");
+
     //self.inbox = ko.observable();
 
     self.at.subscribe(function() {
@@ -359,10 +359,6 @@ RT.App.prototype = {
         });
         return cf(null) && (u && !P && (u.isAdmin() || u.isAgent())) && (P = !0) && $.colorbox(S);
     },
-//    initListingsMobile: function() {
-//        var d = RTApp.displayMobileListingsWizard;
-//        return d(!d());
-//    },
     showListingsSearch: function() {
         return this.displayListingsSearch(true);
     },
@@ -390,6 +386,17 @@ RT.App.prototype = {
         p.state = t.st();
         p.filter = d && d.filteredBy();
         p.sort = d && d.sortedBy();
+        if(p.url === '/listings' && t.cp()){
+            var cp = t.cp(), id = cp._id();
+            if(t.cpIsUser()){
+                p.user_id = id;
+            } else{
+                p.page_id = id;
+                if(cp.hasOwnProperty("subtype") && cp.subtype() === "Estate"){
+                    p.parent_id = id;
+                }
+            }
+        }
         return p;
     },
     getNextPage: function() {
@@ -427,7 +434,8 @@ RT.App.prototype = {
 
         // bug to fix autocomplete not closing on Search
         if (args && args.length === 2 && args[1] && args[1].hasOwnProperty('type') && args[1].type === 'click') {
-            $('#s').autocomplete("close");
+            var s = !!$('.ui-autocomplete.ui-widget:visible').length;
+            return s && $('#s').autocomplete("close");
         }
 
         if (args && args.length === 3) {
@@ -676,9 +684,6 @@ RT.App.prototype = {
             }
         });
     },
-//    toggleResponsiveMenu: function() {
-//        this.isResponsiveMenu(!this.isResponsiveMenu());
-//    },
     cpIconClass: function(size) {
         var cp = RTApp.cp(), cls = "hovercards ";
         size = size || 150;
@@ -699,7 +704,6 @@ RT.App.prototype = {
         return "";
     },
     getUserHoverCard: function(d) {
-console.log(d)
         var id = d.user ? d.user._id() : d._id();
         return 'http://' + window.location.host + "/user?id=" + id || "";
     },
@@ -892,8 +896,7 @@ RT.albumsView = function() {
 };
 RT.singleAlbum = function(album) {
     var seeAttachment = function(d) {
-        RTApp.cplib().goTo(RT.singleAttachment.bind(d, album), 3);
-        return true;
+        return RTApp.cplib().goTo(RT.singleAttachment.bind(d, album), 3), true;
     }, deleteDialog = new RT.ConfirmDialog({
         message: "Deleting this album will delete all its pictures including ones that are used in your listings.",
         ok: function() {
@@ -1045,7 +1048,30 @@ RT.singleAttachment = function(currentAlbum) {
 
 RT.ControllerMessages = function() {
     var self = this;
-    self.newMessage = ko.observable();
+    RTC.MakeObsFromArray.call(self, "newMessage hasMoreMessages messageCurrentPage");
+    self.getPost = function() {
+    };
+    self.markConversationRead = function() {
+        "use strict";
+        var t = this, u = RTApp.user(), sc = t.selectedConversation(), p = {
+            url: u.actions['post'](),
+            request_type: 'clear_unread'
+        };
+
+        return sc() && (p = RTC.GetAPI({}, p)) && p.done(function(r) {
+            if (RTC.isSuccess(r)) {
+                sc().unread(null);
+            }
+        }) || !1;
+    };
+    self.resetUnreadCounts = function() {
+        "use strict";
+        var t = this, sc = t.selectedConversation(), p = {
+            url: '/user/resetUnread'
+        };
+
+        return sc() && (p = RTC.GetAPI({}, p)) || !1;
+    };
     self.newMessage.subscribe(function(v){
         return v && $.colorbox({
             fixed: !0,
@@ -1063,18 +1089,21 @@ RT.ControllerMessages = function() {
             },
             onComplete: function() {
                 return $.colorbox.resize();
-            },
-            onOpen: function() {
-                //return $.colorbox.resize();
             }
         });
     });
     self.history([{name: 'Home', hashURL: RTApp.cp().uri(), backLink: {}}, new RT.conversationView]);
 };
+
 RT.ControllerMessages.prototype = new RTC.PageInterface;
+
 RT.conversationView = function() {
     var self = this;
-    self.items = [];
+    self.conversations = ko.mapping.fromJS([]);
+    self.unreadConversations = ko.mapping.fromJS([]);
+    RTC.MakeObsFromArray.call(self, "conversationCurrentPage hasMoreConversations selectedConversation");
+    self.conversationCurrentPage(0);
+    self.hasMoreConversations(!0);
     self.name = "Messages";
     self.hashURL = "#conversations";
     self.backLink = {
@@ -1085,24 +1114,162 @@ RT.conversationView = function() {
     };
     self.rightLinks = [{
             action: function() {
-                return RTApp.inbox().newMessage(new RT.newConversationForm);
+                return RTApp.inbox().newMessage(new RT.newConversationForm(self));
             },
             icon: 'icon-plus', title: 'Create a Message', uri: "#conversations/createMessage"
         }];
-    self.content = {name: 'conversationList', data: self.items};
+    self.content = {name: 'conversationList', data: self.conversations};
+    self.getConversations = function(force) {
+        "use strict";
+        var t = this, m = t.conversations, p, u = RTApp.user(),
+                cp = t.conversationCurrentPage, hm = t.hasMoreConversations,f = [];
+        if ((!hm() || !u) && !force) {
+            return false;
+        }
+        p = {
+            url: u.connections['conversations'](),
+            skip: force ? 0 : cp() * 10
+        };
+        return (p = RTC.GetApi({}, p)) && p.done(function(r) {
+            if (RTC.isSuccess(r)) {
+                cp(cp() + 1);
+                r.data.length > 10 && (hm(!0) && r.data.pop()) || hm(!1);
+                if(force){
+                    return m(RTC.GetObsVal(ko.mapping.fromJS(r.data, {create: RTC.CreateLoop})));
+                }
+                return m.pushAll(RTC.GetObsVal(ko.mapping.fromJS(r.data, {create: RTC.CreateLoop})));
+            }
+        });
+    };
+    self.selectConversation = function(v) {
+        self.selectedConversation(v);
+        v && RTApp.inbox().goTo(new RT.messageView(v), 2);
+        return true;
+    };
+    self.getConversations();
 };
-RT.newConversationForm = function() {
+
+RT.messageView = function(currentConversation){
+    var self = this;
+    RTC.MakeObsFromArray.call(self, "message _processing messagesPrepended");
+    currentConversation && (self.sc = currentConversation);
+    self.messageLimit = 10;
+    self.backLink = {
+        action: function() {
+            var i = RTApp.inbox(), cv = i.history()[1];
+            return i.goBack() && cv.getConversations(!0), !0;
+        },
+        icon: 'icon-chevron-left', title: 'Back to Messages', uri: '#conversations'
+    };
+    self.rightLinks = [];
+    self.conversationWith = ko.computed(function(){
+        var u = ko.toJS(RTApp.user()._id), to = ko.toJS(this.sc.to), from = ko.toJS(this.sc.user);
+        return u === to._id ? from.name : to.name;
+    }, self);
+    self.name = self.conversationWith();
+    self.hashURL = "#conversations/" + self.sc._id();
+    self.messages = ko.mapping.fromJS([]);
+    self.currentMessageCount = ko.computed(function() {
+        return this.messages().length || 0;
+    }, this);
+    self.currentMessageLimit = ko.computed(function() {
+        if (!this.messages()) {
+            return false;
+        }
+        var total = this.sc.counts.messages(), current = this.currentMessageCount(),
+                diff = total - current, cl = this.messageLimit;
+        if (diff > cl) {
+            return cl;
+        }
+        return diff;
+    }, this);
+    self.currentMessageSkip = ko.computed(function() {
+        if (!this.messages()) {
+            return false;
+        }
+        var total = this.sc.counts.messages(), current = this.currentMessageCount(),
+                diff = total - current, cl = this.messageLimit;
+        if (diff > cl) {
+            return total - cl - current;
+        }
+        return 0;
+    }, this);
+    self.hasMoreMessages = ko.computed(function() {
+        return this.currentMessageCount() < this.sc.counts.messages();
+    }, this);
+    self.isRetrievingMessages = ko.computed(function(){
+        return this.hasMoreMessages() && this._processing();
+    }, self);
+    self.getMessages = function() {
+        "use strict";
+        var t = this,  m = t.messages, p, sc = t.sc, current = t.currentMessageCount(),
+                u = RTApp.user(), total = sc.counts.messages(), hm = t.hasMoreMessages();
+        console.log({current : current, total: total});
+
+        if (!hm || t._processing()) {
+            return false;
+        }
+        t._processing(true);
+        p = {
+            url: u.connections['messages']() + '/' + sc._id(),
+            skip: t.currentMessageSkip(),
+            limit: t.currentMessageLimit(),
+        };
+
+        return (p = RTC.GetApi({}, p)) && p.done(function(r) {
+            if (RTC.isSuccess(r)) {
+                return m.insertAll(RTC.GetObsVal(ko.mapping.fromJS(r.data)));
+            }
+        }).always(function(){return t._processing(false);});
+    };
+    self.getMessages();
+
+    self.canPostMessage = ko.computed(function(){
+        return !!this.message();
+    }, self).extend({throttle: 300});
+    self.reply = function(){
+        var t = self, sc= t.sc, u = ko.toJS(RTApp.user()._id), to = ko.toJS(sc.to),
+                from = ko.toJS(sc.user), m = t.message, p = {},
+                c = t.messages;
+
+        t.canPostMessage() && t._processing(!0);
+        p.to_id = (u === to._id) ? from._id : to._id;
+        p.message = m();
+        p.url = '/post/message';
+
+        p = RTC.PostApi({}, p);
+
+        p.done(function(r){
+            if(RTC.isSuccess(r)){
+                c.push(ko.mapping.fromJS(r.data.message));
+                m(null);
+            }
+        });
+
+        p.always(function(){return self._processing(!1);});
+    };
+    self.messages.subscribe(function(v){
+        var e = this.messagesPrepended();
+        return !e && setTimeout(function(){
+            var e = $("#message-window");
+            return e.mCustomScrollbar("scrollTo", "last");
+        }, 100);
+    }, self);
+    self.content = {name: 'messageListT', data: self};
+};
+
+RT.newConversationForm = function(conversations) {
     var self = this;
     self.name = "New Message";
-    self.s = ko.observable("");
-    self.receipient = ko.observable();
+
+    RTC.MakeObsFromArray.call(self, "receipient message currentConversation _processing");
+    conversations && (self.parent = conversations);
     self.setReceipient = function(context, event, ui){
         if(ui && ui.item.value){
             context.receipient(new RT.User(ui.item.value));
         }
-    }
+    };
     self.receipient.subscribe(function(v){return v && setTimeout(function(){return $.colorbox.resize();}, 1);});
-    self.message = ko.observable();
     self.getReceipients = function(request, response) {
         var url = '/user/index/' + RTApp.user()._id(), a = RTC.GetApi({},{
             url: url,
@@ -1113,7 +1280,33 @@ RT.newConversationForm = function() {
             return RTC.isSuccess(r) && response(r.data);
         });
     };
-    //self.content = {name: 'newConversation', data: self};
+    self.canPostMessage = ko.computed(function(){
+        var r = this.receipient(), m = this.message();
+        if((r && !r.hasOwnProperty('_id')) || (!r) || (!m)){
+            return false;
+        };
+        return true;
+    }, self).extend({throttle: 300});
+    self.sendMessage = function(){
+        var r = self.receipient(), m = self.message(), p = {};
+
+        self.canPostMessage() && self._processing(!0);
+        p.to_id = r._id();
+        p.message = m;
+        p.url = '/post/message';
+
+        p = RTC.PostApi({}, p);
+
+        p.done(function(r){
+            if(RTC.isSuccess(r)){
+                var p = self.parent, c = p && p.conversations, d = ko.mapping.fromJS(r.data);
+                c.addToSet(d);
+                return p.selectConversation(d) && $.colorbox.close();
+            }
+        });
+
+        p.always(function(){return self._processing(!1);});
+    };
 };
 
 RT.Actions = function(t) {
@@ -1162,7 +1355,7 @@ RT.Actions = function(t) {
                 || $.bootstrapGrowl('<i class="icon-exclamation-sign"></i> Please type in a comment.', {type: 'warning'});
         ;
     };
-    self.delete = function(d) {
+    self["delete"] = function(d) {
         var c = true, p = {
             url: d.actions['delete']()
         };
@@ -1203,10 +1396,7 @@ RT.Actions = function(t) {
             status: 'active',
             to_id: RTC.GetObsVal(d.recipient)
         };
-        d.type() !== 'conversation' && (p.post = {
-            _id: d._id(),
-            type: d.type()
-        });
+        d.type() !== 'conversation' && (p.post_id = d._id());
         return c && (c = self.submit(p, d)) && c.done(function(r) {
             if (RTC.isSuccess(r)) {
                 d.commentSubmit(false);
@@ -1328,8 +1518,8 @@ RT.Post = function() {
     };
     this.getComments = function() {
         "use strict";
-        var self = this, s;
-        return this.counts.comments() > 2 && (s = new RTC.GetApi({}, {
+        var self = this, s, counts = this.counts.comments(), current = self.currentCommentCount();
+        return (counts > 2 && current < counts) && (s = new RTC.GetApi({}, {
             skip: this.currentCommentSkip(),
             limit: this.currentCommentLimit(),
             url: self.connections.comments()
@@ -1808,7 +1998,7 @@ RT.Listing.prototype.getThumbnail = function() {
     "use strict";
     var img = new Image();
     img.width = arguments[0] || 150;
-    img.alt = "Listing Thumbnails";
+    img.alt = "Album Thumbnails";
     img.src = getPicBySize.apply(this, arguments);
     return jQuery(img).addClass('imgPreview')[0].outerHTML;
     function getPicBySize() {
@@ -1841,14 +2031,14 @@ RT.Attachment = function() {
                     frameborder: 0,
                     width: d.width,
                     height: d.height,
-                    id: "fullPreview" + t._id()
+                    id: "fullPreview-" + t._id()
                 });
             } else if (t.hasOwnProperty("picture") && t.picture()) {
                 i = jQuery(RTC.NewDom("img"));
                 i.attr({
                     src: "//" + t.picture(),
                     alt: t.excerpt() || t.name() || "Picture",
-                    id: "fullPreview" + t._id()
+                    id: "fullPreview-" + t._id()
                 });
             }
             return i;
@@ -1921,6 +2111,17 @@ RT.Attachment = function() {
         return this.excerpt() || this.name();
     }, this);
 };
+RT.Conversation = function(p) {
+    "use strict";
+    p = p || {};
+    ko.mapping.fromJS(p, {}, this);
+    this.isUnread = ko.computed(function(){
+        return this.unread() === RTApp.user()._id();
+    }, this);
+    this.lastMsgIsCu = ko.computed(function(){
+        return this.lastMessage._id() === RTApp.user()._id();
+    }, this);
+};
 RT.Comment = function(p) {
     "use strict";
     p = p || {};
@@ -1959,98 +2160,7 @@ RT.Comment.prototype = {
         return this.canDelete() && this.commentOptions(!1);
     }
 };
-RT.Conversations = function() {
-    var self = this;
-    self.conversations = ko.mapping.fromJS([]);
-    self.unreadConversations = ko.mapping.fromJS([]);
-    self.messages = ko.mapping.fromJS([]);
-    RTC.MakeObsFromArray.call(self, "hasMoreConversations hasMoreMessages selectedConversation messageCurrentPage conversationCurrentPage");
-    self.messageCurrentPage(0);
-    self.conversationCurrentPage(0);
-    self.getPost = function() {
-    };
-    self.selectConversation = function(d) {
-        if (d !== self.selectedConversation()) {
-            return self.selectedConversation(d);
-        }
-    };
-    self.reply = function(d, e) {
-    };
-    self.getConversations = function() {
-        "use strict";
-        var t = this, m = t.conversations, p, u = RTApp.user(),
-                cp = t.conversationCurrentPage, hm = t.hasMoreConversations;
-        if (!hm()) {
-            return false;
-        }
-        p = {
-            url: u.connections['conversations'](),
-            skip: cp() * 10
-        };
-        return (p = RTC.GetApi({}, p)) && p.done(function(r) {
-            if (RTC.isSuccess(r)) {
-                cp(cp() + 1);
-                if (r.data.length > 10) {
-                    hm(!0) && r.data.pop();
-                } else {
-                    hm(!1);
-                }
-                return m.pushAll(RTC.GetObsVal(ko.mapping.fromJS(r.data)));
-            }
-        });
-    };
-    self.getMessages = function() {
-        "use strict";
-        var t = this, sc = t.selectedConversation(), m = t.messages, p,
-                u = RTApp.user(), cp = t.messageCurrentPage, hm = t.hasMoreMessages;
-        if (!sc || !hm()) {
-            return false;
-        }
-        p = {
-            url: u.connections['messages']() + '/' + sc._id(),
-            skip: cp() * 10
-        };
-        return (p = RTC.GetApi({}, p)) && p.done(function(r) {
-            if (RTC.isSuccess(r)) {
-                cp(cp() + 1);
-                r.data.length > 10 && hm(!0) && r.data.pop() || hm(!1);
-                return m.insertAll(RTC.GetObsVal(ko.mapping.fromJS(r.data)));
-            }
-        });
-    };
-    self.markConversationRead = function() {
-        "use strict";
-        var t = this, u = RTApp.user(), sc = t.selectedConversation(), p = {
-            url: u.actions['post'](),
-            request_type: 'clear_unread'
-        };
-        if (!sc()) {
-            return false;
-        }
-        return (p = RTC.GetAPI({}, p)) && p.done(function(r) {
-            if (RTC.isSuccess(r)) {
-                sc().unread(null);
-            }
-        });
-    };
-    self.resetUnreadCounts = function() {
-        "use strict";
-        var t = this, sc = t.selectedConversation(), p = {
-            url: '/user/resetUnread'
-        };
-        if (!sc()) {
-            return false;
-        }
-        return (p = RTC.GetAPI({}, p));
-    };
-    self.selectedConversation.subscribe(function(v) {
-        if (v) {
-            this.hasMoreMessages(true);
-            this.messageCurrentPage(0);
-            this.getMessages();
-        }
-    }, self);
-};
+
 RT.Sorter = function() {
     "use strict";
     var p = arguments[0] || {}, t = this, ff = "priceLow priceHigh builtLow builtHigh roomsLow roomsHigh s";
@@ -2813,7 +2923,7 @@ RT.Forms = {
         self.uploadSettings = ko.computed(function() {
             "use strict";
             var t = this, log = function(k, v) {
-                return console.log({k: v});
+                return; //console.log({k: v});
             };
             return {
                 runtimes: "html5,flash,silverlight",
@@ -2954,13 +3064,6 @@ RT.Forms = {
             self.connections = ko.mapping.fromJS(pars.connections);
             pars.picture && self.picture(pars.picture);
             pars.mediainfo && (self.mediainfo = pars.mediainfo);
-
-//            var a = lib.selectedAlbum().attachments, ci = ko.utils.arrayFirst(a(), function(item) {
-//                return item._id() === self._id();
-//            }), i = a.indexOf(ci);
-            //RT.singleAttachment.bind(ko.mapping.fromJS(pars, {create: RTC.CreateLoop}, ci), album)
-            //a.replace(a()[i], ko.mapping.fromJS(pars, {create: RTC.CreateLoop}))
-
         };
         self.updateAttachment = function() {
             var t = this, s, p = {
@@ -3158,11 +3261,8 @@ RT.Forms = {
             return "<span class='text-info' style='font-size:1.1em'>" + this.addedMedia().length + " </span> item(s) selected";
         }, this);
         T.addToSelected = function(d) {
-            var am = T.addedMedia, found = ko.utils.arrayFirst(am(), function(i) {
-                return RTC.GetObsVal(i._id) === RTC.GetObsVal(d._id);
-            });
-            d.isSelected(!found);
-            return !!found ? am.remove(d) : am.push(d) && T.picture(d);
+            var added = T.addedMedia.addToSet(d, true);
+            d.isSelected(added);
         };
         T.selectAllAttachments = function() {
             var am = T.addedMedia, l = T.mediaLib(), s = l ? l.selectedAlbum() : false,
@@ -4498,8 +4598,8 @@ jQuery(document).ready(function($) {
         ko.applyBindingsToNode(this, {qtip: RTApp.getUserHoverCard.bind(RTApp, ko.dataFor(this))});
     });
     $(w).resize(function() {
-        var cb = $("#colorbox");
         return setTimeout(function() {
+            var cb = $("#colorbox");
             RTApp.viewport.width($(w).innerWidth());
             RTApp.viewport.height($(w).innerHeight());
             RTApp.currentSlideShow() && RTApp.currentSlideShow().resize();

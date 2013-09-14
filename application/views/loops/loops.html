@@ -147,7 +147,7 @@
         <!--/ko-->
         <div class="pull-left hidden-phone">
             <span style="width:60px">
-                <a href="#" data-bind="attr:{title:user.name}" class="drop-shadow curved">
+                <a href="#" data-bind="title:user.name, href:'/' + user._id()" class="drop-shadow curved thumbnail">
                     <img style="width:60px; height:60px;" data-bind="getAvatar : {context:$data.user, size:60}, attr:{alt:user.name}" width="60" height="60">
                 </a>
             </span>
@@ -155,10 +155,10 @@
         <div class="media-body">
             <div class="postTitle">
                 <!--ko if:isTestimonial() && status() !== 'active'-->
-                <small class="postStatusInfoLabel" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></small>
+                <small class="postStatusInfoLabel" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text white" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></small>
                 <!--/ko-->
                     <div style="width:40px;float:left;margin-right:2%" class="visible-phone">
-                        <a href="#" data-bind="attr:{title:user.name}" class="drop-shadow curved">
+                        <a href="#" data-bind="href:'/' + user._id()" class="drop-shadow curved thumbnail">
                             <img style="width:40px; height:40px;" data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40" height="40">
                         </a>
                     </div> <!-- phone profile thumb -->
@@ -216,38 +216,56 @@
     </div> <!-- post action links -->
 </script>
 <script type="text/html" id="editMode">
-    <article class="postFeed editMode" data-bind="css:cssParentClassesForReceived">
+    <article class="postFeed media relative clearfix editMode" data-bind="css:cssParentClassesForReceived">
         <div class="dropdown postSettings" data-bind="css:cssOptionsClassesForReceived">
             <div class="pull-left">
-                <label class="label" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></label>
+                <label class="label" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text white" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></label>
             </div>
             <div class="pull-right">
                 <div class="btn-group">
-                    <button class="btn btn-mini small-caps" data-bind="click:approval, enable:status() !== 'trash'">
+                    <button class="btn btn-small small-caps" data-bind="click:approval, enable:status() !== 'trash'">
                         <i class="icon-ok" data-bind="css:{'icon-remove':status() === 'active', 'icon-ok':status() === 'pending'}"></i>
                         <span data-bind="text:status() === 'active' ? 'UnApprove' : 'Approve'"></span>
                     </button>
-                    <!--<button class="btn btn-mini" data-bind="css:{active:status() === 'active'}">Archive</button>-->
-                    <button class="btn btn-mini btn-inverse small-caps" data-bind="css:{active:status() === 'trash'}, click:trash">
+                    <!--<button class="btn btn-small" data-bind="css:{active:status() === 'active'}">Archive</button>-->
+                    <button class="btn btn-small btn-inverse small-caps" data-bind="css:{active:status() === 'trash'}, click:trash">
                         <i class="icon-trash icon-white"></i></button>
                 </div>
             </div>
         </div> <!-- post settings -->
-        <div class="feedProfileThumbs thumbnails">
-            <span class="mediumNail">
-                <a href="#" class="thumbnail" data-bind="attr:{title:user.name}">
-                    <img class="img-polaroid"  data-bind="getAvatar : {context:$data.user, size:90}, attr:{alt:user.name}" width="50" height="50">
+        <div class="pull-left hidden-phone">
+            <span style="width:60px">
+                <a href="#" data-bind="title:user.name, href:'/' + user._id()" class="drop-shadow curved thumbnail">
+                    <img style="width:60px; height:60px;" data-bind="getAvatar : {context:$data.user, size:60}, attr:{alt:user.name}" width="60" height="60">
                 </a>
             </span>
         </div> <!-- post profile thumb -->
-        <div class="postTitle">
-            <a  data-bind="attr:{href : '/' + user._id()}, title: 'View ' + user.name() + '\'s Profile', text:user.name" class="personHoverCard"></a>&nbsp;<span data-bind="html:generated_title"></span>
-            <blockquote>
-                <p data-bind="html:content"></p>
-                <small><cite data-bind="text:user.name"></cite></small>
-            </blockquote>
-            <small class="muted"><time data-bind="timeago:created"></time></small>
-        </div> <!-- post Title -->
+        <div class="media-body">
+            <div class="postTitle">
+                <!--ko if:isTestimonial() && status() !== 'active'-->
+                <small class="postStatusInfoLabel" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text white" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></small>
+                <!--/ko-->
+                    <div style="width:40px;float:left;margin-right:2%" class="visible-phone">
+                        <a href="#" data-bind="title:user.name, href:'/' + user._id()" class="drop-shadow curved thumbnail">
+                            <img style="width:40px; height:40px;" data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40" height="40">
+                        </a>
+                    </div> <!-- phone profile thumb -->
+                <a data-bind="
+                   attr:{href : '/' + user._id()},
+                   title: 'View ' + user.name() + '\'s Profile',
+                   text:user.name,
+                   qtip: RTApp.getUserHoverCard" class="personHoverCard"></a>&nbsp;<span data-bind="html:generated_title"> </span> <small class="muted"><time data-bind="timeago:created"></time></small>
+                <!--ko if : type() === 'wallpost' || type() === 'post'--><p data-bind="html:content" class="post-content"></p></span><!--/ko-->
+                <!--ko if:type() === 'testimonial'-->
+                <div class="clearfix" style="margin:10px auto">
+                    <blockquote>
+                        <p data-bind="html:content"></p>
+                        <small><cite data-bind="text:user.name"></cite></small>
+                    </blockquote>
+                </div>
+                <!--/ko-->
+            </div> <!-- post Title -->
+        </div>
     </article>
 </script>
 <script type="text/html" id="postComments">
@@ -259,7 +277,7 @@
                 event: {mouseover: showCommentOptions, mouseleave: hideCommentOptions},
                 slideIn:hasMore">
                 <div class="commentInline media-list">
-                    <button class="close" type="button" style="display:none" data-bind="visible:commentOptions, click:$parent.deleteComment"><i class="icon-remove"></i></button>
+                    <button class="close" aria-hidden="true" type="button" style="display:none" data-bind="visible:commentOptions, click:$parent.deleteComment"><i class="icon-remove"></i></button>
                     <div class="media">
                         <div class="commentThumb visible-desktop pull-left">
                             <img data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40px" height="40px">
@@ -297,7 +315,7 @@
                             <img data-bind="getAvatar:{context:RTApp.user, size:40}, attr:{alt:RTApp.user().name}" width="40px" height="40px" />
                         </div>
                             <div class="commentTextarea">
-                                <button class="close" type="button" data-bind="click:destroyComment, visible:commentSubmit"><i class="icon-remove"></i></button>
+                                <button class="close" aria-hidden="true" type="button" data-bind="click:destroyComment, visible:commentSubmit"><i class="icon-remove"></i></button>
                                 <form action="" style="width:100%" method="post" class="comment-form" data-bind="submit:RTApp.performAction.bind($data, 'comment')">
                                     <textarea data-bind="click:showCommentSubmit, value:commentText, valueUpdate:'afterkeydown', expand:true" class="commentInput contentArea" placeholder="Your comment" style="width:95%"></textarea>
                                 </form>

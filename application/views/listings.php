@@ -30,7 +30,7 @@
                                 <span class="add-on" style="cursor:help" data-bind="
                                       title: 'Search by name, address or postal code. All number fields below allow special search syntax, examples: \'5.5k\' or \'1.2m\'. \'k\' represents thousands and \'m\' represents millions'
                                       ">?</span>
-                                <input id="s" name="s" type="text" data-bind="click:$parent.showListingsSearch.bind($parent),value:s, valueUpdate:'afterkeydown'" placeholder="Search Listings...">
+                                <input id="s" name="s" type="text" data-bind="autoComplete : { source: $parent.getKeyword.bind($parent), delay: 500, minLength:2}, event:{autocompleteselect:$parent.resetNewResults.bind($parent)}, click:$parent.showListingsSearch.bind($parent),value:s" placeholder="Search Listings...">
                                 <div class="btn-group">
                                     <button tabindex="-1" class="btn btn-inverse" data-bind="text:type,value:type,click:$parent.resetNewResults.bind($parent)"></button>
                                     <button tabindex="-1" data-toggle="dropdown" class="btn dropdown-toggle btn-inverse">
@@ -101,7 +101,7 @@
                                     </div>
                                 </div>
                                 <div class="span6">
-                                    <label class="listingSearchLabel"><i class="info16 sqft"></i>Built-Up Size<button data-bind="click:hideListingsSearch" class="close pull-right" style="font-size: 15px;padding:0;margin:-5px 0 0 0">x</button></label>
+                                    <label class="listingSearchLabel"><i class="info16 sqft"></i>Built-Up Size<button data-bind="click:hideListingsSearch" class="close pull-right" aria-hidden="true" style="padding:0;margin:-5px 0 0 0"><i class="icon-remove"></i></button></label>
                                     <div class="row-fluid">
                                         <div class="span5">
                                             <div class="input-append dropdown combobox input-prepend" data-bind="with:Search().formFields">

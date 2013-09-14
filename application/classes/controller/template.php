@@ -272,8 +272,7 @@ class Controller_Template extends Controller {
      */
     protected function search_defaults()
     {
-        $query         = $this->request->query();
-        //$query['sort'] = \Arr::get($query, 'sort', '') === 'Newest' ? 'popular' : 'active';
+        $query         = (array) $this->request->query();
 
         $state = \Arr::get($query, 'state');
 
@@ -285,7 +284,7 @@ class Controller_Template extends Controller {
             'access_token' => $this->token()
         ];
 
-        return Arr::merge($defaults, $query);
+        return \Arr::merge($defaults, $query);
     }
 
     /**
@@ -406,16 +405,17 @@ class Controller_Template extends Controller {
             $query['filter'] = $filter;
         }
 
+        foreach(['builtLow', 'builtHigh', 'priceHigh', 'priceLow', 'roomsHigh', 'roomsLow'] as $key)
+        {
+            $d = in_array($key, ['builtHigh', 'priceHigh', 'roomsHigh']) ? null : 0;
+            $params[$key] = static::checkNumberField(\Arr::get($query, $key, $d));
+        }
+        $s = Security::xss_clean(\Arr::get($query, 's', ''));
         $params = [
             'type'      => ucfirst(strtolower(\Arr::get($query, 'type', 'sale'))),
-            'builtLow'  => static::checkNumberField(\Arr::get($query, 'builtLow', 0)),
-            'builtHigh' => static::checkNumberField(\Arr::get($query, 'builtHigh')),
-            'priceHigh' => static::checkNumberField(\Arr::get($query, 'priceHigh')),
-            'priceLow'  => static::checkNumberField(\Arr::get($query, 'priceLow', 0)),
-            'roomsHigh' => static::checkNumberField(\Arr::get($query, 'roomsHigh')),
-            'roomsLow'  => static::checkNumberField(\Arr::get($query, 'roomsLow', 0)),
-            's'         => Security::xss_clean(\Arr::get($query, 's', ''))
-        ];
+            // minumum search for keywords is 2 characters
+            's'         => strlen($s) > 1 ? $s : null
+        ] + $params;
 
         return \Arr::merge($query, ['listing' => array_filter($params)]);
     }
