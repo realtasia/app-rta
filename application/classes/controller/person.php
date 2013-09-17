@@ -17,7 +17,7 @@ class Controller_Person extends Controller_Auth {
     {
         parent::before();
 
-        $username = $this->request->param('username');
+        $username = strtolower($this->request->param('username'));
         //echo Session::instance()->get('session');
         // this is the last possible route, the member username. If not specified,
         // then this might be a bit of a problem

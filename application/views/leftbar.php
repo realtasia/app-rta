@@ -23,7 +23,7 @@
         </div>
         <div class="visible-desktop">
             <!--ko with : user-->
-            <div class="createListing" style="display:none" data-bind="visible:isAdmin() || isAgent()">
+            <div class="createListing" style="display:none" data-bind="flash:isAdmin() || isAgent()">
                 <a href="#" data-bind="click:$parent.initListings.bind($parent)" class="responsiveIconLink"><i class="icon-list"></i><span style="text-transform: capitalize;font-variant: small-caps">&nbsp;New Listing</span></a>
             </div>
             <!--/ko-->

@@ -21,7 +21,7 @@
                     <div id="wraparound" class="outerBox relative">
                         <div id="search-wrap" class="filterContentBG contentArea contentNoBottom">
                             <div class="input-append input-large" style="width:88%">
-                                <input type="text" class="search-query" name="s" id="s" placeholder="Search People ..." data-bind="value:Search().formFields.s, valueUpdate:'afterkeydown'">
+                                <input type="text" autocomplete="off" class="search-query" name="s" id="s" placeholder="Search People ..." data-bind="value:Search().formFields.s, valueUpdate:'afterkeydown'">
                                 <button type="submit" class="btn btn-inverse" data-bind="click:resetNewResults">Search</button>
                             </div>
                         </div>

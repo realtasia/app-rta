@@ -31,7 +31,7 @@
     <div class="dropdown" id="filterButtonDiv">
         <div style="">
             <a href="#" id="filterButton" class="dropdown-toggle">Show:&nbsp;
-                <span class="dropDownSelected">RealtAsia</span>&nbsp;<span class="caret"></span>
+                <span class="dropDownSelected">RealtAsia</span>&nbsp;<i class="icon-caret-down"></i>
             </a>
             <ul class="dropdown-menu">
                 <li>
@@ -54,7 +54,7 @@
             <i class="icon-spinner icon-spin" style="display: none;"></i>
             <a class="btn btn-small dropdown-toggle" id="sortButton" href="#">Sort:&nbsp;
                 <span class="sortSelected">Newest</span>&nbsp;
-                <span class="caret"></span>
+                <i class="icon-caret-down"></i>
             </a>
             <ul class="dropdown-menu" role="menu" style="font-size:95%">
                 <li role="menuitem">

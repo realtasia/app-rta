@@ -2,16 +2,20 @@
 /**
  * @author jason
  */
-echo form::open(Request::current()->detect_uri(), [
-    'id'     => 'filterform',
-    'method' => $type
-]);
+//echo form::open(Request::current()->detect_uri(), [
+//    'id'     => 'filterform',
+//    'method' => $type
+//]);
 ?>
-<section id="feedActionDiv">
+<section id="feedActionDiv" class="clearfix">
+    <?php echo form::open(Request::current()->detect_uri(), [
+    'id'     => 'filterform',
+    'class'     => 'clearfix',
+    'method' => $type])?>
     <div class="dropdown" id="filterButtonDiv">
         <div style="display:none" data-bind="visible:Search, with:Search">
-            <a href="#" data-bind="click:showDropdown" id="filterButton" class="dropdown-toggle">Show:&nbsp;
-                <span class="dropDownSelected" data-bind="text:filteredBy"></span>&nbsp;<span class="caret"></span>
+            <a href="#" data-bind="click:showDropdown" id="filterButton" class="dropdown-toggle btn btn-small btn-link">Show:&nbsp;
+                <span class="dropDownSelected" data-bind="text:filteredBy"></span>&nbsp;<i class="icon-caret-down"></i>
             </a>
             <ul class="dropdown-menu" data-bind="foreach:filters">
                 <li><a href="#" data-bind="click : $parent.updateFilter, text:$data"></a>
@@ -25,8 +29,7 @@ echo form::open(Request::current()->detect_uri(), [
         <div style="display:none" data-bind="visible:Search, with:Search">
             <i class="icon-spinner icon-spin" data-bind="visible:$root.isGettingNew"></i>
             <a data-bind="click:showDropdown" class="btn btn-small dropdown-toggle" id="sortButton" href="#">Sort:&nbsp;
-                <span class="sortSelected" data-bind="text:sortedBy"></span>&nbsp;
-                <span class="caret"></span>
+                <span class="sortSelected" data-bind="text:sortedBy"></span>&nbsp;<i class="icon-caret-down"></i>
             </a>
             <ul class="dropdown-menu" role="menu" style="font-size:95%" data-bind="foreach:sorters">
                 <li role="menuitem">
@@ -35,7 +38,7 @@ echo form::open(Request::current()->detect_uri(), [
             </ul>
         </div>
     </div>
-</section> <!--  sort button & result count -->
 <?= form::hidden('state', Security::token()); ?>
 <?= form::hidden('sec_id', time()); ?>
 </form>
+</section> <!--  sort button & result count -->

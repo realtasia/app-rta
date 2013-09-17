@@ -62,7 +62,7 @@
             <div class="btn-group pull-left">
                 <span style="display:inline-block">
                     <!--ko if : $root.ca() === 'testimonials'-->
-                    <a class="btn btn-small" style="display:none" data-bind="click:$root.startEditMode.bind($root), title:'Manage Testimonials', visible:$root.cpIsCu">
+                    <a class="btn btn-small" style="display:none;border-right:none;" data-bind="click:$root.startEditMode.bind($root), title:'Manage Testimonials', visible:$root.cpIsCu">
                         <i class="icon-tasks"></i> <span>Manage Approvals</span>
                     </a>
                     <!--/ko-->

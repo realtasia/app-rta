@@ -1,0 +1,63 @@
+<div id="loginBox">
+<section class="RTAWindow">
+<header class="titleBar">
+<div class="contentArea titleBarBG">
+<button type="button" class="close" aria-hidden="true" data-bind="click : hide"><i class="icon-remove"></i></button>
+<h4><i class="icon-signin"></i> Log In</h4>
+</div>
+</header>
+<section class="RTAWindowContainer">
+<section class="RTAWindowContent noSidebar">
+<div class="contentArea introBox relative">
+<p style="margin: 0">Forgotten your Realtasia password? <a onclick="javascript:return false;" href="/user/reset_password">Click here</a> to reset it.
+<!--<br style="margin-bottom: 10px" />
+<button class="btn-fb btn btn-small btn-fb-login">
+<span class="fb-auth-button" id="fb-auth">login with facebook</span>
+</button>
+<small class="muted" id="fb-auth-container"> Only if you have registered using facebook.</small>-->
+</p>
+</div>
+<hr style="margin:0"/>
+<form class="form-horizontal contentArea" id="formLogin" style="margin-bottom: 0">
+<p class="muted" data-bind="ifnot:$root.isError">
+<!--Didn't register using Facebook?-->
+Enter your Realtasia credentials.</p>
+<p class="text-error" data-bind="visible: window['RTApp'].isError">
+<strong data-bind="text: RTApp.ajaxData() && RTApp.ajaxData().message || null">
+</strong>
+</p>
+<div class="control-group" data-bind="validationElement: username">
+<label class="control-label" for="inputEmail">Email</label>
+<div class="controls">
+<input type="text" id="inputEmail" placeholder="Realtasia Email or Username" data-bind="valueWithInit : username" />
+</div>
+</div>
+<div class="control-group" data-bind="validationElement: password">
+<label class="control-label" for="inputPassword">Realtasia Password</label>
+<div class="controls">
+<input type="password" id="inputPassword" placeholder="Realtasia Password" data-bind="valueWithInit : password" />
+</div>
+</div>
+<div class="control-group">
+<div class="controls">
+<label class="checkbox">
+<input type="checkbox" name="remember" id="login_remember" /> Remember me</label>
+</div>
+</div>
+<div class="control-group" style="margin-bottom: 0">
+<div class="controls">
+<button class="btn-rta btn btn-small btn-rta-login" data-bind="click: login">
+<span class="fb-auth-button">login with realtasia</span>
+</button>
+<span>
+<i class="icon-spin icon spinner" style="display:none" id="rtLoginLoader"></i>
+</span>
+</div>
+</div>
+</form>
+</section>
+</section>
+<footer class="footerBar">
+</footer>
+</section>
+</div>

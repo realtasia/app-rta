@@ -14,18 +14,7 @@ Common*/
     font-size: 0;
 }
 
-.tooltipster-hovercard {
-    border-radius:2px;
-    border: 2px solid #999;
-    background: #fff;
-    min-width: 320px;
-}
 
-/* Use this next selector to style things like font-size and line-height: */
-.tooltipster-hovercard .tooltipster-content {
-    font-size: 12px;
-    padding: 5px;
-}
 
 .statusRight,#resultCount,.listing,.mainListingContent,.postedBy,.formContainer,.containerLeft,.containerRight,.large,.regular,.hoverCard .thumbnails,.hoverCard .thumbnail,.hoverCard.contentLeft,.hoverCard.contentRight,.hoverCard .withLabel,.regular,.membersInline LI {
     display: inline-block;
@@ -148,7 +137,7 @@ Common*/
     /*+border-radius:0;*/
     border-radius: 0;
     /*[disabled]border:1px solid #D6D6D6;*/
-    background-color: #E6E6E6;
+    /*background-color: #E6E6E6;*/
     display: block;
     /*+box-shadow:inset 0 1px #EBECEC;*/
     box-shadow: inset 0 1px #EBECEC;
@@ -175,8 +164,6 @@ a.thumbnail{
 .media-list .pull-left .thumbnail,.thumbInfo {
     /*+border-radius:0;*/
     border-radius: 0;
-    border: 1px solid #D6D6D6;
-    background-color: #E6E6E6;
     /*+box-shadow:none;*/
     box-shadow: none;
     margin-top: 1px;
@@ -190,7 +177,7 @@ a.thumbnail{
 }
 
 .price, .listingType {
-    background: #E9EBEC url("/images/forBG.gif") no-repeat -2px 0;
+    background: #E9EBEC url("/img/forBG.gif") no-repeat -2px 0;
     display: block;
     position: absolute;
     border: 1px solid transparent;
@@ -293,7 +280,6 @@ a.thumbnail{
 .postActionInfo LI A {
     padding: 0;
     margin: 0 5px 0 0;
-    font-size: .9em;
 }/*comments*/
 .postComments {
     display: block;
@@ -311,12 +297,22 @@ a.thumbnail{
     box-shadow: none;
 }
 
+.commentBD{
+    border-top: 1px solid #FFFFFF;
+    border-bottom: 1px solid #eee;
+}
+
+.commentBD:first-child{
+    border-top: 0 none;
+}
+.commentBD:last-child{
+    border-bottom: 0 none;
+}
 .commentBG {
     margin: 0;
     padding: 1px;
     list-style: none;
     height: 100%;
-    border-bottom: 1px solid #d9d9d9 !important;
     color: #686868;
     background: rgb(247, 247, 247);
     /*Old browsers
@@ -335,10 +331,6 @@ a.thumbnail{
     background: radial-gradient(at center, ellipse cover, rgba(247,247,247,1) 0%,rgba(243,243,243,1) 100%);
 }
 
-/*.commentBG:not(.commentForm) {*/
-.commentBG {
-    border-top: 1px solid #FFFFFF;
-}
 
 .postCommentLast {
     border-bottom: none;
@@ -352,6 +344,7 @@ a.thumbnail{
 .commentAuthor {
     text-align: left;
     font-weight: bold;
+    padding-left:0 !important;
 }
 
 LI.commentActions {
@@ -383,25 +376,7 @@ LI.commentActions {
     /*[disabled]max-width:300px;*/
 }
 
-TEXTAREA.commentInput {
-    background-color: transparent;
-    width: 100%;
-    height: 26px;
-    padding: 0 0 0 2px;
-    margin: 0;
-    border-bottom: 1px solid #E2E3E4;
-    resize: none;
-    /*+box-shadow:none;*/
-    box-shadow: none;
-    font-size: 1em !important;
-}
-
-TEXTAREA.commentInput:focus {
-    outline: 0;
-    outline: none;
-    /*+box-shadow:none;*/
-    box-shadow: none;
-}/*Search Filter Area
+/*Search Filter Area
 Search Box Area*/
 #search-wrap .btn-group {
     position: relative;
@@ -463,7 +438,7 @@ Search Box Area*/
     /*+border-radius:1px;*/
     border-radius: 1px;
     height: 24px;
-    background: transparent url('/images/searchInputBG.gif') repeat-x;
+    /*background: transparent url('/images/searchInputBG.gif') repeat-x;*/
     border: 0 none;
     padding-top: 2px;
     padding-bottom: 4px;
@@ -506,7 +481,7 @@ Search Box Area*/
     opacity: 0.3;
 }
 
-.superscript{font-size:xx-small; vertical-align:top;margin-left:-1px;}
+.superscript{font-size:xx-small; vertical-align:top;display:inline-block;line-height: 1 !important;margin-left:-1px}
 
 #wraparound {
     color: #6A6340;
@@ -1089,13 +1064,6 @@ LABEL .close {
     margin-top: -20px;
 }
 
-#rtModalLoadingGraphic {
-    background: #fff url(/images/26.gif) no-repeat center center;
-    height: 100%;
-    width: 100%;
-    position: relative;
-}
-
 #rtModalLoadingGraphic i {
     display: inline;
     text-align: center;
@@ -1124,42 +1092,6 @@ LABEL .close {
 
 #slideshow table td,#slideshow table th {
     border-top: none;
-}
-/*
-UI Tooltips
-*/
-.ui-tooltip.ui-widget-content {
-    background: #f9fcf7;
-    /* Old browsers */
-    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
-    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y5ZmNmNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWY5ZjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  #f9fcf7 0%, #f5f9f0 100%);
-    /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9fcf7), color-stop(100%,#f5f9f0));
-    /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%);
-    /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%);
-    /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%);
-    /* IE10+ */
-    background: linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%);
-    /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9fcf7', endColorstr='#f5f9f0',GradientType=0 );
-    /* IE6-8 */
-}
-
-.tooltip.ui-tooltip.ui-widget-content {
-    background-image: none;
-    background-color: #000;
-    opacity: .8;
-    border: 0 !important;
-    padding: 2px 5px;
-}
-
-.tooltip.ui-tooltip-content {
-    background-color: transparent;
-    color: #fefefe;
 }
 
 .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
@@ -1231,6 +1163,24 @@ html {
     -webkit-font-smoothing: antialiased;
 }
 
+.tooltipster-hovercard {
+    /*border-radius:2px;*/
+    /*border: 2px solid #999;*/
+    /*background: #fff;*/
+    /*min-width: 320px;*/
+    width:auto;
+    border-color:transparent;
+    background:transparent;
+  -webkit-transform: translateZ(0); /* webkit flicker fix */
+  -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
+    transform: translateZ(0);
+}
+
+/* Use this next selector to style things like font-size and line-height: */
+.tooltipster-hovercard .tooltipster-content {
+    /*font-size: 12px;*/
+    /*padding: 5px;*/
+}
 
 /* This is the default Tooltipster theme (feel free to modify or duplicate and create multiple themes!): */
 .tooltipster-default {
@@ -1265,9 +1215,6 @@ html {
 
 
 
-
-
-
 /* This is the base styling required to make all Tooltipsters work */
 .tooltipster-base {
     padding: 0;
@@ -1278,6 +1225,9 @@ html {
     pointer-events: none;
     width: auto;
     overflow: visible;
+  -webkit-transform: translateZ(0); /* webkit flicker fix */
+  -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
+    transform: translateZ(0);
 }
 .tooltipster-base .tooltipster-content {
     overflow: hidden;
@@ -1507,4 +1457,7 @@ html {
 
 .nav-tabs > .active > a {
     box-shadow: 1px 1px 1px #EEEEEE inset;
+}
+.mute{
+    box-shadow:none !important;
 }

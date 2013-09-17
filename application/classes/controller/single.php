@@ -58,7 +58,7 @@ EOD;
             $this->template->meta = (array) Metatag::factory($data);
             $this->content        = View::factory('loops/single/user', $data);
         }
-        $this->response->body(View::factory('loops/single/hoverCard', $data));
+        $this->response->body(View::factory('loops/single/personHoverCard', $data));
     }
 
     public function action_location()
@@ -72,7 +72,7 @@ EOD;
             $this->template->meta = (array) Metatag::factory($data);
             $this->content        = View::factory('loops/single/location', $data);
         }
-        $this->response->body(View::factory('loops/single/hoverCard', $data));
+        $this->response->body(View::factory('loops/single/locationHoverCard', $data));
     }
 
     public function action_post()

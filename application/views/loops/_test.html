@@ -1,0 +1,62 @@
+<script type="text/html" id="postComments">
+    <div class="indentedComment">
+        <ul class="commentList commentBG" data-bind="attr:{id : 'forPost' + _id()}">
+            <!--ko if : !!comments().length-->
+            <!--ko foreach : comments-->
+            <li class="commentBG commentBD commentContentArea" data-bind="
+                event: {mouseover: showCommentOptions, mouseleave: hideCommentOptions},
+                slideIn:hasMore">
+                <div class="commentInline media-list">
+                    <button class="close" aria-hidden="true" type="button" style="display:none" data-bind="visible:commentOptions, click:$parent.deleteComment"><i class="icon-remove"></i></button>
+                    <div class="media">
+                        <div class="commentThumb visible-desktop pull-left">
+                            <img data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40px" height="40px">
+                        </div>
+                        <div class="commentBody media-body clearfix">
+                            <div class="commentThumb hidden-desktop" style="float:left;margin-right:2%">
+                                <img data-bind="getAvatar : {context:$data.user, size:40}, attr:{alt:user.name}" width="40px" height="40px">
+                            </div>
+                            <div class="commentBody media-body clearfix">
+                                <a class="commentAuthor personHoverCard" data-bind="href : '/' + user._id(), text:user.name"></a>
+                                <p data-bind="html:content"></span></p>&nbsp;
+                                <span class="commentInfo" style="display: inline-block">
+                                    <small class="muted"><time data-bind="timeago:created"></time></small>
+                                    <!--ko if: $data.interactions-->
+                                    <span class="commentActions hasActiveState" data-bind="css:{active:interactions.like},hoverClass: 'hovering'">
+                                        <a href="#" class="like-link"><i class="action16 likeSmall"></i></a>
+                                    </span>
+                                    <!--/ko-->
+                                    <span class="commentActions">
+                                        <a href="#" class="likerHoverCard"><span data-bind="text:counts.likers"></span></a>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- comment inline -->
+            </li> <!-- comment -->
+            <!--/ko-->
+            <!--/ko-->
+            <!--ko if:RTApp.user() && canComment() && !isTestimonial()-->
+            <li class="commentForm commentBG contentNoBottom commentContentArea">
+                <div class="commentInline">
+                    <div class="media" style="overflow-y:visible !important;">
+                        <div class="commentThumb" style="float:left;margin-right:2%">
+                            <img data-bind="getAvatar:{context:RTApp.user, size:40}, attr:{alt:RTApp.user().name}" width="40px" height="40px" />
+                        </div>
+                            <div class="statusFormTA">
+                                <button class="close" aria-hidden="true" type="button" data-bind="click:destroyComment, visible:commentSubmit"><i class="icon-remove"></i></button>
+                                <form action="" style="width:100%" method="post" class="comment-form" data-bind="submit:RTApp.performAction.bind($data, 'comment')">
+                                    <textarea data-bind="click:showCommentSubmit, value:commentText, valueUpdate:'afterkeydown', expand:true" class="commentInput contentArea" placeholder="Your comment" style="width:95%"></textarea>
+                                </form>
+                            </div>
+                            <div style="margin-top:-10px;margin-left:55px" class="clearfix" data-bind="if: commentSubmit">
+                                <small style="color:#bbb;text-shadow:1px 1px 1px #fff;"><i class="icon-info-sign"></i> To leave a line, press "SHIFT" + "ENTER"</small>
+                            </div>
+                    </div>
+                </div> <!-- comment inline -->
+            </li> <!-- comment form-->
+            <!--/ko-->
+        </ul> <!-- comments -->
+    </div> <!-- comment OuterBox-->
+</script>

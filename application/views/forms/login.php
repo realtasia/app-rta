@@ -43,7 +43,7 @@
                             <span class="fb-auth-button">login with realtasia</span>
                         </button>
                         <span>
-                            <img src="/images/16.gif" style="display:none" id="rtLoginLoader" />
+                            <i class="icon-spin icon spinner" style="display:none" id="rtLoginLoader"></i>
                         </span>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                             <span class="fb-auth-button">login with realtasia</span>
                         </button>
                         <span>
-                            <img src="/images/16.gif" style="display:none" id="rtLoginLoader" />
+                            <i class="icon-spin icon spinner" style="display:none" id="rtLoginLoader"></i>
                         </span>
                     </div>
                 </div>

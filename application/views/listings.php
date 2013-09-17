@@ -34,7 +34,7 @@
                                 <div class="btn-group">
                                     <button tabindex="-1" class="btn btn-inverse" data-bind="text:type,value:type,click:$parent.resetNewResults.bind($parent)"></button>
                                     <button tabindex="-1" data-toggle="dropdown" class="btn dropdown-toggle btn-inverse">
-                                        <span class="caret"></span>
+                                        <i class="icon-caret-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><a href="#" data-bind="click:updateType">Rent</a></li>
@@ -54,7 +54,7 @@
                                         <div class="span5">
                                             <input type="text" placeholder="1,500" data-bind="value:Search().formFields.priceLow, valueUpdate:'afterkeydown'"/>
                                         </div>
-                                        <div class="span1" style="margin-left:15px"><label class="text-center">&mdash;</label></div>
+                                        <div class="span1" style="margin-left:10px"><label class="text-center">&mdash;</label></div>
                                         <div class="span5 pull-right" style="margin-right: 10px">
                                             <input type="text" placeholder="2m" data-bind="value:Search().formFields.priceHigh, valueUpdate:'afterkeydown'"/>
                                         </div>
@@ -64,7 +64,7 @@
                                         <div class="span5">
                                             <div class="input-append dropdown combobox" data-bind="with:Search().formFields">
                                                 <input type="text" class="listingTextHalfling" placeholder="STUDIO" data-bind="value:roomsLow, valueUpdate:'afterkeydown'">
-                                                <button data-toggle="dropdown" class="btn" style="padding:4px;margin-left:-1px"><i class="caret"></i></button>
+                                                <button data-toggle="dropdown" class="btn" style="padding:4px;margin-left:-1px"><i class="icon-caret-down"></i></button>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="#" data-bind="click:updateRoomsLow">STUDIO</a></li>
                                                     <li><a href="#" data-bind="click:updateRoomsLow">1 Room</a></li>
@@ -79,11 +79,11 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="span1" style="margin-left:15px"><label class="text-center">&mdash;</label></div>
+                                        <div class="span1" style="margin-left:10px"><label class="text-center">&mdash;</label></div>
                                         <div class="span5 pull-right" style="margin-right: 10px">
                                             <div class="input-append dropdown combobox" data-bind="with:Search().formFields">
                                                 <input type="text" class="listingTextHalfling" placeholder="9+ Rooms" data-bind="value:roomsHigh, valueUpdate:'afterkeydown'">
-                                                <button data-toggle="dropdown" class="btn" style="padding:4px;margin-left:-1px"><i class="caret"></i></button>
+                                                <button data-toggle="dropdown" class="btn" style="padding:4px;margin-left:-1px"><i class="icon-caret-down"></i></button>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="#" data-bind="click:updateRoomsHigh">STUDIO</a></li>
                                                     <li><a href="#" data-bind="click:updateRoomsHigh">1 Room</a></li>
@@ -106,7 +106,7 @@
                                         <div class="span5">
                                             <div class="input-append dropdown combobox input-prepend" data-bind="with:Search().formFields">
                                                 <input type="text" class="listingTextHalfling" placeholder="0 sqft" data-bind="value:builtLow, valueUpdate:'afterkeydown'">
-                                                <button  tabindex="-1" data-toggle="dropdown" class="btn" style="padding:4px;margin-left:-1px"><i class="caret"></i></button>
+                                                <button  tabindex="-1" data-toggle="dropdown" class="btn" style="padding:4px;margin-left:-1px"><i class="icon-caret-down"></i></button>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="#" data-bind="click:updateBuiltLow">0 sqft</a></li>
                                                     <li><a href="#" data-bind="click:updateBuiltLow">500 sqft</a></li>
@@ -121,11 +121,11 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="span1" style="margin-left:15px"><label class="text-center">&mdash;</label></div>
+                                        <div class="span1" style="margin-left:10px"><label class="text-center">&mdash;</label></div>
                                         <div class="span5 pull-right" style="margin-right: 10px">
                                             <div class="input-append dropdown combobox" data-bind="with:Search().formFields">
                                                 <input type="text" class="listingTextHalfling" placeholder="9,000+ sqft" data-bind="value:builtHigh, valueUpdate:'afterkeydown'">
-                                                <button data-toggle="dropdown" class="btn" style="padding:4px;margin-left:-1px"><i class="caret"></i></button>
+                                                <button data-toggle="dropdown" class="btn" style="padding:4px;margin-left:-1px"><i class="icon-caret-down"></i></button>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="#" data-bind="click:updateBuiltHigh">500 sqft</a></li>
                                                     <li><a href="#" data-bind="click:updateBuiltHigh">1,000 sqft</a></li>
@@ -162,10 +162,7 @@
                     <?php
                     if (isset($cl) && !empty($cl))
                     {
-                        foreach ($cl as $post)
-                        {
-                            echo View::factory('loops/single/listing', (array) $post);
-                        }
+                        echo View::factory('loops/posts-comments')->set('cl', $cl);
                     }
                     ?>
                     <!--/ko-->

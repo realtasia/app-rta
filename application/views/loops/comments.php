@@ -17,9 +17,13 @@
     </ul>
 </div> <!-- post action links -->
 <?php if ($counts['comments'] > 0): ?>
-    <div class="indentedComment">
-        <ul class="commentList contentArea commentBG" id="forPost<?php echo $_id ?>">
-            <?php echo View::factory('loops/single/comment')->set('comments', $comments); ?>
-        </ul> <!-- comments -->
-    </div> <!-- comment OuterBox-->
+    <div class="navbar navbar-responsive" style="border:1px solid #eaeaea">
+        <div class="navbar-inner relative clearfix navbar-inner-responsive">
+            <div class="container-fluid" style="padding:0 1px;">
+                <ul class="commentList media-list" id="forPost<?php echo $_id ?>">
+                    <?php echo View::factory('loops/single/comment')->set('comments', $comments); ?>
+                </ul> <!-- comments -->
+            </div>
+        </div>
+    </div> <!-- comment navbar-responsive-->
 <?php endif; ?>

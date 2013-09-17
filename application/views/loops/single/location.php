@@ -1,7 +1,7 @@
 <?php $cssClass = ['Private Apartments'  => 'APT90', 'Serviced Apartments' => 'SVCAPT90', 'Private Landed'      => 'LND90', 'HDB'                 => 'HDB90', 'estate'              => 'EST90'] ?>
 <li class="widgetOuterBox" id="<?php echo $_id ?>">
     <article class="contentArea widgetContentBG relative media location">
-        <a class="pull-left" href="#">
+        <a class="pull-left" href="<?php echo $uri ?>">
             <div style="width:90px;height:auto" class="img-polaroid"><i class="hovercards <?php echo Arr::get($cssClass, $subtype, '') ?>"></i></div>
         </a>
         <div class="contentBottom media-body media-details">
@@ -21,7 +21,7 @@
             <ul class="postActionButtons"></ul>
             <ul class="postActionInfo">
                 <li data-bind="hoverClass: 'hovering'">
-                    <a   title="See subscribers" href="<?php echo $uri . '/subscribers' ?>" class="subscriberHoverCard"><i class="info16 people"></i>
+                    <a title="See subscribers" href="<?php echo $uri . '/subscribers' ?>" class="subscriberHoverCard"><i class="info16 people"></i>
                         <span><?php echo Arr::get($counts, 'subscribers', 0) ?></span>
                     </a></li>
                 <li data-bind="hoverClass: 'hovering'">

@@ -1,7 +1,7 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
     <div class="navbar-inner inner">
-        <div class="container">
-            <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar collapsed pull-left hidden-desktop">
+        <div class="">
+            <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar collapsed hidden-desktop">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -17,13 +17,13 @@
                 <li style="display:none;" data-b ind="visible:!RTApp.user()"><a href="/loginbasic" data-bind="title:'Log In'"><i class="icon-signin"></i></a></li>
             </ul>
             <div class="nav-collapse navbar-responsive-collapse collapse" style="height:0;z-index:1">
-                <ul class="nav" style="background:#484747;margin-bottom:-2px">
+                <ul class="nav" style="margin-bottom:-2px;">
                     <?php echo $main_menu->render() ?>
                 </ul>
-                <ul class="nav pull-right" style="padding-bottom:0;background:#484747;z-index:1">
+                <ul class="nav pull-right" style="padding-bottom:0;">
                     <li class="hidden-desktop nav-divider"></li>
                     <!--ko if: user-->
-                    <li style="display:none;margin-right:20px" data-bind="visible:user, title:'This feature is not enabled yet'">
+                    <li style="display:none;margin-right:0" data-bind="visible:user, title:'This feature is not enabled yet'">
                         <a href="#" class="visible-desktop clearfix RTNotify"><i class="icon-exclamation"></i></a></li>
                     <li style="display:none;margin-right:10px" class="dropdown" data-bind="visible:user, with:user">
                         <a href="#" class="hidden-desktop" data-bind="href:uri() + '#conversations', title:'View Messages', click:function(){return $('.collapse').collapse('toggle'), true;}"><span><i class="icon-envelope hidden-desktop"></i></span> Messages <span class="badge badge-important pull-right" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span></a>
@@ -46,7 +46,7 @@
                         </div>
                     </li>
                     <li style="display:none;" class="visible-desktop" data-bind="visible:user, with:user">
-                        <a class="dropdown-toggle visible-desktop" id="desktop-more-link" data-toggle="dropdown" style="margin-top:1px; cursor:pointer">More <b class="caret"></b></a>
+                        <a class="dropdown-toggle visible-desktop" id="desktop-more-link" data-toggle="dropdown" style="margin-top:1px; cursor:pointer">More <i class="icon-caret-down"></i></a>
                         <ul class="dropdown-menu" id="mainMoreNav">
                             <li><a href="#settings" data-bind="title:'Change your personal settings', href: $data.uri() + '#settings'" class="navSettings" style="padding-left:7px"><i class="icon-wrench"></i> Settings</a></li>
                             <li><a href="/billing" data-bind="title:'View account details', href: $data.uri() + '/billing'" class="navSettings" style="padding-left:7px"><i class="icon-cog"></i> Account / Billing</a></li>

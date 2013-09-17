@@ -1,0 +1,277 @@
+<div class="contentArea" data-bind="css:{centerContent: RTApp.isLargerThanDefault, 'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}, style:{marginLeft: RTApp.centerView}">
+    <ul class="small-block-grid-2 grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp">
+        <li data-bind="css : {active : currentEdit() === 'notifications'}"><a href="#" data-bind="click: currentEdit.bind($data, 'notifications')"><i class="sideNavIcon icon-bell"></i>&nbsp;Notifications</a></li>
+        <li data-bind="css : {active : currentEdit() === 'privacy'}"><a href="#" data-bind="click: currentEdit.bind($data, 'privacy')"><i class="sideNavIcon icon-lock"></i>&nbsp;Privacy</a></li>
+    </ul>
+    <div class="media" data-bind="with:RTApp.cp">
+        <div class="pull-left">
+            <img alt="User Profile Photo" id="mobileProfilePhoto" data-bind="title:name, getAvatar : {context:$data, size:'90'}">
+        </div>
+        <div class="media-body">
+            <h5 style="display:inline-block" class="noMargTopBtm">Hi there <span data-bind="text:name"></span>, </h5>
+            <p style="font-size: 13px">Your personal settings page.
+                <span class="hidden-phone">Change your privacy & notifications settings here.</span>
+            </p>
+        </div>
+    </div>
+    <div class="pageInfo clearfix" style="display:block;clear:both">
+            <div class="btn-toolbar">
+                <div class="btn-group pull-left">
+                    <button class="pageActionsButton btn" data-bind="enable: isSavable() && !isSaving(), click:saveAndExit">
+                        <i class="icon-ok"></i>
+                        <span data-bind="html:autoSaveMessage() || 'Save'"></span>
+                    </button>
+                    <button class="pageActionsButton btn" data-bind="click:cancelAndExit, hoverClass:'btn-inverse'">
+                        <i class="icon-home"></i>
+                        <span>Exit</span>
+                    </button>
+                </div>
+            </div>
+        <!--ko if : isSaving-->
+        <div class="alert" data-bind="flash:isSaving" style="display:inline-block;padding:3px 6px;margin:0">
+            <h6 style="padding:0;margin:0">
+                <span><i class="icon-spinner icon-spin"></i> Saving </span>
+                <small>Please hold for a few moments...</small>
+            </h6>
+        </div>
+        <!--/ko-->
+    </div>
+</section> <!--  introcontent -->
+<form class="form-horizontal" id="settingsBox">
+    <!--ko if : currentEdit() === 'privacy'-->
+    <!--ko with : settings.privacy-->
+    <fieldset><legend>Privacy Settings</legend>
+        <div  class="row-fluid">
+            <div class="span6"><label class="muted">My Profile is: <a href="#" class="label label-inverse help-text" data-bind="title:'If you set this to Private, you will not be listed in the member directory.'">?</a></label></div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="is" value="PUBLIC" data-bind="checked: is"> Public</label>
+            </div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="is" value="PRIVATE" data-bind="checked: is"> Private</label>
+            </div>
+        </div>
+        <div  class="row-fluid">
+            <div class="span6"><label class="muted">My Contact info is: <a href="#" class="label label-inverse help-text" data-bind="title:'Choose the visibility of your email / mobile number.'">?</a></label></div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="contacts.is" value="PUBLIC" data-bind="checked: contacts.is"> Public</label>
+            </div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="contacts.is" value="PRIVATE" data-bind="checked: contacts.is"> Private</label>
+            </div>
+        </div>
+        <div  class="row-fluid">
+            <div class="span6"><label class="muted">My Biodata (birthday etc) is: <a href="#" class="label label-inverse help-text" data-bind="title:'Choose visibility of languages you speak, education & other bio-data.'">?</a></label></div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="personal.is" value="PUBLIC" data-bind="checked: personal.is"> Public</label>
+            </div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="personal.is" value="PRIVATE" data-bind="checked: personal.is"> Private</label>
+            </div>
+        </div>
+        <div  class="row-fluid">
+            <div class="span6"><label class="muted">Everyone can subscribe to updates: <a href="#" class="label label-inverse help-text" data-bind="title:'Can other users subscribe to your profile?'">?</a></label></div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="subscriptions.is" value="PUBLIC" data-bind="checked: subscriptions.is"> Yes</label>
+            </div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="subscriptions.is" value="PRIVATE" data-bind="checked: subscriptions.is"> No</label>
+            </div>
+        </div>
+        <div  class="row-fluid">
+            <div class="span6"><label class="muted">Everyone can send messages: <a href="#" class="label label-inverse help-text" data-bind="title:'Can other users send you private messages?'">?</a></label></div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="messages.is" value="PUBLIC" data-bind="checked: messages.is"> Yes</label>
+            </div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="messages.is" value="PRIVATE" data-bind="checked: messages.is"> No</label>
+            </div>
+        </div>
+        <div  class="row-fluid">
+            <div class="span6"><label class="muted">Everyone can write on my profile: <a href="#" class="label label-inverse help-text" data-bind="title:'Restrict who can write on your profile page. This include testimonials but not comments.'">?</a></label></div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="wallposts.others_posts.is" value="PUBLIC" data-bind="checked: wallposts.others_posts.is"> Yes</label>
+            </div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="wallposts.others_posts.is" value="PRIVATE" data-bind="checked: wallposts.others_posts.is"> No</label>
+            </div>
+        </div>
+        <div  class="row-fluid">
+            <div class="span6"><label class="muted">Everyone can see what others wrote on my profile: <a href="#" class="label label-inverse help-text" data-bind="title:'Choose who can see posts in your profile that were written by others. This <strong>does not include</strong> people you are subscribed to; only people who write directly in your profile.'">?</a></label></div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="wallposts.others_posts_visibility.is" value="PUBLIC" data-bind="checked: wallposts.others_posts_visibility.is"> Yes</label>
+            </div>
+            <div class="span3">
+                <label class="checkbox inline muted"><input type="radio" name="wallposts.others_posts_visibility.is" value="PRIVATE" data-bind="checked: wallposts.others_posts_visibility.is"> No</label>
+            </div>
+        </div>
+        <!--            <div  class="row-fluid">
+                        <div class="span6"><label class="checkbox inline muted">Who can mention me in their posts:</label></div>
+                        <div class="span6">
+                            <span class="pull-right" style="text-align:right">
+                                <label class="checkbox inline muted"><input type="radio" name="mentions.is" value="PUBLIC" data-bind="checked: mentions.is"> Public</label>
+                                <label class="checkbox inline muted"><input type="radio" name="mentions.is" value="PRIVATE" data-bind="checked: mentions.is"> Private</label>
+                            </span>
+                        </div>
+                    </div>-->
+    </fieldset>
+    <!--/ko-->
+    <!--/ko-->
+
+
+
+    <!--ko if : currentEdit() === 'notifications'-->
+    <!--ko with : settings.notifications-->
+    <fieldset>
+        <legend><strong>Like</strong> notifications</legend>
+        <section id="likeNotifications">
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people like my profile.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="likers.profile" value="true" data-bind="checkedRadioToBool : likers.profile"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="likers.profile" value="false" data-bind="checkedRadioToBool: likers.profile"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people like my posts.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="likers.own_post" value="true" data-bind="checkedRadioToBool: likers.own_post"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="likers.own_post" value="false" data-bind="checkedRadioToBool: likers.own_post"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people like my comments.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="likers.comments" value="true" data-bind="checkedRadioToBool: likers.comments"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="likers.comments" value="false" data-bind="checkedRadioToBool: likers.comments"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people like posts I participate in.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="likers.other_posts" value="true" data-bind="checkedRadioToBool: likers.other_posts"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="likers.other_posts" value="false" data-bind="checkedRadioToBool: likers.other_posts"> No</label>
+                </div>
+            </div>
+        </section>
+    </fieldset>
+    <br>
+    <fieldset>
+        <legend><strong>Subscriber</strong> notifications</legend>
+        <section id="subscribeNotifications" class="row-fluid">
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people subscribe to me.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="subscribers.profile" value="1" data-bind="checked: subscribers.profile"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="subscribers.profile" value="0" data-bind="checked: subscribers.profile"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people subscribe to my posts.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="subscribers.own_post" value="1" data-bind="checked: subscribers.own_post"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="subscribers.own_post" value="0" data-bind="checked: subscribers.own_post"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people subscribe to posts I participate in.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="subscribers.other_posts" value="1" data-bind="checked: subscribers.other_posts"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="subscribers.other_posts" value="0" data-bind="checked: subscribers.other_posts"> No</label>
+                </div>
+            </div>
+        </section>
+    </fieldset>
+    <br>
+    <fieldset>
+        <legend><strong>Comment</strong> notifications</legend>
+        <section id="commentNotifications" class="row-fluid">
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people comment on my posts.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="comments.own_post" value="1" data-bind="checked: comments.own_post"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="comments.own_post" value="0" data-bind="checked: comments.own_post"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people comment on posts I participate in.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="comments.other_posts" value="1" data-bind="checked: comments.other_posts"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="comments.other_posts" value="0" data-bind="checked: comments.other_posts"> No</label>
+                </div>
+            </div>
+        </section>
+    </fieldset>
+    <br>
+    <fieldset>
+        <legend><strong>Other</strong> notifications</legend>
+        <section id="otherNotifications" class="row-fluid">
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people mention me.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="mentions" value="1" data-bind="checked: mentions"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="mentions" value="0" data-bind="checked: mentions"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people write a testimonial about me.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="testimonial" value="1" data-bind="checked: testimonial"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="testimonial" value="0" data-bind="checked: testimonial"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people write something on my profile page.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="wallpost" value="1" data-bind="checked: wallpost"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="wallpost" value="0" data-bind="checked: wallpost"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span8"><label class="checkbox inline muted">When people send me a message.</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="messages" value="1" data-bind="checked: messages"> Yes</label>
+                </div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="messages" value="0" data-bind="checked: messages"> No</label>
+                </div>
+            </div>
+            <div  class="row-fluid">
+                <div class="span7"><label class="checkbox inline muted">Profile Page updates (locations, people..).</label></div>
+                <div class="span2">
+                    <label class="checkbox inline muted"><input type="radio" name="pages" value="Daily" data-bind="checked: pages"> Daily</label>
+                </div>
+                <div class="span3">
+                    <label class="checkbox inline muted"><input type="radio" name="pages" value="Weekly" data-bind="checked: pages"> Weekly</label>
+                </div>
+            </div>
+        </section>
+    </fieldset>
+    <!--/ko-->
+    <!--/ko-->
+</form>
+</div>
+

@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-14 15:02:18 
+   Compiled at: 2013-09-17 20:47:57 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -123,6 +123,20 @@ RT.Com = {
     GetObsVal: function(p) {
         return ko.isObservable(p) ? p() : p;
     },
+    GetThumbnail: function() {
+        "use strict";
+        var s = arguments[0] || 150, img = new Image(), getPicBySize = function(s) {
+            if (this.hasOwnProperty("picture") && this.picture()) {
+                return "http://" + this.picture().replace(this.user._id(), this.user._id() + "/" + s);
+            }
+            return "http://" + RT.BUCKET + "/avatars/nothumb" + s + ".png";
+        };
+        img.width = s;
+        img.alt = "Album Thumbnails";
+        img.src = getPicBySize.call(this, s);
+        return jQuery(img).addClass('imgPreview')[0].outerHTML;
+
+    },
     Uploader: function(VM) {
         return new plupload.Uploader(VM.uploadSettings());
     },
@@ -151,15 +165,15 @@ RT.Com = {
         a.timeout && (o.timeout = a.timeout);
         return c && c.url && jQuery.ajax(o)
                 .done(function(a) {
-                    a && window.RTApp.ajaxStatus(a.status) && window.RTApp.ajaxData(a.data);
-                    a && ((a.data && a.data.message === 'Access Denied' && d && !d.user() && window.location.reload()) || (a.session && a.session.access_token && d && d.hasOwnProperty('at') && d.at(a.session.access_token)));
-                })
+            a && window.RTApp.ajaxStatus(a.status) && window.RTApp.ajaxData(a.data);
+            a && ((a.data && a.data.message === 'Access Denied' && d && !d.user() && window.location.reload()) || (a.session && a.session.access_token && d && d.hasOwnProperty('at') && d.at(a.session.access_token)));
+        })
                 .always(function() {
-                    a.loading && jQuery(a.loading).hide();
-                })
+            a.loading && jQuery(a.loading).hide();
+        })
                 .fail(function(a) {
-                    RTApp.ajaxStatus('error');
-                    RTApp.ajaxData(a);
+            RTApp.ajaxStatus('error');
+            RTApp.ajaxData(a);
         }) || $.Deferred().reject().promise();
     },
     Field: function() {
@@ -393,6 +407,23 @@ RT.Com = {
     CBSettings: {transition: "none", speed: 1, top: '10%', open: !0, maxWidth: '95%', maxHeight: '95%', height: "30%", onClosed: function() {
             return RTApp.currentForm(null) && (RTC.processing = !1); //ko.cleanNode(document.getElementById(id));
         }},
+    CB: {
+        _get: function() {
+            var e = document.getElementById('colorbox');
+            if (e && e.style.display !== "none") {
+                return e;
+            }
+            return null;
+        },
+        resize: function() {
+            var e = RT.Com.CB._get();
+            return e && $.colorbox.resize();
+        },
+        close: function() {
+            var e = RT.Com.CB._get();
+            return e && $.colorbox.close();
+        }
+    },
     qtipPlacement: function(element) {
         var d = "top", e = $(element);
         if (e.hasClass('tipsRight')) {
@@ -522,7 +553,7 @@ RT.Com = {
     log: function(k, d) {
         "use strict";
         var m = ["log", "debug", "warn", "info", "dir", "dirxml", "trace", "profile"], i, v;
-        !window.console && (window.console = {});
+        //!window.console && (window.console = {});
         if (RT.Com.debug) {
             v = {data: d};
             v[k] = true;
@@ -618,11 +649,11 @@ RT.Com = {
     Obstract: function(o, k) {
         return RT.Com.GetObsVal(RT.Com.arrGet(o, k));
     },
-    locationArrays:{
-        subtypes : ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"],
-        hdbTypes : ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"],
-        aptTypes : ['Condominium', 'Walkup', 'Apartment'],
-        landedTypes : ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"]
+    locationArrays: {
+        subtypes: ["HDB", "Private Apartments", "Serviced Apartments", "Private Landed"],
+        hdbTypes: ["2I", "2S (Standard)", "3A", "3A Modified", "3NG", "3NG Modified", "3I", "3I Modified", "3S (Simplified)", "3STD (Standard)", "4A", "4NG", "4S (Simplified)", "4I", "4STD (Standard)", "5A", "5I", "5S", "EA", "EM", "Other"],
+        aptTypes: ['Condominium', 'Walkup', 'Apartment'],
+        landedTypes: ["Bungalow", "Bungalow (Good Class)", "Detached", "Semi-Detached", "Terraced", "Corner-Terrace", "Town House", "Shop House", "Conservation House", "Clustered Housing"]
     },
     Validation: {
         username: {
@@ -651,10 +682,12 @@ RTC["PageInterface"].prototype = new RTC.Base;
 RTC["Loop"].prototype = new RTC.Base;
 
 RT["handlers"] = {
-    reverse:{
-        init: function(e, vA, allBindingsAccessor, context){
-            var obs = vA(), rev = function(){
-                return function(){return obs(!obs());}
+    reverse: {
+        init: function(e, vA, allBindingsAccessor, context) {
+            var obs = vA(), rev = function() {
+                return function() {
+                    return obs(!obs());
+                }
             };
             return ko.bindingHandlers.click.init(e, rev, allBindingsAccessor, context);
         }
@@ -865,7 +898,12 @@ RT["handlers"] = {
         init: function(element, vA, binds) {
             if (!binds().qtip && ko.unwrap(vA())) {
                 var b = ko.unwrap(binds()), position = b.position || "top",
-                        offsetY = position === 'top' ? 30 : -50;
+                        offsetY;
+                if(position === 'top'){
+                    offsetY = 30
+                } else{
+                    offsetY = 50;
+                }
                 $(element).tooltipster({
                     content: ko.unwrap(vA()),
                     arrow: false,
@@ -953,6 +991,22 @@ RT["handlers"] = {
         }
     },
     scroll: {
+        init: function(e) {
+            return $(e).addClass("customScroll").mCustomScrollbar({
+                enable: true,
+                theme: "dark-thick",
+                contentTouchScroll: true,
+                autoHideScrollbar: true,
+                scrollInertia: 200,
+                advanced: {
+                    updateOnContentResize: true,
+                    updateOnBrowserResize: true
+                }
+            });
+
+        }
+    },
+    scrollMessages: {
         init: function(e, va, allBindings, vm, context) {
             var d = ko.unwrap(va()), p = ko.unwrap(context).$parent;
             console.log(d);
@@ -962,30 +1016,25 @@ RT["handlers"] = {
                 contentTouchScroll: true,
                 autoHideScrollbar: true,
                 scrollInertia: 200,
-                advanced:{
-                    updateOnContentResize: true,
-                    updateOnBrowserResize: true
-                },
-                callbacks:{
-                    onTotalScrollBackOffset:30,
-                    onTotalScrollBack: function(){
-                        if(!!d.length){
+//                advanced: {
+//                    updateOnContentResize: true,
+//                    updateOnBrowserResize: true
+//                },
+                callbacks: {
+                    onTotalScrollBackOffset: 30,
+                    onTotalScrollBack: function() {
+                        if (!!d.length) {
                             this.messagesPrepended(d[0]._id());
+                            if (d.length === p.sc.counts.messages()) {
+                                return $(e).mCustomScrollbar("scrollTo", 40, {
+                                    scrollInertia: 200
+                                });
+                            }
                         }
                         return this.getMessages.call(this);
                     }.bind(p)
                 }
             });
-
-        },
-        update: function(e, va, allBindings, vm, context){
-            var p = ko.unwrap(context).$parent, id = p.messagesPrepended();
-            if(id){
-                p.messagesPrepended(null);
-                return $(e).mCustomScrollbar("scrollTo", '#message' + id, {
-                    scrollInertia: 200
-                });
-            }
 
         }
     },
@@ -1446,15 +1495,15 @@ RT["handlers"] = {
         this.push.apply(this, items);
     };
 
-    ko.observableArray.fn["addToSet"] = function(item, remove, key){
-        if(!key){
+    ko.observableArray.fn["addToSet"] = function(item, remove, key) {
+        if (!key) {
             key = '_id';
         }
-        var f = ko.utils.arrayFirst(this(), function(i){
+        var f = ko.utils.arrayFirst(this(), function(i) {
             return RTC.GetObsVal(i[key]) === RTC.GetObsVal(item[key]);
         });
 
-        if(!f){
+        if (!f) {
             this.unshift(item);
             return true;
         }
@@ -1659,8 +1708,7 @@ RT["handlers"] = {
                 "use strict";
                 var vm = Accessor(), uw = ko.unwrap(vm),
                         d = document, show = !!uw.currentItem(), n = d.getElementById('rtModal'),
-                        p = d.getElementById('rtModalContainer') || d.createElement("DIV"),
-                        direction = uw.direction(), a = {};
+                        p = d.getElementById('rtModalContainer') || d.createElement("DIV");
                 if (show) {
                     uw.isLoading(true);
                     if (!n) {
@@ -1674,7 +1722,6 @@ RT["handlers"] = {
                         return uw.resize();
                     }
                     return $(p).fadeIn('fast', function() {
-
                         return uw.resize.call(uw, function() {
                             $(p).find('.draggable img').draggable({axis: "x", revert: true, delay: 0});
                         });
@@ -1719,7 +1766,7 @@ RT["handlers"] = {
             init: function(vm) {
                 //return console.log(vm);
                 var s = ko.utils.extend(RT.Com.CBSettings, {
-                    href: '/assets/dialog.html', height: "auto", width: "35%", maxWidth: '95%', minWidth: '400px',
+                    href: '/assets/templates/dialog.html', height: "auto", width: "35%", maxWidth: '95%', minWidth: '400px',
                     onComplete: function() {
                         ko.applyBindings(vm, document.getElementById("dialogContent"));
                         return $.colorbox.resize();
@@ -1738,8 +1785,8 @@ RT["handlers"] = {
                     fTop = (w.scrollTop() + w.height() - fHeight) + "px";
 
             return ($(document.body).height() + fHeight) < w.height()
-                    && $footer.css({position: "absolute"}).animate({top: fTop})
-                    || $footer.css({position: "static"});
+                    ? $footer.css({position: "absolute"}).animate({top: fTop})
+                    : $footer.css({position: "static"});
         };
         fixFooter();
         w.scroll(fixFooter).resize(fixFooter);
@@ -1781,7 +1828,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-14 15:02:18 
+   Compiled at: 2013-09-17 20:47:57 
 ================================ */
 RT.App = function() {
     "use strict";
@@ -1833,14 +1880,32 @@ RT.App = function() {
         }
         return false;
     }, this);
+    self.isJSAction.subscribe(function(v) {
+        if (!v)
+            return false;
+        var a = window.analytics || {};
+        switch (this.ca()) {
+            case "edit":
+                return a.track("Click on edit Profile");
+            case 'settings':
+                return a.track("Click on Settings");
+            case 'media':
+                return a.track("Click on Media Library");
+            case 'conversations':
+                return a.track("Click on Messages");
+            case 'leads':
+                return a.track("Click on Admin page");
+        }
+        ;
+    }, self);
     self.interactors = function() {
-        var t = this, a = arguments[0] || {};
+        var t = this, a = arguments[0] || {}, u = RTApp.user();
         t.items = ko.observableArray();
         t.interactable = ko.observable();
         t.total = ko.observable();
         t.uri = ko.observable();
-        t.current = ko.computed(function() {
-        }, this);
+//        t.current = ko.computed(function() {
+//        }, this);
         t.type = ko.observable();
         t.page = ko.computed(function() {
             var T = this;
@@ -1854,11 +1919,16 @@ RT.App = function() {
             var items = a[type], S;
             if (t.total() > 0) {
                 S = ko.utils.extend(RTC.CBSettings, {
-                    width: "330px", href: '/assets/interactors.html', height: "auto",
+                    width: "330px", href: '/assets/templates/interactors.html', height: "auto",
                     onComplete: function() {
+                        var aa = type.ucFirst();
                         ko.applyBindings(t, document.getElementById("interactors"));
                         $("#moreInteractors").waypoint(RTC.InteractorHandler, {
                             offset: "125%"
+                        });
+                        analytics && analytics.track("Viewing the " + aa + " list of " + a.type(), {
+                            user_id: u._id(),
+                            post_id: a._id()
                         });
                         return $.colorbox.resize();
                     }
@@ -1888,7 +1958,7 @@ RT.App = function() {
             }
         };
         t.resize = function() {
-            return $.colorbox.resize();
+            return RTC.CB.resize();
         };
         t.get = function(w) {
             if (t.total() !== t.items().length) {
@@ -1907,7 +1977,7 @@ RT.App = function() {
         t.hide = function() {
             var e = document.getElementById("interactors");
             e && !!e.length && ko.cleanNode(e);
-            $.colorbox.close();
+            RTC.CB.close();
         };
     };
     self.viewport = {
@@ -1988,7 +2058,7 @@ RT.App.prototype = {
                     return $.colorbox({html: "<div class='RTAWindowContainer'><p class='contentArea text-info'><i class='icon-info-sign'></i> " + r.data.message + "</p></div>"});
                 }
                 var s = ko.utils.extend(RT.Com.CBSettings, {
-                    href: '/assets/qrcode.html', height: "auto", width: "auto", maxWidth: '95%', minWidth: '500px',
+                    href: '/assets/templates/qrcode.html', height: "auto", width: "auto", maxWidth: '95%', minWidth: '500px',
                     onComplete: function() {
                         ko.applyBindings(d, document.getElementById("qrcodeContent"));
                         return $.colorbox.resize();
@@ -2001,7 +2071,7 @@ RT.App.prototype = {
     initLoginForm: function() {
         "use strict";
         var t = this, cf = t.currentForm, C = RTC, P = C.processing, S = ko.utils.extend(C.CBSettings, {
-            width: "570px", height: "30%", href: "/assets/login.html", onComplete: function() {
+            width: "570px", height: "30%", href: "/assets/templates/login.html", onComplete: function() {
                 cf(new RT.Forms.Login());
                 setTimeout(function() {
                     ko.applyBindings(cf(), document.getElementById("loginBox"));
@@ -2024,7 +2094,7 @@ RT.App.prototype = {
                 cf = RTC.getCookie('skipfbAnimate'), f = $('#feedbackButton');
 
         if (this.user() && t.isTabletOrLarger()) {
-            trg.load("/assets/feedback.html", function() {
+            trg.load("/assets/templates/feedback.html", function() {
                 ko.applyBindings(t.feedback, trg[0]);
                 if (!cf) {
                     f.css({'-webkit-backface-visibility': 'hidden', '-webkit-transition': 'translate3d(0,0,0)'});
@@ -2050,7 +2120,7 @@ RT.App.prototype = {
                 RTC.processing = !1;
                 return ko.applyBindings(cf(), trg[0]);
             }
-            return trg.load("/assets/info.html", function() {
+            return trg.load("/assets/templates/info.html", function() {
                 cf(new RT.Forms.Info());
                 cf().init();
                 ko.cleanNode(trg[0]);
@@ -2072,7 +2142,7 @@ RT.App.prototype = {
                 RTC.processing = !1;
                 return ko.applyBindings(cf(), trg[0]);
             }
-            return trg.load("/assets/settings.html", function() {
+            return trg.load("/assets/templates/settings.html", function() {
                 cf(new RT.Forms.Settings(t.user(), t));
                 RTC.processing = !1;
                 ko.cleanNode(trg[0]);
@@ -2093,7 +2163,7 @@ RT.App.prototype = {
                 cf().history(cf().history.slice(0, 2));
                 return cf().currentIndex(1) && (RTC.processing = !1);
             }
-            return trg.load("/assets/mediaLibrary.html", function() {
+            return trg.load("/assets/templates/mediaLibrary.html", function() {
                 cf(new RT.ControllerLibrary);
                 ko.cleanNode(trg[0]);
                 RTC.processing = !1;
@@ -2111,7 +2181,7 @@ RT.App.prototype = {
                 cf().history(cf().history.slice(0, 2));
                 return cf().currentIndex(1) && (RTC.processing = !1);
             }
-            return trg.load("/assets/conversations.html", function() {
+            return trg.load("/assets/templates/conversations.html", function() {
                 cf(new RT.ControllerMessages);
                 ko.cleanNode(trg[0]);
                 RTC.processing = !1;
@@ -2124,7 +2194,7 @@ RT.App.prototype = {
         "use strict";
         var t = this, cf = t.currentForm, C = RTC, P = C.processing, cp = t.cp(),
                 u = t.user(), S = ko.utils.extend(C.CBSettings, {
-            width: "980px", href: "/assets/listingWizard.html", height: "auto",
+            width: "980px", href: "/assets/templates/listingWizard.html", height: "auto",
             onComplete: function() {
                 cf(new RT.Forms.Listing());
                 if (cp && C.GetObsVal(cp.type) === 'location') {
@@ -2154,7 +2224,7 @@ RT.App.prototype = {
         var isA = false, t = this;
         t.admin.subscribe(function(a) {
             if (a && !isA) {
-                $.getScript("/assets/js/adminlocations.js", function() {
+                $.getScript("/js/adminlocations.js", function() {
                     return t['adminLocations'](new RT.Admin.AdminLocations) || false;
                 });
                 return (isA = true), true;
@@ -2171,13 +2241,13 @@ RT.App.prototype = {
         p.state = t.st();
         p.filter = d && d.filteredBy();
         p.sort = d && d.sortedBy();
-        if(p.url === '/listings' && t.cp()){
+        if (p.url === '/listings' && t.cp()) {
             var cp = t.cp(), id = cp._id();
-            if(t.cpIsUser()){
+            if (t.cpIsUser()) {
                 p.user_id = id;
-            } else{
+            } else {
                 p.page_id = id;
-                if(cp.hasOwnProperty("subtype") && cp.subtype() === "Estate"){
+                if (cp.hasOwnProperty("subtype") && cp.subtype() === "Estate") {
                     p.parent_id = id;
                 }
             }
@@ -2203,12 +2273,12 @@ RT.App.prototype = {
     getKeyword: function(request, response) {
         "use strict";
         var f = jQuery("form.RTASearch"), l = window.location,
-            u = !!f.length ? f.attr("action") : "http:" + l.host + l.pathname,
-            p = {
-                state: jQuery("#RTASearchState").val(),
-                s: request.term,
-                url: u + '/keyword'
-            };
+                u = !!f.length ? f.attr("action") : "http:" + l.host + l.pathname,
+                p = {
+            state: jQuery("#RTASearchState").val(),
+            s: request.term,
+            url: u + '/keyword'
+        };
         return (p = new RTC.Get({}, p)) && p.done(function(r) {
             return RTC.isSuccess(r) && response(r.data);
         });
@@ -2283,7 +2353,12 @@ RT.App.prototype = {
                 t.initFeedbackForm();
                 !t.autoLogin() && setTimeout(RTC.poll, 3e4) || window.location.pathname !== "/loginbasic" && (window.location = "/loginbasic?redirect_to=" + encodeURIComponent(window.location) + "&state=" + t.st() + "&access_token=" + t.at());
                 t.initPostForm();
-                return t.cuIsAdmin() && $.getScript("/assets/js/admin.js").done(function() {
+                analytics && analytics.identify(v._id(), {
+                    name: v.name(),
+                    username: v.username(),
+                    role: v.roles().join(" ")
+                });
+                return t.cuIsAdmin() && $.getScript("/js/admin.js").done(function() {
                     $("#rightbar").on("click", "#adminCountWidget a", function() {
                         $("#adminCountWidget a").parent().each(function() {
                             $(this).removeClass("active");
@@ -2302,7 +2377,7 @@ RT.App.prototype = {
                 if (!!trg.find("#adminContentSessions").length) {
                     return;
                 }
-                trg.load("/assets/admin/sessions.html", function() {
+                trg.load("/assets/templates/admin/sessions.html", function() {
                     ko.cleanNode(trg[0]);
                     RTC.processing = !1;
                     return ko.applyBindings(this, trg[0]);
@@ -2489,12 +2564,20 @@ RT.App.prototype = {
         return "";
     },
     getUserHoverCard: function(d) {
-        var id = d.user ? d.user._id() : d._id();
+        var id = d.user ? d.user._id() : d._id(), name = d.user ? d.user.name() : d.name();
+        analytics && analytics.track("Viewed a User hovercard", {
+            user_id: RTApp.user()._id(),
+            viewing: name + "(" + id + ")"
+        });
         return 'http://' + window.location.host + "/user?id=" + id || "";
     },
     getLocationHoverCard: function(d) {
-        var id = d.user ? d.user._id() : d._id();
-        return 'http://' + window.location.host + "/user?id=" + id || "";
+        var id = d._id();
+        analytics && analytics.track("Viewed a Location hovercard", {
+            user_id: RTApp.user()._id(),
+            viewing: d.name + "(" + id + ")"
+        });
+        return 'http://' + window.location.host + "/page?id=" + id || "";
     }
 };
 
@@ -2560,7 +2643,7 @@ RT.ControllerLibrary = function() {
     };
     self.stopEditingAlbum = function() {
         "use strict";
-        var ta = self.tempAlbum, d = self.editingAlbum, sv = d() && d().serverVals, e = document.getElementById('colorbox');
+        var ta = self.tempAlbum, d = self.editingAlbum, sv = d() && d().serverVals;
         if (d()) {
             if (sv()) {
                 ta() && ko.mapping.fromJS(sv(), {}, ta()) || ta(new RT.Album(ko.toJS(sv())));
@@ -2570,7 +2653,7 @@ RT.ControllerLibrary = function() {
             self.setSelected(ta()) && ta(null);
         }
         self.up() && self.up().destroy() && self.up(null);
-        e && e.style.display !== 'none' && $.colorbox.close();
+        RTC.CB.close();
         return d(null) && self.history()[1].getAlbums(true) && new RTC.Get({}, {
             url: "/media/deletealbumid"
         });
@@ -2626,7 +2709,9 @@ RT.ControllerLibrary = function() {
         });
     })(RTApp);
 };
+
 RT.ControllerLibrary.prototype = new RTC.PageInterface;
+
 RT.albumsView = function() {
     var self = this;
     self.name = "Albums";
@@ -2679,6 +2764,7 @@ RT.albumsView = function() {
     //console.log(RTApp.user().connections.albums());
     self.getAlbums();
 };
+
 RT.singleAlbum = function(album) {
     var seeAttachment = function(d) {
         return RTApp.cplib().goTo(RT.singleAttachment.bind(d, album), 3), true;
@@ -2749,7 +2835,7 @@ RT.singleAlbum = function(album) {
     album.getItems();
     album.content = {name: 'pictureList', data: album.attachments};
     ko.computed(function() {
-        if(typeof album.attachments === 'function'){
+        if (typeof album.attachments === 'function') {
             if (album.attachments() && !!album.attachments().length) {
                 RTC.forEach(album.attachments(), function(i) {
                     if (!i.hasOwnProperty("seeAttachment")) {
@@ -2763,6 +2849,7 @@ RT.singleAlbum = function(album) {
     }, album);
     return album;
 };
+
 RT.singleAttachment = function(currentAlbum) {
     var self = this;
     self.parent = currentAlbum;
@@ -2857,7 +2944,7 @@ RT.ControllerMessages = function() {
 
         return sc() && (p = RTC.GetAPI({}, p)) || !1;
     };
-    self.newMessage.subscribe(function(v){
+    self.newMessage.subscribe(function(v) {
         return v && $.colorbox({
             fixed: !0,
             transition: 'fade',
@@ -2907,7 +2994,7 @@ RT.conversationView = function() {
     self.getConversations = function(force) {
         "use strict";
         var t = this, m = t.conversations, p, u = RTApp.user(),
-                cp = t.conversationCurrentPage, hm = t.hasMoreConversations,f = [];
+                cp = t.conversationCurrentPage, hm = t.hasMoreConversations, f = [];
         if ((!hm() || !u) && !force) {
             return false;
         }
@@ -2919,7 +3006,7 @@ RT.conversationView = function() {
             if (RTC.isSuccess(r)) {
                 cp(cp() + 1);
                 r.data.length > 10 && (hm(!0) && r.data.pop()) || hm(!1);
-                if(force){
+                if (force) {
                     return m(RTC.GetObsVal(ko.mapping.fromJS(r.data, {create: RTC.CreateLoop})));
                 }
                 return m.pushAll(RTC.GetObsVal(ko.mapping.fromJS(r.data, {create: RTC.CreateLoop})));
@@ -2934,20 +3021,20 @@ RT.conversationView = function() {
     self.getConversations();
 };
 
-RT.messageView = function(currentConversation){
+RT.messageView = function(currentConversation) {
     var self = this;
     RTC.MakeObsFromArray.call(self, "message _processing messagesPrepended");
     currentConversation && (self.sc = currentConversation);
     self.messageLimit = 10;
     self.backLink = {
         action: function() {
-            var cv = RTApp.inbox().history()[1];
-            return RTApp.inbox().goBack() && cv.getConversations(!0), !0;
+            var i = RTApp.inbox(), cv = i.history()[1];
+            return i.goBack() && cv.getConversations(!0), !0;
         },
         icon: 'icon-chevron-left', title: 'Back to Messages', uri: '#conversations'
     };
     self.rightLinks = [];
-    self.conversationWith = ko.computed(function(){
+    self.conversationWith = ko.computed(function() {
         var u = ko.toJS(RTApp.user()._id), to = ko.toJS(this.sc.to), from = ko.toJS(this.sc.user);
         return u === to._id ? from.name : to.name;
     }, self);
@@ -2982,14 +3069,14 @@ RT.messageView = function(currentConversation){
     self.hasMoreMessages = ko.computed(function() {
         return this.currentMessageCount() < this.sc.counts.messages();
     }, this);
-    self.isRetrievingMessages = ko.computed(function(){
+    self.isRetrievingMessages = ko.computed(function() {
         return this.hasMoreMessages() && this._processing();
     }, self);
     self.getMessages = function() {
         "use strict";
-        var t = this,  m = t.messages, p, sc = t.sc, current = t.currentMessageCount(),
+        var t = this, m = t.messages, p, sc = t.sc, current = t.currentMessageCount(),
                 u = RTApp.user(), total = sc.counts.messages(), hm = t.hasMoreMessages();
-        console.log({current : current, total: total});
+        console.log({current: current, total: total});
 
         if (!hm || t._processing()) {
             return false;
@@ -3005,15 +3092,17 @@ RT.messageView = function(currentConversation){
             if (RTC.isSuccess(r)) {
                 return m.insertAll(RTC.GetObsVal(ko.mapping.fromJS(r.data)));
             }
-        }).always(function(){return t._processing(false);});
+        }).always(function() {
+            return t._processing(false);
+        });
     };
     self.getMessages();
 
-    self.canPostMessage = ko.computed(function(){
+    self.canPostMessage = ko.computed(function() {
         return !!this.message();
     }, self).extend({throttle: 300});
-    self.reply = function(){
-        var t = self, sc= t.sc, u = ko.toJS(RTApp.user()._id), to = ko.toJS(sc.to),
+    self.reply = function() {
+        var t = self, sc = t.sc, u = ko.toJS(RTApp.user()._id), to = ko.toJS(sc.to),
                 from = ko.toJS(sc.user), m = t.message, p = {},
                 c = t.messages;
 
@@ -3024,21 +3113,34 @@ RT.messageView = function(currentConversation){
 
         p = RTC.PostApi({}, p);
 
-        p.done(function(r){
-            if(RTC.isSuccess(r)){
+        p.done(function(r) {
+            if (RTC.isSuccess(r)) {
                 c.push(ko.mapping.fromJS(r.data.message));
                 m(null);
             }
         });
 
-        p.always(function(){return self._processing(!1);});
+        p.always(function() {
+            return self._processing(!1);
+        });
     };
-    self.messages.subscribe(function(v){
-        var e = this.messagesPrepended();
-        return !e && setTimeout(function(){
-            var e = $("#message-window");
-            return e.mCustomScrollbar("scrollTo", "last");
-        }, 100);
+    self.messages.subscribe(function(v) {
+        var id = this.messagesPrepended, e = $("#message-window"), cb;
+        if (id()) {
+            cb = function() {
+                e.mCustomScrollbar("update");
+                return e.mCustomScrollbar("scrollTo", '#message' + id(), {
+                    scrollInertia: 200
+                });
+            };
+        } else {
+            id(null);
+            cb = function() {
+                e.mCustomScrollbar("update");
+                return e.mCustomScrollbar("scrollTo", "last");
+            };
+        }
+        return setTimeout(cb, 100);
     }, self);
     self.content = {name: 'messageListT', data: self};
 };
@@ -3049,14 +3151,18 @@ RT.newConversationForm = function(conversations) {
 
     RTC.MakeObsFromArray.call(self, "receipient message currentConversation _processing");
     conversations && (self.parent = conversations);
-    self.setReceipient = function(context, event, ui){
-        if(ui && ui.item.value){
+    self.setReceipient = function(context, event, ui) {
+        if (ui && ui.item.value) {
             context.receipient(new RT.User(ui.item.value));
         }
     };
-    self.receipient.subscribe(function(v){return v && setTimeout(function(){return $.colorbox.resize();}, 1);});
+    self.receipient.subscribe(function(v) {
+        return v && setTimeout(function() {
+            return $.colorbox.resize();
+        }, 1);
+    });
     self.getReceipients = function(request, response) {
-        var url = '/user/index/' + RTApp.user()._id(), a = RTC.GetApi({},{
+        var url = '/user/index/' + RTApp.user()._id(), a = RTC.GetApi({}, {
             url: url,
             request_type: 'search_message_receipient',
             s: request.term
@@ -3065,14 +3171,15 @@ RT.newConversationForm = function(conversations) {
             return RTC.isSuccess(r) && response(r.data);
         });
     };
-    self.canPostMessage = ko.computed(function(){
+    self.canPostMessage = ko.computed(function() {
         var r = this.receipient(), m = this.message();
-        if((r && !r.hasOwnProperty('_id')) || (!r) || (!m)){
+        if ((r && !r.hasOwnProperty('_id')) || (!r) || (!m)) {
             return false;
-        };
+        }
+        ;
         return true;
     }, self).extend({throttle: 300});
-    self.sendMessage = function(){
+    self.sendMessage = function() {
         var r = self.receipient(), m = self.message(), p = {};
 
         self.canPostMessage() && self._processing(!0);
@@ -3082,15 +3189,17 @@ RT.newConversationForm = function(conversations) {
 
         p = RTC.PostApi({}, p);
 
-        p.done(function(r){
-            if(RTC.isSuccess(r)){
+        p.done(function(r) {
+            if (RTC.isSuccess(r)) {
                 var p = self.parent, c = p && p.conversations, d = ko.mapping.fromJS(r.data);
                 c.addToSet(d);
-                return p.selectConversation(d) && $.colorbox.close();
+                return p.selectConversation(d) && RTC.CB.close();
             }
         });
 
-        p.always(function(){return self._processing(!1);});
+        p.always(function() {
+            return self._processing(!1);
+        });
     };
 };
 
@@ -3107,7 +3216,7 @@ RT.Actions = function(t) {
             $("#" + d._id()).removeClass("opaque");
         }).done(function(r) {
             if (!RTC.isSuccess(r)) {
-                return $.bootstrapGrowl('<p>Oops, we could not complete that action.<br><small class="muted">The object might no longer exists. Please provide feedback if you think this is an error.</small>', {type: 'warning'});
+                return $.bootstrapGrowl('<p>Oops, we could not complete that action.<br><small>The object might no longer exists. Please provide feedback if you think this is an error.</small>', {type: 'warning'});
             }
         });
         return s;
@@ -3123,7 +3232,7 @@ RT.Actions = function(t) {
                 _id: d._id(),
                 type: d.type()
             },
-            message: d.commentText(),
+            message: c,
             status: 'active'
         };
         return c && (c = self.submit(p, d, true)) && c.done(function(r) {
@@ -3136,6 +3245,12 @@ RT.Actions = function(t) {
                 d.counts.comments(d.counts.comments() + 1);
                 $(".commentInput").css("height", "25px");
             }
+        }).always(function() {
+            analytics && analytics.track("Commented on a " + p.post.type, {
+                user_id: p.user._id,
+                post_id: p.post._id,
+                data: c
+            });
         })
                 || $.bootstrapGrowl('<i class="icon-exclamation-sign"></i> Please type in a comment.', {type: 'warning'});
         ;
@@ -3159,6 +3274,11 @@ RT.Actions = function(t) {
                 });
             }
 
+        }).always(function() {
+            analytics && analytics.track("Deleted a " + d.type(), {
+                user_id: d.user._id(),
+                post_id: d._id()
+            });
         });
     };
     self.privacy = function(d, a) {
@@ -3168,6 +3288,12 @@ RT.Actions = function(t) {
         d.privacy.is() !== a ? p.privacy = {is: a} : c = false;
         return c && (c = self.submit(p, d)) && c.done(function(r) {
             return RTC.isSuccess(r) && a === "PUBLIC" ? d.setPublic() : d.setPrivate();
+        }).always(function() {
+            analytics && analytics.track("Changed a " + d.type() + "privacy settings", {
+                user_id: d.user._id(),
+                post_id: d._id(),
+                data: a
+            });
         });
     };
     self.message = function(d) {
@@ -3189,16 +3315,23 @@ RT.Actions = function(t) {
                 d.counts.comments(d.counts.comments() + 1);
                 $(".commentInput").css("height", "25px");
                 return setTimeout(function() {
-                    $.bootstrapGrowl('<p>Your message was succesfully sent.<br><small class="muted">This conversation continues in your inbox</small></p>', {type: 'success'});
+                    $.bootstrapGrowl('<p>Your message was succesfully sent.<br><small>This conversation continues in your inbox</small></p>', {type: 'success'});
                 }, 500);
             }
+        }).always(function() {
+            analytics && analytics.track("Created a private message in " + p.post.type, {
+                user_id: p.user._id,
+                post_id: p.post._id,
+                data: c
+            });
         });
     };
 };
 RT.User = function() {
     "use strict";
-    var t = this, a = arguments[0] || {};
+    var t = this, a = arguments[0] || {}, o = "ajaxStatus ajaxData currentEdit";
     ko.mapping.fromJS(a, {}, this);
+    RTC.MakeObsFromArray.call(this, o);
     t.interactions = a.interactions ? ko.mapping.fromJS(a.interactions) : null;
     t.isAdmin = ko.computed(function() {
         return t.roles && t.roles() && -1 !== t.roles.indexOf("admin");
@@ -3206,12 +3339,9 @@ RT.User = function() {
     t.isAgent = ko.computed(function() {
         return t.roles && t.roles() && -1 !== t.roles.indexOf("agent");
     }, t);
-    t.ajaxStatus = ko.observable("success");
-    t.ajaxData = ko.observable({});
-    t.currentEdit = ko.observable("picture");
-    t.changeEdit = function(mi) {
-        return t.currentEdit(mi);
-    };
+    t.ajaxStatus("success");
+    t.ajaxData({});
+    t.currentEdit("picture");
     t.clearMessageCount = function() {
         var c = this.counts.newMessages;
         setTimeout(function() {
@@ -3296,7 +3426,7 @@ RT.Post = function() {
         return this.hasOwnProperty("comments");
     };
     this.canComment = function() {
-        return this.isPost() && !this.isTestimonial();
+        return RTApp.user() && this.isPost() && !this.isTestimonial();
     };
     this.showCommentSubmit = function() {
         return this.commentSubmit(!0);
@@ -3727,21 +3857,7 @@ RT.Album = function() {
         loadMore: this.getAttachments.bind(this)
     });
 };
-RT.Album.prototype.getThumbnail = function() {
-    "use strict";
-    var img = new Image();
-    img.width = arguments[0] || 150;
-    img.alt = "Album Thumbnails";
-    img.src = getPicBySize.apply(this, arguments);
-    return jQuery(img).addClass('imgPreview')[0].outerHTML;
-    function getPicBySize() {
-        if (this.hasOwnProperty("picture") && this.picture()) {
-            return "http://" + this.picture().replace(this.user._id(), this.user._id() + "/" + (arguments[0] || "150"));
-        }
-        return "http://" + RT.BUCKET + "/avatars/nothumb" + (arguments[0] || "150") + ".png";
-    }
-    ;
-};
+RT.Album.prototype.getThumbnail = RTC.GetThumbnail;
 RT.Listing = function() {
     RT.Post.apply(this, arguments);
     var t = this;
@@ -3779,21 +3895,7 @@ RT.Listing = function() {
         hasListing: this
     });
 };
-RT.Listing.prototype.getThumbnail = function() {
-    "use strict";
-    var img = new Image();
-    img.width = arguments[0] || 150;
-    img.alt = "Album Thumbnails";
-    img.src = getPicBySize.apply(this, arguments);
-    return jQuery(img).addClass('imgPreview')[0].outerHTML;
-    function getPicBySize() {
-        if (this.hasOwnProperty("picture") && this.picture()) {
-            return "http://" + this.picture().replace(this.user._id(), this.user._id() + "/" + (arguments[0] || "150"));
-        }
-        return "http://" + RT.BUCKET + "/avatars/nothumb" + (arguments[0] || "150") + ".png";
-    }
-    ;
-};
+RT.Listing.prototype.getThumbnail = RTC.GetThumbnail;
 RT.Attachment = function() {
     RT.Post.apply(this, arguments);
     this.dimensions = ko.computed(function() {
@@ -3900,10 +4002,10 @@ RT.Conversation = function(p) {
     "use strict";
     p = p || {};
     ko.mapping.fromJS(p, {}, this);
-    this.isUnread = ko.computed(function(){
+    this.isUnread = ko.computed(function() {
         return this.unread() === RTApp.user()._id();
     }, this);
-    this.lastMsgIsCu = ko.computed(function(){
+    this.lastMsgIsCu = ko.computed(function() {
         return this.lastMessage._id() === RTApp.user()._id();
     }, this);
 };
@@ -4090,6 +4192,8 @@ RT.Library = function(params) {
                 if (RTC.isSuccess(r) && !!r.data.length) {
                     return ko.mapping.fromJS(r.data, {create: RTC.CreateLoop}, self.albums);
                 }
+            }).always(function(){
+                return RTC.CB.resize();
             });
         }
     };
@@ -4154,7 +4258,7 @@ RT.Library = function(params) {
     };
     self.stopEditingAlbum = function() {
         "use strict";
-        var ta = self.tempAlbum, d = self.editingAlbum, sv = d() && d().serverVals, e = document.getElementById('colorbox');
+        var ta = self.tempAlbum, d = self.editingAlbum, sv = d() && d().serverVals;
         if (d()) {
             if (sv()) {
                 ta() && ko.mapping.fromJS(sv(), {}, ta()) || ta(new RT.Album(ko.toJS(sv())));
@@ -4164,7 +4268,7 @@ RT.Library = function(params) {
             self.setSelected(ta()) && ta(null);
         }
         self.up() && self.up().destroy() && self.up(null);
-        e && e.style.display !== 'none' && $.colorbox.close();
+        RTC.CB.close();
         return d(null) && self.getAlbums(true) && new RTC.Get({}, {
             url: "/media/deletealbumid"
         });
@@ -4206,12 +4310,10 @@ RT.Library = function(params) {
         });
     }, self);
 };
-RT.Library.prototype = {
-    deleteAlbum: function() {
-        var t = this, ea = t.editingAlbum;
-        ea() && ea().actions && ea().actions["delete"] && RTApp.performAction('delete', ea(), null);
-        return t.selectedAlbum(null) && ea(null) && t.stopEditingAlbum();
-    }
+RT.Library.prototype.deleteAlbum = function() {
+    var t = this, ea = t.editingAlbum;
+    ea() && ea().actions && ea().actions["delete"] && RTApp.performAction('delete', ea(), null);
+    return t.selectedAlbum(null) && ea(null) && t.stopEditingAlbum();
 };
 
 RT.Forms = {
@@ -4494,7 +4596,7 @@ RT.Forms = {
             first_name: user.first_name,
             last_name: user.last_name,
             uri: user.uri,
-            username: ko.validateIfChanged(user.username()),
+            username: ko.validateIfChanged(user.uri().substr(1, user.uri().length)),
             email: ko.validateIfChanged(user.email()),
             company: ko.validateIfChanged(RTC.GetObsVal(user.company)),
             designation: ko.validateIfChanged(user.designation()),
@@ -4519,6 +4621,23 @@ RT.Forms = {
             roles: ko.observableArray(user.roles()),
             vcard: ko.observableArray()
         };
+        self.editables.showUriButUpdateUsername = ko.computed({
+            read: function() {
+                var u = this.uri();
+                // remove the "/" from the URI. This is done because the URL
+                // can have caps, but not the username
+                return u.substr(1, u.length);
+            },
+            write: function(v) {
+                var u = this.username, i = u.initial();
+                console.log({check: (v.toLowerCase() === i.toLowerCase()) || (v.toLowerCase() === i) || (v === i.toLowerCase())})
+                if ((v.toLowerCase() !== i.toLowerCase())) {
+                    return u(v);
+                }
+                return u.revert();
+            },
+            owner: self.editables
+        });
         self.editables.vcard([
             {value: 'mobile', enable: true, checked: ko.observable(false), label: 'Mobile', title: null},
             {value: 'email', enable: true, checked: ko.observable(false), label: 'Email', title: null},
@@ -4649,7 +4768,7 @@ RT.Forms = {
                 return "http://" + pic.replace(id, id + "/150");
             }
             if (link) {
-// placeholder for link post types
+                // placeholder for link post types
             }
             return "http://" + RT.BUCKET + "/avatars/nothumb150.png";
         }, self);
@@ -4789,7 +4908,7 @@ RT.Forms = {
         self.isEditingExcerpt.subscribe(this.autoSave, this);
         self.privacy.is.subscribe(this.autoSave.bind(this, false));
         self.attachments.subscribe(function() {
-            return $.colorbox && $.colorbox.resize();
+            return RTC.CB.resize();
         });
     },
     Attachment: function(params, album, lib) {
@@ -4833,7 +4952,7 @@ RT.Forms = {
             if (pic) {
                 return "//" + pic.replace(id, id + "/110");
             }
-            return "/images/nothumb110.png";
+            return "/img/nothumb110.png";
         }, this);
         self.percent(params.percent);
         self.queued(params.queued);
@@ -4877,7 +4996,7 @@ RT.Forms = {
         var o = "showMediaMenu priceFormat hasValuation hasLand serverVals tempAlbum uploadAlbum currentStep subtype showSubType showAddress editing queued size name picture mediaLib selectFromAlbum uploadNew";
         C.MakeObsFromArray.call(T, o);
         T.hide = function() {
-            return $.colorbox.close();
+            return RTC.CB.close();
         };
         T.steps = ko.observableArray([
             new C.Step(1, 'Location Details', 'locationDetailsT'),
@@ -4886,13 +5005,12 @@ RT.Forms = {
             new C.Step(4, 'Media', 'mediaAttachT'),
             new C.Step(5, 'Status', 'postStatusT')
         ]);
-        T.currentStep(this.steps()[0]);
+        T.currentStep(T.editing() ? this.steps()[1] : this.steps()[0]);
         T.currentIndex = ko.computed(function() {
             return T.steps.indexOf(T.currentStep());
         }, this);
         T.subTypes = RTC.locationArrays.subtypes;
         T.showAddress(true);
-        T.editing() && this.currentStep(this.steps()[1]);
         T.hdbTypes = RTC.locationArrays.hdbTypes;
         T.aptTypes = RTC.locationArrays.aptTypes;
         T.landedTypes = RTC.locationArrays.landedTypes;
@@ -4947,13 +5065,12 @@ RT.Forms = {
         tD.valuation.extend({throttle: 100});
         tD.cov.extend({throttle: 500});
         tD.builtSize.extend({throttle: 100});
-        tD.message.extend({maxLength: 10e3});
+        tD.message.extend({maxLength: 1e4});
         tD.unit = {
             floor: ko.observable("").extend({required: !0}),
             stack: ko.observable("").extend({required: !0})
         };
         T.listing = T.defaults = tD;
-//        T.listing.builtSize.extend({required: !0});
         T.locationDetails = ko.computed(function() {
             var l = T.listing, p = l.page();
             return {
@@ -5054,6 +5171,7 @@ RT.Forms = {
                     a = s ? s.attachments() : false;
             return a && RTC.forEach(a, function(i) {
                 i.isSelected(true);
+                T.picture(i);
                 return am.push(i);
             });
         };
@@ -5091,7 +5209,9 @@ RT.Forms = {
             "use strict";
             var cp = RTApp.user(), p = {url: cp.uri() + '/media'};
             return cp && (p = new RTC.Get({}, p)) && p.done(function(r) {
-                return RTC.isSuccess(r) && T.mediaLib(new RT.Library(r.data)) && T.goToStep(T.steps()[3]) || !1;
+                if(RTC.isSuccess(r)){
+                    return T.mediaLib(new RT.Library(r.data)) && T.goToStep(T.steps()[3]) || !1;
+                }
             });
         };
         T.selectFromAlbum(true);
@@ -5190,7 +5310,7 @@ RT.Forms = {
             return cps <= t.totalSteps && cs(cps) && t.completedSteps.push(cps);
         };
         T.resize = function() {
-            return jQuery.colorbox.resize() && jQuery('.windowMenuBar td').width('20%');
+            return RTC.CB.resize() && jQuery('.windowMenuBar td').width('20%');
         };
         T.reload = function() {
             return $.fn.colorbox.load();
@@ -5242,9 +5362,6 @@ RT.Forms = {
                 return types.indexOf(v) >= 0 && s.isComplete(true);
             }
         }, T);
-//        T.toggleMediaMenu = function() {
-//            return this.showMediaMenu(!this.showMediaMenu());
-//        };
         T.errors = ko.validation.group(this.listing, {deep: !0});
         T.canGoNext = ko.computed(function() {
             var ci = T.currentIndex();
@@ -5362,9 +5479,24 @@ RT.Forms.Info.prototype = {
             })) && s.done(function(r) {
                 if (RTC.isSuccess(r)) {
                     t.editables.commit();
-                    t.editables.beginEdit();
-                    return t.isSaving(false) && RTC.Renew() && logout && (location.href = "/logout");
+                    t.editables.beginEdit("UserInfo");
+                    for (var i in t.editables) {
+                        t.editables[i].hasOwnProperty("isModified") && t.editables[i].isModified(false);
+                    }
+                    RTC.Renew() && logout && (location.href = "/logout");
+                    return $.bootstrapGrowl('<p>Changes Saved!<br><small>Your changes have been successfully saved. Hit the "Exit" button to return to your profile page.</small></p>', {type: 'success'});
                 }
+
+                if (RTC.isFailure(r)) {
+                    for (var i in t.editables) {
+                        if (r.data.hasOwnProperty(i)) {
+                            t.editables[i].setError(r.data[i][0]);
+                            t.editables[i].serverInvalidated = true;
+                        }
+                    }
+                }
+            }).always(function() {
+                return t.isSaving(false)
             });
         }
     },
@@ -5479,8 +5611,9 @@ RT.Forms.Info.prototype = {
         var self = this, user = RTApp.user(), se = self.editables;
         self.uploader.init();
         self.uploader.refresh();
-        ko.editable(se);
-        se.beginEdit();
+        ko.editable(se, {enable: true, scope: "UserInfo"});
+        se.beginEdit("UserInfo");
+        //console.log(se);
         se.smsVerify = ko.observable(!0).extend({
             throttle: 600
         });
@@ -5715,6 +5848,9 @@ RT.Forms.Info.prototype = {
             throttle: 500
         });
         se.username.subscribe(function() {
+            if (se.username.hasOwnProperty("serverInvalidated")) {
+                se.username.clearError();
+            }
             if (se.username.hasChanged()) {
                 self.checkUniqueUsername(se.username());
                 se.username.extend({
@@ -5752,6 +5888,7 @@ RT.Forms.Info.prototype = {
                 });
                 se.uri("/" + se.username());
             } else {
+                se.username.revert();
                 se.username.rules([]);
             }
         }, self);
@@ -5849,7 +5986,7 @@ RT.Forms.Login.prototype = {
     hide: function() {
         var e = document.getElementById("loginBox");
         e && !!e.length && ko.cleanNode(e);
-        jQuery.colorbox.close();
+        RTC.CB.close();
     },
     show: function() {
     },
@@ -5864,6 +6001,7 @@ RT.Forms.Login.prototype = {
         return (s = RTC.Post({loading: l}, p)) && s.done(function(r) {
             if (RTC.isSuccess(r)) {
                 r.session && r.session.access_token && a.at(r.session.access_token);
+                $.bootstrapGrowl('<p>Login Successful! <small>Please wait while page reloads...</small></p>', {type: 'success'});
                 if (redirect) {
                     return window.location = decodeURIComponent(redirect);
                 }
@@ -5909,7 +6047,8 @@ RT.Forms.Settings.prototype = {
                 self.isSaving(!1);
                 self.settings.commit();
                 self.settings.beginEdit();
-                return self.isSaving(!1) && RTC.Renew();
+                self.isSaving(!1) && RTC.Renew();
+                return $.bootstrapGrowl('<p>Changes Saved!<br><small>Your changes have been successfully saved. Hit the "Exit" button to return to your profile page.</small></p>', {type: 'success'});
             });
         });
     },
@@ -6286,13 +6425,19 @@ jQuery(document).ready(function($) {
                 r = RTC,
                 isLike = $(t).hasClass('like-link'), s,
                 performSub = function(noElementChange) {
-            var j, u = r.Interaction(t, "subscribe", a);
-            return (j = r.PostApi({}, {url: u.url})) && j.done(function() {
+            var j, l = r.Interaction(t, "subscribe", a);
+            return (j = r.PostApi({}, {url: l.url})) && j.done(function() {
                 a.interactions.subscribe(!a.interactions.subscribe());
                 if (!noElementChange) {
-                    return u.modifyElement();
+                    return l.modifyElement();
                 }
                 return;
+            }).always(function() {
+                var i = l.state ? "Subscribed " : "Stop subscribing ", u = RTApp.user();
+                analytics && analytics.track(i + " to " + a.type(), {
+                    user_id: u._id(),
+                    post_id: a._id()
+                });
             });
         },
                 performLike = function() {
@@ -6300,6 +6445,12 @@ jQuery(document).ready(function($) {
             return (j = r.PostApi({}, {url: l.url})) && j.done(function() {
                 a.interactions.like(!a.interactions.like());
                 return l.modifyElement();
+            }).always(function() {
+                var i = l.state ? "Liked " : "Unliked ", u = RTApp.user();
+                analytics && analytics.track(i + "a " + a.type(), {
+                    user_id: u._id(),
+                    post_id: a._id()
+                });
             });
 
             return l;
@@ -6377,6 +6528,10 @@ jQuery(document).ready(function($) {
         }
         return  true;
     })
+            .on('submit', '.comment-form', function(e){
+                e.preventDefault();
+                returnRTApp.performAction.bind(ko.dataFor(this), 'comment');
+            })
             .removeClass("no-js");
     $('#theLoop')
             .on("mouseenter", ".getHoverCardUser", function(e) {
@@ -6384,11 +6539,10 @@ jQuery(document).ready(function($) {
     });
     $(w).resize(function() {
         return setTimeout(function() {
-            var cb = $("#colorbox");
             RTApp.viewport.width($(w).innerWidth());
             RTApp.viewport.height($(w).innerHeight());
             RTApp.currentSlideShow() && RTApp.currentSlideShow().resize();
-            cb && cb.css('display') !== "none" && $.colorbox.resize();
+            return RTC.CB.resize();
         }, 1);
     });
     $(".RTASearch").waypoint("sticky", {

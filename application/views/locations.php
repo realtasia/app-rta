@@ -21,7 +21,7 @@
                     <div id="wraparound" class="outerBox relative">
                         <div id="search-wrap" class="filterContentBG contentArea contentNoBottom">
                             <div class="input-append input-large" style="width:88%">
-                                <input type="text" class="search-query" name="s" id="s" placeholder="Search Locations ..." data-bind="autoComplete : { source: getKeyword, delay: 500, minLength:2}, event:{autocompleteselect:resetNewResults}, value:Search().formFields.s">
+                                <input type="text" autocomplete="off" class="search-query" name="s" id="s" placeholder="Search Locations ..." data-bind="autoComplete : { source: getKeyword, delay: 500, minLength:2}, event:{autocompleteselect:resetNewResults}, value:Search().formFields.s">
                                 <button type="submit" class="btn btn-inverse" data-bind="click:resetNewResults">Search</button>
                             </div>
                         </div>

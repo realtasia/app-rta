@@ -60,7 +60,7 @@
                         <div class="btn-group">
                             <button class="btn normalSelect">Property Type</button>
                             <button data-toggle="dropdown" class="btn dropdown-toggle">
-                                <span class="caret"></span>
+                                <i class="icon-caret-down"></i>
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a>Private Apartment</a></li>
@@ -70,7 +70,7 @@
                         <div class="btn-group">
                             <button class="btn normalSelect">Tenure</button>
                             <button data-toggle="dropdown" class="btn dropdown-toggle">
-                                <span class="caret"></span>
+                                <i class="icon-caret-down"></i>
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a>Freehold</a></li>

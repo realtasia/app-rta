@@ -1,0 +1,80 @@
+<section class="contentArea centerContent clearfix" id="adminSessions" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet}">
+    <!--ko template : {name : 'adminSessionBlock', data:RTApp.admin}--><!--/ko--><!--ko template : {name : 'adminUserBlock', data:RTApp.admin}--><!--/ko-->
+</section>
+
+
+<script type="text/html" id="adminUserBlock">
+    <table class="table" id="adminTable" data-bind="visible: RTApp.ca() === 'leads'">
+        <thead>
+            <tr>
+                <th style="padding:0;width:auto;">
+                    <span class="label text-center" data-bind="text:usersType().ucwords() + ' users'" style="font-size:11px;display:block;border-radius:0;padding:12px 5px;border-right:none;"></span>
+                </th>
+                <th style="padding:0;width:auto;">
+                    <input placeholder="Search name, number or email" type="text" name="s" style="margin:0 auto;display:block;width:100%">
+                </th>
+                <th style="padding:0;width:auto;">
+                    <button class="btn" type="button" data-bind="click:searchUsers" style="padding:8px 5px;border-left:none;display:block;width:100%">Search</button>
+                </th>
+            </tr>
+        </thead>
+<tbody data-bind="foreach : { data: RTApp.cl }">
+    <tr>
+        <td colspan="3" data-bind="style:{borderTop : $index === 0 && 'none'}">
+            <h5 style="margin:3px auto; position:relative; padding-left:50px">
+                <a href="#" data-bind="href : uri()"><span data-bind="text:name" style="color:#555"></span></a>&nbsp;
+                <!--ko foreach : roles--><small data-bind="text:'[' + $data + ']'"></small><!--/ko-->&nbsp;
+                <small class="muted">
+                    &nbsp;Joined: <abbr data-bind="dateText:created"></abbr>
+                </small><br>
+                <small><a href="#" data-bind="href : 'tel:' + info.telephone.mobile(), text : info.telephone.mobile().substr(3)"></a></small>,
+                <small><a href="#" data-bind="href : 'mailto:' + email(), text : email()"></a></small>
+                <div class="btn-group" style="position:absolute;left:0;top:0;">
+                    <a href="#" class="" data-bind="css:{hovering: isActive}, click:RTApp.admin().activation"><i class="icon-ok-sign"></i></a>
+                    <a href="#" data-toggle="dropdown" class="hasHoverState"><i class="icon-double-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">New Follow-Up</a></li>
+                        <li><a href="#">Generate Password</a></li>
+                        <li class="dropdown-submenu">
+                            <a href="#">Change Status</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-bind="click:RTApp.admin().terminateUser">Terminate User</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a href="#">Change Role</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-bind="click:RTApp.admin().makeAdmin">Make Admin</a></li>
+                                <li><a href="#" data-bind="click:RTApp.admin().makeUser">Make User</a></li>
+                                <li><a href="#" data-bind="click:RTApp.admin().makeAgent">Make Agent</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </h5>
+        </td>
+    </tr></tbody>
+</table> <!-- Admin User table -->
+</script>
+<script type="text/html" id="adminSessionBlock">
+    <div class="contentArea" style="margin:0 auto 10px auto;text-align: center">
+        <div class="btn-toolbar" style="margin:0 auto">
+            <div class="btn-group" style="text-align:left;">
+                <button data-toggle="dropdown" class="btn btn-small btn-info">Create Token</button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-bind="click:createPresentationSession">For Presentation</a></li>
+                    <li><a href="#" data-bind="click:createSignupSession">For Sign-Up</a></li>
+                </ul>
+                <button class="btn btn-small btn-inverse" data-bind="click:deleteSession">Delete Token</button>
+                <span style="display:inline-block;width:16px"><i class="icon-spin icon-spinner" id="adminTokenLoader" style="display:none"></i></span>
+            </div>
+        </div>
+        <ul class="reputationContainer">
+            <li class="outerBox reputationScore"><div class="contentArea"><span class="reputation" data-bind="flash:session,text:session() && session().substr(0, 1) || 0">0</span></li>
+            <li class="outerBox reputationScore"><div class="contentArea"><span class="reputation" data-bind="flash:session,text:session() && session().substr(1, 1) || 0">0</span></li>
+            <li class="outerBox reputationScore"><div class="contentArea"><span class="reputation" data-bind="flash:session,text:session() && session().substr(2, 1) || 0">0</span></li>
+            <li class="outerBox reputationScore"><div class="contentArea"><span class="reputation" data-bind="flash:session,text:session() && session().substr(3, 1) || 0">0</span></li>
+        </ul>
+        <a href="#" style="text-align:center;display:block;margin:0 auto;clear:both;padding-top:10px;"><span data-bind="click:refreshTokenUsers, flash:session, visible:session">Refresh <span class="muted" data-bind="flash:sessionType, text:sessionType"></span> user list</span></a>
+    </div>
+</script>

@@ -2,7 +2,7 @@
 <!--ko ifnot:RTApp.isJSAction-->
 <div class="contentArea centerContent" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}">
     <?php include Kohana::find_file('views', 'introcontent/person') ?>
-    <!--ko template: {name:'jsPostBox', if:$root.postForm().canPost}--><!--/ko-->
+    <!--ko template: {name:'jsPostBox', if:postForm().canPost() && (ca() === 'feed' || ca() === 'testimonials')}--><!--/ko-->
     <?php if($ca === 'info'):include Kohana::find_file('views', 'personInfo');endif; ?>
     <section id="theLoop" class="profile" data-bind="visible:clNotEmpty, css:{opaque : isGettingNew}" style="min-height:100%;overflow:auto;<?php echo isset($cl) ? '' : 'display:none'; ?>">
         <!--ko if:ca() !== 'leads' && ca() !== 'feedback'-->
@@ -25,10 +25,10 @@
 </div>
 <!--/ko-->
 <script type="text/html" id="jsPostBox">
-    <div class="navbar">
-        <div class="navbar-inner relative clearfix" style="border-radius:0;display:none;padding:5px;min-height:33px" data-bind="visible:user() && (ca() === 'feed' || ca() === 'testimonials'), with:$root.postForm">
+    <div class="navbar navbar-responsive" style="border:1px solid #ddd">
+        <div class="navbar-inner relative clearfix" style="border-radius:0;padding:5px;min-height:33px" data-bind="with:$root.postForm">
             <form style="margin:0;padding:0" class=" relative clearfix">
-                <div style="position:absolute;width:35px;left:0;height:100%;" data-bind="visible:!RTApp.cpIsCu()">
+                <div style="position:absolute;width:35px;left:0;height:100%;margin-right: -6px;padding-bottom: 4px;" data-bind="visible:!RTApp.cpIsCu()">
                     <a class="btn centralize btnPostType" data-bind="click:togglePostType, title:'Click to choose between sharing an update & writing a testimonial'">
                         <span data-bind="flash:postType() === 'postTestimonial'"><i class="icon-user"></i><i class="icon-comment-alt superscript"></i></span>
                         <i data-bind="flash:postType() === 'postStatus'" class="icon-bullhorn"></i>
@@ -36,20 +36,20 @@
                 </div>
                 <div class="container-fluid" style="padding:0 2px;" data-bind="style:{marginLeft:RTApp.cpIsCu() ? '-1px' : '38px'}">
                     <div class="row-fluid">
-                        <div class="statusFormTA relative clearfix span10" data-bind="style:{minHeight:postBoxHeight}">
+                        <div class="statusFormTA relative clearfix span9" data-bind="style:{minHeight:postBoxHeight}">
                             <button class="close pull-right" aria-hidden="true" style="margin-left:-1px;" type="button" data-bind="click:destroy, visible:showButtons"><i class="icon-remove"></i></button>
-                            <textarea id="statusFormTextarea" class="pull-left" placeholder="" data-bind="attr:{placeholder:prompt}, click:init, value:message, valueUpdate:'afterkeydown', expand : true"></textarea>
+                            <textarea class="pull-left statusFormTextarea" placeholder="" data-bind="attr:{placeholder:prompt}, click:init, value:message, valueUpdate:'afterkeydown', expand : true"></textarea>
                         </div>
-                        <div class="span2" style='margin-left:5px'>
-                            <div class="btn-group" id="postButtonContainer" style="margin-top:4px">
-                                <a class="btn-mini" href="#" data-toggle="dropdown"  data-bind="title:'Change visibility'"><i class="icon" data-bind="css:{'icon-eye-open' : privacy() === 'PUBLIC', 'icon-eye-close' : privacy() === 'PRIVATE' }"></i> <span class="visible-phone">Privacy</span></a>
+                        <div class="span3" style='margin-left:5px'>
+                            <div class="btn-group pull-right" id="postButtonContainer" style="margin:4px 5px 0 0">
+                                <a class="btn btn-small" href="#" data-bind="enable:canSubmit,click:createNew, title:'Submit'"><i class="icon-share-alt"></i>  <span class="visible-phone">Submit</span></a>
+                                <a class="btn btn-small" style="border-right:0 none;" href="#" data-toggle="dropdown"  data-bind="title:'Change visibility'"><i class="icon" data-bind="css:{'icon-eye-open' : privacy() === 'PUBLIC', 'icon-eye-close' : privacy() === 'PRIVATE' }"></i> <span class="visible-phone">Privacy</span></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="Privacy Menu">
                                     <li style="display:block;"><small class="muted" style="padding-left:3px;">Choose this Post's Privacy</small></li>
                                     <li style="display:block;"><a href="#" data-bind="click:setPublic"><i class="icon icon-eye-open"></i> Public</a></li>
                                     <li style="display:block;"><a href="#" data-bind="click:setPrivate"><i class="icon icon-eye-close"></i> Private</a></li>
                                 </ul>
-                                <a class="btn-mini disabled"><i class="icon-upload-alt" data-bind="title:'Feature not yet enabled'"></i> <span class="visible-phone">Add Photo</span></a>
-                                <a class="btn-mini" href="#" data-bind="enable:canSubmit,click:createNew, title:'Submit'"><i class="icon-share-alt"></i>  <span class="visible-phone">Submit</span></a>
+                                <a class="btn btn-small disabled"><i class="icon-upload-alt" data-bind="title:'Feature not yet enabled'"></i> <span class="visible-phone">Add Photo</span></a>
                             </div>
                         </div>
                     </div>

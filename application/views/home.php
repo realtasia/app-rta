@@ -313,7 +313,7 @@
                                                                                 </form>-->
                                         <small class="muted">You don't need a paypal account.</small>
 
-                                        <a onclick="return false;" href="#" style="text-align: left;text-decoration: underline;display:block;" data-bind="qtip:'Please check your email for other payment options.'">Other payment options</a><br>
+                                        <a onclick="return false;" href="#" style="text-align: left;text-decoration: underline;display:block;" data-bind="qtip:function(){return 'Please check your email for other payment options.'}">Other payment options</a><br>
                                         <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup', 'WIPaypal', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');
                                 return false;">
                                             <img class="img-polaroid" src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark" width="300" />

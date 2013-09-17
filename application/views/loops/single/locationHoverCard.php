@@ -1,30 +1,30 @@
 <?php defined('SYSPATH') or die('No direct script access.'); ?>
-<section class="hoverCard">
-    <div class="media" style="padding:0 5px">
-        <a class="pull-left" href="#">
-            <div style="width:90px;height:90px"><i class="hovercards <?php echo Arr::get($cssClass, $subtype, '') ?>"></i></div>
+<div class="card hovercard">
+    <div class="avatar" style="margin:5px auto;top:5px">
+        <a href="/<?php echo $_id ?>" title="Go to <?php echo $name ?>'s profile page">
+            <img class="hidden-phone" alt="<?php echo $name ?>" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/90", $avatar) : 'http://' . RT::API_SERVER . "/avatar/$_id" . "/90"); ?>" width="90" height="90">
+            <img class="visible-phone" alt="<?php echo $name ?>" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/60", $avatar) : 'http://' . RT::API_SERVER . "/avatar/$_id" . "/60"); ?>" width="60" height="60">
         </a>
-        <div class="media-body">
-            <h4 class="media-heading" style="font-size:95%">
-                <a href="<?php echo $uri ?>" class="locationHoverCard"><strong><?php echo $name ?></strong></a>&nbsp;
-                <a href="#">
-                    <small class="muted" style="font-variant:small-caps;font-size:0.9em"><?php echo $subtype ?></small>
-                </a>
-            </h4>
-            <ul class="unstyled" style="font-size:90%;border-top:1px solid #ccc;padding:5px">
-                <?php if ($type !== 'Estate'): ?>
-                <li><strong>Estate</strong> <a href="<?php echo Arr::get($parent, 'uri') ?>" title="<?php echo "View " . Arr::get($parent, 'name') . "'s profile" ?>"><?php echo Arr::get($parent, 'name') ?></a></li>
-                <?php endif; ?>
-                <?php if (isset($property_type)): ?>
-                    <li><strong>Property Type</strong> <a href="#"><?php echo $property_type ?></a></li>
-                <?php endif; ?>
-                <li><strong>Listings</strong> <a href="<?php echo $uri . '/listings' ?>"><?php echo Arr::get($counts, 'listings', 0) ?></a></li>
-                <li><strong>Last Active</strong> <time title="<?php echo date('c', $modified) ?>"><?php echo Date::fuzzy_span($modified) ?></time></li>
-            </ul>
-        </div>
     </div>
-    <!--        <ul class="nav nav-pills" style="margin:5px -5px 0 5px;font-size:80%">
-            <li class="active"><a href="#" style="border-radius:0;">Info</a></li>
-            <li><a href="#" style="border-radius:0;">Bar Code</a></li>
-        </ul>-->
-</section>
+    <div class="info">
+        <div class="title">
+            <a href="<?php echo $uri ?>"><?php echo $name ?></a>
+            <a href="#" style="display:block;margin:0;"><small class="muted" style="font-variant:small-caps;font-size:11px"><?php echo $subtype ?></small></a>
+        </div>
+        <div class="desc"><strong>Estate</strong> <a href="<?php echo Arr::get($parent, 'uri') ?>" title="<?php echo "View " . Arr::get($parent, 'name') . "'s profile" ?>"><?php echo Arr::get($parent, 'name') ?></a></div>
+        <?php if (!empty($property_type)): ?>
+            <div class="desc"><strong>Property Type</strong> <a href="#"><?php echo $property_type ?></a></div>
+        <?php endif; ?>
+        <div class="desc"><strong>Listings</strong> <a href="<?php echo $uri ?>/listings"><?php echo Arr::get($counts, 'listings', 0) ?></a></div>
+        <div class="desc"><strong>Last Active</strong> <time title="<?php echo date('c', $modified) ?>"><?php echo Date::fuzzy_span($modified) ?></time></div>
+    </div>
+    <div class="bottom">
+        <span class="add-on">
+            <i class="info16 people"></i>&nbsp;<?php echo Arr::get($counts, 'subscribers', 0) ?>
+        </span>
+
+        <a title="See likes" href="<?php echo $uri . '/likers' ?>" class="likerHoverCard btn btn-small"><i class="action16 likeSmall btn-link"></i>
+            <span><?php echo Arr::get($counts, 'likers', 0) ?></span>
+        </a>
+    </div>
+</div>

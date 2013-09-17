@@ -1,0 +1,501 @@
+<!--main template-->
+<section class="RTAWindow clearfix" id="listingCreationWizard" style="height:99%;margin:0 auto;">
+    <header class="titleBar">
+        <div class="contentArea titleBarBG">
+            <button type="button" class="close" aria-hidden="true" data-bind="click : hide">&times;</button>
+            <h4><i class="icon-magic"></i> Listing Wizard</h4>
+        </div>
+    </header>
+    <section class="RTAWindowContainer">
+        <section class="RTAWindowContent noSidebar">
+            <section class="relative">
+                <nav class="windowMenuBar">
+                    <ul class="nav nav-pills windowMenu">
+                        <li data-bind="hoverClass:'hovering'">
+                            <button class="windowMenuItem" data-bind="enable:canGoBack, click:goBack, css:{disabled:!canGoBack()}"><i class="icon-circle-arrow-left" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Back</button>
+                        </li>
+                        <li data-bind="hoverClass:'hovering'">
+                            <button class="windowMenuItem" data-bind="css:{disabled: currentIndex() <= 0}, enable:currentIndex() > 0, click:resetSteps"><i class="icon-undo" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Reset</button>
+                        </li>
+                        <li data-bind="hoverClass:'hovering'">
+                            <button class="windowMenuItem" data-bind="enable:canGoNext, click:goNext, css:{disabled:!canGoNext()}"><i class="icon-circle-arrow-right" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Next</button>
+                        </li>
+                        <li data-bind="hoverClass:'hovering'">
+                            <button class="windowMenuItem" data-bind="css:{disabled: !currentIndex() < 3}, enable:currentIndex() >= 3, click:publish"><i class="icon-ok-sign" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Publish</button>
+                        </li>
+                        <li data-bind="hoverClass:'hovering'" class="pull-right">
+                            <button class="windowMenuItem" data-bind="click : hide"><i class="icon-ban-circle" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Cancel</button>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="row-fluid">
+                    <div class="span9 clearfix" style="height:100%">
+                        <section class="RTAWindowContent noSidebar clearfix" style="position:relative;bottom:0;height:100%;border-right:1px solid #DDDDDD">
+                            <ul class="nav nav-tabs visible-desktop" id="stepsTabs" data-bind="visible:!(currentStep().id()>3)">
+                                <!--ko ifnot:editing-->
+                                <li data-bind="css:{active:currentStep().id() === steps()[0].id()}">
+                                    <a href="#" class="muted" data-bind="click:goToStep.bind($data,steps()[0])">
+                                        <span data-bind="text:steps()[0].name"></span>
+                                    </a>
+                                </li>
+                                <!--/ko-->
+                                <li data-bind="css:{active:currentStep().id() === steps()[1].id()}">
+                                    <a href="#" class="muted" data-bind="click:goToStep.bind($data,steps()[1])">
+                                        <span data-bind="text:steps()[1].name"></span>
+                                    </a>
+                                </li>
+                                <li data-bind="css:{active:currentStep().id() === steps()[2].id()}">
+                                    <a href="#" class="muted" data-bind="click:goToStep.bind($data,steps()[2])">
+                                        <span data-bind="text:steps()[2].name"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!--ko if: currentIndex() === 3-->
+                            <header class="alert alert-info clearfix" style="position: absolute; right:1px; padding: 5px; z-index: 1; top:1px; left: 1px;">
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <label style="width:100%;font-size:1.2em;color: #222;">
+                                            <span data-bind="html:albumNavText"></span>&nbsp;&nbsp;<small style="display:block;" data-bind="html:addedMediaCaption"></small>
+                                        </label>
+                                    </div>
+                                    <div class="span6">
+                                        <!--ko ifnot:mediaLib().selectedAlbum-->
+                                        <div class="btn-group pull-right"><a class="btn btn-mini" data-bind="html:uploadOptionText, click:prepareForUpload" href="#"></a></div>
+                                        <!--/ko-->
+                                        <!--ko if:mediaLib().selectedAlbum-->
+                                        <div class="btn-group pull-right"><a class="btn btn-mini" data-bind="click:selectAllAttachments" href="#"><i class="icon-plus-sign"></i> Select All</a></div>
+                                        <!--/ko-->
+                                        <div class="btn-group pull-right"><a class="btn btn-mini" data-bind="click:goToStep.bind($data,steps()[2])" href="#"><i class="action16 okCircleBG"></i>Finish</a></div>
+                                    </div>
+                                </div>
+                            </header>
+                            <!--/ko-->
+                            <div style="position:relative;bottom:0" class="contentArea">
+                                <form id="listingWizardForm" data-bind="if:currentStep">
+                                    <div class="accordion-inner horizontal" id="templateSwitcher" style="padding: 5px;border-top:0">
+                                        <!--ko template:{name:getTemplate,afterRender:resize}--> <!--/ko-->
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="span3 clearfix" style="margin-left:5px;height:auto;width:25%" data-bind="style:{width:RTApp.isSmallerThanTablet() ? 'auto' : '25%'}">
+                        <address data-bind="with:locationDetails" style="padding:5px 0">
+                            <label data-bind="text:name" class="label label-info"></label>
+                            <p class="alert alert-info" data-bind="visible:$parent.subtype" style="padding:3px;">
+                                <!--ko if:$parent.subtype--><strong>Type: </strong> <span data-bind="text:genType" style="text-transform: capitalize;"></span><!--/ko-->
+                                <!--ko if:address--><br class="visible-desktop"><strong>Add: </strong> <span data-bind="text:address"></span><!--/ko-->
+                                <!--ko if:$parent.currentIndex() > 0-->
+                                <!--ko with:$parent.listing-->
+                                <!--ko if:price--><br class="visible-desktop"><strong>For:&nbsp;</strong><span data-bind="text:type"></span><!--/ko-->
+                                <!--ko if:price--><br class="visible-desktop"><strong>Asking:&nbsp;</strong>$<span data-bind="text:price"></span><!--/ko-->
+                                <!--ko if:builtSize--><br class="visible-desktop"><strong>Size:&nbsp;</strong><span data-bind="text:builtSize"></span> sqft<!--/ko-->
+                                <!--ko if:rooms--><br class="visible-desktop"><strong>Rooms:&nbsp;</strong><span data-bind="text:rooms"></span> rooms. <!--/ko-->
+                                <!--ko if:message--><br class="visible-desktop"><strong>Desc:&nbsp;</strong><span data-bind="text:message"></span><!--/ko-->
+                                <!--/ko-->
+                                <!--/ko-->
+                            </p>
+                            <!--ko if:$parent.listing.cobroke-->
+                            <label class="label label-warning">Co-Broke Notes</label>
+                            <p class="alert alert-warning" style="padding:3px;">
+                                <span data-bind="text:$parent.listing.cobroke"></span>
+                            </p>
+                            <!--/ko-->
+                            <!--ko if:!!$parent.addedMedia().length-->
+                            <label class="label">Attachments <span style="padding:0 4px" data-bind="text:$parent.addedMedia().length">0</span></label>
+                            <a href="#" data-bind="click:$parent.removeAllAttachments">Remove all</a>
+                            <ul class="alert alert-success thumbnails thumbnailGallery" style="margin:auto;border:0;padding:0">
+                                <!--ko template:{name:'smallNail',foreach:$parent.addedMedia, afterRender:$parent.resize}--><!--/ko-->
+                            </ul>
+                            <!--/ko-->
+                        </address>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </section>
+</section>
+
+
+<script type="text/html" id="locationDetailsT">
+<h4>Find Location <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Choose a location by name, postal code or address'">?</a></h4>
+<input style="display:block;" type="text" name="locationSearch" placeholder="Name, postal code or address" data-bind="
+       autoComplete : { source: searchPostal, select: chooseLocation, change:chooseLocation, minLength: 2 },
+       value:listing.page().name,
+       event:{blur:noAutocomplete}">
+<!--ko template: { if:showSubType, afterRender:resize }-->
+<br>
+<h4>Location Type <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title: 'We do not recognise this location, please tell us which category it falls under.'">?</a></h4>
+<select style="display:block;" data-bind="
+        options: subTypes,
+        value: subtype,
+        optionsCaption: 'Choose a location type ...'"
+        style='width:264px;margin-top:4px'></select>
+<!--/ko-->
+<!--ko template: { if: subtype, afterRender:resize }-->
+<br>
+<h4>Property Type <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title: propertyTypeCaption">?</a></h4>
+<select style="display:block;" data-bind="
+        options: propertyTypes,
+        value: listing.property_type,
+        optionsCaption: 'Choose a property type ...'"
+        style='width:264px;margin-top:4px'></select>
+<br>
+<label class="checkbox" style="width:100%;font-size:1.1em;font-weight: normal">
+    <input type="checkbox" data-bind="checked:showAddress">&nbsp;&nbsp;Show real address & map?
+    <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'If unchecked, Address & maps will not be shown, we will put the listing in the correct location but you have to provide more details.'">?</a>
+</label>
+<!--/ko-->
+<div class="btn-toolbar">
+    <button class="btn pull-left" data-bind="enable:listing.property_type,click:goNext">Next</button>
+</div>
+</script> <!--location details-->
+
+<script type="text/html" id="listingDetailsT">
+<div class="control-group" style="min-height:36px">
+    <label class="control-label" for="rent">Type</label>
+    <div class="controls">
+        <label class="radio inline" style="font-size:13px;font-weight:normal;">
+            <input type="radio" id="saleCheck" name="listing_type" value="Sale" data-bind="checked: listing.type" >&nbsp;&nbsp;Sale
+        </label>
+        <label class="radio inline" style="font-size:13px;font-weight:normal;">
+            <input type="radio" id="rentCheck" name="listing_type" value="Rent" data-bind="checked: listing.type" >&nbsp;&nbsp;Rent
+        </label>
+    </div>
+</div>
+<!--ko template: { if:listing.type() === 'Rent', afterRender:resize}-->
+<div class="control-group" data-bind="validationElement: listing.leaseSpace">
+    <label class="control-label" for="availability">Availability <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Please choose a date this listing becomes available for lease and the space available for rent'">?</a></label>
+    <div class="controls">
+        <input class="textUnit" readonly="readonly" id="availability" data-bind="datepicker: listing.availability, datepickerOptions : {changeMonth : true, changeYear : true, yearRange : '2013:2015', dateFormat: 'dd-M-y'}" type="text" placeholder="Click to Choose"> -
+        <select data-bind="
+                options: leaseSpaceTypes,
+                value: listing.leaseSpace,
+                optionsCaption: 'Space Leased...'"
+                style='margin: 4px 0 3px 0;width:127px'></select>
+        <span class="help-block" data-bind="validationMessage: listing.leaseSpace"></span>
+    </div>
+</div>
+<!--/ko-->
+<div class="control-group" data-bind="validationElement: listing.unit.floor">
+    <label class="control-label" for="listingFloor">Unit No. <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'We do not show the unit number but we need this for statistics'">?</a></label>
+    <div class="controls">
+        <input class="textUnit" type="text" name="listingFloor" placeholder="Floor" data-bind="
+               value:listing.unit.floor,
+               valueUpdate:'afterkeydown'"> -
+        <input class="textUnit" type="text" name="listingStack" placeholder="Stack" data-bind="
+               value:listing.unit.stack,
+               valueUpdate:'afterkeydown'">
+        <span class="help-inline" data-bind="if:listing.page().subtype === 'Private Landed'">
+            <label class="checkbox" style="width:100%;font-weight: normal"><input type="checkbox" data-bind="title:'For landed properties, please click here.', checked:listing.unitIsAddress"><span class='muted'>&nbsp;&nbsp;Same as Address (Landed)</span></label>
+        </span>
+        <span class="help-block" data-bind="validationMessage: listing.unit.floor"></span>
+        <span class="help-block" data-bind="validationMessage: listing.unit.stack"></span>
+    </div>
+</div>
+<div class="control-group" data-bind="validationElement: listing.builtSize">
+    <label class="control-label" for="listingBuilt">Built <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Size in square feet. Examples: \'5500\' or \'5.5k\'. Enter \'0\' if there is no size information.'">?</a></label>
+    <div class="controls">
+        <input type="text" name="listingBuilt" placeholder="Built-Up Size (sqft)" data-bind="
+               value:listing.builtSize, valueUpdate:'afterkeydown'">
+        <span class="help-inline">
+            <label class="checkbox" style="width:100%;"><input type="checkbox" value="0" data-bind="checked:hasLand">&nbsp;&nbsp;Include land size?</label>
+        </span>
+        <span class="help-block" data-bind="validationMessage: listing.builtSize"></span>
+    </div>
+    <!--ko template: { if:hasLand, afterRender:resize }-->
+    <br>
+    <label class="control-label" for="listingLand">Land <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Size in square feet. Examples: \'5500\' or \'5.5k\'. Enter \'0\' if there is no size information.'">?</a></label>
+    <div class="controls">
+        <input type="text" name="listingLand" placeholder="Land Size (sqft)" data-bind="
+               value:listing.landSize,
+               valueUpdate:'afterkeydown'">
+        <span class="help-block" data-bind="validationMessage: listing.landSize"></span>
+    </div>
+    <!--/ko-->
+</div>
+<div class="control-group" data-bind="validationElement: listing.price">
+    <label class="control-label" for="listingAsking">Price <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Enter an asking price Examples: \'1.2m\' or \'550k\'. Enter \'0\' if not available.'">?</a></label>
+    <div class="controls">
+        <input type="text" name="listingAsking" placeholder="Price" data-bind="
+               value:listing.price, valueUpdate:'afterkeydown'">
+        <span class="help-inline" data-bind="visible:listing.type() === 'Sale'">
+            <label class="checkbox" style="width:100%;"><input type="checkbox" value="0" data-bind="checked:hasValuation">&nbsp;&nbsp;Valuation?</label>
+        </span>
+        <span class="help-block" data-bind="validationMessage: listing.price"></span>
+    </div>
+    <!--ko template: { if:hasValuation, afterRender:resize }-->
+    <br>
+    <label class="control-label" for="listingValue">Valuation <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'If this property has been valued, enter a valuation price. Examples: \'1.2m\' or \'550k\'.'">?</a></label>
+    <div class="controls">
+        <input type="text" name="listingValue" placeholder="Valuation Price" data-bind="
+               value:listing.valuation, valueUpdate:'afterkeydown'">
+        <span class="help-block" data-bind="validationMessage: listing.valuation"></span>
+    </div>
+    <br>
+    <label class="control-label" for="listingCOV">COV <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Cash over Valuation. This field is auto calculated.'">?</a></label>
+    <div class="controls">
+        <input type="text" readonly="readonly" name="listingCOV" placeholder="Cash Over Valuation" data-bind="
+               value:listing.cov, valueUpdate:'afterkeydown'">
+        <span class="help-block" data-bind="validationMessage: listing.cov"></span>
+    </div>
+    <!--/ko-->
+</div>
+<div class="control-group" data-bind="validationElement: listing.rooms">
+    <label class="control-label" for="listingRooms">Rooms <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Enter the number of rooms this unit has.'">?</a></label>
+    <div class="controls">
+        <input type="text" name="listingRooms" placeholder="No. of rooms" data-bind="
+               value:listing.rooms, valueUpdate:'afterkeydown'">
+        <span class="help-block" data-bind="validationMessage: listing.rooms"></span>
+    </div>
+</div>
+<div class="control-group" data-bind="validationElement: listing.baths">
+    <label class="control-label" for="listingBaths">Bathrooms <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Enter the number of bathrooms this unit has.'">?</a></label>
+    <div class="controls">
+        <input type="text" name="listingBaths" placeholder="No. of bathrooms" data-bind="
+               value:listing.baths, valueUpdate:'afterkeydown'">
+        <span class="help-block" data-bind="validationMessage: listing.baths"></span>
+    </div>
+</div>
+<div class="control-group" data-bind="validationElement: listing.message">
+    <label class="control-label" for="listingDescription">Description <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'The listing\'s description is seen by everyone. This box expands as you type.'">?</a></label>
+    <div class="controls">
+        <textarea class="span3" name="listingDescription" placeholder="Description is seen by everyone" data-bind="
+                  value:listing.message,
+                  valueUpdate:'afterkeydown',
+                  expand:true"></textarea>
+        <span class="help-block" data-bind="validationMessage: listing.message"></span>
+    </div>
+</div>
+<div class="control-group" data-bind="validationElement: listing.cobroke">
+    <label class="control-label" for="listingCoBrokeNotes">Co-Broke  <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Notes are seen by Realt Agents only. This box expands as you type.'">?</a></label>
+    <div class="controls">
+        <textarea class="span3" name="listingCoBrokeNotes" placeholder="Notes are seen by Realt Agents only" data-bind="
+                  value:listing.cobroke,
+                  valueUpdate:'afterkeydown',
+                  expand:true"></textarea>
+        <span class="help-block" data-bind="validationMessage: listing.cobroke"></span>
+    </div>
+</div>
+</script> <!--listing details-->
+
+<script type="text/html" id="listingAttachmentT">
+<section style="width:30%;margin:0 auto;text-align: center; cursor:pointer">
+    <div style="margin:0 auto;text-align: center;cursor:pointer">
+        <div class="contentArea" data-bind="hoverClass:'hovering'">
+            <div class="centralise"><i class="icon-ok-sign icon-3x"></i></div>
+            <h3 sclass="text-center"><a href="#" data-bind="css:{disabled: currentIndex() < 2}, enable:currentIndex() >= 2, click:publish">Publish</a></h3>
+        </div>
+    </div>
+    <hr>
+    <div style="margin:0 auto;text-align: center; cursor:pointer">
+        <div class="contentArea" data-bind="hoverClass:'hovering', click:goToMediaLib">
+            <div class="centralise"><i class="icon-paper-clip icon-3x"></i></div>
+            <h3 class="text-center"><a href="#">Add Media <a href="#" class="label label-inverse help-text" tabindex="-1" data-bind="title:'Attach files to this listings. You can choose files from your media library or Upload to new albums'"></i></a></h3>
+        </div>
+    </div>
+    <hr>
+    <div class="opaque disabled">
+        <div class="contentArea">
+            <div class="centralise" style="cursor:default"><i class="icon-calendar icon-3x"></i></div>
+            <h3 class="text-center" data-bind="title:'Feature not yet available'">Add Event</h3>
+        </div>
+    </div>
+</section>
+</script> <!--listing attachment-->
+
+<script type="text/html" id="smallNail">
+<li class="listingNail smallNail" data-bind="css:{blue:_id() === $root.selectedCoverId()}"><div class="thumbnail">
+        <a href="#" data-bind="html:getAttachmentThumb(40), click:$root.selectCover" style="width:35px;height:35px"></a>
+    </div>
+</li>
+</script> <!--small nail-->
+
+<script type="text/html" id="mediaAttachT">
+<section class="" style="margin-top:35px;">
+    <section class="RTAWindowContent" data-bind="with:mediaLib">
+        <ul class="thumbnails" style="max-height: none">
+            <!--ko serverForEach : {name : 'albums', foreach: albums, if:!selectedAlbum()}--><!--/ko-->
+            <!--ko if:selectedAlbum-->
+            <li data-bind="click:function(){return showAlbums() && $.colorbox.resize()}" style="width:120px">
+                <a href="#" style="margin-top:25%;text-align: center;font-size: 1.5em;display:block">&larr; Back to Albums</a>
+            </li>
+            <!--ko serverForEach : {name : 'selectablePicture', foreach: selectedAlbum().attachments, afterRender:$parent.resize}--><!--/ko-->
+            <li data-bind="RTModal:selectedAlbum().slideShow"></li>
+            <!--ko if:selectedAlbum().hasNextPage-->
+            <li class="hasHoverButtons clearfix" style="width:120px">
+                <div class="thumbnail relative clearfix" style="cursor: pointer;">
+                    <a href="#" id="loadAttachments" style="width:110px;text-align: center;font-size: 2em;display:block;margin-top:25%">Load More</a>
+                </div>
+            </li>
+            <!--/ko-->
+            <!--/ko-->
+        </ul>
+    </section>
+</section>
+</script> <!--media attach-->
+
+<script type="text/html" id="albums">
+<li class="hasHoverButtons">
+    <label style="text-align: center"><span data-bind="text:name"></span> (<small class="muted" data-bind="text:counts.attachments"></small>)</label>
+    <a href="#" class="thumbnail relative" data-bind="click:$parent.setSelected" style="border-style:dashed">
+        <span data-bind="html:getThumbnail(150)"></span>
+        <p class="label label-inverse" style="display: none;" data-bind=""></p>
+    </a>
+</li>
+</script> <!--albums-->
+
+<script type="text/html" id="selectablePicture">
+<li class="clearfix selectableContainer" style="width:120px;padding:0;border:0;cursor:pointer" data-bind="
+    click:$root.addToSelected,
+    css:{blue:isSelected}">
+    <div class="thumbnail relative" data-bind="
+         attr:{
+         href:'//' + picture(),
+         title:excerpt,rel:$parent._id
+         }">
+        <div class="selectable-inner" data-bind="css:{blue:isSelected}">
+            <!--<input type="checkbox" data-bind="checked:isSelected,click:$root.addToSelected,clickBubble:false">-->
+            <!--<input type="checkbox" data-bind="visible:!isSelected()">-->
+            <i class="icon-plus" data-bind="visible:!isSelected()"></i>
+            <i class="icon-ok" data-bind="visible:isSelected"></i>
+        </div>
+        <span data-bind="html:getAttachmentThumb()"></span>
+    </div>
+</li>
+</script><!--selectable picture-->
+
+<script type="text/html" id="albumPopupNav">
+<div class="row-fluid" style="margin-bottom:10px">
+    <div class="span5">
+        <h3 data-bind="text:name() && name() || 'Upload files for listing'"></h3>
+        <span class="muted" data-bind="html:excerpt"></span>
+    </div>
+    <div class="span7">
+        <div class="btn-toolbar pull-right">
+            <!--ko ifnot:isDefaultAlbum-->
+            <div class="btn-group">
+                <button class="btn btn-small btn-rta" id="browseButton" data-bind="click:checkAlbum">
+                    <i class="icon-upload"></i> Add Files
+                </button>
+            </div>
+            <div class="btn-group" data-toggle="buttons-radio" style="z-index:10">
+                <button type="button"  class="btn btn-small" data-bind="title:'Make album Public', placement:'bottom', css:{active:privacy.is() === 'PUBLIC'}, click:setPublic">
+                    <i class="icon-eye-open"></i></button>
+                <button type="button"  class="btn btn-small" data-bind="title:'Make album Private', placement:'bottom', css:{active:privacy.is() === 'PRIVATE'}, click:setPrivate">
+                    <i class="icon-eye-close"></i></button>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-small" data-bind="click:$parent.deleteAlbum.bind($parent)"><i class="icon-remove-sign"></i> Delete Album</button>
+            </div>
+            <!--/ko-->
+            <div class="btn-group">
+                <button class="btn btn-small btn-info" data-bind="click:saveAlbum, enable:isSavable"><i class="icon-ok-sign"></i> <span data-bind="text:autoSaveMessage() || 'Save'"></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+</script> <!--album popup nav-->
+
+<script type="text/html" id="uploadedThumbsT">
+<li class="span6">
+    <div class="thumbnail">
+        <div class="media">
+            <div class="pull-left" style="text-align: center">
+                <img alt="Uploaded File" onLoad="$(this).fadeTo('slow', 1)" class="media-object img-rounded" src="/img/nothumb110.png" width="110" height="110" data-bind="attr:{src:getThumbnail}">
+            </div>
+            <div class="media-body">
+                <!--ko if:isUploading-->
+                <label class="muted" data-bind="text:uploadingText"></label>
+                <div class="progress progress-striped active" style="height:15px;border-radius: 2px">
+                    <div class="bar" data-bind="style:{width:percent() + '%'}"></div>
+                </div>
+                <!--/ko-->
+                <!--ko ifnot:isUploading-->
+                    <button type="button" class="close" data-bind="click:$parents[1].deleteFile">&times;</button>
+                    <label><span data-bind="text:name"></span></label>
+                    <!--ko if:editing-->
+                        <input type="text" data-bind="value:message, hasfocus:editing" placeholder="Describe this item" style="padding:2px" />
+                    <!--/ko-->
+                    <label class="muted inplaceLabel" data-bind="visible:!editing(),click:edit, hoverClass:'text-success', text:message()||'Add Description'"></label>
+                <!--/ko-->
+            </div>
+        </div>
+    </div>
+</li>
+</script> <!--uploaded thumbs-->
+
+<script type="text/html" id="editAlbumT">
+<div id="editAlbumForListing" data-bind="with:uploadAlbum">
+    <section id="libraryMobile" class="RTAWindowContent noSidebar">
+        <div class="contentArea introBox relative">
+            <form class="form-horizontal">
+                <!--ko template : {name:'albumPopupNav', afterRender:$parent.initUploader}--><!--/ko-->
+                <div class="row-fluid" data-bind="ifnot:isDefaultAlbum">
+                    <div class="span6">
+                        <div class="btn-toolbar">
+                            <label class="muted inplaceLabel" data-bind="visible:!isEditingName(),click:editName, hoverClass:'showIcon'"><span data-bind="html:name()||'Click to add an album name'"></span><span class="pull-right"><i class="icon-edit" style="display:none;"></i></span></label>
+                            <!--ko if:isEditingName-->
+                            <input type="text" autocomplete="off" id="editAlbumName" data-bind="value:name, valueUpdate: 'afterkeydown', disable:isDefaultAlbum, hasfocus:isEditingName" placeholder="Enter an Album name">
+                            <!--/ko-->
+                        </div>
+                    </div>
+                    <div class="span6">
+                        <div class="btn-toolbar">
+                            <label class="muted inplaceLabel" data-bind="visible:!isEditingExcerpt(),click:editExcerpt, hoverClass:'showIcon'"><span data-bind="html:excerpt()||'Click to add an album description'"></span><span class="pull-right"><i class="icon-edit" style="display:none;"></i></span></label>
+                            <!--ko if:isEditingExcerpt-->
+                            <input type="text" autocomplete="off" data-bind="value:excerpt, valueUpdate: 'afterkeydown', disable:isDefaultAlbum, hasfocus:isEditingExcerpt" id="editAlbumExcerpt" placeholder="Enter a description">
+                            <!--/ko-->
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--ko if:showAddFiles-->
+        <hr/><ul class="thumbnails" data-bind="template:{name:'uploadedThumbsT', foreach:attachments}"></ul>
+        <!--/ko-->
+    </section>
+</div>
+</script><!--edit album-->
+
+<script type="text/html" id="postStatusT">
+<div class="alert alert-success">
+    <h5 style="margin:0"><i class="icon-ok"></i> Success! <small class="text-success"> Your listing was successfully posted.</small></h5>
+</div>
+<p class="muted"><i class="icon-info-sign"></i> You can change your cover picture by clicking on the small thumbnails on the right.</p>
+<div class="outerBox" data-bind="with:serverVals">
+    <article class="contentArea widgetContentBG relative media listing">
+        <div class="pull-left">
+            <a href="" class="thumbnail" data-bind="html:getThumbnail.call($data)"></a>
+            <div class="mediaThumbLinks">
+                <span class="thumbInfo"><a href="#" class="text-center" style="display: block">View details</a>
+                </span>
+            </div>
+        </div> <!-- listings thumbnail -->
+        <div class="contentBottom media-body media-details">
+            <h3 class="media-heading"><a href="#" data-bind="text:page.name, attr:{href:page.uri}"></a></h3>
+            <span class="price relative">
+                <span class="listingType" data-bind="html:'FOR<br>' + listing.type()"></span>
+                <span data-bind="text:'$' + RTC.ThousandSep.call(null, listing.price())"></span>
+            </span>
+            <dl class="dl-horizontal">
+                <dt><i class="info16 sqft"></i></dt><dd data-bind="text:RTC.ThousandSep.call(null, listing.built_size()) + ' sqft'"></dd>
+                <dt><i class="info16 bathrooms"></i></dt><dd data-bind="text:RTC.ThousandSep.call(null, listing.baths()) + ' bathrooms'">3 toilets</dd>
+                <dt><i class="info16 bedrooms"></i></dt><dd data-bind="text:listing.rooms() + ' bedrooms'"></dd>
+            </dl>
+            <p data-bind="html:excerpt"></p>
+        </div> <!-- listings content -->
+    </article>
+</div>
+</script> <!--post status-->
+
+<!--styels-->
+<style>
+    address{font-size:90%;}
+    address > p.alert > strong {font-variant: small-caps;}
+    ul#stepsTabs{margin-top: 0; padding-top:10px;margin-bottom: 5px;background-color: #f7f7f7;width:100%;}
+    ul#stepsTabs > li > a {border-radius: 0}
+    ul.windowMenu > li {margin-right: 1%}
+    #editAlbumForListing #libraryMobile{margin:0 auto !important;}
+</style>
