@@ -156,7 +156,7 @@ class Controller_Location extends Controller_Auth {
         $query = ['page_id' => $this->cp['_id']];
         if ($this->cp['subtype'] === 'Estate')
         {
-            $query = ['page_parent' => $this->cp['_id']];
+            $query = ['parent_id' => $this->cp['_id']];
         }
 
         return Arr::merge($query, parent::listings_search());

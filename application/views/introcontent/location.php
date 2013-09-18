@@ -70,7 +70,20 @@
     <div class="pageInfo">
         <div class="pageActions">
             <div class="btn-toolbar">
-                <div class="btn-group">
+                <div class="btn-group pull-left">
+                    <!--ko if : $root.ca() === 'testimonials'-->
+                    <a class="btn btn-small" style="display:none" data-bind="click:$root.startEditMode, title:'Manage Testimonials', visible:$root.cpuIsCu">
+                        <i class="icon-tasks"></i>
+                        <span>Manage Approvals</span>
+                    </a>
+                    <!--/ko-->
+                    <!--ko if : $root.cpuIsCu-->
+                    <a class="btn btn-small" style="display:none" data-bind="click:editProfile, title:'Edit your profile', visible:$root.cpuIsCu">
+                        <i class="icon-pencil"></i> <span>Edit Page</span>
+                    </a>
+                    <!--/ko-->
+                </div>
+                <div class="btn-group pull-right">
                     <!--ko if : $data.interactions-->
                     <!--ko if : $data.subtype() !== 'Estate'-->
                     <a class="btn btn-small subscribe-link <?php echo $interact && $interact['subscribe'] ? 'active' : '' ?>" style="display:none"  data-bind="visible:$data.interactions, css:{active:$data.interactions.subscribe, hovering:!$data.interactions.subscribe()}, title:($data.interactions.subscribe() ? 'Stop Subscribing to ' : 'Subscribe to ') + name() + '\'s Profile'">
@@ -81,19 +94,6 @@
                     <a class="btn btn-small like-link <?php echo $interact && $interact['like'] ? 'active' : '' ?>" style="display:none"  data-bind="visible:$data.interactions, css:{active:$data.interactions.like, hovering:!$data.interactions.like()}, title:($data.interactions.like() ? 'Stop Liking ' : 'Like ') + name() + '\'s Profile'">
                         <i class="action16 likeSmall"></i>
                         <span data-bind="text:$data.interactions.like() ? 'Unlike' : 'Like'"><?php echo $interact && $interact['like'] ? 'Unlike' : 'Like' ?></span>
-                    </a>
-                    <!--/ko-->
-                </div>
-                <div class="btn-group">
-                    <!--ko if : $root.ca() === 'testimonials'-->
-                    <a class="btn btn-small" style="display:none" data-bind="click:$root.startEditMode, title:'Manage Testimonials', visible:$root.cpuIsCu">
-                        <i class="icon-tasks"></i>
-                        <span>Manage Approvals</span>
-                    </a>
-                    <!--/ko-->
-                    <!--ko if : $root.cpuIsCu-->
-                    <a class="btn btn-small" style="display:none" data-bind="click:editProfile, title:'Edit your profile', visible:$root.cpuIsCu">
-                        <i class="icon-pencil"></i> <span>Edit Page</span>
                     </a>
                     <!--/ko-->
                 </div>

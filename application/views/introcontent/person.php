@@ -61,20 +61,25 @@
         <div class="btn-toolbar noMargTopBtm">
             <div class="btn-group pull-left">
                 <span style="display:inline-block">
-                    <!--ko if : $root.ca() === 'testimonials'-->
-                    <a class="btn btn-small" style="display:none;border-right:none;" data-bind="click:$root.startEditMode.bind($root), title:'Manage Testimonials', visible:$root.cpIsCu">
-                        <i class="icon-tasks"></i> <span>Manage Approvals</span>
-                    </a>
-                    <!--/ko-->
                     <!--ko if : $root.cpIsCu-->
-                    <a href="#edit" class="btn btn-small" style="display:none" data-bind="title:'Edit your profile', visible:$root.cpIsCu">
-                        <i class="icon-pencil"></i> <span>Edit Profile</span>
-                    </a>
-                    <span class="visible-phone" data-bind="with:$root.user">
-                        <a class="btn btn-small btn-rta" style="display:none" data-bind="click:$root.initListings.bind($root), title:'Create a Listing', visible:isAdmin() || isAgent()">
-                            <i class="icon-plus-sign"></i> <span>New Listing</span>
+                        <!--ko if : $root.ca() === 'testimonials'-->
+                        <a class="btn btn-small" style="border-right:none;" data-bind="click:$root.startEditMode.bind($root), title:$root.isEditMode() ? 'Save Changes' : 'Manage Approvals', css:{'btn-primary':$root.isEditMode}">
+                            <i data-bind="switchClass:{removeAdd : ['icon-ok', 'icon-tasks'], val:$root.isEditMode}"></i> <span data-bind="text: $root.isEditMode() ? 'Save Changes' : 'Manage Approvals'"></span>
                         </a>
-                    </span>
+                        <!--/ko-->
+                        <!--ko if : $root.ca() === 'listings'-->
+                        <a class="btn btn-small" style="border-right:none;" data-bind="click:$root.startEditMode.bind($root), title:$root.isEditMode() ? 'Save Changes' : 'Manage Listings', css:{'btn-primary':$root.isEditMode}">
+                            <i data-bind="switchClass:{removeAdd : ['icon-ok', 'icon-tasks'], val:$root.isEditMode}"></i> <span data-bind="text: $root.isEditMode() ? 'Save Changes' : 'Manage Listings'"></span>
+                        </a>
+                        <!--/ko-->
+                        <a href="#" class="btn btn-small" data-bind="title:'Edit your profile', href: RTApp.user().uri() + '#edit'">
+                            <i class="icon-pencil"></i> <span>Edit Profile</span>
+                        </a>
+                        <span class="visible-phone" data-bind="with:$root.user">
+                            <a class="btn btn-small btn-rta" style="display:none" data-bind="click:$root.initListings.bind($root), title:'Create a Listing', visible:isAdmin() || isAgent()">
+                                <i class="icon-plus-sign"></i> <span>New Listing</span>
+                            </a>
+                        </span>
                     <!--/ko-->
                 </span>
             </div>

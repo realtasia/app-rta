@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-17 20:47:57 
+   Compiled at: 2013-09-18 11:30:15 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1828,7 +1828,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-17 20:47:57 
+   Compiled at: 2013-09-18 11:30:15 
 ================================ */
 RT.App = function() {
     "use strict";
@@ -2320,7 +2320,7 @@ RT.App.prototype = {
     },
     startEditMode: function() {
         if (location.href.match(/written/g)) {
-            return alert("You can only manage testimonials you received. Try clicking on <strong>Testimonials</strong> > <strong>Received</strong>");
+            return $.bootstrapGrowl('<i class="icon-info-sign"></i> You can only manage testimonials you received. Try clicking on <strong>Testimonials</strong> > <strong>Received</strong>', {type: 'info'});
         }
         this.isEditMode(!this.isEditMode());
         return RTC.forEach(this.cl(), function(i) {
@@ -3588,8 +3588,11 @@ RT.Post.prototype.extend(function() {
     this.hasVideo(this.hasDetails() && this.link.type() === "video" || false);
     this.hasRich(this.hasDetails() && this.link.type() === "rich" || false);
     this.editingTemplate = ko.computed(function() {
-        if (this.editMode() && this.isReceived()) {
-            return "editMode";
+        if (this.editMode() && this.isTestimonial() && this.isReceived()) {
+            return "testimonialEditMode";
+        }
+        if (this.editMode() && this.type() === "listing") {
+            return "listingEditMode";
         }
         if (this.isHidden() || this.isReported() || this.isTrashed()) {
             return "undoTemplate";
@@ -3765,11 +3768,11 @@ RT.Testimonial = function() {
         if (this.status) {
             switch (this.status()) {
                 case "active":
-                    return "Approved infoBorderColor";
+                    return "Approved successBGColor";
                 case "pending":
-                    return "unApproved warningBorderColor";
+                    return "unApproved infoBorderColor";
                 case "trash":
-                    return "unApproved inverseBorderColor";
+                    return "unApproved warningBorderColor";
                 case "archive":
                     return "unApproved";
                 default:
@@ -3781,11 +3784,11 @@ RT.Testimonial = function() {
         if (this.status) {
             switch (this.status()) {
                 case "active":
-                    return "infoBGColor infoBorderColor";
+                    return "successBorderColor successBGColor";
                 case "pending":
-                    return "warningBGColor warningBorderColor";
+                    return "infoBGColor infoBorderColor";
                 case "trash":
-                    return "inverseBGColor inverseBorderColor";
+                    return "warningBGColor warningBorderColor";
                 default:
                     return "";
             }
@@ -3809,11 +3812,11 @@ RT.Testimonial = function() {
         if (this.status) {
             switch (this.status()) {
                 case "active":
-                    return "label-info";
+                    return "alert-success";
                 case "pending":
-                    return "label-warning";
+                    return "alert-info";
                 case "trash":
-                    return "label-inverse";
+                    return "";
                 case "archive":
                     return "";
             }
@@ -5160,7 +5163,7 @@ RT.Forms = {
         };
         T.addedMedia = ko.observableArray();
         T.addedMediaCaption = ko.computed(function() {
-            return "<span class='text-info' style='font-size:1.1em'>" + this.addedMedia().length + " </span> item(s) selected";
+            return "<span style='font-size:1.1em'>" + this.addedMedia().length + " </span> item(s) selected";
         }, this);
         T.addToSelected = function(d) {
             var added = T.addedMedia.addToSet(d, true);
@@ -5199,10 +5202,12 @@ RT.Forms = {
             if (sa && sa()) {
                 i.addClass("icon-upload");
                 s.text(" Upload more files").prepend(i);
+                console.log(s.html())
                 return s.html();
             }
             i.addClass("icon-plus-sign");
             s.text(" Create new").prepend(i);
+                console.log(s.html())
             return s.html();
         }, this);
         T.goToMediaLib = function() {

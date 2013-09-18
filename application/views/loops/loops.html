@@ -215,21 +215,20 @@
         </ul>
     </div> <!-- post action links -->
 </script>
-<script type="text/html" id="editMode">
+<script type="text/html" id="testimonialEditMode">
     <article class="postFeed media relative clearfix editMode" data-bind="css:cssParentClassesForReceived">
         <div class="dropdown postSettings" data-bind="css:cssOptionsClassesForReceived">
             <div class="pull-left">
-                <label class="label" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text white" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></label>
+                <label class="alert tightPadding" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text white" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></label>
             </div>
             <div class="pull-right">
                 <div class="btn-group">
-                    <button class="btn btn-small small-caps" data-bind="click:approval, enable:status() !== 'trash'">
+                    <button class="btn" data-bind="click:approval, enable:status() !== 'trash'">
                         <i class="icon-ok" data-bind="css:{'icon-remove':status() === 'active', 'icon-ok':status() === 'pending'}"></i>
-                        <span data-bind="text:status() === 'active' ? 'UnApprove' : 'Approve'"></span>
                     </button>
-                    <!--<button class="btn btn-small" data-bind="css:{active:status() === 'active'}">Archive</button>-->
-                    <button class="btn btn-small btn-inverse small-caps" data-bind="css:{active:status() === 'trash'}, click:trash">
-                        <i class="icon-trash icon-white"></i></button>
+                    <!--<button class="btn" data-bind="css:{active:status() === 'active'}">Archive</button>-->
+                    <button class="btn" data-bind="css:{active:status() === 'trash'}, click:trash">
+                        <i class="icon-trash"></i></button>
                 </div>
             </div>
         </div> <!-- post settings -->
@@ -268,9 +267,47 @@
         </div>
     </article>
 </script>
+<script type="text/html" id="listingEditMode">
 
-
-
+<article class="postFeed media relative clearfix editMode" style="margin-top:0">
+    <div class="dropdown postSettings" style="min-height:30px;">
+        <div class="pull-left">
+            <label class="alert tightPadding"><span data-bind="dateText:modified"></span></label>
+        </div>
+        <div class="pull-right">
+            <div class="btn-group">
+                <button class="btn"><i class="icon-ok"></i></button>
+                <button class="btn"><i class="icon-trash"></i></button>
+            </div>
+        </div>
+    </div> <!-- post settings -->
+    <br>
+    <div class="pull-left">
+        <a class="thumbnail" href="#" data-bind="html: getThumbnail.call($data),click:setCurrentItem"></a>
+        <div class="mediaThumbLinks">
+            <span class="thumbInfo">
+                <a href="#" class="text-center" data-bind="click:setCurrentItem, text:counts.attachments()+' attachments' " style="display: block"></a>
+            </span>
+        </div>
+    </div> <!-- listings thumbnail -->
+    <div class="contentBottom media-body media-details">
+        <h3 class="media-heading" style="display:inline-block;width:100%;">
+            <a href="#" data-bind="text:page.name, href:page.uri"></a>
+            <a href="#"><small class="muted" data-bind="text:page.subtype() + ' - ' +listing.property_type()"></small></a>
+            <span class="text-right">
+                <small style="font-weight:bold;color:#555" data-bind="text:listing.type().toUpperCase()"></small>
+                <span style="font-weight:bold;color:#555;font-size:85%" data-bind="text:'$' + RTC.ThousandSep(listing.price())"></span>
+            </span>
+        </h3>
+        <ul class="nav">
+            <li><i class="info16 sqft"></i> <span style="color: #878888;" data-bind="text:(RTC.ThousandSep(listing.built_size()) || 0) + ' sqft'"></span></li>
+            <li><i class="info16 bathrooms"></i> <span style="color: #878888;" data-bind="text:listing.baths() + ' bathrooms'"></span></li>
+            <li><i class="info16 bedrooms"></i> <span style="color: #878888;" data-bind="text:listing.rooms() + ' bedrooms'"></span></li>
+        </ul>
+    </div> <!-- listings content -->
+    <div data-bind="RTModal:slideShow"></div>
+</article>
+</script>
 
 <script type="text/html" id="postComments">
     <div class="navbar navbar-responsive" style="border:1px solid #eaeaea;">

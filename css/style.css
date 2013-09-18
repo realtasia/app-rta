@@ -2688,7 +2688,7 @@ INPUT#birthday {
     height: 100%;
 }
 
-.RTAWindowContent .thumbnails {
+.RTAWindowContent .thumbnails:not(.thumbnailGallery) {
     display: block;
     padding: 10px 0 0;
     position: relative;

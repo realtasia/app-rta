@@ -24,10 +24,10 @@
                 <span data-bind="text:$data.interactions.like() ? 'Unlike' : 'Like'"><?php echo $interact && $interact['like'] ? 'Unlike' : 'Like' ?></span>
             </a>
             <!--/ko-->
-            <!--ko if : $root.ca() === 'testimonials'-->
-            <a data-bind="hoverClass: 'hovering'" class="pageActionsButton btn btn-mini hasActiveState" style="display:none" data-bind="click:$root.startEditMode, title:'Manage Testimonials', visible:$root.cpuIsCu">
+            <!--ko if : $root.ca() === 'listings'-->
+            <a data-bind="hoverClass: 'hovering'" class="pageActionsButton btn btn-mini hasActiveState" style="display:none" data-bind="click:$root.startEditMode, title:'Manage Listings', visible:$root.cpuIsCu">
                 <i class="action16 edit"></i>
-                <span>Manage Approvals</span>
+                <span>Manage Listings</span>
             </a>
             <!--/ko-->
             <!--ko if : $root.cpuIsCu-->

@@ -11,7 +11,7 @@
             <ul class="unstyled" style="font-size:90%;">
                 <li><strong>Estate</strong> <a href="<?php echo Arr::get($parent, 'uri') ?>" title="<?php echo "View " . Arr::get($parent, 'name') . "'s profile" ?>"><?php echo Arr::get($parent, 'name') ?></a></li>
                 <?php if (isset($property_type)): ?>
-                    <li><strong>Property Type</strong> <a href="#"><?php echo $property_type ?></a></li>
+                    <li><strong>Property Type</strong> <a href="#"><?php echo Debug::vars($property_type) ?></a></li>
                 <?php endif; ?>
                 <li><strong>Listings</strong> <a href="<?php echo $uri . '/listings' ?>"><?php echo Arr::get($counts, 'listings', 0) ?></a></li>
                 <li><strong>Last Active</strong> <time title="<?php echo date('c', $modified) ?>"><?php echo Date::fuzzy_span($modified) ?></time></li>

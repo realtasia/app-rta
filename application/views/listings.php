@@ -23,7 +23,7 @@
                 <button class="btn btn-large" style="box-shadow:1px 1px 3px #ccc;width:100%;font-weight:bold;font-size:1.2em;color:#777" data-bind="click:toggleMobileListingSearch"><i class="icon-search"></i> Search</button>
             </div>
             <div class="contentArea contentBox">
-                <form class="listingsSearch RTASearch hidden-phone" accept-charset="utf-8" id="filterform" method="GET" action="/listings">
+                <form class="listingsSearch RTASearch hidden-phone" accept-charset="utf-8" id="filterform" method="GET" action="/<?php echo Request::initial()->detect_uri() ?>">
                     <div id="wraparound" class="outerBox relative">
                         <section id="search" class="filterContentBG contentArea contentNoBottom">
                             <div class="input-append input-large input-prepend" style="width:82%" data-bind="with:Search().formFields">

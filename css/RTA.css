@@ -114,6 +114,9 @@ Common*/
     margin: 2px 0 5px;
     font-size: 1.35em !important;
 }
+.listing .media-heading small {
+    font-size: .8em !important;
+}
 
 .listingLeft {
     width: 165px;
@@ -331,6 +334,7 @@ a.thumbnail{
     background: radial-gradient(at center, ellipse cover, rgba(247,247,247,1) 0%,rgba(243,243,243,1) 100%);
 }
 
+.tightPadding{padding:5px}
 
 .postCommentLast {
     border-bottom: none;
