@@ -892,30 +892,25 @@ RT["handlers"] = {
         }
     },
     title: {
-        init: function(element, vA, binds) {
+        init: function(e, vA, binds) {
             if (!binds().qtip && ko.unwrap(vA())) {
-                var b = ko.unwrap(binds()), position = b.position || "top",
-                        offsetY;
-                if(position === 'top'){
-                    offsetY = 30
-                } else{
-                    offsetY = 50;
-                }
-                $(element).tooltipster({
+                var b = ko.unwrap(binds()), position = b.position || "top";
+                $(e).tooltipster({
                     content: ko.unwrap(vA()),
                     arrow: false,
                     animation: "grow",
                     position: position,
-                    offsetY: offsetY,
+                    offsetY: 30,
                     touchDevices: false
                 });
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
-                    $(element).tooltipster("destroy");
+                ko.utils.domNodeDisposal.addDisposeCallback(e, function() {
+                    $(e).tooltipster("destroy");
                 });
+                console.log($(e).data().plugin_tooltipster.positionTooltip.toString())
             }
         },
-        update: function(element, vA, binds) {
-            return !binds().qtip && ko.unwrap(vA()) && $(element).tooltipster("update", ko.unwrap(vA()));
+        update: function(e, vA, binds) {
+            return !binds().qtip && ko.unwrap(vA()) && $(e).tooltipster("update", ko.unwrap(vA()));
         }
     },
     helpText: {

@@ -33,12 +33,12 @@
 </div>
 <div id="container" style="padding-bottom:100px;">
     <div class="container-fluid homeMenu">
-        <div id="contentCarousel" data-interval="false" class="relative">
+        <div id="contentCarousel" data-interval="false" class="relative carousel">
             <span id="main-content" class="placehash"></span>
             <ul class="nav centralize" id="mainSubMenu">
-                <li><a href="#Features" data-target="#contentCarousel" data-slide-to="0">Features</a></li>
-                <li><a data-target="#contentCarousel" href="#FAQContent" data-slide-to="1" id="FAQTab">FAQ</a></li>
-                <li data-bind="visible:!RTApp.user()"><a data-target="#contentCarousel" href="#Register" id="registerTab" data-slide-to="2" data-bind="click:initRegForm">Register</a></li>
+                <li><a class="btn btn-link" href="#Features" data-target="#contentCarousel" data-slide-to="0">Features</a></li>
+                <li><a class="btn btn-link" data-target="#contentCarousel" href="#FAQContent" data-slide-to="1" id="FAQTab">FAQ</a></li>
+                <li data-bind="visible:!RTApp.user()"><a class="btn btn-link" data-target="#contentCarousel" href="#Register" id="registerTab" data-slide-to="2" data-bind="click:initRegForm">Register</a></li>
             </ul>
             <div class="carousel-inner">
                 <div class="active item relative" id="Features" style="margin-top:10px;">
@@ -100,10 +100,10 @@
                     <div class="alert alert-info" style="margin-top:30px;">
                         <h3 class="hidden-phone" style="margin-top:0;"><i class="icon-lightbulb"></i>&nbsp;Registrations are now open!</h3>
                         <h4 class="visible-phone" style="margin-top:0;"><i class="icon-lightbulb"></i>&nbsp;Registrations are now open!</h4>
-                        <small>Membership is limited to the <strong>first 100 users</strong>, so hurry&hellip;</small>
+                        <p style="display:inline">Membership is limited to the <strong>first 100 users</strong>, so hurry&hellip;</p>
                         <button onclick="javascript:window.scrollTo(0, 450);
-                                jQuery('#registerTab').click();" class="btn btn-info btn-small" style="display:inline-block"><i class="icon-magic"></i>&nbsp;Register Now!</button>&nbsp;
-                        <small class="muted">or read through our <a data-target="#contentCarousel" href="#main-content" data-slide-to="1" onclick="window.scrollTo(0, 500);
+                                jQuery('#registerTab').click();" class="btn btn-primary" style="display:inline-block"><i class="icon-magic"></i>&nbsp;Register Now!</button>&nbsp;
+                        <small>or read through our <a class="btn btn-link" data-target="#contentCarousel" href="#main-content" data-slide-to="1" onclick="window.scrollTo(0, 500);
                                 jQuery('#FAQTab').click();">FAQ.</a></small>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                                     Paid membership is currently exclusive to licensed Real Estate Agents, but Realtasia is built for both agents and regular users alike. During the preview period,
                                     we limit the total number of registrations and adjust it upwards periodically.
                                 </p>
-                                <a class="text-info" href="#main-content"><small>Back to questions&nbsp;<i class="icon-arrow-up"></i></small></a>
+                                <a href="#main-content">Back to questions&nbsp;<i class="icon-arrow-up"></i></a>
                             </div>
                             <hr>
                             <div class="contentArea">
@@ -145,21 +145,21 @@
                                     different scenarios.<br>
                                     During this time, we collect feedback from you as we test and improve on the application and add proposed features (including our mobile application)
                                 </p>
-                                <a class="text-info" href="#main-content"><small>Back to questions&nbsp;<i class="icon-arrow-up"></i></small></a>
+                                <a href="#main-content">Back to questions&nbsp;<i class="icon-arrow-up"></i></a>
                             </div>
                             <hr>
                             <div class="contentArea">
                                 <h4 class="bold textShadow relative"><span id="will-my-membership-fees-remain-the-same" class="placehash"></span>Will my membership fees remain the same?</h4>
                                 <p class="muted textShadow" style="font-size:110%;line-height:1.7">
                                     Yes. Existing members maintain their original package fees. New users will subscribe at listed rates.                                </p>
-                                <a class="text-info" href="#main-content"><small>Back to questions&nbsp;<i class="icon-arrow-up"></i></small></a>
+                                <a href="#main-content">Back to questions&nbsp;<i class="icon-arrow-up"></i></a>
                             </div>
                             <hr>
                             <div class="contentArea">
                                 <h4 class="bold textShadow relative"><span id="do-i-pay-more-as-new-features-are-introduced" class="placehash"></span>Do I pay more as new features are introduced?</h4>
                                 <p class="muted textShadow" style="font-size:110%;line-height:1.7">
                                     Your package price remains the same for all future updates and upgrades except if we integrate services from external vendors/providers (e.g. SMS Marketing, online advertising etc)</p>
-                                <a class="text-info" href="#main-content"><small>Back to questions&nbsp;<i class="icon-arrow-up"></i></small></a>
+                                <a href="#main-content">Back to questions&nbsp;<i class="icon-arrow-up"></i></a>
                             </div>
                             <hr>
                             <div class="contentArea">
@@ -169,7 +169,7 @@
                                     You get a chance to contribute to and help shape Realtasia as it moves forward.
                                     The preview period is <strong>limited to the first 100</strong> users, and you get more than <strong><em>60%</em></strong> off the proposed subscription fees!
                                 </p>
-                                <a class="text-info" href="#main-content"><small>Back to questions&nbsp;<i class="icon-arrow-up"></i></small></a>
+                                <a href="#main-content">Back to questions&nbsp;<i class="icon-arrow-up"></i></a>
                             </div>
                             <hr>
                             <div class="contentArea">
@@ -177,7 +177,7 @@
                                 <p class="muted textShadow" style="font-size:110%;line-height:1.7">
                                     You can pay using all major credit cards, your paypal account or via inter-bank transfers. (Cheque payments are not applicable during the private preview stage.)
                                 </p>
-                                <a class="text-info" href="#main-content"><small>Back to questions&nbsp;<i class="icon-arrow-up"></i></small></a>
+                                <a href="#main-content">Back to questions&nbsp;<i class="icon-arrow-up"></i></a>
                             </div>
                             <hr>
                         </div>
@@ -185,9 +185,9 @@
                     <div class="alert alert-info" style="margin-top:30px;">
                         <h3 class="hidden-phone" style="margin-top:0;"><i class="icon-lightbulb"></i>&nbsp;Registrations are now open!</h3>
                         <h4 class="visible-phone" style="margin-top:0;"><i class="icon-lightbulb"></i>&nbsp;Registrations are now open!</h4>
-                        <small>Membership is limited to the first <strong>first 100 users</strong>, so hurry&hellip;</small>
+                        <p  style="display:inline">Membership is limited to the first <strong>first 100 users</strong>, so hurry&hellip;</p>
                         <button onclick="javascript:window.scrollTo(0, 450);
-                                jQuery('#registerTab').click()" class="btn btn-info btn-small" style="display:inline-block"><i class="icon-magic"></i>&nbsp;Register Now!</button>
+                                jQuery('#registerTab').click()" class="btn btn-primary" style="display:inline-block"><i class="icon-magic"></i>&nbsp;Register Now!</button>
                     </div>
                 </div>
                 <div class="item relative" id="Register" data-bind="ifnot:user">

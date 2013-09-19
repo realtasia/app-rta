@@ -41,11 +41,11 @@
                             <textarea class="pull-left statusFormTextarea" placeholder="" data-bind="attr:{placeholder:prompt}, click:init, value:message, valueUpdate:'afterkeydown', expand : true"></textarea>
                         </div>
                         <div class="span3" style='margin-left:5px'>
-                            <div class="btn-group pull-right" id="postButtonContainer" style="margin:4px 5px 0 0">
+                            <div class="btn-group pull-right" id="postButtonContainer" style="margin:3px 5px 0 0">
                                 <a class="btn btn-small" href="#" data-bind="enable:canSubmit,click:createNew, title:'Submit'"><i class="icon-share-alt"></i>  <span class="visible-phone">Submit</span></a>
                                 <a class="btn btn-small" style="border-right:0 none;" href="#" data-toggle="dropdown"  data-bind="title:'Change visibility'"><i class="icon" data-bind="css:{'icon-eye-open' : privacy() === 'PUBLIC', 'icon-eye-close' : privacy() === 'PRIVATE' }"></i> <span class="visible-phone">Privacy</span></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="Privacy Menu">
-                                    <li style="display:block;"><small class="muted" style="padding-left:3px;">Choose this Post's Privacy</small></li>
+                                    <li style="display:block;"><span class="muted" style="padding:5px;">Change Visibilty</span></li>
                                     <li style="display:block;"><a href="#" data-bind="click:setPublic"><i class="icon icon-eye-open"></i> Public</a></li>
                                     <li style="display:block;"><a href="#" data-bind="click:setPrivate"><i class="icon icon-eye-close"></i> Private</a></li>
                                 </ul>

@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-18 11:30:15 
+   Compiled at: 2013-09-19 10:24:29 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -895,30 +895,25 @@ RT["handlers"] = {
         }
     },
     title: {
-        init: function(element, vA, binds) {
+        init: function(e, vA, binds) {
             if (!binds().qtip && ko.unwrap(vA())) {
-                var b = ko.unwrap(binds()), position = b.position || "top",
-                        offsetY;
-                if(position === 'top'){
-                    offsetY = 30
-                } else{
-                    offsetY = 50;
-                }
-                $(element).tooltipster({
+                var b = ko.unwrap(binds()), position = b.position || "top";
+                $(e).tooltipster({
                     content: ko.unwrap(vA()),
                     arrow: false,
                     animation: "grow",
                     position: position,
-                    offsetY: offsetY,
+                    offsetY: 30,
                     touchDevices: false
                 });
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
-                    $(element).tooltipster("destroy");
+                ko.utils.domNodeDisposal.addDisposeCallback(e, function() {
+                    $(e).tooltipster("destroy");
                 });
+                console.log($(e).data().plugin_tooltipster.positionTooltip.toString())
             }
         },
-        update: function(element, vA, binds) {
-            return !binds().qtip && ko.unwrap(vA()) && $(element).tooltipster("update", ko.unwrap(vA()));
+        update: function(e, vA, binds) {
+            return !binds().qtip && ko.unwrap(vA()) && $(e).tooltipster("update", ko.unwrap(vA()));
         }
     },
     helpText: {
@@ -1828,7 +1823,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-18 11:30:15 
+   Compiled at: 2013-09-19 10:24:29 
 ================================ */
 RT.App = function() {
     "use strict";

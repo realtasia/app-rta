@@ -5,6 +5,13 @@ Author       : Jason Nathan
 Description: General Defs
 
 Common*/
+
+BODY {
+    background-image: url("/img/bg.png");
+    min-height:450px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+}
+
 /*+clearfix {*/.statusRight:after,#resultCount:after,.listing:after,.mainListingContent:after,.postedBy:after,.formContainer:after,.containerLeft:after,.containerRight:after,.large:after,.regular:after,.hoverCard .thumbnails:after,.hoverCard .thumbnail:after,.hoverCard.contentLeft:after,.hoverCard.contentRight:after,.hoverCard .withLabel:after,.regular:after,.membersInline LI:after {
     content: ".";
     display: block;
@@ -14,8 +21,6 @@ Common*/
     font-size: 0;
 }
 
-
-
 .statusRight,#resultCount,.listing,.mainListingContent,.postedBy,.formContainer,.containerLeft,.containerRight,.large,.regular,.hoverCard .thumbnails,.hoverCard .thumbnail,.hoverCard.contentLeft,.hoverCard.contentRight,.hoverCard .withLabel,.regular,.membersInline LI {
     display: inline-block;
 }
@@ -23,10 +28,11 @@ Common*/
 .statusRight,#resultCount,.listing,.mainListingContent,.postedBy,.formContainer,.containerLeft,.containerRight,.large,.regular,.hoverCard .thumbnails,.hoverCard .thumbnail,.hoverCard.contentLeft,.hoverCard.contentRight,.hoverCard .withLabel,.regular,.membersInline LI {
     display: block;
     height: 1px;
-}/*+}*/BODY {
-    padding-top: 0;
-    background: #FDFDFD;
-}/*StatusBox*/
+}/*+}*/
+
+HTML, BODY {height: 100%;-webkit-font-smoothing: antialiased;}
+
+/*StatusBox*/
 .newPostButtons,.newPostMediaButtons {
     height: 20px;
     padding-top: 5px;
@@ -884,7 +890,7 @@ LABEL .close {
     border-bottom: 1px solid #FFF;
 }
 
-.RTAWindowContainer H3,.RTAWindowContainer H4 {
+.RTAWindowContainer H3 {
     margin: 0;
 }
 
@@ -1122,7 +1128,6 @@ LABEL .close {
     top: 0;
     margin: 0 auto;
     max-width: 1010px;
-    /*[empty]+border-radius:;*/
     min-height: 500px;
 }
 

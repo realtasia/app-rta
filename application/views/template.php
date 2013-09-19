@@ -12,14 +12,14 @@
         <meta name="viewport" content="width=device-width">
         <?php
         echo Assets::factory('all')
-          ->merge(TRUE)->process(TRUE)
-          ->css('jquery-boostrap.min.css')
+          ->merge(TRUE)
+          ->css('jquery-boostrap.css')
           ->css('font-awesome.min.css')
           ->css('icons.css')
           ->css('RTA.css')
           ->css('style.css');
         echo Assets::factory('init')
-          ->merge(TRUE)->process(TRUE)
+          ->merge(TRUE)
           ->js("http://" . RT::COM_SERVER . "/js/jquery.min.js")
           ->js("http://html5shiv.googlecode.com/svn/trunk/html5.js", ['condition' => 'IE'])
           ->js("http://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
@@ -66,7 +66,7 @@
                 echo $content;
             else:
                 ?>
-                <section id="container" class="fill" style="padding-bottom:100px;margin-top:40px">
+                <section id="container" class=" container-fluid fill" style="padding-bottom:100px;margin-top:40px">
                     <?php echo $leftbar ?>
                     <?php echo $content ?>
                     <?php echo $rightbar ?>

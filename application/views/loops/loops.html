@@ -349,14 +349,11 @@
                             <div class="pull-left" style="margin-right:1px">
                                 <img data-bind="getAvatar:{context:RTApp.user, size:40}, attr:{alt:RTApp.user().name}" width="40px" height="40px" />
                             </div>
-                            <div class="statusFormTA relative clearfix media-body" style="min-height:37px;" data-bind="css:{mute:!commentSubmit()}">
+                            <div class="statusFormTA relative clearfix media-body" style="min-height:37px;">
                                 <button class="close" aria-hidden="true" type="button" data-bind="click:destroyComment, visible:commentSubmit"><i class="icon-remove"></i></button>
                                 <form style="width:100%" method="post" class="comment-form">
                                     <textarea class="statusFormTextarea commentInput" data-bind="click:showCommentSubmit, value:commentText, valueUpdate:'afterkeydown', expand:true" placeholder="Your comment" style="width:95%"></textarea>
                                 </form>
-                            </div>
-                            <div style="margin-left:40px" class="clearfix" data-bind="if: commentSubmit">
-                                <small style="color:#bbb;text-shadow:1px 1px 1px #fff;"><i class="icon-info-sign"></i> To leave a line, press "SHIFT" + "ENTER"</small>
                             </div>
                         </div>
                     </li>
