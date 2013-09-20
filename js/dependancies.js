@@ -62,7 +62,7 @@ RT.Com = {
         return val && String(val).split("").reverse().join("").replace(/(\d{3}\B)/g, "$1,").split("").reverse().join("") || null;
     },
     RemoveCommas: function(val) {
-        return val.toString().replace(/,/g, '');
+        return val ? val.toString().replace(/,/g, '') : val;
     },
     MakePrice: function(str) {
         "use strict";
@@ -209,28 +209,6 @@ RT.Com = {
     },
     setInputWidths: function() {
         return true;
-//        return setTimeout(function() {
-//            var divs = $('.input-prepend'), w = divs.closest('form').find('input'),
-//                    x = 0, a, xtr = 0;
-//            w.each(function() {
-//                if (this.id !== "s" && $(this).width() > x) {
-//                    x = $(this).width();
-//                }
-//            });
-//            divs.each(function() {
-//                var t = $(this), i, s;
-//                if (t.is(':visible')) {
-//                    a = t.find('.add-on');
-//                    a.each(function() {
-//                        s = $(this);
-//                        xtr += s.width() + parseInt(s.css('padding-left')) + parseInt(s.css('padding-right'));
-//                    });
-//                    console.log({x: x, xtr: xtr});
-//                    i = t.find('input');
-//                    i.attr("id") !== 's' && i.css('width', x - xtr - 1 + 'px') && (xtr = 0);
-//                }
-//            });
-//        }, 1);
     },
     PageHandler: function(direction) {
         "use strict";
@@ -300,7 +278,7 @@ RT.Com = {
         return target;
     },
     NewDom: function(d) {
-        return document.createElement(d)
+        return document.createElement(d);
     },
     DateFormat: function() {
         var j = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g, k = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g, s = /[^-+\dA-Z]/g, d = function(a, c) {
@@ -407,18 +385,13 @@ RT.Com = {
     CB: {
         _get: function() {
             var e = document.getElementById('colorbox');
-            if (e && e.style.display !== "none") {
-                return e;
-            }
-            return null;
+            return (e && e.style.display !== "none") ? e : null;
         },
         resize: function() {
-            var e = RT.Com.CB._get();
-            return e && $.colorbox.resize();
+            return RT.Com.CB._get() && $.colorbox.resize();
         },
         close: function() {
-            var e = RT.Com.CB._get();
-            return e && $.colorbox.close();
+            return RT.Com.CB._get() && $.colorbox.close();
         }
     },
     qtipPlacement: function(element) {
@@ -637,7 +610,6 @@ RT.Com = {
         self.goTo = function(cb, page) {
             var ci = self.currentIndex, h = self.history;
             page = page || 1;
-            console.log(typeof cb)
             typeof cb === 'function' && h.push(cb()) || h.push(cb);
             return ci(page);
         };
@@ -684,7 +656,7 @@ RT["handlers"] = {
             var obs = vA(), rev = function() {
                 return function() {
                     return obs(!obs());
-                }
+                };
             };
             return ko.bindingHandlers.click.init(e, rev, allBindingsAccessor, context);
         }
@@ -906,7 +878,6 @@ RT["handlers"] = {
                 ko.utils.domNodeDisposal.addDisposeCallback(e, function() {
                     $(e).tooltipster("destroy");
                 });
-                console.log($(e).data().plugin_tooltipster.positionTooltip.toString())
             }
         },
         update: function(e, vA, binds) {
@@ -966,7 +937,7 @@ RT["handlers"] = {
     },
     expand: {
         init: function(element, va) {
-            va = ko.unwrap(va) || 25
+            va = ko.unwrap(va) || 25;
             $(element).css('height', va).autosize().trigger('autosize.resize');
         },
         update: function(element) {

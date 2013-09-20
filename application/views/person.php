@@ -2,7 +2,7 @@
 <!--ko ifnot:RTApp.isJSAction-->
 <div class="contentArea centerContent" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}">
     <?php include Kohana::find_file('views', 'introcontent/person') ?>
-    <!--ko template: {name:'jsPostBox', if:postForm().canPost() && (ca() === 'feed' || ca() === 'testimonials')}--><!--/ko-->
+    <!--ko template: {name:'jsPostBox', if:$root.user() && $root.postForm().canPost() && ($root.ca() === 'feed' || $root.ca() === 'testimonials')}--><!--/ko-->
     <?php if($ca === 'info'):include Kohana::find_file('views', 'personInfo');endif; ?>
     <section id="theLoop" class="profile" data-bind="visible:clNotEmpty, css:{opaque : isGettingNew}" style="min-height:100%;overflow:auto;<?php echo isset($cl) ? '' : 'display:none'; ?>">
         <!--ko if:ca() !== 'leads' && ca() !== 'feedback'-->

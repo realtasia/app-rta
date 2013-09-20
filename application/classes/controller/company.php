@@ -84,10 +84,10 @@ class Controller_Company extends Controller_Auth {
         if($this->request->param('id') === 'keyword')
             return $this->action_keyword();
 
-            $req  = Api::request('/listing/search/', $this->listings_query());
+            $req  = Api::request('/post/listings/', $this->listings_query());
             //die($req);
             $data = $req->get_data();
-            if ($data::success())
+            if ($req::success())
             {
                 if ($this->auto_render)
                 {
@@ -138,7 +138,7 @@ class Controller_Company extends Controller_Auth {
             $this->template->set('cl', $data);
             $this->template->set('clt', 'people');
             $this->content    = View::factory('people')->set('cl', $data);
-            return $this->content->set('introcontent', View::factory("introcontent/company"));
+            return $this->content->set('introcontent', Kohana::find_file('views', 'introcontent/location'));
         }
 
         return parent::json_response($req);

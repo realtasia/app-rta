@@ -1,15 +1,15 @@
 <!--main template-->
-<section class="RTAWindow clearfix" id="listingCreationWizard" style="height:99%;margin:0 auto;">
+<section class="RTAWindow clearfix" id="listingCreationWizard" style="height:auto;margin:0 auto;">
     <header class="titleBar">
         <div class="contentArea titleBarBG">
-            <button type="button" class="close" aria-hidden="true" data-bind="click : hide">&times;</button>
+            <button type="button" class="close" aria-hidden="true" data-bind="click : cancel">&times;</button>
             <h4><i class="icon-magic"></i> Listing Wizard</h4>
         </div>
     </header>
     <section class="RTAWindowContainer">
-        <section class="RTAWindowContent noSidebar">
+        <section class="RTAWindowContent noSidebar relative">
             <section class="relative">
-                <nav class="windowMenuBar">
+                <nav class="windowMenuBar" data-bind="visible:!confirmCancel()">
                     <ul class="nav nav-pills windowMenu">
                         <li data-bind="hoverClass:'hovering'">
                             <button class="windowMenuItem" data-bind="enable:canGoBack, click:goBack, css:{disabled:!canGoBack()}"><i class="icon-circle-arrow-left" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Back</button>
@@ -24,12 +24,21 @@
                             <button class="windowMenuItem" data-bind="css:{disabled: !currentIndex() < 3}, enable:currentIndex() >= 3, click:publish"><i class="icon-ok-sign" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Publish</button>
                         </li>
                         <li data-bind="hoverClass:'hovering'" class="pull-right">
-                            <button class="windowMenuItem" data-bind="click : hide"><i class="icon-ban-circle" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Cancel</button>
+                            <button class="windowMenuItem" data-bind="click : cancel"><i class="icon-ban-circle" data-bind="css:{'icon-2x':RTApp.isPhone, 'icon-3x':!RTApp.isPhone()}"></i>Cancel</button>
                         </li>
                     </ul>
                 </nav>
-                <div class="row-fluid">
-                    <div class="span9 clearfix" style="height:100%;margin-left:auto">
+                <div class="opaqueToggle" data-bind="css:{'show' : confirmCancel}, style:{height:confirmCancel() ? '100%' : '0'}" style="width:100%">
+                    <div style="top:0;right:0;bottom:0;left:0;width:100%;margin:0" class="alert relative" data-bind="visible:confirmCancel">
+                        <h3 style="margin:10px auto;height:auto;text-align:center"><i class="icon-warning-sign"></i> You changes will be lost! Continue to navigate away from this page?</h3>
+                        <div class="btn-toolbar centralize text-center" style="margin:10px auto;">
+                            <button class="btn btn-large" data-bind="click:hide">Yes.</button>
+                            <button class="btn btn-large" data-bind="click:cancel">No. Take me back to the wizard.</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid" data-bind="visible:!confirmCancel()">
+                    <div class="span9 clearfix" style="margin-left:auto">
                         <section class="RTAWindowContent noSidebar clearfix" style="position:relative;bottom:0;height:100%;border-right:1px solid #DDDDDD">
                             <ul class="nav nav-tabs visible-desktop" id="stepsTabs" data-bind="visible:!(currentStep().id()>3)">
                                 <!--ko ifnot:editing-->
@@ -464,28 +473,27 @@
 <div class="alert alert-success">
     <h5 style="margin:0"><i class="icon-ok"></i> Success! <small class="text-success"> Your listing was successfully posted.</small></h5>
 </div>
-<p class="muted"><i class="icon-info-sign"></i> You can change your cover picture by clicking on the small thumbnails on the right.</p>
+<p class="muted"><i class="icon-info-sign"></i> You can change your cover picture by clicking on the small thumbnails <span data-bind="text:RTApp.isSmallerThanTablet() ? 'below' : 'on the bottom-right'"></span>.</p>
 <div class="outerBox" data-bind="with:serverVals">
     <article class="contentArea widgetContentBG relative media listing">
         <div class="pull-left">
-            <a href="" class="thumbnail"><img data-bind="attr:{src:'http://' + $data.picture().replace(RTApp.user()._id()}"</a>
+            <a href="" class="thumbnail"><img data-bind="attr:{src:$parent.getSelectedPicture}"></a>
             <div class="mediaThumbLinks">
-                <span class="thumbInfo"><a href="#" class="text-center" style="display: block">View details</a>
-                </span>
+                <span class="thumbInfo"><a href="#" class="text-center" style="display: block">View details</a></span>
             </div>
         </div> <!-- listings thumbnail -->
         <div class="contentBottom media-body media-details">
-            <h3 class="media-heading"><a href="#" data-bind="text:page.name, attr:{href:page.uri}"></a></h3>
+            <h3 class="media-heading"><a href="#" data-bind="text:$data.page.name, attr:{href:$data.page.uri}"></a></h3>
             <span class="price relative">
-                <span class="listingType" data-bind="html:'FOR<br>' + listing.type()"></span>
-                <span data-bind="text:'$' + RTC.ThousandSep.call(null, listing.price())"></span>
+                <span class="listingType" data-bind="html:'FOR<br>' + $data.listing.type()"></span>
+                <span data-bind="text:'$' + RTC.ThousandSep.call(null, $data.listing.price())"></span>
             </span>
             <dl class="dl-horizontal">
-                <dt><i class="info16 sqft"></i></dt><dd data-bind="text:RTC.ThousandSep.call(null, listing.built_size()) + ' sqft'"></dd>
-                <dt><i class="info16 bathrooms"></i></dt><dd data-bind="text:RTC.ThousandSep.call(null, listing.baths()) + ' bathrooms'">3 toilets</dd>
-                <dt><i class="info16 bedrooms"></i></dt><dd data-bind="text:listing.rooms() + ' bedrooms'"></dd>
+                <dt><i class="info16 sqft"></i></dt><dd data-bind="text:RTC.ThousandSep.call(null, $data.listing.built_size()) + ' sqft'"></dd>
+                <dt><i class="info16 bathrooms"></i></dt><dd data-bind="text:RTC.ThousandSep.call(null, $data.listing.baths()) + ' bathrooms'">3 toilets</dd>
+                <dt><i class="info16 bedrooms"></i></dt><dd data-bind="text:$data.listing.rooms() + ' bedrooms'"></dd>
             </dl>
-            <p data-bind="html:excerpt"></p>
+            <p data-bind="html:$data.excerpt"></p>
         </div> <!-- listings content -->
     </article>
 </div>

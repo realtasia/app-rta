@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-19 10:24:29 
+   Compiled at: 2013-09-20 13:30:05 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -65,7 +65,7 @@ RT.Com = {
         return val && String(val).split("").reverse().join("").replace(/(\d{3}\B)/g, "$1,").split("").reverse().join("") || null;
     },
     RemoveCommas: function(val) {
-        return val.toString().replace(/,/g, '');
+        return val ? val.toString().replace(/,/g, '') : val;
     },
     MakePrice: function(str) {
         "use strict";
@@ -212,28 +212,6 @@ RT.Com = {
     },
     setInputWidths: function() {
         return true;
-//        return setTimeout(function() {
-//            var divs = $('.input-prepend'), w = divs.closest('form').find('input'),
-//                    x = 0, a, xtr = 0;
-//            w.each(function() {
-//                if (this.id !== "s" && $(this).width() > x) {
-//                    x = $(this).width();
-//                }
-//            });
-//            divs.each(function() {
-//                var t = $(this), i, s;
-//                if (t.is(':visible')) {
-//                    a = t.find('.add-on');
-//                    a.each(function() {
-//                        s = $(this);
-//                        xtr += s.width() + parseInt(s.css('padding-left')) + parseInt(s.css('padding-right'));
-//                    });
-//                    console.log({x: x, xtr: xtr});
-//                    i = t.find('input');
-//                    i.attr("id") !== 's' && i.css('width', x - xtr - 1 + 'px') && (xtr = 0);
-//                }
-//            });
-//        }, 1);
     },
     PageHandler: function(direction) {
         "use strict";
@@ -303,7 +281,7 @@ RT.Com = {
         return target;
     },
     NewDom: function(d) {
-        return document.createElement(d)
+        return document.createElement(d);
     },
     DateFormat: function() {
         var j = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g, k = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g, s = /[^-+\dA-Z]/g, d = function(a, c) {
@@ -410,18 +388,13 @@ RT.Com = {
     CB: {
         _get: function() {
             var e = document.getElementById('colorbox');
-            if (e && e.style.display !== "none") {
-                return e;
-            }
-            return null;
+            return (e && e.style.display !== "none") ? e : null;
         },
         resize: function() {
-            var e = RT.Com.CB._get();
-            return e && $.colorbox.resize();
+            return RT.Com.CB._get() && $.colorbox.resize();
         },
         close: function() {
-            var e = RT.Com.CB._get();
-            return e && $.colorbox.close();
+            return RT.Com.CB._get() && $.colorbox.close();
         }
     },
     qtipPlacement: function(element) {
@@ -640,7 +613,6 @@ RT.Com = {
         self.goTo = function(cb, page) {
             var ci = self.currentIndex, h = self.history;
             page = page || 1;
-            console.log(typeof cb)
             typeof cb === 'function' && h.push(cb()) || h.push(cb);
             return ci(page);
         };
@@ -687,7 +659,7 @@ RT["handlers"] = {
             var obs = vA(), rev = function() {
                 return function() {
                     return obs(!obs());
-                }
+                };
             };
             return ko.bindingHandlers.click.init(e, rev, allBindingsAccessor, context);
         }
@@ -909,7 +881,6 @@ RT["handlers"] = {
                 ko.utils.domNodeDisposal.addDisposeCallback(e, function() {
                     $(e).tooltipster("destroy");
                 });
-                console.log($(e).data().plugin_tooltipster.positionTooltip.toString())
             }
         },
         update: function(e, vA, binds) {
@@ -969,7 +940,7 @@ RT["handlers"] = {
     },
     expand: {
         init: function(element, va) {
-            va = ko.unwrap(va) || 25
+            va = ko.unwrap(va) || 25;
             $(element).css('height', va).autosize().trigger('autosize.resize');
         },
         update: function(element) {
@@ -1823,7 +1794,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-19 10:24:29 
+   Compiled at: 2013-09-20 13:30:05 
 ================================ */
 RT.App = function() {
     "use strict";
@@ -1916,7 +1887,7 @@ RT.App = function() {
                 S = ko.utils.extend(RTC.CBSettings, {
                     width: "330px", href: '/assets/templates/interactors.html', height: "auto",
                     onComplete: function() {
-                        var aa = type.ucFirst();
+                        var aa = type.ucfirst();
                         ko.applyBindings(t, document.getElementById("interactors"));
                         $("#moreInteractors").waypoint(RTC.InteractorHandler, {
                             offset: "125%"
@@ -2189,7 +2160,8 @@ RT.App.prototype = {
         "use strict";
         var t = this, cf = t.currentForm, C = RTC, P = C.processing, cp = t.cp(),
                 u = t.user(), S = ko.utils.extend(C.CBSettings, {
-            width: "980px", href: "/assets/templates/listingWizard.html", height: "auto",
+            width: "980px", href: "/assets/templates/listingWizard.html",
+            height: "auto", trapFocus: true,overlayClose:false,escKey:false,
             onComplete: function() {
                 cf(new RT.Forms.Listing());
                 if (cp && C.GetObsVal(cp.type) === 'location') {
@@ -2561,7 +2533,7 @@ RT.App.prototype = {
     getUserHoverCard: function(d) {
         var id = d.user ? d.user._id() : d._id(), name = d.user ? d.user.name() : d.name();
         analytics && analytics.track("Viewed a User hovercard", {
-            user_id: RTApp.user()._id(),
+            user_id: RTApp.user() ? RTApp.user()._id() : "Public",
             viewing: name + "(" + id + ")"
         });
         return 'http://' + window.location.host + "/user?id=" + id || "";
@@ -2569,7 +2541,7 @@ RT.App.prototype = {
     getLocationHoverCard: function(d) {
         var id = d._id();
         analytics && analytics.track("Viewed a Location hovercard", {
-            user_id: RTApp.user()._id(),
+            user_id: RTApp.user() ? RTApp.user()._id() : "Public",
             viewing: d.name + "(" + id + ")"
         });
         return 'http://' + window.location.host + "/page?id=" + id || "";
@@ -2675,7 +2647,7 @@ RT.ControllerLibrary = function() {
             inline: !0,
             width: 960,
             maxWidth: '95%',
-            maxHeight: '95%',
+            maxHeight: '95%', trapFocus: true,
             onClosed: function() {
                 t.editingAlbum(null);
                 u() && u().destroy() && u(null);
@@ -2950,7 +2922,7 @@ RT.ControllerMessages = function() {
             inline: !0,
             width: 960,
             maxWidth: '95%',
-            maxHeight: '95%',
+            maxHeight: '95%', trapFocus: true,
             onClosed: function() {
                 self.newMessage(null);
             },
@@ -4293,7 +4265,7 @@ RT.Library = function(params) {
             inline: !0,
             width: 960,
             maxWidth: '95%',
-            maxHeight: '95%',
+            maxHeight: '95%', trapFocus: true,
             onClosed: function() {
                 t.editingAlbum(null);
                 u() && u().destroy() && u(null);
@@ -4991,10 +4963,15 @@ RT.Forms = {
     Listing: function() {
         var T = this, C = RTC;
         T.defaults = {};
-        var o = "showMediaMenu priceFormat hasValuation hasLand serverVals tempAlbum uploadAlbum currentStep subtype showSubType showAddress editing queued size name picture mediaLib selectFromAlbum uploadNew";
+        var o = "confirmCancel isCancelled showMediaMenu priceFormat hasValuation hasLand serverVals tempAlbum uploadAlbum currentStep subtype showSubType showAddress editing queued size name picture mediaLib selectFromAlbum uploadNew isSaving";
         C.MakeObsFromArray.call(T, o);
         T.hide = function() {
-            return RTC.CB.close();
+            if(!T.isSaving()){
+                return RTC.CB.close();
+            }
+            return T.isSaving.subscribe(function(v){
+                return !v && RTC.CB.close();
+            });
         };
         T.steps = ko.observableArray([
             new C.Step(1, 'Location Details', 'locationDetailsT'),
@@ -5068,7 +5045,8 @@ RT.Forms = {
             floor: ko.observable("").extend({required: !0}),
             stack: ko.observable("").extend({required: !0})
         };
-        T.listing = T.defaults = tD;
+        T.defaults = tD;
+        T.listing = T.defaults;
         T.locationDetails = ko.computed(function() {
             var l = T.listing, p = l.page();
             return {
@@ -5161,8 +5139,9 @@ RT.Forms = {
             return "<span style='font-size:1.1em'>" + this.addedMedia().length + " </span> item(s) selected";
         }, this);
         T.addToSelected = function(d) {
-            var added = T.addedMedia.addToSet(d, true);
+            var am = T.addedMedia, added = am.addToSet(d, true);
             d.isSelected(added);
+            return T.picture(added ? d : am()[0]);
         };
         T.selectAllAttachments = function() {
             var am = T.addedMedia, l = T.mediaLib(), s = l ? l.selectedAlbum() : false,
@@ -5197,12 +5176,10 @@ RT.Forms = {
             if (sa && sa()) {
                 i.addClass("icon-upload");
                 s.text(" Upload more files").prepend(i);
-                console.log(s.html())
                 return s.html();
             }
             i.addClass("icon-plus-sign");
             s.text(" Create new").prepend(i);
-                console.log(s.html())
             return s.html();
         }, this);
         T.goToMediaLib = function() {
@@ -5278,33 +5255,72 @@ RT.Forms = {
             }
         };
         T.save = function(d, e) {
-            return !1;
+           "use strict";
+            var p = {JSON: ko.toJSON(T.toJS())},
+                    sv = T.serverVals,
+                    a = RTApp, is = T.isSaving;
+            if(!sv())
+                return false;
+            p.request_type = "update_listing";
+            p._id = ko.toJS(sv()._id);
+            p.url = "/post/update/";
+            is(true);
+            return (p = RTC.PostApi({}, p)) && p.done(function(r) {
+                if (RTC.isSuccess(r)) {
+                    RTC.Renew();
+                    sv(RTC.CreateLoop(r.data));
+                    if (a.cp()) {
+                        if (r.data.user._id === RTC.GetObsVal(a.cp()._id)) {
+                            var found = ko.utils.arrayFirst(a.cl(), function(i){
+                                return RTC.GetObsVal(i._id) === r.data._id;
+                            });
+                            if(found){
+                                var tmp = ko.mapping.fromJS(r.data, {create: RTC.CreateLoop});
+                                return a.cl()[a.cl.indexOf(found)] = RTC.GetObsVal(tmp);
+                            }
+                        }
+                    }
+                }
+            }).always(function(){return is(false) && setTimeout(function(){return RTC.CB.resize();}, 1);});
         };
         T.publish = function(d, e) {
             "use strict";
-            var p = {JSON: ko.toJSON(T.toJS())}, sv = T.serverVals, a = RTApp, cpid;
+            var p = {JSON: ko.toJSON(T.toJS())},
+                    sv = T.serverVals,
+                    a = RTApp,
+                l = a.user().counts.listings, is = T.isSaving;
             p.request_type = "create_listing";
             p.url = "/post/update/";
+            is(true);
+            if(sv())
+                return T.save();
             return (p = RTC.PostApi({}, p)) && p.done(function(r) {
                 if (RTC.isSuccess(r)) {
                     RTC.Renew();
                     sv(RTC.CreateLoop(r.data));
                     T.currentStep((T.steps()[4]));
-                    a.user().counts.listings(a.user().counts.listings() + 1);
+                    l(l() + 1);
                     if (a.cp()) {
-                        cpid = RTC.GetObsVal(a.cp()._id);
-                        p = T.toJS();
-                        if (p._id === cpid) {
+                        if (r.data.user._id === RTC.GetObsVal(a.cp()._id)) {
                             a.cp().counts.listings(a.cp().counts.listings() + 1);
-                            a.cl.unshift(new RT.Listing(r.data));
+                            var tmp = ko.mapping.fromJS(r.data, {create: RTC.CreateLoop});
+                            a.cl.unshift(RTC.GetObsVal(tmp));
                         }
                     }
                 }
-            });
+            }).always(function(){return is(false)});
         };
         T.cancel = function(d, e) {
-            return !1;
+            if(T.serverVals()){
+                return T.hide();
+            }
+            return T.confirmCancel(!T.confirmCancel());
         };
+        T.confirmCancel.subscribe(function(){
+            return setTimeout(function(){
+                return RTC.CB.resize();
+            }, 1);
+        }, T);
         T.progressStep = function() {
             var t = this, cs = t.currentStep, cps = cs() + 1;
             return cps <= t.totalSteps && cs(cps) && t.completedSteps.push(cps);
@@ -5338,7 +5354,6 @@ RT.Forms = {
                     l.addedMedia.push(ko.toJS(a._id));
                 });
             }
-            ;
             if (this.picture()) {
                 l.picture = RTC.GetObsVal(this.picture().picture) || "";
             }
@@ -5375,6 +5390,24 @@ RT.Forms = {
             }
             return ci < T.steps().length - 1;
         });
+        T.getSelectedPicture = ko.computed(function(){
+            var p = this.picture(), url, id = RTApp.user()._id();
+            if(!p)
+                return false;
+
+            url = p.picture().replace(id, id + "/" + 150);
+            if(url){
+                return "//" + url;
+            }
+
+        }, T);
+        T.picture.subscribe(function(v){
+            var t = this, sv = t.serverVals();
+            if(!sv)
+                return false;
+
+            return v && t.save();
+        }, this);
         var l = T.mediaLib(), s = l && l.selectedAlbum(), a = s ? s.attachments() : !1;
         a && T.checkAttachments.call(T);
         C.forEach(['price', 'valuation', 'cov', 'landSize', 'builtSize'], function(n) {

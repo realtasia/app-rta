@@ -61,9 +61,14 @@
             </ul>
         </div>
     </section>-->
-    <div data-bind="if:cpIsCu" class="alert RTHelpBox" style="margin:20px auto;">
+    <?php if(!empty($cu)):?>
+    <!--ko if: $root.user()-->
+    <div data-bind="if:$root.cpIsCu" class="alert RTHelpBox" style="margin:20px auto;">
         <button class="close" aria-hidden="true" onclick="return $(this).parent().fadeOut(), !1;"><i class="icon-remove"></i></button>
         <h5 class="noMrgTop"><i class="icon-info-sign" style="font-size:18px"></i> Change what is shown here</h5>
         <p><a href="#edit" style="text-decoration: underline;">Edit</a> your profile to add information to your about page. You can also change your <a href="#settings" style="text-decoration: underline">privacy settings</a> to show/hide sensitive information.</p>
     </div>
+    <!--/ko-->
+    <?php endif; ?>
+
 </section>

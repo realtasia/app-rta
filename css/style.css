@@ -1040,7 +1040,17 @@ SIDEBARS*/
     padding: 3px;
     background-color: #fff;
     margin-left:0;
+    margin-bottom:0 !important;
 }
+
+.opaqueToggle{
+    transition-property: opacity, background-color;
+    transition-duration: .5s, .5s;
+    transition-delay: 0, 0;
+    opacity: 0;
+}
+
+.opaqueToggle.show{opacity:1}
 
 UL.thumbnailGallery .thumbnail {
     background-color: #fff;
@@ -2680,15 +2690,13 @@ INPUT#birthday {
     max-height: 450px;
     overflow: auto;
     overflow-x: hidden;
-    margin-left: -10px !important;
 }
 
-.RTAWindowContent .thumbnails > LI:nth-child(odd) {
+.RTAWindowContent .thumbnails:not(.thumbnailGallery) > LI:nth-child(odd) {
     margin-left: 0 !important;
-    margin-bottom: 10px !important;
 }
 
-.RTAWindowContent .thumbnails > LI {
+.RTAWindowContent .thumbnails:not(.thumbnailGallery) > LI {
     margin-left: 10px;
     margin-bottom: 10px !important;
 }
@@ -3069,7 +3077,6 @@ SPAN.label_checkbox_pair LABEL {
 }
 
 .horizontal .btn-group .btn {
-    padding: 4px 5px 3px;
     margin: 0 0 5px;
 }
 

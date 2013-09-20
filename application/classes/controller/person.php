@@ -226,11 +226,12 @@ class Controller_Person extends Controller_Auth {
         {
             $q = array();
             $u = json_decode(json_encode($u), true);
-            switch (strtolower($this->request->param('id')))
+            $ot = strtolower($this->request->param('id'));
+            switch ($ot)
             {
                 case 'people' :
                     $q['object_type'] = 'user';
-                    $q['api']         = 'user';
+                    $q['api']         = 'user/';
                     break;
                 case 'locations' :
                     $q['object_type'] = 'page';
@@ -244,16 +245,17 @@ class Controller_Person extends Controller_Auth {
             //die(Debug::Vars($u));
 
 
-            $ids = parent::get_interactor_ids(\Arr::path($u, 'connections.subscriptions'), $q);
+            $ids = parent::get_interactor_ids(\Arr::path($u, 'connections.subscriptions'), $q, true);
 
-            //echo "<pre>". Debug::Vars($o_ids);
-            //die();
+            //echo Debug::Vars($ids);
             if (!empty($ids))
             {
                 $req = Api::request("/{$q['api']}", [
                       'access_token' => $this->token(),
                       'include_ids'  => $ids,
                 ]);
+//            echo Debug::Vars($req->get_data());
+//            die();
                 if ($req::success())
                 {
                     if ($this->auto_render)

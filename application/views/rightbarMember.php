@@ -16,7 +16,7 @@
                         <?php foreach (Arr::get($cp, 'likers', []) as $l): ?>
 
                         <li class="smallNail" data-bind="qtip: RTApp.getUserHoverCard"><div class="thumbnail">
-                                <a href="/<?php echo $l['_id'] ?>" title="<?php echo $l['name'] ?>" style="width:35px;height:35px"><img alt="User Thumbnails" src="<?php echo 'http://' . $api . "/avatar/{$l['_id']}" . "/40" ?>" alt="<?php echo $l['name'] ?>" width="35px" height="35px" /></a></div>
+                                <a href="/<?php echo $l['_id'] ?>" title="<?php echo $l['name'] ?>" style="width:40px;height:40px"><img alt="User Thumbnails" src="<?php echo 'http://' . $api . "/avatar/{$l['_id']}" . "/40" ?>" alt="<?php echo $l['name'] ?>" width="40px" height="40px" /></a></div>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -35,7 +35,7 @@
                 <ul class="thumbnails thumbnailGallery" style="display:<?php echo isset($cp['subscribers']) && Arr::path($cp, 'counts.subscribers') > 0 ? 'block' : 'none' ?>;" data-bind="visible : subscribers().length > 0,serverForEach : {name : 'rightbarThumbs', foreach:subscribers}">
                     <?php foreach (Arr::get($cp, 'subscribers', []) as $s): ?>
                         <li class="smallNail"><div class="thumbnail">
-                                <a href="/<?php echo $s['_id'] ?>" title="<?php echo $s['name'] ?>" style="width:35px;height:35px"><img alt="User Thumbnails" src="<?php echo 'http://' . $api . "/avatar/{$s['_id']}" . "/40" ?>" alt="<?php echo $s['name'] ?>" width="35px" height="35px" /></a></div>
+                                <a href="/<?php echo $s['_id'] ?>" title="<?php echo $s['name'] ?>" style="width:40px;height:40px"><img alt="User Thumbnails" src="<?php echo 'http://' . $api . "/avatar/{$s['_id']}" . "/40" ?>" alt="<?php echo $s['name'] ?>" width="40px" height="40px" /></a></div>
                         </li>
                     <?php endforeach; ?>
                 </ul>
