@@ -6,7 +6,7 @@
             </div>
             <div class="media-body">
                 <!--ko if : user-->
-                <div class="row-fluid" style="display:none" data-bind="visible:user().isAdmin || user().isAgent">
+                <div class="row-fluid" style="display:none" data-bind="visible:user().canPostListings">
                     <a href="#" data-bind="click:initListings" class="span12 btn btn-mini btn-rta"><i class="icon-plus-sign"></i>&nbsp;New Listing</a>
                 </div>
                 <!--/ko-->
@@ -23,7 +23,7 @@
         </div>
         <div class="visible-desktop">
             <!--ko with : user-->
-            <div class="createListing" style="display:none" data-bind="flash:isAdmin() || isAgent()">
+            <div class="createListing" style="display:none" data-bind="flash:canPostListings">
                 <a href="#" data-bind="click:$parent.initListings.bind($parent)" class="responsiveIconLink"><i class="icon-list"></i><span style="text-transform: capitalize;font-variant: small-caps">&nbsp;New Listing</span></a>
             </div>
             <!--/ko-->
@@ -57,7 +57,7 @@
                         <li class="dropdown" style="display:none" data-bind="visible:$root.cpIsCu, hoverClass:'hovering', css : {active : ca() === 'testimonials'}">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                                 <span class="sideNavIcon"><i class="icon-user"></i><i class="icon-comment-alt superscript"></i></span><span>&nbsp;Testimonials</span>
-                                <b class="caret"></b>
+                                <i class="icon-caret-down"></i>
                             </a>
                             <ul data-bind="" class="dropdown-menu">
                                 <li><a data-bind="attr:{href:'/' + cp().username() + '/testimonials/received'}">Received <span class="badge" data-bind="text:cp().counts.testimonials.received"></span></a></li>
@@ -80,7 +80,7 @@
                         <?php endif; ?>
                         <!--/ko-->
                         <?php if (isset($links['Listings'])): ?>
-                            <li style="display:<? echo in_array($cp['roles'], ['agent']) ? 'block' : 'none' ?>" data-bind="visible:cp().isAdmin || cp().isAgent, hoverClass:'hovering'">
+                            <li style="display:<? echo in_array($cp['roles'], ['agent']) ? 'block' : 'none' ?>" data-bind="visible:cp().canPostListings, hoverClass:'hovering'">
                                 <a id="sidenavListings" href="<?php echo $links['Listings']; ?>"><i class="sideNavIcon icon-list"></i>
                                     <span>&nbsp;Listings&nbsp;</span>
                                     <span data-bind="text:cp().counts.listings" class="badge hidden-phone"><?php echo Arr::path($cp, 'counts.listings') ?></span></a>
@@ -91,7 +91,7 @@
                                 <a href="<?php echo $links['Subscriptions']; ?>" data-toggle="dropdown" class="dropdown-toggle">
                                     <i class="sideNavIcon icon-rss-sign"></i>
                                     <span>&nbsp;Subscriptions&nbsp;</span>
-                                    <b class="caret"></b>
+                                    <i class="icon-caret-down"></i>
                                 </a>
                                 <ul data-bind="" class="dropdown-menu">
                                     <li><a data-bind="" href="<?php echo $links['Subscriptions']; ?>/people">People</a></li>

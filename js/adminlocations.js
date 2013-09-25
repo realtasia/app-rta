@@ -120,7 +120,7 @@ RT["Admin"]['Searcher'] = function() {
 //            return alert('Please select rows to apply this update to.');
 //        }
         var vm = self, S = ko.utils.extend(RTC.CBSettings, {
-            width: "480px", href: "/assets/templates/admin/createEstate.html", height: "auto",
+            width: "480px", href: RTC.getTemplate('createEstate'), height: "auto",
             onComplete: function() {
                 ko.applyBindings(vm, document.getElementById('estateForm'));
                 return $.colorbox.resize();
@@ -134,7 +134,7 @@ RT["Admin"]['Searcher'] = function() {
     self.createLocation = function(d) {
         self.locationForm(new RT.Admin.Location(ko.toJS(d)));
         var S = ko.utils.extend(RTC.CBSettings, {
-            width: "480px", href: '/assets/templates/admin/createLocation.html', height: "auto",
+            width: "480px", href: RTC.getTemplate('createLocation'), height: "auto",
             onComplete: function() {
                 ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
                 return $.colorbox.resize();
@@ -263,7 +263,7 @@ RT["Admin"]['Straylocations'] = function() {
         self.locationForm(new RT.Admin.Location(ko.toJS(self.final)));
         self.locationForm().create = self.createLocation.bind(self);
         var S = ko.utils.extend(RTC.CBSettings, {
-            width: "480px", href: '/assets/templates/admin/createLocation.html', height: "auto",
+            width: "480px", href: RTC.getTemplate('createLocation'), height: "auto",
             onComplete: function() {
                 ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
                 return setTimeout(function(){
@@ -360,7 +360,7 @@ RT["Admin"]['Straylocations'] = function() {
             self.locationForm(new RT.Admin.Location(d));
             self.locationForm().create = null;
             var S = ko.utils.extend(RTC.CBSettings, {
-                width: "480px", href: '/assets/templates/admin/createLocation.html', height: "100%",
+                width: "480px", href: RTC.getTemplate('createLocation'), height: "100%",
                 onComplete: function() {
                     ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
                     return setTimeout(function(){

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 include APPPATH . 'views/loops/loops.html'; ?>
-<div class="contentArea" data-bind="css:{centerContent: RTApp.isLargerThanDefault, 'container-fluid': RTApp.isSmallerThanTablet}, style:{marginLeft:centerView}">
+<section class="contentArea centerContent" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}">
     <?php include Kohana::find_file('views', 'introcontent/company') ?>
     <?php if ($ca === 'info'){include Kohana::find_file('views', 'companyInfo');} ?>
     <section id="theLoop" class="profile" data-bind="visible:cl()" style="<?php if (!isset($cl)){echo 'display:none';}?>">
@@ -16,4 +16,4 @@ include APPPATH . 'views/loops/loops.html'; ?>
         </div>
         <!--/ko-->
     </section> <!--  theLoop -->
-</div>
+</section>

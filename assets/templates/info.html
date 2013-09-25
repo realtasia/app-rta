@@ -1,9 +1,9 @@
 <section class="contentArea centerContent clearfix" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet}">
-    <ul class="small-block-grid-4 grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp">
-        <li data-bind="css : {active : currentEdit() === 'picture'}"><a href="#" data-bind="click:currentEdit.bind($data, 'picture')"><i class="sideNavIcon icon-camera-retro"></i>&nbsp;Picture</a></li>
-        <li data-bind="css : {active : currentEdit() === 'account'}"><a href="#" data-bind="click:currentEdit.bind($data, 'account')"><i class="sideNavIcon icon-cogs"></i>&nbsp;Account</a></li>
-        <li data-bind="css : {active : currentEdit() === 'bio'}"><a href="#" data-bind="click:currentEdit.bind($data, 'bio')"><i class="sideNavIcon icon-phone"></i>&nbsp;Contact</a></li>
-        <li data-bind="css : {active : currentEdit() === 'company'}"><a href="#" data-bind="click:currentEdit.bind($data, 'company')"><i class="sideNavIcon icon-briefcase"></i>&nbsp;Work</a></li>
+    <ul class="small-block-grid-4 grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp" role="menu" aria-labelledby="mPicture mAccount mBio mCompany">
+        <li data-bind="css : {active : currentEdit() === 'picture'}"><a href="#" id="mPicture" data-bind="click:currentEdit.bind($data, 'picture')"><i class="sideNavIcon icon-camera-retro"></i>&nbsp;Picture</a></li>
+        <li data-bind="css : {active : currentEdit() === 'account'}"><a href="#" id="mAccount" data-bind="click:currentEdit.bind($data, 'account')"><i class="sideNavIcon icon-cogs"></i>&nbsp;Account</a></li>
+        <li data-bind="css : {active : currentEdit() === 'bio'}"><a href="#" id="mBio" data-bind="click:currentEdit.bind($data, 'bio')"><i class="sideNavIcon icon-phone"></i>&nbsp;Contact</a></li>
+        <li data-bind="css : {active : currentEdit() === 'company'}"><a href="#" id="mCompany" data-bind="click:currentEdit.bind($data, 'company')"><i class="sideNavIcon icon-briefcase"></i>&nbsp;Work</a></li>
     </ul>
     <div class="media" data-bind="with:RTApp.cp">
         <div class="pull-left">
@@ -21,7 +21,7 @@
             <div class="btn-group pull-left">
                 <button class="pageActionsButton btn" data-bind="enable: isSavable, click:saveAndExit, css:{active:isSaving, 'btn-primary' : isSavable}">
                     <i class="icon-ok"></i>
-                    <span data-bind="html:autoSaveMessage() || 'Save'"></span>
+                    <span data-bind="html:autoSaveMessage"></span>
                 </button>
                 <button class="pageActionsButton btn" data-bind="click:cancelAndExit">
                     <i class="icon-home"></i>
@@ -43,7 +43,7 @@
             <fieldset data-bind="visible : currentEdit() === 'picture'" id="uploadContainer">
                 <legend data-bind="css:{smallFont:RTApp.isSmallerThanTablet}">Change Profile Picture
                     <small class="pull-right">
-                        <button id="uploadAvatar" class="btn btn-info" data-bind="visible:!uploading() && !uploaded(), css:{'btn-medium':RTApp.viewport.width() <= 768, 'btn-mini':RTApp.viewport.isTabletOrLarger}"><i class="icon-upload icon-white"></i> Upload</button>
+                        <a id="uploadAvatar" class="btn btn-info" data-bind="visible:!uploading() && !uploaded(), css:{'btn-medium':RTApp.viewport.width() <= 768, 'btn-mini':RTApp.viewport.isTabletOrLarger}"><i class="icon-upload icon-white"></i> Upload</a>
                     </small>
                 </legend>
                 <!--ko if:savingCrop-->
@@ -85,11 +85,11 @@
                         </span>
                     </div>
                     <div class="span9" style="margin-left: 0; max-width:380px;width:auto;height:auto">
-                        <img id="cropBox" src="" />
+                        <img id="cropBox" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" />
                     </div>
                     <div class="span3 hidden-phone">
                         <div style="overflow: hidden;width:120px;height:120px;position:relative;margin-bottom: 5px">
-                            <img style="max-width:none;width:auto;height:auto" id="avatarPreview" src="" data-bind="attr : {src : tempUpload}" />
+                            <img style="max-width:none;width:auto;height:auto" id="avatarPreview" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" data-bind="attr : {src : tempUpload() || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D'}" />
                         </div>
                         <button class="btn btn-small btn-primary" style="width:58px" data-bind="click:saveAvatar, enable :!savingCrop()">Save</button>
                         <button class="btn btn-small btn-inverse" style="width:58px" data-bind="click:cancel">Cancel</button>
@@ -261,7 +261,7 @@
                 <div class="alert RTHelpBox">
                     <button class="close" onclick="return $(this).parent().fadeOut(), !1;"><i class="icon-remove"></i></button>
                     <h5 class="noMrgTop"><i class="icon-info-sign" style="font-size:18px"></i> Public contact card information.</h5>
-                    <p>Choose what information you would like to include in your scannable QRCode / mobile VCARD. Then click on regenerate when you're finished.<small> <em><a href="#" onclick="return $('#vcardHelpBlock').slideToggle(), !1;">*Click here</a> for more info</em></small>
+                    <p>Choose what information you would like to include in your scannable QRCode / mobile VCARD. Then <strong>click on Regenerate</strong> when you're finished.<small> <em><a href="#" onclick="return $('#vcardHelpBlock').slideToggle(), !1;">*Click here</a> for more info</em></small>
                     <div style="font-size:90%;display:none" id="vcardHelpBlock">
                         <hr>
                         A vcard is a file that contains contact information. It can be downloaded and added to a User's mobile phone.
@@ -335,6 +335,7 @@
                 </div>
                 <!--/ko-->
             </fieldset>
+            <input type="submit" value="" style="opacity:0">
         </form>
     </div>
     <div class="pageInfo clearfix" style="display:block;clear:both">
@@ -342,7 +343,7 @@
             <div class="btn-group pull-left">
                 <button class="pageActionsButton btn" data-bind="enable: isSavable, click:saveAndExit, css:{active:isSaving}">
                     <i class="icon-ok"></i>
-                    <span data-bind="html:autoSaveMessage() || 'Save'"></span>
+                    <span data-bind="html:autoSaveMessage"></span>
                 </button>
                 <button class="pageActionsButton btn" data-bind="click:cancelAndExit">
                     <i class="icon-home"></i>

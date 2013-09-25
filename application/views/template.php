@@ -14,10 +14,10 @@
         echo Assets::factory('all')
           ->merge(TRUE)
           ->css('jquery-boostrap.css')
-          ->css('font-awesome.min.css')
-          ->css('icons.css')
           ->css('RTA.css')
-          ->css('style.css');
+          ->css('style.css')
+          ->css('font-awesome.min.css')
+          ->css('icons.css');
         echo Assets::factory('init')
           ->merge(TRUE)
           ->js("http://" . RT::COM_SERVER . "/js/jquery.min.js")
@@ -25,6 +25,7 @@
           ->js("http://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
           ->js("http://" . RT::COM_SERVER . "/js/respond.min.js", ['condition' => 'lte IE 8'])
           ->js("http://" . RT::COM_SERVER . "/js/json.js", ['condition' => 'lte IE 7'])
+          ->js("lte-ie7.js", ['condition' => 'lte IE 7'])
         ?>
         <!--[if lte IE 9]>
         <script type="text/javascript">
@@ -66,7 +67,7 @@
                 echo $content;
             else:
                 ?>
-                <section id="container" class=" container-fluid fill" style="padding-bottom:100px;margin-top:40px">
+                <section id="container" class="container-fluid fill" style="padding-bottom:100px;">
                     <?php echo $leftbar ?>
                     <?php echo $content ?>
                     <?php echo $rightbar ?>
@@ -122,7 +123,7 @@
             var analytics = analytics || [];
             analytics.load = function(e) {
             var t = document.createElement("script");
-            t.type = "text/javascript", t.async = !0, t.src = ("https:" === document.location.protocol ? "https://" : "http://") + "d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/" + e + "/analytics.min.js";
+            t.type = "text/javascript", t.async = !0, t.src = ("https:" === document.location.protocol ? "https://" : "http://") + "d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/" + e + "/analytics.js";
             var n = document.getElementsByTagName("script")[0];
             n.parentNode.insertBefore(t, n);
             var r = function(e) {

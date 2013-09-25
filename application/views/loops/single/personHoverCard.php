@@ -24,12 +24,12 @@
     </div>
     <div class="bottom">
         <div class="bottom">
-            <span class="add-on">
+            <div class="muted" style="display:inline-block">
                 <i class="info16 people"></i><span><?php echo Arr::get($counts, 'subscribers', 0) ?></span>
-            </span>
-            <span class="add-on">
+            </div>
+            <div class="muted" style="display:inline-block">
                 <i class="info16 likeSmall"></i><?php echo Arr::get($counts, 'likers', 0) ?>
-            </span>
+            </div>
         </div>
     </div>
 </div>

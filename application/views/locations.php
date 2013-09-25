@@ -1,17 +1,17 @@
 <?php defined('SYSPATH') or die('No direct script access.'); ?>
 <?php if (isset($introcontent)): ?>
-    <div class="contentArea" data-bind="css:{centerContent: RTApp.isLargerThanDefault, 'container-fluid': RTApp.isSmallerThanTablet}, style:{marginLeft:centerView}">
+    <div class="cp contentArea" data-bind="css:{centerContent: RTApp.isLargerThanDefault, 'container-fluid': RTApp.isSmallerThanTablet}, style:{marginLeft:centerView}">
         <?php include $introcontent; ?>
     <?php else: ?>
         <div class="container-fluid relative" data-bind="style:{marginLeft:centerView}" style="margin-top:50px;">
             <div class="outerBox centerWidth relative">
-                <section class="contentArea introBox widgetContentBG relative">
+                <div class="contentArea introBox widgetContentBG relative">
                     <div class="hidden-phone">
                         <h2 id="introHeader" ><i class="icon-compass"></i> Locations Directory</h2>
                         <p><?php echo Kohana::message('pages', 'locations.description') ?></p>
                     </div>
                     <h3 class="noMargTopBtm visible-phone"><i class="icon-compass"></i> Locations Directory</h3>
-                </section>
+                </div>
             </div> <!-- intro content -->
         <?php endif; ?>
         <div class="outerBox centerWidth" style="margin-top:10px;">

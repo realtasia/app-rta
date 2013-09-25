@@ -89,6 +89,32 @@ class Api {
     }
 
     /**
+     * Gets the user from db each time. used for polling.
+     *
+     * @param Api_Response $response
+     * @return mixed
+     */
+    public function fetch_user(\Api_Response $response = null)
+    {
+        $s  = Session::instance();
+        $api = $response ? $response : self::response();
+
+        if ($api::get_user_id())
+        {
+            $r = self::request('/user/index/' . $api::get_user_id(), [
+                  'access_token' => $api::get_token()
+            ]);
+
+            if($r::success())
+            {
+                $cu = $r->get_data();
+                $r::get_grant_type() === self::PASSWORD ? $s->set('cu', $cu) : $s->delete("cu");
+            }
+            return $cu;
+        }
+    }
+
+    /**
      * Destroys session & removes cookie
      */
     public static function logout()

@@ -6,6 +6,9 @@ RT.App = function() {
     self = this;
     self.ticks.extend({throttle: 5 * 60 * 1e3});
     self.currentPage(1);
+    self.currentSlideShow.subscribe(function(v){
+        return v && v.resize();
+    },self);
     self.formParams(self.Search() && self.Search().formFields);
     self.ajaxStatus("success");
     self.ajaxMessage = ko.computed(function() {
@@ -87,14 +90,14 @@ RT.App = function() {
             var items = a[type], S;
             if (t.total() > 0) {
                 S = ko.utils.extend(RTC.CBSettings, {
-                    width: "330px", href: '/assets/templates/interactors.html', height: "auto",
+                    width: "330px", href: RTC.getTemplate("interactors"), height: "auto",
                     onComplete: function() {
                         var aa = type.ucfirst();
                         ko.applyBindings(t, document.getElementById("interactors"));
                         $("#moreInteractors").waypoint(RTC.InteractorHandler, {
                             offset: "125%"
                         });
-                        analytics && analytics.track("Viewing the " + aa + " list of " + a.type(), {
+                        u && a && analytics && analytics.track("Viewing the " + aa + " list of " + a.type(), {
                             user_id: u._id(),
                             post_id: a._id()
                         });
@@ -190,7 +193,7 @@ RT.App = function() {
     };
     o = "visibility selectedOption reportOne optionSignout optionRefresh reportTwo";
     RTC.MakeObsFromArray.call(self.feedback, o);
-    self.feedback.selectedOption('compliment');
+    self.feedback.selectedOption('problem');
     self.feedback.reportOne("");
     self.feedback.reportTwo("");
 
@@ -223,10 +226,10 @@ RT.App.prototype = {
         if (d.cp()) {
             return $.get(d.cp().uri() + '/qrcode', function(r) {
                 if (typeof r === "object" && r.status === 'fail') {
-                    return $.colorbox({html: "<div class='RTAWindowContainer'><p class='contentArea text-info'><i class='icon-info-sign'></i> " + r.data.message + "</p></div>"});
+                    return $.bootstrapGrowl('<h4><i class="icon-info-sign"></i> ' + r.data.message + '</h4>', {type: 'warning'});
                 }
                 var s = ko.utils.extend(RT.Com.CBSettings, {
-                    href: '/assets/templates/qrcode.html', height: "auto", width: "auto", maxWidth: '95%', minWidth: '500px',
+                    href: RTC.getTemplate("qrcode"), height: "auto", width: "auto", maxWidth: '95%', minWidth: '500px',
                     onComplete: function() {
                         ko.applyBindings(d, document.getElementById("qrcodeContent"));
                         return $.colorbox.resize();
@@ -239,7 +242,7 @@ RT.App.prototype = {
     initLoginForm: function() {
         "use strict";
         var t = this, cf = t.currentForm, C = RTC, P = C.processing, S = ko.utils.extend(C.CBSettings, {
-            width: "570px", height: "30%", href: "/assets/templates/login.html", onComplete: function() {
+            width: "570px", height: "30%", href: RTC.getTemplate("login"), onComplete: function() {
                 cf(new RT.Forms.Login());
                 setTimeout(function() {
                     ko.applyBindings(cf(), document.getElementById("loginBox"));
@@ -262,7 +265,7 @@ RT.App.prototype = {
                 cf = RTC.getCookie('skipfbAnimate'), f = $('#feedbackButton');
 
         if (this.user() && t.isTabletOrLarger()) {
-            trg.load("/assets/templates/feedback.html", function() {
+            trg.load(RTC.getTemplate("feedback"), function() {
                 ko.applyBindings(t.feedback, trg[0]);
                 if (!cf) {
                     f.css({'-webkit-backface-visibility': 'hidden', '-webkit-transition': 'translate3d(0,0,0)'});
@@ -288,7 +291,7 @@ RT.App.prototype = {
                 RTC.processing = !1;
                 return ko.applyBindings(cf(), trg[0]);
             }
-            return trg.load("/assets/templates/info.html", function() {
+            return trg.load(RTC.getTemplate("info"), function() {
                 cf(new RT.Forms.Info());
                 cf().init();
                 ko.cleanNode(trg[0]);
@@ -310,7 +313,7 @@ RT.App.prototype = {
                 RTC.processing = !1;
                 return ko.applyBindings(cf(), trg[0]);
             }
-            return trg.load("/assets/templates/settings.html", function() {
+            return trg.load(RTC.getTemplate("settings"), function() {
                 cf(new RT.Forms.Settings(t.user(), t));
                 RTC.processing = !1;
                 ko.cleanNode(trg[0]);
@@ -331,7 +334,7 @@ RT.App.prototype = {
                 cf().history(cf().history.slice(0, 2));
                 return cf().currentIndex(1) && (RTC.processing = !1);
             }
-            return trg.load("/assets/templates/mediaLibrary.html", function() {
+            return trg.load(RTC.getTemplate("mediaLibrary"), function() {
                 cf(new RT.ControllerLibrary);
                 ko.cleanNode(trg[0]);
                 RTC.processing = !1;
@@ -349,7 +352,7 @@ RT.App.prototype = {
                 cf().history(cf().history.slice(0, 2));
                 return cf().currentIndex(1) && (RTC.processing = !1);
             }
-            return trg.load("/assets/templates/conversations.html", function() {
+            return trg.load(RTC.getTemplate("conversations"), function() {
                 cf(new RT.ControllerMessages);
                 ko.cleanNode(trg[0]);
                 RTC.processing = !1;
@@ -362,12 +365,11 @@ RT.App.prototype = {
         "use strict";
         var t = this, cf = t.currentForm, C = RTC, P = C.processing, cp = t.cp(),
                 u = t.user(), S = ko.utils.extend(C.CBSettings, {
-            width: "980px", href: "/assets/templates/listingWizard.html",
-            height: "auto", trapFocus: true,overlayClose:false,escKey:false,
+            width: "980px", href: RTC.getTemplate("listingWizard"),
+            height: "auto", overlayClose:false,escKey:false,
             onComplete: function() {
                 cf(new RT.Forms.Listing());
                 if (cp && C.GetObsVal(cp.type) === 'location') {
-// cf().showSubType(false);
                     cf().listing.page({
                         _id: cp._id(),
                         name: cp.name(),
@@ -381,7 +383,12 @@ RT.App.prototype = {
                 return cf().resize();
             }
         });
-        return cf(null) && (u && !P && (u.isAdmin() || u.isAgent())) && (P = !0) && $.colorbox(S);
+        cf(null);
+        if(u && !P && u.canPostListings()){
+            P = !0;
+            return $.colorbox(S);
+        }
+
     },
     showListingsSearch: function() {
         return this.displayListingsSearch(true);
@@ -522,7 +529,7 @@ RT.App.prototype = {
                 t.initFeedbackForm();
                 !t.autoLogin() && setTimeout(RTC.poll, 3e4) || window.location.pathname !== "/loginbasic" && (window.location = "/loginbasic?redirect_to=" + encodeURIComponent(window.location) + "&state=" + t.st() + "&access_token=" + t.at());
                 t.initPostForm();
-                analytics && analytics.identify(v._id(), {
+                v && analytics && analytics.identify(v._id(), {
                     name: v.name(),
                     username: v.username(),
                     role: v.roles().join(" ")
@@ -546,7 +553,7 @@ RT.App.prototype = {
                 if (!!trg.find("#adminContentSessions").length) {
                     return;
                 }
-                trg.load("/assets/templates/admin/sessions.html", function() {
+                trg.load(RTC.getTemplate("sessions"), function() {
                     ko.cleanNode(trg[0]);
                     RTC.processing = !1;
                     return ko.applyBindings(this, trg[0]);
@@ -733,17 +740,18 @@ RT.App.prototype = {
         return "";
     },
     getUserHoverCard: function(d) {
-        var id = d.user ? d.user._id() : d._id(), name = d.user ? d.user.name() : d.name();
+        var id = d.user ? d.user._id() : d._id(), name = d.user ? d.user.name() : d.name(),
+                u = ko.toJS(RTApp.user());
         analytics && analytics.track("Viewed a User hovercard", {
-            user_id: RTApp.user() ? RTApp.user()._id() : "Public",
+            user_id: u ? u._id : "Public",
             viewing: name + "(" + id + ")"
         });
         return 'http://' + window.location.host + "/user?id=" + id || "";
     },
     getLocationHoverCard: function(d) {
-        var id = d._id();
+        var id = d._id(), u = ko.toJS(RTApp.user());
         analytics && analytics.track("Viewed a Location hovercard", {
-            user_id: RTApp.user() ? RTApp.user()._id() : "Public",
+            user_id: u ? u._id : "Public",
             viewing: d.name + "(" + id + ")"
         });
         return 'http://' + window.location.host + "/page?id=" + id || "";
@@ -849,7 +857,7 @@ RT.ControllerLibrary = function() {
             inline: !0,
             width: 960,
             maxWidth: '95%',
-            maxHeight: '95%', trapFocus: true,
+            maxHeight: '95%',
             onClosed: function() {
                 t.editingAlbum(null);
                 u() && u().destroy() && u(null);
@@ -859,6 +867,7 @@ RT.ControllerLibrary = function() {
             },
             onOpen: function() {
                 u() && u().refresh();
+                $(document.body).css({overflow:'hidden'});
                 return $.colorbox.resize();
             }
         });
@@ -869,11 +878,11 @@ RT.ControllerLibrary = function() {
             RTC.isSuccess(r) && ko.mapping.fromJS(r.data, {}, self);
             self.mediaCount = ko.computed(function() {
                 var c = this.counts;
-                return c.documents() + c.pictures() + c.videos();
+                return c && c.documents() + c.pictures() + c.videos();
             }, self);
             self.albumCount = ko.computed(function() {
-                var c = this.counts.albums;
-                return c["private"]() + c["public"]();
+                var c = this.counts && this.counts.albums;
+                return c && c["private"]() + c["public"]();
             }, self);
         });
     })(RTApp);
@@ -1092,26 +1101,13 @@ RT.ControllerMessages = function() {
     RTC.MakeObsFromArray.call(self, "newMessage hasMoreMessages messageCurrentPage");
     self.getPost = function() {
     };
-    self.markConversationRead = function() {
-        "use strict";
-        var t = this, u = RTApp.user(), sc = t.selectedConversation(), p = {
-            url: u.actions['post'](),
-            request_type: 'clear_unread'
-        };
-
-        return sc() && (p = RTC.GetAPI({}, p)) && p.done(function(r) {
-            if (RTC.isSuccess(r)) {
-                sc().unread(null);
-            }
-        }) || !1;
-    };
     self.resetUnreadCounts = function() {
         "use strict";
         var t = this, sc = t.selectedConversation(), p = {
             url: '/user/resetUnread'
         };
 
-        return sc() && (p = RTC.GetAPI({}, p)) || !1;
+        return sc() && (p = RTC.GetApi({}, p)) || !1;
     };
     self.newMessage.subscribe(function(v) {
         return v && $.colorbox({
@@ -1124,7 +1120,7 @@ RT.ControllerMessages = function() {
             inline: !0,
             width: 960,
             maxWidth: '95%',
-            maxHeight: '95%', trapFocus: true,
+            maxHeight: '95%',
             onClosed: function() {
                 self.newMessage(null);
             },
@@ -1184,8 +1180,23 @@ RT.conversationView = function() {
     };
     self.selectConversation = function(v) {
         self.selectedConversation(v);
+        self.markConversationRead();
         v && RTApp.inbox().goTo(new RT.messageView(v), 2);
         return true;
+    };
+    self.markConversationRead = function() {
+        "use strict";
+        var t = this, u = RTApp.user(), sc = t.selectedConversation(), p = {
+            url: "/post/update/" + RTC.GetObsVal(u._id),
+            request_type: 'clear_unread'
+        };
+
+        return sc && (p = RTC.PostApi({}, p)) && p.done(function(r) {
+            if (RTC.isSuccess(r)) {
+                sc.unread(null);
+            }
+            //RTC.Renew();
+        }) || !1;
     };
     self.getConversations();
 };
@@ -1254,7 +1265,7 @@ RT.messageView = function(currentConversation) {
         p = {
             url: u.connections['messages']() + '/' + sc._id(),
             skip: t.currentMessageSkip(),
-            limit: t.currentMessageLimit(),
+            limit: t.currentMessageLimit()
         };
 
         return (p = RTC.GetApi({}, p)) && p.done(function(r) {
@@ -1413,22 +1424,21 @@ RT.Actions = function(t) {
                 d.commentText(null);
                 d.counts.comments(d.counts.comments() + 1);
                 $(".commentInput").css("height", "25px");
+                analytics && analytics.track("Commented on a " + p.post.type, {
+                    user_id: p.user._id,
+                    post_id: p.post._id,
+                    data: c
+                });
             }
-        }).always(function() {
-            analytics && analytics.track("Commented on a " + p.post.type, {
-                user_id: p.user._id,
-                post_id: p.post._id,
-                data: c
-            });
-        })
-                || $.bootstrapGrowl('<i class="icon-exclamation-sign"></i> Please type in a comment.', {type: 'warning'});
+        }) || $.bootstrapGrowl('<i class="icon-exclamation-sign"></i> Please type in a comment.', {type: 'warning'});
         ;
     };
     self["delete"] = function(d) {
-        var c = true, p = {
+        var c, p = {
             url: d.actions['delete']()
         };
-        return c && (c = self.submit(p, d)) && c.done(function(r) {
+        c = self.submit(p, d);
+        c.done(function(r) {
             if (RTC.isSuccess(r)) {
                 if (d.hasOwnProperty('isTestimonial') && d.isTestimonial()) {
                     var tw = t.user().counts.testimonials.written;
@@ -1437,18 +1447,17 @@ RT.Actions = function(t) {
                             d.user._id() === t.user._id() &&
                             tw(tw() - 1);
                 }
-//console.log("#" + d._id());
+                analytics && analytics.track("Deleted a " + RTC.GetObsVal(d.type), {
+                    user_id: RTC.GetObsVal(d.user && d.user._id),
+                    post_id: RTC.GetObsVal(d && d._id)
+                });
                 return $("#" + d._id()).slideUp(500, function() {
                     return t.cl.remove(d);
                 });
             }
 
-        }).always(function() {
-            analytics && analytics.track("Deleted a " + d.type(), {
-                user_id: d.user._id(),
-                post_id: d._id()
-            });
         });
+        return c;
     };
     self.privacy = function(d, a) {
         var c = true, p = {
@@ -1456,13 +1465,17 @@ RT.Actions = function(t) {
         };
         d.privacy.is() !== a ? p.privacy = {is: a} : c = false;
         return c && (c = self.submit(p, d)) && c.done(function(r) {
-            return RTC.isSuccess(r) && a === "PUBLIC" ? d.setPublic() : d.setPrivate();
+            if(RTC.isSuccess(r)){
+                analytics && analytics.track("Changed a " + d.type() + "privacy settings", {
+                    user_id: d.user._id(),
+                    post_id: d._id(),
+                    data: a
+                });
+                return a === "PUBLIC" ? d.setPublic() : d.setPrivate();
+            }
+
         }).always(function() {
-            analytics && analytics.track("Changed a " + d.type() + "privacy settings", {
-                user_id: d.user._id(),
-                post_id: d._id(),
-                data: a
-            });
+
         });
     };
     self.message = function(d) {
@@ -1483,16 +1496,15 @@ RT.Actions = function(t) {
                 d.commentText(null);
                 d.counts.comments(d.counts.comments() + 1);
                 $(".commentInput").css("height", "25px");
+                analytics && analytics.track("Created a private message in " + p.post.type, {
+                    user_id: p.user._id,
+                    post_id: p.post._id,
+                    data: c
+                });
                 return setTimeout(function() {
                     $.bootstrapGrowl('<p>Your message was succesfully sent.<br><small>This conversation continues in your inbox</small></p>', {type: 'success'});
                 }, 500);
             }
-        }).always(function() {
-            analytics && analytics.track("Created a private message in " + p.post.type, {
-                user_id: p.user._id,
-                post_id: p.post._id,
-                data: c
-            });
         });
     };
 };
@@ -1508,6 +1520,9 @@ RT.User = function() {
     t.isAgent = ko.computed(function() {
         return t.roles && t.roles() && -1 !== t.roles.indexOf("agent");
     }, t);
+    t.canPostListings = ko.computed(function(){
+        return this.isAdmin() || this.isAgent();
+    }, t).extend({throttle:1});
     t.ajaxStatus("success");
     t.ajaxData({});
     t.currentEdit("picture");
@@ -1647,36 +1662,51 @@ RT.Post = function() {
             return t.isHidden(false);
         });
     };
+    this.confirmDelete = function(d){
+        var ok = function() {
+                return RTApp.performAction('delete', d, null);
+            }, m;
+            switch(RTC.GetObsVal(d.type)){
+                case 'listing':
+                    m = "Deleting a listing will not delete attachments. Delete attachments in your Media Library. Continue?";
+                    break;
+                case 'album':
+                    m = "Warning! If you have listings that have attachments from this album, they will be removed. To hide this album instead, change it's privacy by clicking on the <i class='icon-eye-close'></i> privacy button. Continue?";
+                    break;
+                default:
+                    m = "Deleting this post is permanent!";
+                    break;
+            }
+        return ko.bindingHandlers.confirmDialog.init(new RT.ConfirmDialog({
+            message: m,
+            ok: ok
+        }));
+    };
     this.deleteComment = function(d) {
-        //console.log('HERE');
+        var ok = function() {
+                return RTApp.performAction('delete', d, null);
+            };
         return ko.bindingHandlers.confirmDialog.init(new RT.ConfirmDialog({
             message: "Deleting this comment is permanent.",
-            ok: function() {
-                p = {url: d.actions && d.actions["delete"] && d.actions["delete"]()};
-                return (p = RTC.PostApi({}, p)) && p.done(function(r) {
-                    return RTC.isSuccess(r) && t.comments.remove(d) && t.counts.comments(t.counts.comments() - 1);
-                });
-            }
+            ok: ok
+        }));
+    };
+    this.deleteComment = function(d) {
+        var ok = function() {
+            var promise = RTApp.performAction('delete', d, null);
+            return promise && promise.done(function(r){
+                return RTC.isSuccess(r) && t.comments.remove(d) && t.counts.comments(t.counts.comments() - 1);
+            });
+        };
+        return ko.bindingHandlers.confirmDialog.init(new RT.ConfirmDialog({
+            message: "Deleting this comment is permanent.",
+            ok: ok
         }));
     };
     this.destroyComment = function() {
         return this.commentSubmit(false) && this.commentText(null);
     };
-    this.getThumbnail = function() {
-        "use strict";
-        var img = new Image();
-        img.width = arguments[0] || 110;
-        img.alt = "Album Thumbnails";
-        img.src = getPicBySize.apply(this, arguments);
-        return jQuery(img)[0].outerHTML;
-        function getPicBySize() {
-            if (this.hasOwnProperty("picture") && this.picture()) {
-                return "http://" + this.picture().replace(this.user._id(), this.user._id() + "/" + (arguments[0] || "110"));
-            }
-            return "http://" + RT.BUCKET + "/avatars/nothumb" + (arguments[0] || "110") + ".png";
-        }
-        ;
-    };
+    this.getThumbnail = RTC.GetThumbnail;
     this.getVideoThumbnail = function() {
         "use strict";
         var img = $(RTC.NewDom("img"));
@@ -1693,8 +1723,7 @@ RT.Post = function() {
     };
     this.getRichThumbnail = function() {
         var i = jQuery(RTC.NewDom("i"));
-        i.addClass("attachment");
-        i.addClass(this.getRichCss());
+        i.addClass(this.getRichCss()).css('font-size', '110px');
         return i[0].outerHTML;
         //<i class="attachment" data-bind="css:getRichCss"></i>
     };
@@ -1712,6 +1741,7 @@ RT.Post = function() {
             var iframe = $(RTC.NewDom("iframe"));
             iframe.attr(ko.toJS(this.mediainfo));
             iframe.css('border', 'none');
+            iframe.css('width', '100%');
             return this.isEmbeddedRich(iframe);
         }
         return "";
@@ -1743,7 +1773,7 @@ RT.Post.prototype.extend(function() {
     this.providerInfo = ko.computed(function() {
         var t = this, hl = !!t.hasDetails(), i = RTC.NewDom('img'),
                 s = $(RTC.NewDom('span')), u, p = hl && t.link.provider;
-        if (hl) {
+        if (hl && p) {
             u = p.url().match(/uri=/) ? p.url().replace(/^[^=]*=/, '') : p.url();
             i.width = "16";
             i.height = "16";
@@ -1782,19 +1812,28 @@ RT.Post.prototype.extend(function() {
         return !1;
     }, this);
     this.isPostHideable = ko.computed(function() {
-        if (this.isPost() && this.is_owner()) {
-            return !1;
-        }
-        if (this.isPost() && this.is_page_owner()) {
-            return !1;
-        }
-        return !0;
+        var t = this;
+        // if this is a post and current user does not own it but owns the current
+        // page, he/she can hide this post.
+        return (t.isPost() && (!t.is_owner() && t.is_page_owner())) ? !0 :!1;
     }, this);
     this.isTestimonial = ko.computed(function() {
         return this.hasOwnProperty("type") && this.type() === "testimonial";
     }, this);
     this.showCommentBox = ko.computed(function() {
         return this.canComment() && (this.comments().length >= 1 || this.interactable());
+    }, this);
+    this.subscriberCount = ko.computed(function() {
+        var c = this.counts, s = c ? c.subscribers() : 0;
+        return typeof s === 'function' ? s() : s;
+    }, this);
+    this.likesCount = ko.computed(function() {
+        var c = this.counts, s = c ? c.likers() : 0;
+        return typeof s === 'function' ? s() : s;
+    }, this);
+    this.totalCommentCount = ko.computed(function() {
+        var c = this.counts, cc = c && typeof c.comments === 'function' ? c.comments() : 0;
+        return typeof cc === 'function' ? cc() : cc;
     }, this);
     this.currentCommentCount = ko.computed(function() {
         return this.isPost() && this.comments && this.comments().length || 0;
@@ -1831,19 +1870,19 @@ RT.Post.prototype.extend(function() {
                 case "docx":
                 case "odt":
                 case "fodt":
-                    return "DOC";
+                    return "file-word";
                 case "pptx":
                 case "ppt":
                 case "odp":
                 case "fodp":
-                    return "PPT";
+                    return "file-ppt";
                 case "pdf":
-                    return "PDF";
+                    return "file-pdf";
                 case "xls":
                 case "xlsx":
                 case "ods":
                 case "fods":
-                    return "XLS";
+                    return "file-xls";
             }
         }
     }, this);
@@ -2029,21 +2068,23 @@ RT.Album = function() {
         loadMore: this.getAttachments.bind(this)
     });
 };
-RT.Album.prototype.getThumbnail = RTC.GetThumbnail;
 RT.Listing = function() {
     RT.Post.apply(this, arguments);
     var t = this;
-    this.currentItem = ko.observable();
-    this.setCurrentItem = function() {
+    t.currentItem = ko.observable();
+    t.setCurrentItem = function() {
         t.currentItem(t.attachments()[0]);
     };
-    this.currentPage = ko.observable(1);
-    this.displayComments = ko.observable(false);
-    this.hasNextPage = ko.observable(this.addedMedia && this.addedMedia().length <= this.counts.attachments());
-    this.getAttachments = function() {
+    t.currentPage = ko.observable(1);
+    t.displayComments = ko.observable(false);
+    t.canRenew = ko.computed(function(){
+        return new Date(t.expiry() * 1000).getTime() < new Date().getTime();
+    }, t);
+    t.hasNextPage = ko.observable(t.addedMedia && t.addedMedia().length <= t.counts.attachments());
+    t.getAttachments = function() {
         "use strict";
-        var a = this.attachments, am = this.addedMedia, total = am().length,
-                fetched = a().length, p = {url: RTC.GetObsVal(this.connections.attachments)},
+        var a = t.attachments, am = t.addedMedia, total = am().length,
+                fetched = a().length, p = {url: RTC.GetObsVal(t.connections.attachments)},
         ids = [], toGet = (total - fetched) >= 10 ? 11 : total - fetched;
         ids = am.splice(0, toGet);
         p._ids = ids;
@@ -2056,18 +2097,114 @@ RT.Listing = function() {
         }) || t.hasNextPage(!1);
         return a;
     };
-    this.showComments = function() {
+    t.attachmentCountLabel = ko.computed(function(){
+        var c = this.counts, a = c.attachments();
+        if(typeof a === 'function'){
+            a = a();
+        }
+        return a + ' attachments';
+    }, t);
+    t.showComments = function() {
         return t.showCommentBox() && t.displayComments(true);
     };
-    this.slideShow = new RT.Modal({
-        items: this.attachments,
-        currentItem: this.currentItem,
-        total: this.counts.attachments,
-        loadMore: this.getAttachments.bind(this),
-        hasListing: this
+    t.slideShow = new RT.Modal({
+        items: t.attachments,
+        currentItem: t.currentItem,
+        total: t.counts.attachments,
+        loadMore: t.getAttachments.bind(t),
+        hasListing: t
     });
+    t.populateAddedMedia = function(){
+        var am = t.addedMedia, p = {};
+        if(!!am().length){
+            p.include_ids = am();
+            p.url = RTC.GetObsVal(t.connections.attachments);
+            p.limit = am().length;
+            p = RTC.GetApi({}, p);
+            if(p){
+                p.done(function(r){
+                    if(RTC.isSuccess(r)){
+                        ko.mapping.fromJS(r.data, {create: RTC.CreateLoop}, am);
+                    }
+                });
+                return p;
+            }
+        } else if(!!t.attachments().length){
+            am(t.attachments());
+        }
+        return $.Deferred().resolve();
+    };
+    t.fullContent = function(){
+        var js = ko.toJS(this),
+                u = js.connections ? js.connections.fullContent : false;
+        u && (u = RTC.GetApi({}, {url: u})) && u.done(function(r) {
+            t.message(r.data);
+        });
+    };
+    t.startEditing = function() {
+        "use strict";
+        var t = this, cf = RTApp.currentForm, C = RTC, P = C.processing,
+                u = RTApp.user(), S = ko.utils.extend(C.CBSettings, {
+            width: "980px", href: RTC.getTemplate("listingWizard"),
+            height: "auto", overlayClose:false, escKey:false}), promise;
+        cf(null);
+        t.fullContent();
+        if(u && !P && u.canPostListings() && u._id() === t.user._id()){
+            P = !0;
+            // populate addedMedia to full objects -> it returns a deferred
+            promise = t.populateAddedMedia();
+            // when populated define the onComplete and start colorbox
+            promise.done(function(){
+                S.onComplete = function(){
+                    var fl, f, tl = t.listing, unit = tl.unit(), uarray;
+                    uarray = unit.split("-");
+                    // declare a new listing form
+                    cf(new RT.Forms.Listing());
+                    // populate shorthand vars
+                    f = cf(), fl = f.listing;
+                    f.serverVals(t);
+                    t.message.subscribe(function(v){
+                        return v && fl.message(v);
+                    });
+
+                    // this must be set to true
+                    f.editing(true);
+                    // add the populated attachments to form
+                    f.addedMedia(t.addedMedia());
+                    // set the subtype
+                    f.subtype(t.page.subtype());
+                    // add listing details
+                    fl.rooms(tl.rooms());
+                    fl.builtSize(tl.built_size());
+                    fl.landSize(tl.land_size());
+                    fl.price(tl.price());
+                    fl.cov(tl.cov());
+                    fl.cobroke(tl.cobroke());
+                    fl.baths(tl.baths());
+                    fl.valuation(tl.valuation());
+                    fl.address(t.address());
+                    fl.page(ko.toJS(t.page));
+                    fl.page_parent(ko.toJS(t.page_parent));
+                    fl.property_type(ko.toJS(tl.property_type));
+                    // this is an array if the property for this listing is not landed
+                    if(uarray.length > 1){
+                        fl.unit.floor(uarray[0]);
+                        fl.unit.stack(uarray[1]);
+                    } else {
+                        fl.unitIsAddress(true);
+                    }
+                    // other properties
+                    f.showAddress(t.showAddress());
+                    f.hasChanges(false);
+
+                    ko.applyBindings(cf(), document.getElementById("listingCreationWizard"));
+                    return cf().resize();
+                };
+               return $.colorbox(S);
+            });
+        }
+    };
 };
-RT.Listing.prototype.getThumbnail = RTC.GetThumbnail;
 RT.Attachment = function() {
     RT.Post.apply(this, arguments);
     this.dimensions = ko.computed(function() {
@@ -2091,7 +2228,7 @@ RT.Attachment = function() {
                     width: d.width,
                     height: d.height,
                     id: "fullPreview-" + t._id()
-                });
+                }).css({'max-width' : '100%', width:'auto !important'});
             } else if (t.hasOwnProperty("picture") && t.picture()) {
                 i = jQuery(RTC.NewDom("img"));
                 i.attr({
@@ -2108,36 +2245,40 @@ RT.Attachment = function() {
         "use strict";
         // can be 150, defaults to 110
         var t = this, as = [35, 40, 90, 150], a = parseInt(arguments[0]) || "",
-                s = as.indexOf(a) >= 0 ? a : "", e, i,
-                el = t._id() && document.getElementById(t._id() + (s || 110));
+                s = as.indexOf(a) >= 0 ? a : 110, e, i,
+                el = t._id() && document.getElementById(t._id() + s);
         if (!el) {
             if (t.hasRich()) {
                 e = RTC.GetObsVal(t.link.src).split(".");
                 e && (e = e.pop().toLowerCase());
-                i = $(RTC.NewDom("i")).addClass('attachment').attr('id', t._id() + (s || 110));
+                i = $(RTC.NewDom("i")).attr('id', t._id() + s).css('font-size', s+'px');
                 switch (e) {
                     case "doc":
                     case "docx":
                     case "odt":
                     case "fodt":
-                        i.addClass("DOC" + s);
+                        i.addClass("file-word");
                         break;
                     case "pptx":
                     case "ppt":
                     case "odp":
                     case "fodp":
-                        i.addClass("PPT" + s);
+                        i.addClass("file-ppt");
                         break;
                     case "pdf":
-                        i.addClass("PDF" + s);
+                        i.addClass("file-pdf");
                         break;
                     case "xls":
                     case "xlsx":
                     case "ods":
                     case "fods":
-                        i.addClass("XLS" + s);
+                        i.addClass("file-xls");
                         break;
                 }
+                i.attr({
+                    role: 'img',
+                    'aria-labelledby': 'Placeholder Image'
+                });
             } else if (t.hasOwnProperty("picture") && t.picture()) {
                 i = $(RTC.NewDom("img"));
                 a.length === 0 && (a = 110);
@@ -2350,11 +2491,11 @@ RT.Library = function(params) {
     var self = this;
     self.mediaCount = ko.computed(function() {
         var c = this.counts;
-        return c.documents() + c.pictures() + c.videos();
+        return c && c.documents() + c.pictures() + c.videos();
     }, self);
     self.albumCount = ko.computed(function() {
-        var c = this.counts.albums;
-        return c["private"]() + c["public"]();
+        var c = this.counts && this.counts.albums;
+        return c && c["private"]() + c["public"]();
     }, self);
     self.albums = ko.mapping.fromJS([]);
     self.getAlbums = function(force) {
@@ -2467,7 +2608,7 @@ RT.Library = function(params) {
             inline: !0,
             width: 960,
             maxWidth: '95%',
-            maxHeight: '95%', trapFocus: true,
+            maxHeight: '95%',
             onClosed: function() {
                 t.editingAlbum(null);
                 u() && u().destroy() && u(null);
@@ -2477,6 +2618,7 @@ RT.Library = function(params) {
             },
             onOpen: function() {
                 u() && u().refresh();
+                $(document.body).css({overflow:'hidden'});
                 return $.colorbox.resize();
             }
         });
@@ -2702,15 +2844,17 @@ RT.Forms = {
     Info: function() {
         "use strict";
         var self = this, A = RTApp, user = A.user(), vcard = user.vcard && user.vcard() || [],
-                o = "isSaving checkUser smsVerify mobileVerify companyLabel changePassword dimensions uploadStatus uploadProgress uploadMessage tempUpload originalWidth originalHeight savingCrop userType uploadSettings";
+                o = "isSaving checkUser smsVerify mobileVerify companyLabel changePassword dimensions uploadStatus uploadProgress uploadMessage tempUpload originalWidth originalHeight savingCrop userType uploadSettings saveCompleted";
         RTC.MakeObsFromArray.call(self, o);
         RTC.MakeObsFromArray.apply(self, ["isUniqueUsername isUniqueEmail isUniquePhone isOldPasswordValid", !0]);
         self.autoSaveMessage = ko.computed(function() {
             switch (true) {
                 case self.isSaving():
                     return 'Saving &hellip;';
+                case !self.isSaving() && self.saveCompleted():
+                    return "Saved";
                 default:
-                    return null;
+                    return "Save";
             }
         }, self);
         self.avatar = RTC.MakeObs(user.avatar);
@@ -2802,7 +2946,6 @@ RT.Forms = {
             },
             write: function(v) {
                 var u = this.username, i = u.initial();
-                console.log({check: (v.toLowerCase() === i.toLowerCase()) || (v.toLowerCase() === i) || (v === i.toLowerCase())})
                 if ((v.toLowerCase() !== i.toLowerCase())) {
                     return u(v);
                 }
@@ -2830,26 +2973,31 @@ RT.Forms = {
     },
     Settings: function() {
         "use strict";
-        ko.mapping.fromJS(RTApp.user(), {}, this);
-        ko.editable(this.settings);
-        this.isSaving = ko.observable(false);
-        this.autoSaveMessage = ko.computed(function() {
+        var self = this;
+        ko.mapping.fromJS(RTApp.user(), {}, self);
+        ko.editable(self.settings);
+        self.isSaving = ko.observable(false);
+        self.saveCompleted = ko.observable(false);
+        self.autoSaveMessage = ko.computed(function() {
             switch (true) {
-                case this.isSaving():
+                case self.isSaving():
                     return 'Saving &hellip;';
+                case !self.isSaving() && self.saveCompleted():
+                    return "Saved";
                 default:
-                    return null;
+                    return "Save";;
             }
-        }, this);
-        this.settings.beginEdit();
-        this.currentEdit = RTApp.cp().currentEdit;
-        this.currentEdit("notifications");
-        this.isSavable = ko.computed(function() {
+        }, self);
+        self.settings.beginEdit();
+        self.currentEdit = RTApp.cp().currentEdit;
+        self.currentEdit("notifications");
+        self.isSavable = ko.computed(function() {
             return this.settings.hasChanges();
-        }, this).extend({throttle: 1000});
-        this.isSavable.subscribe(function(v) {
-            return v && this.saveAndExit();
-        }, this);
+        }, self).extend({throttle: 1000});
+        self.isSavable.subscribe(function(v){
+            if(v && this.saveCompleted())
+                return this.saveCompleted(false);
+        }, self);
     },
     Post: function() {
         "use strict";
@@ -2870,7 +3018,7 @@ RT.Forms = {
         this.providerInfo = ko.computed(function() {
             var t = this, hl = !!t.externalFields(), i = RTC.NewDom('img'),
                     s = $(RTC.NewDom('span')), u, p = hl && t.externalFields().link.provider;
-            if (hl) {
+            if (hl && p) {
                 u = p.url.match(/uri=/) ? p.url.replace(/^[^=]*=/, '') : p.url;
                 i.width = "16";
                 i.height = "16";
@@ -2937,12 +3085,12 @@ RT.Forms = {
             var id = RTApp.cp()._id(), pic = RTC.GetObsVal(this.picture),
                     link = this.link && RTC.GetObsVal(this.link.src);
             if (pic) {
-                return "http://" + pic.replace(id, id + "/150");
+                return "http://" + pic.replace(id, id + "/110");
             }
             if (link) {
                 // placeholder for link post types
             }
-            return "http://" + RT.BUCKET + "/avatars/nothumb150.png";
+            return "http://" + RT.BUCKET + "/avatars/nothumb110.png";
         }, self);
         self.user = lib.user;
         self.status = "active";
@@ -3107,6 +3255,7 @@ RT.Forms = {
         self.mediainfo = params.mediainfo || {
             size: ko.observable()
         };
+        self.link = {type:ko.observable(), src:ko.observable()};
         self.picture = RTC.MakeObs(params.picture);
         self.page = page || {};
         self.page_parent = album.page || {
@@ -3118,14 +3267,52 @@ RT.Forms = {
         self.message = RTC.MakeObs(params.message).extend({maxLength: 10e3});
         self.excerpt = RTC.MakeObs(params.excerpt).extend({maxLength: 10e3});
         self.user = lib.user;
-        self.getThumbnail = ko.computed(function() {
+        self.isPicture = ko.computed(function(){
+            return !!RTC.GetObsVal(this.picture);
+        }, self);
+        self.getThumbSrc = ko.computed(function() {
             "use strict";
             var id = RTApp.cp()._id(), pic = RTC.GetObsVal(this.picture);
             if (pic) {
                 return "//" + pic.replace(id, id + "/110");
             }
             return "/img/nothumb110.png";
-        }, this);
+        }, self);
+        self.getThumbPlaceHolder = ko.computed(function(){
+            "use strict";
+            var t = this, s = "110px", e, i, link;
+            link = t['link'];
+            if(link && link.hasOwnProperty('type') && link.type() === "rich") {
+                e = RTC.GetObsVal(t.link.src).split(".");
+                e && (e = e.pop().toLowerCase());
+                i = $(RTC.NewDom("i")).attr('id', t._id() + s).css('font-size', s);
+                switch (e) {
+                    case "doc":
+                    case "docx":
+                    case "odt":
+                    case "fodt":
+                        i.addClass("file-word");
+                        break;
+                    case "pptx":
+                    case "ppt":
+                    case "odp":
+                    case "fodp":
+                        i.addClass("file-ppt");
+                        break;
+                    case "pdf":
+                        i.addClass("file-pdf");
+                        break;
+                    case "xls":
+                    case "xlsx":
+                    case "ods":
+                    case "fods":
+                        i.addClass("file-xls");
+                        break;
+                }
+                return i[0].outerHTML;
+            }
+            return '<i class="icon-spin icon-spinner" style="vertical-align:middle;text-align:middle;font-size:15px"></i>';
+        }, self).extend({throttle:100});
         self.percent(params.percent);
         self.queued(params.queued);
         self.size(params.size);
@@ -3135,11 +3322,15 @@ RT.Forms = {
         self.update = function(pars) {
             self._id(pars._id);
             self.page = pars.page;
-            self.name(pars.name)
+            self.name(pars.name);
             self.actions = ko.mapping.fromJS(pars.actions);
             self.connections = ko.mapping.fromJS(pars.connections);
             pars.picture && self.picture(pars.picture);
             pars.mediainfo && (self.mediainfo = pars.mediainfo);
+            if(pars.link){
+                self.link.type(pars.link.type);
+                self.link.src(pars.link.src);
+            }
         };
         self.updateAttachment = function() {
             var t = this, s, p = {
@@ -3165,14 +3356,14 @@ RT.Forms = {
     Listing: function() {
         var T = this, C = RTC;
         T.defaults = {};
-        var o = "confirmCancel isCancelled showMediaMenu priceFormat hasValuation hasLand serverVals tempAlbum uploadAlbum currentStep subtype showSubType showAddress editing queued size name picture mediaLib selectFromAlbum uploadNew isSaving";
+        var o = "confirmCancel isCancelled showMediaMenu priceFormat hasChanges hasValuation hasLand serverVals tempAlbum uploadAlbum currentStep subtype showSubType showAddress editing queued size name picture mediaLib selectFromAlbum uploadNew isSaving";
         C.MakeObsFromArray.call(T, o);
         T.hide = function() {
             if(!T.isSaving()){
-                return RTC.CB.close();
+                return T.currentIndex() === 5 ? window.location.reload() : RTC.CB.close();
             }
             return T.isSaving.subscribe(function(v){
-                return !v && RTC.CB.close();
+                return !v && (T.currentIndex() === 5 ? window.location.reload() : RTC.CB.close());
             });
         };
         T.steps = ko.observableArray([
@@ -3180,9 +3371,13 @@ RT.Forms = {
             new C.Step(2, 'Listing Details', 'listingDetailsT'),
             new C.Step(3, 'Finish', 'listingAttachmentT'),
             new C.Step(4, 'Media', 'mediaAttachT'),
-            new C.Step(5, 'Status', 'postStatusT')
+            new C.Step(5, 'Upload', 'editAlbumT'),
+            new C.Step(6, 'Status', 'postStatusT')
         ]);
-        T.currentStep(T.editing() ? this.steps()[1] : this.steps()[0]);
+        T.currentStep(this.steps()[0]);
+        T.editing.subscribe(function(v){
+            return v && T.currentStep(this.steps()[1]);
+        }, T);
         T.currentIndex = ko.computed(function() {
             return T.steps.indexOf(T.currentStep());
         }, this);
@@ -3260,15 +3455,6 @@ RT.Forms = {
                 address: C.GetObsVal(l.address)
             };
         }, T);
-        T.goNext = function() {
-            return T.canGoNext() && T.currentStep(T.steps()[T.currentIndex() + 1]);
-        };
-        T.canGoBack = ko.computed(function() {
-            return T.editing() ? T.currentIndex() > 1 : T.currentIndex() > 0;
-        });
-        T.goBack = function() {
-            return T.canGoBack() && T.currentStep(T.steps()[T.currentIndex() - 1]);
-        };
         T.queryLocation = function(term) {
             return new C.GetApi({}, {url: '/listing/keyword/', s: term});
         };
@@ -3328,7 +3514,7 @@ RT.Forms = {
                 }
             }
 
-            return T.editing() ? false : T.currentStep(data);
+            return T.currentStep(data);
         };
         T.selectedCoverId = ko.computed(function() {
             return this.picture() ? this.picture()._id() : "";
@@ -3394,15 +3580,11 @@ RT.Forms = {
             });
         };
         T.selectFromAlbum(true);
-        T.prepareForUpload = function(d, e) {
-            var l = T.mediaLib(), s = l && l.selectedAlbum();
-            return s ? T.addToAlbum.call(T, d) : T.createAlbum.call(T);
-        };
         T.createAlbum = function() {
             "use strict";
             var l = T.mediaLib(), s = l && T.uploadAlbum;
             l && s(new RT.Forms.Album({}, l));
-            return T.currentStep(new RTC.Step(5, 'Upload', 'editAlbumT'));
+            return T.goToStep(T.steps()[4]);
         };
         T.initUploader = function() {
             var l = T.mediaLib(), s = l ? T.uploadAlbum : !1, u = l && l.up;
@@ -3460,60 +3642,62 @@ RT.Forms = {
            "use strict";
             var p = {JSON: ko.toJSON(T.toJS())},
                     sv = T.serverVals,
-                    a = RTApp, is = T.isSaving;
+                    a = RTApp, is = T.isSaving, hs = T.hasChanges;
             if(!sv())
                 return false;
             p.request_type = "update_listing";
             p._id = ko.toJS(sv()._id);
             p.url = "/post/update/";
             is(true);
-            return (p = RTC.PostApi({}, p)) && p.done(function(r) {
+            p = RTC.PostApi({}, p);
+            p.done(function(r) {
                 if (RTC.isSuccess(r)) {
                     RTC.Renew();
                     sv(RTC.CreateLoop(r.data));
                     if (a.cp()) {
                         if (r.data.user._id === RTC.GetObsVal(a.cp()._id)) {
-                            var found = ko.utils.arrayFirst(a.cl(), function(i){
-                                return RTC.GetObsVal(i._id) === r.data._id;
-                            });
-                            if(found){
-                                var tmp = ko.mapping.fromJS(r.data, {create: RTC.CreateLoop});
-                                return a.cl()[a.cl.indexOf(found)] = RTC.GetObsVal(tmp);
-                            }
+                            a.cp().counts.listings(a.cp().counts.listings() + 1);
+                            var d = new RT.Listing(r.data);
+                            console.log(d)
+                            a.cl.replaceOrAdd(d);
                         }
                     }
                 }
-            }).always(function(){return is(false) && setTimeout(function(){return RTC.CB.resize();}, 1);});
+            }).always(function(){return is(false) && hs(false) && setTimeout(function(){return RTC.CB.resize();}, 1);})
+            return p;
         };
         T.publish = function(d, e) {
             "use strict";
+            console.log("Got here")
             var p = {JSON: ko.toJSON(T.toJS())},
                     sv = T.serverVals,
                     a = RTApp,
-                l = a.user().counts.listings, is = T.isSaving;
+                l = a.user().counts.listings, is = T.isSaving, hs = T.hasChanges;
             p.request_type = "create_listing";
             p.url = "/post/update/";
+            if(!!sv())
+                return T.save(d, e).done(function(){
+                    return T.currentStep((T.steps()[5]));
+                });
+
             is(true);
-            if(sv())
-                return T.save();
             return (p = RTC.PostApi({}, p)) && p.done(function(r) {
                 if (RTC.isSuccess(r)) {
                     RTC.Renew();
                     sv(RTC.CreateLoop(r.data));
-                    T.currentStep((T.steps()[4]));
+                    T.currentStep((T.steps()[5]));
                     l(l() + 1);
                     if (a.cp()) {
                         if (r.data.user._id === RTC.GetObsVal(a.cp()._id)) {
                             a.cp().counts.listings(a.cp().counts.listings() + 1);
-                            var tmp = ko.mapping.fromJS(r.data, {create: RTC.CreateLoop});
-                            a.cl.unshift(RTC.GetObsVal(tmp));
+                            return a.cl.unshift(new RT.Listing(r.data));
                         }
                     }
                 }
-            }).always(function(){return is(false)});
+            }).always(function(){return is(false) && hs(false);});
         };
         T.cancel = function(d, e) {
-            if(T.serverVals()){
+            if(!T.hasChanges()){
                 return T.hide();
             }
             return T.confirmCancel(!T.confirmCancel());
@@ -3549,7 +3733,7 @@ RT.Forms = {
             return v === 'Rent' && s.extend({required: !0}) || s("") && s.rules([]);
         });
         T.toJS = ko.computed(function() {
-            var l = ko.toJS(this.listing), am = this.addedMedia(), rc = RTC.RemoveCommas, tmp;
+            var l = ko.toJS(this.listing), am = this.addedMedia(), RC = RTC.RemoveCommas;
             l.addedMedia = [];
             if (am.length > 0) {
                 RTC.forEach(am, function(a) {
@@ -3560,15 +3744,28 @@ RT.Forms = {
                 l.picture = RTC.GetObsVal(this.picture().picture) || "";
             }
             l.rooms = parseInt(l.rooms);
-            l.built_size = parseFloat(l.builtSize);
+            l.built_size = parseFloat(RC(l.builtSize));
             delete l.builtSize;
-            l.land_size = parseFloat(l.landSize) || 0;
+            l.land_size = parseFloat(RC(l.landSize)) || 0;
             delete l.landSize;
-            l.price = parseFloat(rc(l.price));
-            l.cov = parseFloat(rc(l.cov));
-            l.valuation = parseFloat(rc(l.valuation)) || 0;
+            l.price = parseFloat(RC(l.price));
+            l.cov = parseFloat(RC(l.cov));
+            l.valuation = parseFloat(RC(l.valuation)) || 0;
             l.showAddress = this.showAddress();
             return l;
+        }, T);
+        T.toJS.subscribe(function(v){
+            return this.hasChanges(!!v);
+        }, T);
+        T.hasChanges.extend({throttle:100});
+        T.savedButHasChanges = ko.computed(function(){
+            return (this.serverVals() && this.hasChanges());
+        }, T);
+        T.exitLabel = ko.computed(function(){
+            return this.savedButHasChanges() ? "Exit" : "Cancel";
+        }, T);
+        T.publishLabel = ko.computed(function(){
+            return this.savedButHasChanges() ? "Save" : "Finish";
         }, T);
         T.completedLabel = ko.computed(function() {
             return this.currentIndex() && this.currentIndex() + " of " + this.steps().length;
@@ -3580,6 +3777,20 @@ RT.Forms = {
             }
         }, T);
         T.errors = ko.validation.group(this.listing, {deep: !0});
+        T.goNext = function() {
+            return T.canGoNext() && T.currentStep(T.steps()[T.currentIndex() + 1]);
+        };
+        T.canGoBack = ko.computed(function() {
+            return T.editing() ? T.currentIndex() > 1 : T.currentIndex() > 0;
+        });
+        T.goBack = function() {
+            var ni = T.currentIndex() - 1;
+            if(ni === 4 || ni === 3){
+                ni = 3;
+                T.stopEditingAlbum();
+            }
+            return T.canGoBack() && T.currentStep(T.steps()[ni]);
+        };
         T.canGoNext = ko.computed(function() {
             var ci = T.currentIndex();
             switch (ci) {
@@ -3588,6 +3799,7 @@ RT.Forms = {
                 case 1:
                     return T.errors().length === 0;
                 case 3:
+                case 4:
                     return !1;
             }
             return ci < T.steps().length - 1;
@@ -3713,6 +3925,7 @@ RT.Forms.Info.prototype = {
                 url: "/user/update/" + ko.toJS(RTApp.user()._id)
             })) && s.done(function(r) {
                 if (RTC.isSuccess(r)) {
+                    t.saveCompleted(true);
                     t.editables.commit();
                     t.editables.beginEdit("UserInfo");
                     for (var i in t.editables) {
@@ -3731,7 +3944,7 @@ RT.Forms.Info.prototype = {
                     }
                 }
             }).always(function() {
-                return t.isSaving(false)
+                return t.isSaving(false);
             });
         }
     },
@@ -3770,7 +3983,7 @@ RT.Forms.Info.prototype = {
         if (!t.vcardsIsGenerating()) {
             t.vcardsIsGenerating(!0);
             return (s = RTC.PostApi({}, {
-                request_type: "regenerate_qrcode",
+                request_type: "regenerate_vcard",
                 vcard: ko.toJS(t.vcardSelected()),
                 url: "/user/update/" + ko.toJS(RTApp.user()._id)
             })) && s.done(function(r) {
@@ -3795,6 +4008,8 @@ RT.Forms.Info.prototype = {
     saveAvatar: function() {
         "use strict";
         var s, t = this, p = t.dimensions(), $ = jQuery;
+        if(!p)
+            return false;
         p.url = "/media/crop/";
         p.file = t.tempUpload();
         t.savingCrop(!0);
@@ -3823,7 +4038,7 @@ RT.Forms.Info.prototype = {
             tmp.currentPassword = null;
         }
         RTC.forEach(tmp.vcard, function(i) {
-            tmp.vcard[tmp.vcard.indexOf(i)] = [{value: i.value, checked: i.checked}]
+            tmp.vcard[tmp.vcard.indexOf(i)] = [{value: i.value, checked: i.checked}];
         });
 //        for (i = 0, j = tmp.info.education.length; i < j; i++) {
 //            itm = tmp.info.education[i];
@@ -3901,6 +4116,10 @@ RT.Forms.Info.prototype = {
         }, self);
         self.isSavable = ko.computed(function() {
             return this.editables.hasChanges() && this.errors.isValid();
+        }, self).extend({throttle: 1000});
+        self.isSavable.subscribe(function(v){
+            if(v && this.saveCompleted())
+                return this.saveCompleted(false);
         }, self);
         self.checkUniqueUsername = function(val) {
             return RTC.CheckUnique("#usernameLoading", val, self.isUniqueUsername, 'username');
@@ -4270,19 +4489,20 @@ RT.Forms.Settings.prototype = {
         return window.location = RTApp.user().uri();
     },
     saveAndExit: function() {
-        var s, p = this.toJS(), self = this, l = window.location;
-        self.isSaving(!0);
+        var s, p = this.toJS(), self = this, l = window.location, t = self;
+        t.isSaving(!0);
         p.request_type = "update_settings";
         p = {
             JSON: ko.toJSON(p),
             url: "/user/update/" + ko.toJS(this._id)
         };
-        return (s = RTC.PostApi({}, p)) && s.done(function() {
-            return (s = RTC.Renew()) && s.done(function() {
-                self.isSaving(!1);
-                self.settings.commit();
-                self.settings.beginEdit();
-                self.isSaving(!1) && RTC.Renew();
+        return (s = RTC.PostApi({}, p)) && s.done(function(r) {
+            return RTC.isSuccess(r) && (s = RTC.Renew()) && s.done(function() {
+                t.isSaving(!1);
+                t.saveCompleted(true);
+                t.settings.commit();
+                t.settings.beginEdit();
+                t.isSaving(!1) && RTC.Renew();
                 return $.bootstrapGrowl('<p>Changes Saved!<br><small>Your changes have been successfully saved. Hit the "Exit" button to return to your profile page.</small></p>', {type: 'success'});
             });
         });
@@ -4729,9 +4949,9 @@ jQuery(document).ready(function($) {
             .on("click", ".person-info-guide > .close", function() {
         $(this).parent().fadeOut();
     })
-            .on("mouseenter", '.hasHoverButtons', function() {
-        $(this).find('.imageBar').fadeIn();
-    })
+//            .on("mouseenter", '.hasHoverButtons', function() {
+//                $(this).find('.imageBar').fadeIn();
+//            })
             .on("mouseenter", '.carousel', function() {
         $(this).find('.carousel-control').fadeIn();
     })
@@ -4742,19 +4962,19 @@ jQuery(document).ready(function($) {
         $(this).find('.carousel-control').fadeOut();
     })
             .on('keypress', function(e) {
-        var t = RTApp.currentSlideShow(), k = e.keyCode || e.which,
-                ct = t && t.currentItem, tl = t && t.isLoading;
-        typeof ct === 'function' && ct() &&
-                (
+                var t = RTApp.currentSlideShow(), k = e.keyCode || e.which,
+                        ct = t && t.currentItem, tl = t && t.isLoading;
+                if(typeof ct === 'function' && ct()){
+                    switch(k){
                         // Escape
-                        k === 27 && t.closeSlideshow() ||
+                        case 27: return t.closeSlideshow();
                         // Right
-                        k === 39 && tl(!0) && t.nextThing() && t.resize() ||
+                        case 39: return t.nextThing();
                         // Left
-                        k === 37 && tl(!0) && t.previousThing() && t.resize()
-                        );
-        return !0;
-    })
+                        case 37: return t.previousThing();
+                    }
+                }
+            })
             .on('keypress', '.commentInput', function(e) {
         var k = e.keyCode, p = $(e.target || e.currentTarget).parent("form");
         if (k === 13 && !e.shiftKey) {

@@ -14,14 +14,14 @@
                     <input placeholder="Search name, number or email" type="text" name="s" style="margin:0 auto;display:block;width:100%">
                 </th>
                 <th style="padding:0;width:auto;">
-                    <button class="btn" type="button" data-bind="click:searchUsers" style="padding:8px 5px;border-left:none;display:block;width:100%">Search</button>
+                    <button class="btn" type="button" data-bind="click:searchUsers" style="height:38px;border-left:none;display:block;width:100%">Search</button>
                 </th>
             </tr>
         </thead>
 <tbody data-bind="foreach : { data: RTApp.cl }">
     <tr>
         <td colspan="3" data-bind="style:{borderTop : $index === 0 && 'none'}">
-            <h5 style="margin:3px auto; position:relative; padding-left:50px">
+            <h5 style="margin:3px auto; position:relative; padding-left:60px">
                 <a href="#" data-bind="href : uri()"><span data-bind="text:name" style="color:#555"></span></a>&nbsp;
                 <!--ko foreach : roles--><small data-bind="text:'[' + $data + ']'"></small><!--/ko-->&nbsp;
                 <small class="muted">
@@ -30,8 +30,8 @@
                 <small><a href="#" data-bind="href : 'tel:' + info.telephone.mobile(), text : info.telephone.mobile().substr(3)"></a></small>,
                 <small><a href="#" data-bind="href : 'mailto:' + email(), text : email()"></a></small>
                 <div class="btn-group" style="position:absolute;left:0;top:0;">
-                    <a href="#" class="" data-bind="css:{hovering: isActive}, click:RTApp.admin().activation"><i class="icon-ok-sign"></i></a>
-                    <a href="#" data-toggle="dropdown" class="hasHoverState"><i class="icon-double-angle-down"></i></a>
+                    <a href="#" class="btn" data-bind="css:{'btn-success': isActive}, click:RTApp.admin().activation, title:'Change user to ' + (isActive() ? 'pending.' : 'active.')"><i class="icon-ok-sign"></i></a>
+                    <a href="#" class="btn" data-toggle="dropdown"><i class="icon-double-angle-down"></i></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">New Follow-Up</a></li>
                         <li><a href="#">Generate Password</a></li>

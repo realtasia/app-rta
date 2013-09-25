@@ -18,27 +18,21 @@
 </script>
 <script type="text/html" id="listing">
     <article class="contentArea relative media listing clearfix" style="margin-top:0">
-        <div class="pull-left">
-            <a class="thumbnail" href="#" data-bind="html: getThumbnail.call($data),click:setCurrentItem"></a>
+        <div style="display:block;clear:both;">
+            <a style="display:block;clear:both;" class="thumbnail" href="#" data-bind="if:picture, click:setCurrentItem">
+                <div class="an-image" role="img" aria-label="" data-bind="style: {backgroundImage: 'url(http://' + $data.picture() + ')' }, attr: {'aria-label': $data.name() || $data.excerpt()}"></div>
+            </a>
             <div class="mediaThumbLinks">
-                <span class="thumbInfo">
-                    <a href="#" class="text-center" data-bind="click:setCurrentItem, text:counts.attachments()+' attachments' " style="display: block"></a>
+                <span class="">
+                    <a style="display:block;clear:both" href="#" class="text-center btn btn-link" data-bind="click:setCurrentItem, text:attachmentCountLabel"></a>
                 </span>
             </div>
         </div> <!-- listings thumbnail -->
-        <div class="contentBottom media-body media-details">
+        <div class="contentBottom media-details">
             <h3 class="media-heading" style="display:inline-block;width:100%;">
                 <a href="#" data-bind="text:page.name, href:page.uri"></a>
                 <a href="#"><small class="muted" data-bind="text:page.subtype() + ' - ' +listing.property_type()"></small></a>
-                <span class="visible-phone text-right">
-                    <small style="font-weight:bold;color:#555" data-bind="text:listing.type().toUpperCase()"></small>
-                    <span style="font-weight:bold;color:#555;font-size:85%" data-bind="text:'$' + RTC.ThousandSep(listing.price())"></span>
-                </span>
             </h3>
-            <span class="price relative hidden-phone">
-                <span class="listingType" data-bind="html:'FOR<br>' + listing.type().toUpperCase()"></span>
-                <span data-bind="text:'$' + RTC.ThousandSep(listing.price())"></span>
-            </span>
             <ul class="nav">
                 <li><i class="info16 sqft"></i> <span style="color: #878888;" data-bind="text:(RTC.ThousandSep(listing.built_size()) || 0) + ' sqft'"></span></li>
                 <li><i class="info16 bathrooms"></i> <span style="color: #878888;" data-bind="text:listing.baths() + ' bathrooms'"></span></li>
@@ -54,7 +48,7 @@
         <!--ko if:picture -->
         <div class="pull-left" data-bind="ifnot:hasVideo">
             <a data-bind="href : link.src" target="_blank" class="external_link">
-                <img class="img-polaroid" alt="Post Picture Preview" data-bind="attr:{src:picture}" src="" style="width:110px" />
+                <img class="img-polaroid" alt="Post Picture Preview" data-bind="attr:{src:picture}" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" style="width:110px" />
             </a>
             <small class="centralize text-center" style="display:block">
                 <a target="_blank" data-bind="href:link.provider.url, html:providerInfo" style="color:#bbb" href="#" ></a>
@@ -77,7 +71,10 @@
             <!--/ko-->
 
             <!--ko if:!isEmbeddedRich() && hasRich()-->
-            <a href="#" data-bind="title:'View this document here',click:embedDoc, placement:'bottom', html:getRichThumbnail()" style="width:110px;height:110px;display:block;z-index:10">
+            <a class="centralize videoPreview" href="#" data-bind="title:'View this document here',click: embedDoc, placement:'bottom'" style="width:110px;height:110px;display:block;">
+                <span data-bind="html:getRichThumbnail()"></span>
+                <span class="centralize muted">Click to view</span>
+            </a>
             </a>
             <!--/ko-->
             <!--ko if:isEmbeddedRich-->
@@ -85,7 +82,7 @@
                 <i class="icon-spinner icon-spin icon-3x inverted"></i>
 
             </div>
-            <div data-bind="getHtml:isEmbeddedRich"></div>
+            <div style="margin:0 auto; width:auto;" data-bind="getHtml:isEmbeddedRich"></div>
             <!--/ko-->
 
             <p class="thumbPostDesc">
@@ -110,6 +107,11 @@
         <label class="muted" style="position:absolute;right:5px;top:0;font-size:9px" data-bind="text:privacy.is, visible:!postSettings()"></label>
         <div class="postSettings" data-bind="visible:postSettings">
             <!--ko if : is_owner-->
+                <!--ko if : type() === 'listing'-->
+                    <div class="btn-group">
+                        <button class="btn" data-bind="click: startEditing"><i class="icon-pencil"></i></button>
+                    </div>
+                <!--/ko-->
             <div class="btn-group">
                 <button class="btn"  data-bind="
                         css:{active:privacy.is() === 'PUBLIC'},
@@ -140,7 +142,7 @@
                     <!--/ko-->
                     <!--ko if:isPostDeleteable() || isPostHideable()--><li class="divider"></li><!--/ko-->
                     <!--ko if: isPostDeleteable-->
-                    <li><a href="#" data-bind="click:$root.performAction.bind($data, 'delete')"><i class="icon-trash"></i>&nbsp;Delete Post</a></li>
+                    <li><a href="#" data-bind="click:confirmDelete"><i class="icon-trash"></i>&nbsp;Delete Post</a></li>
                     <!--/ko-->
                     <!--ko if: isPostHideable-->
                     <li><a href="#" data-bind="click:hide"><i class="icon-ban-circle"></i>&nbsp;Hide Post</a></li>
@@ -157,26 +159,32 @@
                 </a>
             </span>
         </div> <!-- post profile thumb -->
-        <div class="media-body clearfix">
-            <div class="postTitle clearfix">
-                <!--ko if:isTestimonial() && status() !== 'active'-->
-                <small class="postStatusInfoLabel" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text white" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></small>
-                <!--/ko-->
-                <a data-bind="
-                   href : '/' + user._id(),
-                   title: 'View ' + user.name() + '\'s Profile',
-                   text:user.name,
-                   qtip: RTApp.getUserHoverCard" class="personHoverCard"></a>&nbsp;<span data-bind="html:generated_title"> </span> <small class="muted"><time data-bind="timeago:created"></time></small>
-                <!--ko if : type() === 'wallpost' || type() === 'post' || type() === 'listing'--><p data-bind="html:content" class="post-content"></p></span><!--/ko-->
-                <!--ko if:type() === 'testimonial'-->
-                <div class="clearfix" style="margin:10px auto">
-                    <blockquote>
-                        <p data-bind="html:content"></p>
-                        <small><cite data-bind="text:user.name"></cite></small>
-                    </blockquote>
-                </div>
-                <!--/ko-->
-            </div> <!-- post Title -->
+        <div class="media-body postTitle clearfix">
+            <!--ko if:isTestimonial() && status() !== 'active'-->
+            <small class="postStatusInfoLabel" data-bind="css:currentStateCss"><span data-bind="text:currentStateLabel"></span><a href="#" class="label label-inverse help-text white" tabindex="-1" data-bind="title:'Testimonials pending approval are not pulicly listed. You can manage your received testimonials by clicking testimonials -> received on your left bar.'">?</a></small>
+            <!--/ko-->
+            <a data-bind="
+               href : '/' + user._id(),
+               title: 'View ' + user.name() + '\'s Profile',
+               text:user.name,
+               qtip: RTApp.getUserHoverCard" class="personHoverCard"></a>&nbsp;<span data-bind="html:generated_title"> </span> <small class="muted"><time data-bind="timeago:created"></time></small>
+            <!--ko if : type() === 'wallpost' || type() === 'post' || type() === 'listing'--><p data-bind="html:content" class="post-content"></p><!--/ko-->
+            <!--ko if : type() === 'listing'-->
+            <span class="price relative">
+                <span class="label label-info" data-bind="html:'FOR ' + listing.type().toUpperCase()"></span>
+                <span data-bind="text:'$' + RTC.ThousandSep(listing.price())"></span>
+            </span>
+            <!--/ko-->
+            <!--ko if:type() === 'testimonial'-->
+            <div class="clearfix" style="margin:10px auto">
+                <blockquote>
+                    <p data-bind="html:content"></p>
+                    <small><cite data-bind="text:user.name"></cite></small>
+                </blockquote>
+            </div>
+            <!--/ko-->
+        </div> <!-- post Title -->
+        <div class="clearfix responsive-full-width">
             <!--ko template:getTemplate()--><!--/ko-->
             <!--ko if:!$data.hasOwnProperty('isDefaultAlbum')-->
             <!--ko template:'postActionLinks'--><!--/ko-->
@@ -204,13 +212,13 @@
 
         <ul class="postActionInfo" data-bind="if:$data.connections">
             <li data-bind="ifnot:isTestimonial,hoverClass: 'hovering'">
-                <a  data-bind="href :uri, click : getComments, title:'See more comments'"><i class="action16 comments"></i><small class="muted" data-bind="text:currentCommentCount"></small><small class="muted" data-bind="text: ' of ' + counts.comments()"></small></a>
+                <a  data-bind="href :uri, click : getComments, title:'See more comments'"><i class="action16 comments"></i><small class="muted" data-bind="text:currentCommentCount"></small><small class="muted" data-bind="text: ' of ' + totalCommentCount()"></small></a>
             </li>
             <li data-bind="ifnot:isTestimonial,hoverClass: 'hovering'">
-                <a  data-bind="href :'/subscribers', title:'See subscribers'" class="subscriberHoverCard"><i class="info16 people"></i><small class="muted" data-bind="text:counts.subscribers"></small>
+                <a  data-bind="href :'/subscribers', title:'See subscribers'" class="subscriberHoverCard"><i class="info16 people"></i><small class="muted" data-bind="text: subscriberCount"></small>
                 </a></li>
             <li data-bind="hoverClass: 'hovering'">
-                <a data-bind="href :'/likers', title:'See likes'" class="likerHoverCard"><i class="action16 likeSmall"></i><small class="muted" data-bind="text:counts.likers"></small>
+                <a data-bind="href :'/likers', title:'See likes'" class="likerHoverCard"><i class="action16 likeSmall"></i><small class="muted" data-bind="text: likesCount"></small>
                 </a></li>
         </ul>
     </div> <!-- post action links -->
@@ -271,13 +279,13 @@
 
 <article class="postFeed media relative clearfix editMode" style="margin-top:0">
     <div class="dropdown postSettings" style="min-height:30px;">
-        <div class="pull-left">
-            <label class="alert tightPadding"><span data-bind="dateText:modified"></span></label>
-        </div>
+<!--        <div class="pull-left">
+            <label class="alert tightPadding"><span data-bind="dateText: expiry"></span></label>
+        </div>-->
         <div class="pull-right">
             <div class="btn-group">
-                <button class="btn"><i class="icon-ok"></i></button>
-                <button class="btn"><i class="icon-trash"></i></button>
+                <button class="btn" data-bind="click: startEditing"><i class="icon-pencil"></i></button>
+                <button class="btn" data-bind="click: confirmDelete"><i class="icon-trash"></i></button>
             </div>
         </div>
     </div> <!-- post settings -->
@@ -385,7 +393,7 @@
         <a class="messageContent">
             <div class="media clearfix" style="margin-bottom: 0">
                 <span class="pull-left">
-                    <img alt="LoginThumb" width="35" height="35" src="" data-bind="getAvatar : {context : $data, size : 40}">
+                    <img alt="LoginThumb" width="35" height="35" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" data-bind="getAvatar : {context : $data, size : 40}">
                 </span>
                 <div class="media-body">
                     <h6 class="media-header" data-bind="text:user.name"></h6>

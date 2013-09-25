@@ -238,7 +238,7 @@ abstract class Controller_Auth extends Controller_Template {
         $this->auto_render = false;
         $this->response->headers('Content-type', 'application/json');
 
-        if ($this->get_cu())
+        if (Api::auth()->fetch_user())
         {
             $cu = json_decode(json_encode($this->cu), true);
             ksort($cu);

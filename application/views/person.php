@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.'); ?>
 <!--ko ifnot:RTApp.isJSAction-->
-<div class="contentArea centerContent" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}">
+<section class="contentArea centerContent" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}">
     <?php include Kohana::find_file('views', 'introcontent/person') ?>
     <!--ko template: {name:'jsPostBox', if:$root.user() && $root.postForm().canPost() && ($root.ca() === 'feed' || $root.ca() === 'testimonials')}--><!--/ko-->
     <?php if($ca === 'info'):include Kohana::find_file('views', 'personInfo');endif; ?>
@@ -22,7 +22,7 @@
         </div>
         <!--/ko-->
     </section> <!--  theLoop -->
-</div>
+</section>
 <!--/ko-->
 <script type="text/html" id="jsPostBox">
     <div class="navbar navbar-responsive" style="border:1px solid #ddd">
@@ -64,7 +64,7 @@
                     <div class="pull-left">
                         <!--ko ifnot:$parent.hasVideo-->
                         <a href="#" data-bind="attr:{href:link.src}" target="_blank" class="external_link">
-                            <img alt="Link Preview Image" src="" style="width:110px" data-bind="attr:{src:picture}"/>
+                            <img alt="Link Preview Image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" style="width:110px" data-bind="attr:{src:picture}"/>
                         </a>
                         <!--/ko-->
                     </div>

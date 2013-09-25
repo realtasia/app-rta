@@ -38,8 +38,8 @@ class Controller_Media extends Controller_Auth {
     }
 
     /**
-     * This action is called for regular uploads, engages the upload method in a
-     * loop, then performs calls the respective process/save methods thereafter
+     * This action is called for regular uploads, engages the _upload method in
+     * a loop, then calls the respective process/save methods thereafter
      */
     public function action_upload()
     {
@@ -62,7 +62,7 @@ class Controller_Media extends Controller_Auth {
             }
         }
 
-        die('did not happen');
+        //die('did not happen');
     }
 
     /**
@@ -195,9 +195,9 @@ class Controller_Media extends Controller_Auth {
             $return[$size] = RT::BUCKET . DIRECTORY_SEPARATOR . $args['Key'];
         }
 
-        $res = static::saveS3(static::makeS3($objects));
+        //$res = static::saveS3(static::makeS3($objects));
         //Debug::log(Debug::vars($res));
-        if ($res)
+        if (static::saveS3(static::makeS3($objects)))
         {
             //print_r('save');
             $this->save_avatar($file, $return['uncropped'], $original);
@@ -285,11 +285,8 @@ class Controller_Media extends Controller_Auth {
         if (file_exists($path))
         {
             $shellpath = escapeshellarg($path);
-            $type = @array_shift(explode(' ', exec("file -bi $shellpath")));
-            if($type)
-            {
-                $type = str_replace(';', '', $type);
-            }
+            $type = exec("mimetype -b $shellpath");
+
             if (strpos($type, 'image') !== false)
             {
                 $i = Image::factory($path);
@@ -308,7 +305,7 @@ class Controller_Media extends Controller_Auth {
             }
             return $this->uploaded_file = Arr::merge($names, [
                         'location' => $path, 'type' => $type
-                    ]);
+            ]);
         }
 
         return false;
@@ -375,8 +372,7 @@ class Controller_Media extends Controller_Auth {
         {
             //print_r('save');
             @unlink($this->temp_dir . DIRECTORY_SEPARATOR . $file);
-            $this->response->headers('Content-type', 'application/json');
-            return $this->response->body($this->save($return['uncropped'], $original));
+            return $this->save($return['uncropped'], $original);
         }
 
         // ideally an error.
@@ -420,8 +416,7 @@ class Controller_Media extends Controller_Auth {
             ];
             $link = ['type' => 'rich', 'src' => $s3url];
             @unlink($this->temp_dir . DIRECTORY_SEPARATOR . $file);
-            $this->response->headers('Content-type', 'application/json');
-            return $this->response->body($this->save_document($mediainfo, $link));
+            return $this->save_document($mediainfo, $link);
         }
 
         // ideally an error.
@@ -546,7 +541,7 @@ class Controller_Media extends Controller_Auth {
                 'link' => [
                     'type' => 'image'
                 ],
-                'name' => \Arr::get($this->params, 'name'),
+                'name' => \Arr::get($this->uploaded_file, 'old_name'),
                 'picture' => $picture,
                 'subtype' => $image->mime
             ],
@@ -570,21 +565,22 @@ class Controller_Media extends Controller_Auth {
     public function save_document($mediainfo, $link)
     {
         //return json_encode($this->request->post());
-        $params = [
+        $params = \Arr::merge($this->params, [
             'data' => [
                 'link'      => $link,
                 'mediainfo' => $mediainfo,
-                'name' => \Arr::get($this->params, 'name'),
+                'name' => \Arr::get($this->uploaded_file, 'old_name'),
                 'picture' => null,
                 'subtype' => \Arr::get($this->uploaded_file, 'type')
             ],
             'request_type' => 'create_attachment',
             'access_token' => $this->token(),
-        ];
+        ]);
 
         $url = '/post/update/';
         $req = Api::request($url, $params, HTTP_Request::POST);
         $this->extract_album($req);
+        //file_put_contents('debug.html', var_export($req, true));
         return parent::json_response($req);
     }
 
@@ -704,13 +700,12 @@ class Controller_Media extends Controller_Auth {
      */
     protected static function build_iframe_link($file_url)
     {
-        $data = ['url' => urlencode($file_url), 'embedded' => 'true'];
+        $data = ['url' => $file_url, 'embedded' => 'true'];
 
         return "http://docs.google.com/viewer?" . http_build_query($data);
     }
 
-    /**
-     * Utility that builds an RTA styled link
+     /* Utility that builds an RTA styled link
      *
      * @param string $file_url
      * @return string

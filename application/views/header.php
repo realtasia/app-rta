@@ -14,9 +14,9 @@
             <ul class="nav mainNavPhone hidden-desktop" style="font-size:110%">
                 <li style="display:none;" data-bind="visible:RTApp.user"><a href="#" data-bind="attr:{href:RTApp.user() && RTApp.user().uri}, title:'Go to your Profile Page'"><i class="icon-home"></i></a></li>
                 <li style="display:none;" data-bind="visible:RTApp.user"><a href="/logout" data-bind="title:'Log Out'"><i class="icon-signout"></i></a></li>
-                <li style="display:none;" data-b ind="visible:!RTApp.user()"><a href="/loginbasic" data-bind="title:'Log In'"><i class="icon-signin"></i></a></li>
+                <li style="display:none;" data-bind="visible:!RTApp.user()"><a href="/loginbasic" data-bind="title:'Log In'"><i class="icon-signin"></i></a></li>
             </ul>
-            <div class="nav-collapse navbar-responsive-collapse collapse" style="height:0;z-index:1">
+            <div class="nav-collapse navbar-responsive-collapse collapse" style="height:0;">
                 <ul class="nav" style="margin-bottom:-2px;">
                     <?php echo $main_menu->render() ?>
                 </ul>
@@ -24,7 +24,7 @@
                     <li class="hidden-desktop nav-divider"></li>
                     <!--ko if: user-->
                     <li style="display:none;margin-right:0" data-bind="visible:user, title:'This feature is not enabled yet'">
-                        <a href="#" class="visible-desktop clearfix RTNotify"><i class="icon-exclamation"></i></a></li>
+                        <a href="#" class="visible-desktop clearfix RTNotify"><i class="icon-info-circle"></i></a></li>
                     <li style="display:none;margin-right:10px" class="dropdown" data-bind="visible:user, with:user">
                         <a href="#" class="hidden-desktop" data-bind="href:uri() + '#conversations', title:'View Messages', click:function(){return $('.collapse').collapse('toggle'), true;}"><span><i class="icon-envelope hidden-desktop"></i></span> Messages <span class="badge badge-important pull-right" data-bind="alertminate:counts.newMessages, text:counts.newMessages, visible:!!counts.newMessages()"></span></a>
                         <a href="#" id="messagesLink" class="dropdown-toggle visible-desktop RTNotify clearfix" data-toggle="dropdown" data-bind="click:clearMessageCount">
@@ -38,7 +38,7 @@
                     <li style="display:none;" data-bind="visible:user, with:user" style="padding:0" class="visible-desktop">
                         <div class="dropdown" id="accountDiv" class="media">
                             <span class="pull-left">
-                                <img alt="LoginThumb" width="40" height="40" src="" id="navBarProfilePhoto" data-bind="getAvatar : {context : $data, size : 40}">
+                                <img alt="LoginThumb" width="40" height="40" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" id="navBarProfilePhoto" data-bind="getAvatar : {context : $data, size : 40}">
                             </span>
                             <a id="accountLink" class="media-body" data-bind="attr : {href : uri}">
                                 Hello <span data-bind="text:name"></span>

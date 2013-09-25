@@ -1,15 +1,15 @@
 <?php $interact = isset($interactions) ? $interactions : NULL; ?>
-<ul class="small-block-grid-4 visible-phone" id="phoneProfileNav">
-    <li data-bind="css : {active : RTApp.ca() === 'feed'}"><a href="#" data-bind="attr : {href : RTApp.cp().uri() + '/feed'}"><i class="sideNavIcon icon-list-alt"></i>&nbsp;Feed</a></li>
-    <li data-bind="css : {active : RTApp.ca() === 'info'}"><a href="#" data-bind="attr : {href : RTApp.cp().uri() + '/members'}"><i class="sideNavIcon icon-group"></i>&nbsp;Users</a></li>
-    <li data-bind="css : {active : RTApp.ca() === 'listings'}"><a href="#" data-bind="attr : {href : RTApp.cp().uri() + '/listings'}"><i class="sideNavIcon icon-list"></i>&nbsp;Listings</a></li>
+<ul class="small-block-grid-4 visible-phone" id="phoneProfileNav" role="menu" aria-labelledby="mFeed mMembers mListings" >
+    <li data-bind="css : {active : RTApp.ca() === 'feed'}"><a href="#" id="mFeed" data-bind="attr : {href : RTApp.cp().uri() + '/feed'}"><i class="sideNavIcon icon-list-alt"></i>&nbsp;Feed</a></li>
+    <li data-bind="css : {active : RTApp.ca() === 'info'}"><a href="#" id="mMembers" data-bind="attr : {href : RTApp.cp().uri() + '/members'}"><i class="sideNavIcon icon-group"></i>&nbsp;Users</a></li>
+    <li data-bind="css : {active : RTApp.ca() === 'listings'}"><a href="#" id="mListings" data-bind="attr : {href : RTApp.cp().uri() + '/listings'}"><i class="sideNavIcon icon-list"></i>&nbsp;Listings</a></li>
     <li><a href="#"><i class="sideNavIcon icon-ellipsis-vertical"></i>&nbsp;More</a></li>
 </ul>
-<section id="introContent" data-bind="with:cp">
-    <h3 style="display:inline-block" class="hidden-phone"><?php echo $name ?></h3>
+<section id="introContent" data-bind="with:cp" role="main" aria-labelledby="headerTitle headerTitleSmall">
+    <h3 id="headerTitle" style="display:inline-block" class="hidden-phone"><?php echo $name ?></h3>
     <span class="pageType hidden-phone"> -<?php echo $content ?></span>
     <span class="parentDesc hidden-phone"></span>
-    <h5 style="display:inline-block" class="visible-phone">
+    <h5 style="display:inline-block" class="visible-phone" id="headerTitleSmall">
         <?php echo $name;
         echo $content ? '&nbsp;&nbsp;-&nbsp;&nbsp;' . $content : ''; ?>
     </h5>

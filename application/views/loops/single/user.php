@@ -2,10 +2,10 @@
     <article class="contentArea widgetContentBG relative person">
         <section class="media">
             <a class="pull-left hidden-phone thumbnail" href="<?php echo $uri?>" style="width:85px;height:auto;margin-right:20px">
-                <img alt="<?php echo $name?>" class="img-polaroid" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/90", $avatar) : 'http://' .$api . "/avatar/$_id" . "/90"); ?>" width="90" height="90">
+                <img alt="<?php echo $name?>" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/90", $avatar) : 'http://' .$api . "/avatar/$_id" . "/90"); ?>" width="90" height="90">
             </a>
             <a class="visible-phone clearfix" href="#" style="width:auto;height:40px;margin-right:5px;margin-bottom:10px;float:left" data-bind="title:name, href : uri">
-                <img class="" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/40", $avatar) : 'http://' .$api . "/avatar/$_id" . "/40"); ?>" width="40" height="40">
+                <img class="img-polaroid" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/40", $avatar) : 'http://' .$api . "/avatar/$_id" . "/40"); ?>" width="40" height="40">
             </a>
             <div class="contentBottom media-body media-details">
                 <h3 class="media-heading">
@@ -30,11 +30,11 @@
             <ul class="postActionButtons"></ul>
             <ul class="postActionInfo">
                 <li data-bind="hoverClass: 'hovering'">
-                    <a   title="See subscribers" href="<?php echo $uri . '/subscribers' ?>" class="subscriberHoverCard"><i class="info16 people"></i>
+                    <a title="See subscribers" href="<?php echo $uri . '/subscribers' ?>" class="subscriberHoverCard"><i class="info16 people"></i>
                         <span><?php echo Arr::get($counts, 'subscribers', 0) ?></span>
                     </a></li>
                 <li data-bind="hoverClass: 'hovering'">
-                    <a   title="See likes" href="<?php echo $uri . '/likers' ?>" class="likerHoverCard"><i class="action16 likeSmall"></i>
+                    <a title="See likes" href="<?php echo $uri . '/likers' ?>" class="likerHoverCard"><i class="action16 likeSmall"></i>
                         <span><?php echo Arr::get($counts, 'likers', 0) ?></span>
                     </a></li>
             </ul>

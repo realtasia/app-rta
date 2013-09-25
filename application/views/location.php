@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') or die('No direct script access.'); include APPPATH . 'views/loops/loops.html'?>
-<div id="contentArea" class="centerContent" data-bind="css:{centerContent: RTApp.isDefault() || RTApp.isLarge(), 'container-fluid': RTApp.isSmallerThanTablet}, style:{marginLeft:centerView}">
+<section class="contentArea centerContent" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}">
     <?php include Kohana::find_file('views', 'introcontent/location') ?>
     <!--ko if : $root.postForm().canPost-->
     <div class="outerBox rounded" style="display:none;" data-bind="visible:user() && (ca() === 'feed' || ca() === 'testimonials'), with:$root.postForm">
@@ -24,7 +24,7 @@
                     <div class="pull-left">
                         <!--ko ifnot:$parent.hasVideo-->
                         <a href="#" data-bind="attr:{href:link.src}" target="_blank" class="external_link">
-                            <img alt="Video Preview" src="" style="width:110px" data-bind="attr:{src:picture}"/>
+                            <img alt="Video Preview" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" style="width:110px" data-bind="attr:{src:picture}"/>
                         </a>
                         <!--/ko-->
                     </div>
@@ -106,7 +106,7 @@
                     <div class="pull-left">
                         <!--ko ifnot:$parent.hasVideo-->
                         <a href="#" data-bind="attr:{href:link.src}" target="_blank" class="external_link">
-                            <img alt="Link Preview Image" src="" style="width:110px" data-bind="attr:{src:picture}"/>
+                            <img alt="Link Preview Image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" style="width:110px" data-bind="attr:{src:picture}"/>
                         </a>
                         <!--/ko-->
                     </div>
@@ -147,7 +147,7 @@
         </div>
         <!--/ko-->
     </section> <!--  theLoop -->
-</div>
+</section>
 <script type="text/html" id="pictures">
     <li class="latestThumbs" ><div class = "thumbnail">
             <a href="#" data-bind=""  style="width:80px;height:80px"><img alt="Latest Pictures" data-bind="" width="80px" height="80px" /></a></div>

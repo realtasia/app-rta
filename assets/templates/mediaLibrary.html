@@ -16,7 +16,7 @@
         </ul>
         <h4 data-bind="text:$data.name"></h4>
         <ul class="nav pull-right" data-bind="foreach:rightLinks">
-            <li class="divider-vertical"></li>
+            <li class="divider-vertical" style="margin:0"></li>
             <li>
                 <a href="#" data-bind="click: $data.action, title:$data.title, position:'bottom', href: $data.uri">
                     <i data-bind="attr:{ 'class': $data.icon}"></i>
@@ -114,7 +114,7 @@
 <script type="text/html" id="albumPopupNav">
 <div class="row-fluid">
     <div class="span6" style=margin-left:0;>
-        <h3 data-bind="html:name() && name() || 'Create New Album'"></h3>
+        <h3 data-bind="text:name() && name() || 'Create New Album'"></h3>
         <span class="muted" data-bind="html:excerpt"></span>
     </div>
     <div class="span6">
@@ -128,7 +128,7 @@
             <div class="btn-group" data-toggle="buttons-radio" style="z-index:10">
                 <button type="button" class="btn" style="border-right:none;" data-bind="title:'Make album Public', placement:'bottom', css:{active:privacy.is() === 'PUBLIC'}, click:setPublic">
                     <i class="icon-eye-open"></i></button>
-                <button type="button"  class="btn" data-bind="title:'Make album Private', placement:'bottom', css:{active:privacy.is() === 'PRIVATE'}, click:setPrivate">
+                <button type="button" class="btn" data-bind="title:'Make album Private', placement:'bottom', css:{active:privacy.is() === 'PRIVATE'}, click:setPrivate">
                     <i class="icon-eye-close"></i></button>
             </div>
             <div class="btn-group">
@@ -136,7 +136,7 @@
             </div>
             <!--/ko-->
             <div class="btn-group">
-                <button class="btn btn-info" data-bind="click:saveAlbum, enable:isSavable"><i class="icon-ok"></i> <span data-bind="text:autoSaveMessage() || 'Save'"></span></button>
+                <button class="btn btn-primary" data-bind="click:saveAlbum, enable:isSavable"><i class="icon-ok"></i> <span data-bind="text:autoSaveMessage() || 'Save'"></span></button>
             </div>
         </div>
     </div>
@@ -147,8 +147,13 @@
 <li class="span6">
     <div class="thumbnail">
         <div class="media">
-            <div class="pull-left" style="text-align: center">
-                <img alt="Uploaded File" onLoad="$(this).fadeTo('slow', 1)" class="media-object img-rounded" src="/img/nothumb110.png" width="110" height="110" data-bind="attr:{src:getThumbnail}">
+            <div class="pull-left" style="text-align: center;height:110px;width:110px;">
+                <!--ko if: isPicture-->
+                    <img alt="Uploaded File" onLoad="$(this).fadeTo('slow', 1)" class="media-object img-rounded" src="/img/nothumb110.png" width="110" height="110" data-bind="attr:{src:getThumbSrc}">
+                <!--/ko-->
+                <!--ko ifnot: isPicture-->
+                    <div class="centralize" role="img" data-bind="html:getThumbPlaceHolder"></div>
+                <!--/ko-->
             </div>
             <div class="media-body">
                 <!--ko if:isUploading-->
@@ -180,8 +185,9 @@
             </div>
         </header>
         <section class="RTAWindowContainer">
-            <section id="uploadArea" class="RTAWindowContent noSidebar">
-                <div class="contentArea introBox relative">
+            <section id="libraryMobile" class="RTAWindowContent noSidebar">
+                <div class="row-fluid">
+                <div class="introBox relative contentArea">
                     <form class="form-horizontal">
                         <!--ko template : 'albumPopupNav'--><!--/ko-->
                         <div class="row-fluid" data-bind="ifnot:isDefaultAlbum">
@@ -206,8 +212,9 @@
                     </form>
                 </div>
                 <!--ko if:showAddFiles-->
-                <hr/><ul class="thumbnails" data-bind="template:{name:'uploadedThumbs', foreach:attachments}"></ul>
+                <hr><ul style="margin-left:1%" class="thumbnails" data-bind="template:{name:'uploadedThumbs', foreach:attachments}"></ul>
                 <!--/ko-->
+                </div>
             </section>
         </section>
     </section>

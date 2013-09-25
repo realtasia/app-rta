@@ -18,7 +18,7 @@ RT["Admin"] = function() {
             };
             p.type = type || !0;
             token && (p.token = token);
-            (s = RTC.GetApi(s, p)) && s.done(function(r) {
+            (s = RTC.GetApi(s, p)) && s.hasOwnProperty("done") && s.done(function(r) {
                 return RTC.isSuccess(r) && self.counts(r.data);
             });
             RTC.timeouts.push(setTimeout(function() {
@@ -61,7 +61,7 @@ RT["Admin"] = function() {
         p.url = "/user/update/" + data._id();
         p.request_type = "admin_change_status";
         p.status = data.status() === "active" ? "pending" : "active";
-        return RTC.PostApi(s, p) && s.done(function(r) {
+        return (s = RTC.PostApi(s, p)) && s.done(function(r) {
             return RTC.isSuccess(r) && data.status(p.status) && $.bootstrapGrowl('User activated successfully', {type: 'success'});
         });
     };

@@ -1,8 +1,8 @@
 <?php $interact = isset($interactions) ? $interactions : NULL; ?>
-<ul class="small-block-grid-4 visible-phone" id="phoneProfileNav" data-bind="with:RTApp.cp">
-    <li data-bind="css : {active : RTApp.ca() === 'info'}"><a href="#" data-bind="attr : {href : uri() + '/feed'}"><i class="sideNavIcon icon-info-sign"></i>&nbsp;Info</a></li>
-    <li data-bind="css : {active : RTApp.ca() === 'feed'}"><a href="#" data-bind="attr : {href : uri() + '/members'}"><i class="sideNavIcon icon-list-alt"></i>&nbsp;Feed</a></li>
-    <li data-bind="css : {active : RTApp.ca() === 'listings'}"><a href="#" data-bind="attr : {href : uri() + '/listings'}"><i class="sideNavIcon icon-list"></i>&nbsp;Listings</a></li>
+<ul class="small-block-grid-4 visible-phone" id="phoneProfileNav" data-bind="with:RTApp.cp" role="menu" aria-labelledby="mInfo mFeed mListings">
+    <li data-bind="css : {active : RTApp.ca() === 'info'}"><a href="#" id="mInfo" data-bind="attr : {href : uri() + '/info'}"><i class="sideNavIcon icon-info-sign"></i>&nbsp;Info</a></li>
+    <li data-bind="css : {active : RTApp.ca() === 'feed'}"><a href="#" id="mFeed" data-bind="attr : {href : uri() + '/feed'}"><i class="sideNavIcon icon-list-alt"></i>&nbsp;Feed</a></li>
+    <li data-bind="css : {active : RTApp.ca() === 'listings'}"><a href="#" id="mListings" data-bind="attr : {href : uri() + '/listings'}"><i class="sideNavIcon icon-list"></i>&nbsp;Listings</a></li>
     <li class="dropdown pull-right">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#" ><i class="sideNavIcon icon-ellipsis-vertical"></i>&nbsp;More</a>
         <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="dLabel">
@@ -33,9 +33,9 @@
         </ul>
     </li>
 </ul>
-<section id="introContent" data-bind="with:cp">
+<section id="introContent" data-bind="with:cp" role="main" aria-labelledby="headerTitle headerTitleSmall">
     <div class="hidden-phone">
-        <h3 style="display:inline-block"><?php echo $name ?></h3> - <span class="pageType"><?php echo ucfirst($subtype) ?></span>
+        <h3 id="headerTitle" style="display:inline-block"><?php echo $name ?></h3> - <span class="pageType"><?php echo ucfirst($subtype) ?></span>
         <?php if ($pid      = Arr::get($parent, '_id')): ?>
             <span class="muted">part of the</span>
             <span class="parentDesc" id="e<?php echo $pid ?>"><a href="<?php echo Arr::get($parent, 'uri') ?>"><?php echo Arr::get($parent, 'name') ?> Estate</a></span>
@@ -50,7 +50,7 @@
     <div class="media visible-phone">
         <div style="width:90px;height:90px" class="pull-left"><i class="hovercards" data-bind="attr:{'class':RTApp.cpIconClass(90)}"></i></div>
         <div class="media-body">
-            <h4 style="display:inline-block" class="noMargTopBtm">
+            <h5 style="display:inline-block" class="noMargTopBtm" id="headerTitleSmall">
                 <?php
                 echo $name;
                 ?> - <small class="pageType"><?php echo ucfirst($subtype) ?></small>
@@ -64,7 +64,7 @@
                     echo ucwords($property_type);
                 }
                 ?>
-            </h4>
+            </h5>
         </div>
     </div>
     <div class="pageInfo">

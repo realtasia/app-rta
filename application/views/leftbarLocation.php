@@ -39,7 +39,7 @@
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                                 <i class="info16 itestimonial"></i>&nbsp;
                                 <span class="hidden-phone">Reviews</span>&nbsp;
-                                <b class="caret"></b>
+                                <i class="icon-caret-down"></i>
                             </a>
                             <ul data-bind="" class="dropdown-menu">
                                 <li><a data-bind="attr:{href:cp().uri() + '/reviews/received'}">Received <span class="badge hidden-phone" data-bind="text:cp().counts.testimonials.received"></span></a></li>

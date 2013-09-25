@@ -1,8 +1,8 @@
 <?php $interact = isset($interactions) ? $interactions : NULL; ?>
-<ul class="small-block-grid-4 visible-phone grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp">
-    <li data-bind="css : {active : RTApp.ca() === 'info'}"><a href="#" data-bind="attr : {href : uri() + '/info'}"><i class="sideNavIcon icon-info-sign"></i>&nbsp;About</a></li>
-    <li data-bind="css : {active : RTApp.ca() === 'feed'}"><a href="#" data-bind="attr : {href : uri() + '/feed'}"><i class="sideNavIcon icon-list-alt"></i>&nbsp;Feed</a></li>
-    <li data-bind="css : {active : RTApp.ca() === 'listings'}"><a href="#" data-bind="attr : {href : uri() + '/listings'}"><i class="sideNavIcon icon-list"></i>&nbsp;Listings</a></li>
+<ul class="small-block-grid-4 visible-phone grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp" role="menu" aria-labelledby="mFeed mMembers mListings">
+    <li data-bind="css : {active : RTApp.ca() === 'info'}"><a href="#" id="mInfo" data-bind="attr : {href : uri() + '/info'}"><i class="sideNavIcon icon-info-sign"></i>&nbsp;About</a></li>
+    <li data-bind="css : {active : RTApp.ca() === 'feed'}"><a href="#" id="mFeed" data-bind="attr : {href : uri() + '/feed'}"><i class="sideNavIcon icon-list-alt"></i>&nbsp;Feed</a></li>
+    <li data-bind="css : {active : RTApp.ca() === 'listings'}"><a href="#" id="mListings" data-bind="attr : {href : uri() + '/listings'}"><i class="sideNavIcon icon-list"></i>&nbsp;Listings</a></li>
     <li class="dropdown pull-right">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#" ><i class="sideNavIcon icon-ellipsis-vertical"></i>&nbsp;More</a>
         <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="dLabel">
@@ -33,9 +33,9 @@
         </ul>
     </li>
 </ul>
-<section id="introContent" data-bind="with:cp" class="relative">
+<section id="introContent" data-bind="with:cp" class="relative" role="main" aria-labelledby="headerTitle headerTitleSmall">
     <div class="media hidden-phone">
-        <h3 style="display:inline-block;"><?php echo $name ?></h3>
+        <h3 id="headerTitle" style="display:inline-block;"><?php echo $name ?></h3>
         <span class="pageType"><?php echo $designation ? '&nbsp;&nbsp;-&nbsp;&nbsp;' . $designation . ', ' : ''; ?></span>
         <span class="parentDesc">
             <a class="smallCaps" href="<?php echo!empty($company) ? $company['uri'] : '' ?>"><?php echo!empty($company) ? ucwords(strtolower($company['name'])) : '' ?></a>
@@ -47,7 +47,7 @@
             <img alt="User Profile Photo" id="mobileProfilePhoto" src="<?php echo ($avatar ? 'http://' . str_replace($_id, $_id . "/90", $avatar) : 'http://' . $api . "/avatar/{$_id}" . "/90"); ?>" title="<?php echo $name ?>">
         </div>
         <div class="media-body">
-            <h5 style="display:inline-block" class="noMargTopBtm">
+            <h5 style="display:inline-block" class="noMargTopBtm" id="headerTitleSmall">
                 <?php
                 echo $name;
                 echo $designation ? '&nbsp;&nbsp;-&nbsp;&nbsp;' . $designation . ', ' : '';

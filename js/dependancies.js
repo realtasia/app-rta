@@ -122,23 +122,42 @@ RT.Com = {
     },
     GetThumbnail: function() {
         "use strict";
-        var s = arguments[0] || 150, img = new Image(), getPicBySize = function(s) {
+        var s = arguments[0] || 110, i, getPicBySize = function(s) {
             if (this.hasOwnProperty("picture") && this.picture()) {
                 return "http://" + this.picture().replace(this.user._id(), this.user._id() + "/" + s);
             }
-            return "http://" + RT.BUCKET + "/avatars/nothumb" + s + ".png";
-        };
-        img.width = s;
-        img.alt = "Album Thumbnails";
-        img.src = getPicBySize.call(this, s);
-        return jQuery(img).addClass('imgPreview')[0].outerHTML;
+            return null;
+        },
+                found = getPicBySize.call(this, s);
+        if(found){
+            i = new Image();
+            i.width = s;
+            i.alt = "Album Thumbnails";
+            i.src = found;
+            return $(i)[0].outerHTML;
+        }
+        i = $(RT.Com.NewDom('div'));
+        i.css({
+            width: (s-20) + 'px',
+            height: (s-20) + 'px',
+            padding:"10px",
+            textAlign:"center",
+            backgroundColor: "#ccc",
+            color:"#333",
+            textShadow: '1px 1px 1px #EEE'
+        }).attr({
+            role: 'img',
+            'aria-labelledby': 'Placeholder Image - No Preview'
+        });
+        return i.text("No Preview Available")[0].outerHTML;
 
     },
     Uploader: function(VM) {
         return new plupload.Uploader(VM.uploadSettings());
     },
     Avatar: function() {
-        var u = ko.toJS(this.user) || ko.toJS(arguments[0]) || {}, avatar = u.avatar, id = u._id, url = 'http://';
+        var u = ko.toJS(this.user) || ko.toJS(arguments[0]) || {},
+                avatar = u.avatar, id = u._id, url = 'http://';
         return avatar
                 ? url + avatar.replace(id, id + '/' + arguments[1])
                 : url + RT.Com.api + 'avatar/' + id + '/' + arguments[1];
@@ -379,8 +398,15 @@ RT.Com = {
             return self.template;
         };
     },
-    CBSettings: {transition: "none", speed: 1, top: '10%', open: !0, maxWidth: '95%', maxHeight: '95%', height: "30%", onClosed: function() {
+    CBSettings: {transition: "none", speed: 1, top: '10%', open: !0, maxWidth: '95%', maxHeight: '95%', height: "30%", trapFocus:false,
+        onClosed: function() {
             return RTApp.currentForm(null) && (RTC.processing = !1); //ko.cleanNode(document.getElementById(id));
+        },
+        onCleanup: function() {
+            return $(document.body).css({overflow:''});
+        },
+        onOpen: function() {
+            return $(document.body).css({overflow:'hidden'});
         }},
     CB: {
         _get: function() {
@@ -471,10 +497,10 @@ RT.Com = {
                 cp = RTC.GetObsVal(window.RTApp.cp), i = [];
         //RTC.log('at', p);
         (s = new RTC.Get(s, p)) && s.done(function(r) {
-            if (r && r.status && r.status === "success") {
+            if (RTC.isSuccess(r)) {
                 data = r.data || {};
-                RTC.log('server', r.data);
-                //ko.mapping.fromJS(r.data, {}, t.user);
+                //RTC.log('server', r.data);
+                //ko.mapping.fromJS(r.data, {create:RTC.CreateLoop}, t.user);
                 for (var p in r.data.counts) {
                     //RTC.log('property', p)
                     if ('testimonials' === p) {
@@ -501,12 +527,13 @@ RT.Com = {
                     }
                     window.RTApp.cp(cu);
                 }
+                RTC.Renew();
 
             }
-            return RTC.log('polls', ko.toJS(cu));
+            //return RTC.log('polls', ko.toJS(cu));
         }).always(function() {
-            window['console']['log'] = function() {
-            };
+//            window['console']['log'] = function() {
+//            };
             return cu && setTimeout(RTC.poll, 3e4);
         });
     },
@@ -538,6 +565,8 @@ RT.Com = {
     processing: false,
     timeouts: [],
     api: RT.API_SERVER + '/',
+    templates: '/assets/templates/',
+    getTemplate: function(d){ return RT.Com.templates + d + '.html'},
     resources: 'http://' + RT.COM_SERVER,
     isSuccess: function(r) {
         return r && r.hasOwnProperty("status") && r.status === 'success';
@@ -777,9 +806,8 @@ RT["handlers"] = {
                         distance = (new Date().getTime() - datetime.getTime()),
                         inWords = $.timeago.inWords(distance);
                 return e.data('timeago', {datetime: datetime}) && e.text(inWords);
-            } else {
-                return e.timeago();
             }
+            return e.timeago();
         }
     },
     clickWithParams: {
@@ -1249,11 +1277,11 @@ RT["handlers"] = {
     switchClass: {
         init: function(element, valueAccessor) {
             var v = ko.unwrap(valueAccessor()), e = $(element), c = v.removeAdd;
-            return v.val() && e.switchClass(c[1], c[0]) || e.switchClass(c[0], c[1]);
+            return v.val() ? e.switchClass(c[1], c[0]) : e.switchClass(c[0], c[1]);
         },
         update: function(element, valueAccessor) {
             var v = ko.unwrap(valueAccessor()), e = $(element), c = v.removeAdd;
-            return v.val() && e.switchClass(c[1], c[0]) || e.switchClass(c[0], c[1]);
+            return v.val() ? e.switchClass(c[1], c[0]) : e.switchClass(c[0], c[1]);
         }
     }
 };
@@ -1462,8 +1490,8 @@ RT["handlers"] = {
         if (!key) {
             key = '_id';
         }
-        var f = ko.utils.arrayFirst(this(), function(i) {
-            return RTC.GetObsVal(i[key]) === RTC.GetObsVal(item[key]);
+        var go = RTC.GetObsVal, f = ko.utils.arrayFirst(this(), function(i) {
+            return go(i[key]) === go(item[key]);
         });
 
         if (!f) {
@@ -1471,6 +1499,21 @@ RT["handlers"] = {
             return true;
         }
         remove && this.remove(item);
+        return false;
+    };
+    ko.observableArray.fn["replaceOrAdd"] = function(item, remove, key) {
+        if (!key) {
+            key = '_id';
+        }
+        var go = RTC.GetObsVal, f = ko.utils.arrayFirst(this(), function(i) {
+            return go(i[key]) === go(item[key]);
+        });
+
+        if (!f) {
+            this.unshift(item);
+            return true;
+        }
+        remove && this.remove(item) || this.replace(f, item);
         return false;
     };
     ko.unapplyBindings = function(node, remove) {
@@ -1516,33 +1559,33 @@ RT["handlers"] = {
                 self.currentItem(item) && self.isLoading(true) && self.resize();
             };
             self.slideToggle = function(d, e) {
-                self.isLoading(true);
-                e.currentTarget.id === 'slidePrev' && self.previousThing() || self.nextThing();
-                return self.resize();
-            };
-            self.slideLeft = function(d, e) {
-                return self.previousThing();
+                return e.currentTarget.id === 'slidePrev' ? self.previousThing() : self.nextThing();
             };
             self.slideRight = function(d, e) {
+                return self.previousThing();
+            };
+            self.slideLeft = function(d, e) {
                 return self.nextThing();
             };
             self.previousThing = function() {
                 "use strict";
-                var t = this, prevIndex;
-                if (t.isSlideShow()) {
-                    prevIndex = t.currentIndex() === 0 ? t.total() - 1 : t.currentIndex() - 1;
+                var t = this, ci = t.currentIndex(); //, prevIndex;
+                if (t.isSlideShow() && ci !== 0) {
+                    self.isLoading(true);
+                    //prevIndex = t.currentIndex() === 0 ? t.total() - 1 : t.currentIndex() - 1;
                     t.direction("right");
-                    return t.currentItem(t.items()[prevIndex] || t.currentItem());
+                    return t.currentItem(t.items()[ci - 1]);
                 }
                 return false;
             };
             self.nextThing = function() {
                 "use strict";
-                var t = this, nextIndex;
-                if (t.isSlideShow()) {
-                    nextIndex = t.currentIndex() === t.total() - 1 ? 0 : t.currentIndex() + 1;
+                var t = this, ci = t.currentIndex(); //, nextIndex;
+                if (t.isSlideShow() && (ci + 1 < t.total())) {
+                    self.isLoading(true);
+                    //nextIndex = t.currentIndex() === t.total() - 1 ? 0 : t.currentIndex() + 1;
                     t.direction("left");
-                    return t.currentItem(t.items()[nextIndex] || t.currentItem());
+                    return t.currentItem(t.items()[ci + 1]);
                 }
                 return false;
             };
@@ -1576,7 +1619,7 @@ RT["handlers"] = {
                 self.showMap(true);
             };
             self.currentItem.subscribe(function(v) {
-                v && RTApp.currentSlideShow(self) || RTApp.currentSlideShow(null);
+                return RTApp.currentSlideShow(v ? this : null);
             }, self);
             self.currentIndex.subscribe(function(v) {
                 var t = this, currentTotal = typeof t.items === 'function' && t.items().length || 0,
@@ -1671,7 +1714,7 @@ RT["handlers"] = {
                 "use strict";
                 var vm = Accessor(), uw = ko.unwrap(vm),
                         d = document, show = !!uw.currentItem(), n = d.getElementById('rtModal'),
-                        p = d.getElementById('rtModalContainer') || d.createElement("DIV");
+                        p = d.getElementById('rtModalContainer');
                 if (show) {
                     uw.isLoading(true);
                     if (!n) {
@@ -1686,7 +1729,7 @@ RT["handlers"] = {
                     }
                     return $(p).fadeIn('fast', function() {
                         return uw.resize.call(uw, function() {
-                            $(p).find('.draggable img').draggable({axis: "x", revert: true, delay: 0});
+                            //$(p).find('.draggable img').draggable({axis: "x", revert: true, delay: 0});
                         });
                     });
                 }
@@ -1729,7 +1772,7 @@ RT["handlers"] = {
             init: function(vm) {
                 //return console.log(vm);
                 var s = ko.utils.extend(RT.Com.CBSettings, {
-                    href: '/assets/templates/dialog.html', height: "auto", width: "35%", maxWidth: '95%', minWidth: '400px',
+                    href: RTC.getTemplate('dialog'), height: "auto", width: "35%", maxWidth: '95%', minWidth: '400px',
                     onComplete: function() {
                         ko.applyBindings(vm, document.getElementById("dialogContent"));
                         return $.colorbox.resize();

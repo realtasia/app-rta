@@ -118,7 +118,6 @@ HTML, BODY {height: 100%;-webkit-font-smoothing: antialiased;}
     padding-bottom: 6px;
     padding-top: 0;
     margin: 2px 0 5px;
-    font-size: 1.35em !important;
 }
 .listing .media-heading small {
     font-size: .8em !important;
@@ -185,37 +184,30 @@ a.thumbnail{
     background-color: #E6E6E6;
 }
 
-.price, .listingType {
-    background: #E9EBEC url("/img/forBG.gif") no-repeat -2px 0;
-    display: block;
-    position: absolute;
-    border: 1px solid transparent;
-}
-
 .price {
-    padding: 5px 5px 5px 47px;
-    border-color: #DEDEDE;
+    font-family: Roboto,arial,sans-serif;
     height: 20px;
-    right: 10px;
-    top: 33px;
-    text-shadow: 1px 1px #FFFFFF;
-
+    width:100%;
+    right: 0;
+    position:relative;
+    margin:1px auto 5px 0;
+}
+.price > .span{font-size:1.2em; padding-top:5px}
+.price > .span:first-child{
+    font-size:1em;
+    padding-top:0;
 }
 
 .listingType {
     font-size: 90%;
-    color: #686868;
     padding: 1px 0 0;
     height: 27px;
     margin: 0;
-    text-shadow: 1px 1px #FFFFFF;
     line-height: 1.2;
     text-align: center;
-    width: 36px;
-    /*+placement:anchor-top-left 0 0;*/
+    width: 50px;
     left: 0;
     top: 0;
-    border-top-color:#F4F4F4;
 }
 
 .listing DD {
@@ -491,7 +483,7 @@ Search Box Area*/
     opacity: 0.3;
 }
 
-.superscript{font-size:xx-small; vertical-align:top;display:inline-block;line-height: 1 !important;margin-left:-1px}
+.superscript{font-size:xx-small; vertical-align:top !important;display:inline-block;line-height: 1 !important;margin-left:-1px}
 
 #wraparound {
     color: #6A6340;
@@ -916,7 +908,7 @@ LABEL .close {
     margin-top: 60px;
     position: fixed;
     top: 0;
-    z-index: 1000;
+/*    z-index: 1000;*/
     width: 500px;
 }
 
@@ -935,6 +927,7 @@ LABEL .close {
     top: 0;
     left: 0;
     overflow: hidden;
+    z-index:2;
 }
 
 #colorbox, #cboxWrapper {
@@ -1020,7 +1013,7 @@ LABEL .close {
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #slideshow * {
-    z-index: 9999;
+    z-index: 2;
 }
 
 #slideshowNav {
@@ -1075,7 +1068,7 @@ LABEL .close {
 }
 
 #rtModalLoadingGraphic i {
-    display: inline;
+    background-color: transparent;
     text-align: center;
     vertical-align: middle;
     top: 50%;
@@ -1084,7 +1077,7 @@ LABEL .close {
 }
 
 #slideshow #rtModalLoadingGraphic {
-    background: #000 none no-repeat center center;
+    background-color: transparent;
 }
 
 #slideshow .navbar-inner {
@@ -1135,7 +1128,7 @@ LABEL .close {
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: 1000;
+    z-index: 3;
     float: left;
     display: none;
     min-width: 160px;
