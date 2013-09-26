@@ -182,8 +182,8 @@ class Controller_Ipn extends Controller {
      */
     protected function _check_and_save()
     {
-        return $this->response->body(Debug::vars($this->request->post()));
-        Log::instance()->add(Log::NOTICE, $this->_listener->get_text_report());
+        //return $this->response->body(Debug::vars($this->request->post()));
+        Log::instance()->add(Log::NOTICE, print_r($this->request->post(), true));
 //        if ($this->_listener->check_email($this->expected_receiver_email))
 //        {
 //            if ($this->_listener->is_unique_transaction())
