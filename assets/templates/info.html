@@ -1,4 +1,4 @@
-<section class="contentArea centerContent clearfix" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet}">
+<section class="contentArea centerContent" data-bind="css:{'container-fluid':RTApp.isSmallerThanTablet}">
     <ul class="small-block-grid-4 grid-fix rtResponsiveMenu" data-bind="with:RTApp.cp" role="menu" aria-labelledby="mPicture mAccount mBio mCompany">
         <li data-bind="css : {active : currentEdit() === 'picture'}"><a href="#" id="mPicture" data-bind="click:currentEdit.bind($data, 'picture')"><i class="sideNavIcon icon-camera-retro"></i>&nbsp;Picture</a></li>
         <li data-bind="css : {active : currentEdit() === 'account'}"><a href="#" id="mAccount" data-bind="click:currentEdit.bind($data, 'account')"><i class="sideNavIcon icon-cogs"></i>&nbsp;Account</a></li>

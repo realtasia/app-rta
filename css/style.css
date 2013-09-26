@@ -266,6 +266,7 @@ textarea {
     border-radius:0;
     width: 95%;
 }
+.cp{margin-top:40px}
 .centerContent {
     margin: 40px 270px 0 195px;
     padding: 0 10px 0;
@@ -3625,6 +3626,10 @@ span.placehash{position:absolute; top:-50px;}
     .contentArea.centerContent{
         border-color:transparent;
     }
+    .centerContent, .cp{
+        margin-right:auto;
+        margin-left: auto;
+    }
     .postFeed{box-shadow:1px 1px 3px #ddd; }
     .navbar .btn-navbar .icon-bar{height:4px}
     #container > .container-fluid {
@@ -3648,16 +3653,26 @@ span.placehash{position:absolute; top:-50px;}
 }
 @media (min-width:980px){
     .cp{
-        margin: 40px 270px 0 195px;
+        margin-right:270px;
+        margin-left: 195px;
         min-width: 52%;
     }
 }
+
 @media (min-width: 768px) and (max-width:979px){
     .centerContent{
         margin-right:10px;
+        margin-left: 195px;
     }
+    .cp{
+        margin-left: 195px;
+    }
+    /**/
 }
 @media (max-width:979px){
+    .cp .outerBox.centerWidth{
+        max-width:100%;width:auto;
+    }
     a#feedbackButton{padding:0 5px!important; left:-50px}
     header .nav-collapse > ul.nav > li > a{
         margin:0 auto;

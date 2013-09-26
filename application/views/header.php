@@ -12,9 +12,9 @@
                 </a>
             </span>
             <ul class="nav mainNavPhone hidden-desktop" style="font-size:110%">
-                <li style="display:none;" data-bind="visible:RTApp.user"><a href="#" data-bind="attr:{href:RTApp.user() && RTApp.user().uri}, title:'Go to your Profile Page'"><i class="icon-home"></i></a></li>
-                <li style="display:none;" data-bind="visible:RTApp.user"><a href="/logout" data-bind="title:'Log Out'"><i class="icon-signout"></i></a></li>
-                <li style="display:none;" data-bind="visible:!RTApp.user()"><a href="/loginbasic" data-bind="title:'Log In'"><i class="icon-signin"></i></a></li>
+                <li style="display:none;margin-right:20px" data-bind="visible:RTApp.user"><a href="#" data-bind="attr:{href:RTApp.user() && RTApp.user().uri}, title:'Go to your Profile Page'"><i class="icon-home"></i></a></li>
+                <li style="display:none;margin-right:20px" data-bind="visible:RTApp.user"><a href="/logout" data-bind="title:'Log Out'"><i class="icon-signout"></i></a></li>
+                <li style="display:none;margin-right:20px" data-bind="visible:!RTApp.user()"><a href="/loginbasic" data-bind="title:'Log In', href:RTApp.loginRedirect"><i class="icon-signin"></i></a></li>
             </ul>
             <div class="nav-collapse navbar-responsive-collapse collapse" style="height:0;">
                 <ul class="nav" style="margin-bottom:-2px;">

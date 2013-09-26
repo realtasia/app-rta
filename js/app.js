@@ -51,6 +51,9 @@ RT.App = function() {
         }
         return false;
     }, this);
+    self.loginRedirect = ko.computed(function(){
+        return "/loginbasic?redirect_to=" + window.location;
+    }, this)
     self.isJSAction.subscribe(function(v) {
         if (!v)
             return false;
@@ -250,6 +253,9 @@ RT.App.prototype = {
                 return $.colorbox.resize();
             }
         });
+        if(t.isSmallerThanDefault()){
+            return window.location.href = t.loginRedirect();
+        }
         t.hideListingsSearch();
         return cf(null) && (!t.user() && !P) && (P = !0) && $.colorbox(S) && $('.nav-collapse').collapse('toggle');
     },
@@ -672,6 +678,9 @@ RT.App.prototype = {
             });
             t.isSmallerThanTablet = ko.computed(function() {
                 return v.width() < 768;
+            });
+            t.isSmallerThanDefault = ko.computed(function() {
+                return v.width() < 980;
             });
             t.isPhone = ko.computed(function() {
                 return v.width() <= 480;

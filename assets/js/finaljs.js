@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-26 09:26:39 
+   Compiled at: 2013-09-26 10:44:54 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1837,7 +1837,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-26 09:26:39 
+   Compiled at: 2013-09-26 10:44:54 
 ================================ */
 RT.App = function() {
     "use strict";
@@ -1892,6 +1892,9 @@ RT.App = function() {
         }
         return false;
     }, this);
+    self.loginRedirect = ko.computed(function(){
+        return "/loginbasic?redirect_to=" + window.location;
+    }, this)
     self.isJSAction.subscribe(function(v) {
         if (!v)
             return false;
@@ -2091,6 +2094,9 @@ RT.App.prototype = {
                 return $.colorbox.resize();
             }
         });
+        if(t.isSmallerThanDefault()){
+            return window.location.href = t.loginRedirect();
+        }
         t.hideListingsSearch();
         return cf(null) && (!t.user() && !P) && (P = !0) && $.colorbox(S) && $('.nav-collapse').collapse('toggle');
     },
@@ -2513,6 +2519,9 @@ RT.App.prototype = {
             });
             t.isSmallerThanTablet = ko.computed(function() {
                 return v.width() < 768;
+            });
+            t.isSmallerThanDefault = ko.computed(function() {
+                return v.width() < 980;
             });
             t.isPhone = ko.computed(function() {
                 return v.width() <= 480;

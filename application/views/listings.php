@@ -33,7 +33,7 @@
                                 <input id="s" name="s" type="text" data-bind="autoComplete : { source: $parent.getKeyword.bind($parent), delay: 500, minLength:2}, event:{autocompleteselect:$parent.resetNewResults.bind($parent)}, click:$parent.showListingsSearch.bind($parent),value:s" placeholder="Search Listings...">
                                 <div class="btn-group">
                                     <button tabindex="-1" class="btn btn-inverse" data-bind="text:type,value:type,click:$parent.resetNewResults.bind($parent)"></button>
-                                    <button tabindex="-1" data-toggle="dropdown" class="btn dropdown-toggle btn-inverse">
+                                    <button tabindex="-1" data-toggle="dropdown" class="btn dropdown-toggle btn-inverse" style="padding-left:1px !important;padding-right:1px !important;">
                                         <i class="icon-caret-down"></i>
                                     </button>
                                     <ul class="dropdown-menu">
