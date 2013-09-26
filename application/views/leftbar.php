@@ -7,11 +7,11 @@
             <div class="media-body">
                 <!--ko if : user-->
                 <div class="row-fluid" style="display:none" data-bind="visible:user().canPostListings">
-                    <a href="#" data-bind="click:initListings" class="span12 btn btn-mini btn-rta"><i class="icon-plus-sign"></i>&nbsp;New Listing</a>
+                    <a href="#" data-bind="click:initListings" class="span12 btn btn-small btn-rta btn-fit"><i class="icon-plus-sign"></i>&nbsp;New Listing</a>
                 </div>
                 <!--/ko-->
                 <div class="row-fluid" style="margin-top:10px">
-                    <a target="_blank" href="<?php echo (Arr::get($cp, 'uri')) . '/vcard'; ?>" class="span12 btn btn-mini" style="text-align: left"><i class="icon-phone"></i>&nbsp;Get VCARD</a>
+                    <a target="_blank" data-bind="click:getVCARD" href="<?php echo (Arr::get($cp, 'uri')) . '/vcard'; ?>" class="span12 btn btn-small btn-fit" style="text-align: left"><i class="icon-phone"></i>&nbsp;Get vCARD</a>
                 </div>
             </div>
         </div>

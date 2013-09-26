@@ -2,14 +2,13 @@
 <div class="card hovercard">
     <div class="avatar" style="margin:5px auto;top:5px">
         <a href="/<?php echo $_id ?>" title="Go to <?php echo $name ?>'s profile page">
-            <img class="hidden-phone" alt="<?php echo $name ?>" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/90", $avatar) : 'http://' . RT::API_SERVER . "/avatar/$_id" . "/90"); ?>" width="90" height="90">
-            <img class="visible-phone" alt="<?php echo $name ?>" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/60", $avatar) : 'http://' . RT::API_SERVER . "/avatar/$_id" . "/60"); ?>" width="60" height="60">
+            <img alt="<?php echo $name ?>" src="<?php echo ($avatar ? 'http://' . str_replace($_id, "$_id/90", $avatar) : 'http://' . RT::API_SERVER . "/avatar/$_id" . "/90"); ?>" width="90" height="90">
         </a>
     </div>
     <div class="info">
         <div class="title">
             <a href="<?php echo $uri ?>"><?php echo $name ?></a>
-            <a href="#" style="display:block;margin:0;"><small class="muted" style="font-variant:small-caps;font-size:11px">Realt <?php echo in_array('admin', $roles) ? 'Staff' : ucfirst($roles[0]) ?></small></a>
+            <a href="#" style="display:block;margin:0;"><small class="muted" style="font-variant:small-caps;font-size:12px">Realt <?php echo in_array('admin', $roles) ? 'Staff' : ucfirst($roles[0]) ?></small></a>
         </div>
         <?php if (!empty($company)): ?>
             <div class="desc"><strong>Works at</strong> <a  href="<?php echo Arr::get($company, 'uri') ?>" title="<?php echo "View " . Arr::get($company, 'name') . "'s profile" ?>"><?php echo Arr::get($company, 'name') ?></a></div>

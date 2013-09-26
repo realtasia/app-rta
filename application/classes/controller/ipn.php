@@ -10,7 +10,6 @@
  * @category    Controllers
  * @website		https://github.com/paptamas/kohana-paypal-ipn
  * @license		http://www.opensource.org/licenses/isc-license.txt
- *
  */
 
 class Controller_Ipn extends Controller {
@@ -56,36 +55,37 @@ class Controller_Ipn extends Controller {
      */
     public function action_index()
     {
-        Debug::log(print_r($this->request->post(), true));
+        return $this->_check_and_save();
+        //Debug::log(print_r($this->request->post(), true));
         // Create and set up listener
-//        $this->_listener          = Ipn::factory();
-//        $this->_listener->use_ssl = $this->use_ssl;
-//        $this->_listener->timeout = $this->timeout;
-//
-//        try
-//        {
-//            // Process the notification
-//            $this->_listener->process_ipn($this->request->post());
-//
-//            if ($this->_listener->is_verified())
-//            {
-//                // The payment is VERIFIED, process it
-//                $this->_process_verified_payment();
-//            }
-//            else
-//            {
-//                // The payment is INVALID, process it
-//                $this->_process_invalid_payment();
-//            }
-//        }
-//        catch (Kohana_Exception $e)
-//        {
-//            // Something went wrong, log the error
-//            if ($this->log_errors)
-//            {
-//                Log::instance()->add(Log::NOTICE, $e->getMessage());
-//            }
-//        }
+        $this->_listener          = Ipn::factory();
+        $this->_listener->use_ssl = $this->use_ssl;
+        $this->_listener->timeout = $this->timeout;
+
+        try
+        {
+            // Process the notification
+            $this->_listener->process_ipn($this->request->post());
+
+            if ($this->_listener->is_verified())
+            {
+                // The payment is VERIFIED, process it
+                $this->_process_verified_payment();
+            }
+            else
+            {
+                // The payment is INVALID, process it
+                $this->_process_invalid_payment();
+            }
+        }
+        catch (Kohana_Exception $e)
+        {
+            // Something went wrong, log the error
+            if ($this->log_errors)
+            {
+                Log::instance()->add(Log::NOTICE, $e->getMessage());
+            }
+        }
     }
 
     /**
@@ -125,6 +125,7 @@ class Controller_Ipn extends Controller {
          * Do something with this invalid payment, for example save the
          * text report (($this->_listener->get_text_report())) to db, or just ignore it.
          */
+        $this->_check_and_save();
     }
 
     /**
@@ -181,7 +182,8 @@ class Controller_Ipn extends Controller {
      */
     protected function _check_and_save()
     {
-        Log::instance()->add(Log::NOTICE, print_r($this->_listener->get_post_data(), true));
+        return $this->response->body(Debug::vars($this->request->post()));
+        Log::instance()->add(Log::NOTICE, $this->_listener->get_text_report());
 //        if ($this->_listener->check_email($this->expected_receiver_email))
 //        {
 //            if ($this->_listener->is_unique_transaction())

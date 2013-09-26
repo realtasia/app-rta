@@ -4,8 +4,8 @@
     <li data-bind="css : {active : RTApp.ca() === 'feed'}"><a href="#" id="mFeed" data-bind="attr : {href : uri() + '/feed'}"><i class="sideNavIcon icon-list-alt"></i>&nbsp;Feed</a></li>
     <li data-bind="css : {active : RTApp.ca() === 'listings'}"><a href="#" id="mListings" data-bind="attr : {href : uri() + '/listings'}"><i class="sideNavIcon icon-list"></i>&nbsp;Listings</a></li>
     <li class="dropdown pull-right">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#" ><i class="sideNavIcon icon-ellipsis-vertical"></i>&nbsp;More</a>
-        <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="dLabel">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" data-bind="css:{'disable' : !RTApp.cpIsCu()}, enable: RTApp.cpIsCu" ><i class="sideNavIcon icon-ellipsis-vertical"></i>&nbsp;More</a>
+        <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="dLabel" data-bind="if: RTApp.cpIsCu">
             <li class="text-left">
                 <a href="#media">
                     <i class="sideNavIcon icon-camera"></i>&nbsp;Photos

@@ -66,7 +66,7 @@
                 </a>
                 <div class="media-body media-details">
                     <h3 class="media-heading clearfix">
-                        <a  data-bind="attr:{href : uri}, title:'See ' + name() + '\'s Profile', text:name, qtip: RTApp.getUserHoverCard" class="personHoverCard tipsRight" style="display:inline-block"></a>&nbsp;
+                        <a  data-bind="attr:{href : uri}, title:'See ' + name() + '\'s Profile', text:name, qtip: RTApp.getUserHoverCard" class="personHoverCard" style="display:inline-block"></a>&nbsp;
                         <a href="#">
                             <small class="muted" data-bind="text:(roles.indexOf('admin')!==-1) ? 'Realt Staff': 'Realt ' + roles()[0].ucfirst()"></small>
                         </a>

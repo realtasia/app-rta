@@ -1,9 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-//Route::set('single', '<action>.<format>', ['format' => 'php'])
-//        ->defaults([
-//            'controller' => 'single'
-//        ]);
+Route::set('ipn', 'ipn(/<action>)')
+  ->defaults([
+      'controller' => 'ipn',
+      'action'     => 'index'
+  ]);
+
 
 Route::set('listings', 'listings(/<action>(/<id>(?page=<page>)))', ['page' => '[0-9]+'])
   ->defaults([
@@ -64,13 +66,6 @@ Route::set('default', function($uri) {
               'controller' => 'home',
               'static'     => 'index'
           ];
-      // Check if paypal IPN controller.
-      if (trim($uri, '/') === 'ipn')
-          return [
-              'controller' => 'ipn',
-              'action'     => 'index'
-          ];
-
       // Check if this is the single controller. A finite set of actions.
       if (in_array(trim($uri, '/'), ['parseurl', 'post', 'external', 'user', 'page']))
           return [

@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-26 10:44:54 
+   Compiled at: 2013-09-26 12:43:56 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1837,7 +1837,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-26 10:44:54 
+   Compiled at: 2013-09-26 12:43:56 
 ================================ */
 RT.App = function() {
     "use strict";
@@ -1867,7 +1867,10 @@ RT.App = function() {
     }, self);
     self.cpIsCu = ko.computed(function() {
         var t = this;
-        return (t.user() && t.cp() && t.user()._id() === t.cp()._id()) || !1;
+        if(t.user() && t.cp()){
+            return t.user()._id() === t.cp()._id();
+        }
+        return !1;
     }, self);
     self.cpIsUser = ko.computed(function() {
         return this.cp() && this.cp().hasOwnProperty("first_name");
@@ -2080,6 +2083,16 @@ RT.App.prototype = {
                     }
                 });
                 return $.colorbox(s);
+            });
+        }
+    },
+    getVCARD: function(d) {
+        if (d.cp()) {
+            return $.get(d.cp().uri() + '/vcard', function(r) {
+                if (typeof r === "object" && r.status === 'fail') {
+                    return $.bootstrapGrowl('<h4><i class="icon-info-sign"></i> ' + r.data.message + '</h4>', {type: 'warning'});
+                }
+                return window.location.href = d.cp().uri() + '/vcard';
             });
         }
     },

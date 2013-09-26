@@ -237,6 +237,12 @@ UL.dropdown-menu,.btn,.nav-pills > LI > A,.add-on {
     color: #fff;
 }
 
+.btn-fit{
+    display:block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 :focus,:active,.btn:focus,.active {
     outline: none !important;
 }
@@ -3650,6 +3656,9 @@ span.placehash{position:absolute; top:-50px;}
     .postTitle{
         min-height:55px;
     }
+    .card.hovercard{max-width:200px;margin:0 auto;}
+    .card.hovercard .info .title{font-size:18px;}
+    .card.hovercard .info .desc{font-size:11px;}
 }
 @media (min-width:980px){
     .cp{
