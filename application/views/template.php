@@ -9,7 +9,7 @@
         <?php endif; ?>
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <!--<meta name="viewport" content="initial-scale=1">-->
-        <meta name="viewport" content="width=device-width">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <?php
         echo Assets::factory('all')
           ->merge(TRUE)

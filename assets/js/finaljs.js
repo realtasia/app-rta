@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-25 22:56:02 
+   Compiled at: 2013-09-26 09:26:39 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1837,7 +1837,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-25 22:56:02 
+   Compiled at: 2013-09-26 09:26:39 
 ================================ */
 RT.App = function() {
     "use strict";
@@ -2942,14 +2942,6 @@ RT.ControllerMessages = function() {
     RTC.MakeObsFromArray.call(self, "newMessage hasMoreMessages messageCurrentPage");
     self.getPost = function() {
     };
-    self.resetUnreadCounts = function() {
-        "use strict";
-        var t = this, sc = t.selectedConversation(), p = {
-            url: '/user/resetUnread'
-        };
-
-        return sc() && (p = RTC.GetApi({}, p)) || !1;
-    };
     self.newMessage.subscribe(function(v) {
         return v && $.colorbox({
             fixed: !0,
@@ -3021,23 +3013,40 @@ RT.conversationView = function() {
     };
     self.selectConversation = function(v) {
         self.selectedConversation(v);
-        self.markConversationRead();
-        v && RTApp.inbox().goTo(new RT.messageView(v), 2);
-        return true;
+        if(v){
+            self.markConversationRead().always(self.resetUnreadCounts.bind(self));
+            RTApp.inbox().goTo(new RT.messageView(v), 2);
+            return true;
+        }
+        return false;
     };
     self.markConversationRead = function() {
         "use strict";
-        var t = this, u = RTApp.user(), sc = t.selectedConversation(), p = {
-            url: "/post/update/" + RTC.GetObsVal(u._id),
+        var t = this, sc = t.selectedConversation(), p = {
+            url: "/post/update/" + RTC.GetObsVal(sc._id),
             request_type: 'clear_unread'
         };
+        if(sc){
+            p = RTC.GetApi({}, p);
+            return p.done(function(){
+                return RTC.Renew();
+            });
+        }
+        return $.Deferred.reject().promise();
 
-        return sc && (p = RTC.PostApi({}, p)) && p.done(function(r) {
-            if (RTC.isSuccess(r)) {
-                sc.unread(null);
-            }
-            //RTC.Renew();
-        }) || !1;
+    };
+    self.resetUnreadCounts = function() {
+        "use strict";
+        var t = this, sc = t.selectedConversation(), p = {
+            url: '/user/resetunread/' + RTApp.user()._id()
+        };
+        if(sc){
+            p = RTC.GetApi({}, p);
+            return p.done(function(){
+                return RTC.Renew();
+            });
+        }
+        return $.Deferred.reject().promise();
     };
     self.getConversations();
 };
