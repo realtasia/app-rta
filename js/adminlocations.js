@@ -508,9 +508,9 @@ RT["Admin"]['editableTemplate'] = function(params) {
     self.isEditing = ko.observable(params.isEditing);
     self.fieldsTemplate = params.fieldsTemplate;
     self.text = RTC.MakeObs(params.text);
-//    self.stopEditing = function() {
-//        return self.isEditing(false);
-//    };
+    self.stopEditing = function() {
+        return self.isEditing(false);
+    };
     self.text.subscribe(function(v) {
         return v && self.stopEditing();
     });
