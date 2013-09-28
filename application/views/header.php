@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
             </a>
             <span id="realtLogo">
-                <a href="/" class="brand" >
+                <a href="/?ref=logo" class="brand" >
                     <img alt="Realtasia Logo" src="http://static2.realtasia.com.sg/realtlogo6.png" width="160" height="34">
                 </a>
             </span>
@@ -40,7 +40,7 @@
                             <span class="pull-left">
                                 <img alt="LoginThumb" width="40" height="40" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" id="navBarProfilePhoto" data-bind="getAvatar : {context : $data, size : 40}">
                             </span>
-                            <a id="accountLink" class="media-body" data-bind="attr : {href : uri}">
+                            <a id="accountLink" class="media-body" data-bind="href : uri() + '?ref=accountLink'">
                                 Hello <span data-bind="text:name"></span>
                             </a>
                         </div>
@@ -61,7 +61,7 @@
                             </li>
                             <!--/ko-->
                             <li class="divider"></li>
-                            <li><a href="/logout" id="navLogOut" style="padding-left:7px" data-bind="title:'Log Out'"><i class="icon-signout"></i> Log Out</a></li>
+                            <li><a href="/logout?ref=desktop" id="navLogOut" style="padding-left:7px" data-bind="title:'Log Out'"><i class="icon-signout"></i> Log Out</a></li>
                         </ul>
                     </li>
                     <li class="hidden-desktop" data-bind="if:user"><a href="#" data-bind="attr:{href : user().uri() + '#settings'}"><i class="icon-wrench hidden-desktop"></i> Settings</a></li>

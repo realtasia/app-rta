@@ -592,8 +592,8 @@ RT.Com = {
     },
     responsiveIconLinks: function(v) {
         var e = $(".responsiveIconLink"), i = e.find("i"), c = "centerBlock",
-                s = "icon-2x";
-        return v && e.addClass(c) && i.addClass(s) || e.removeClass(c) && i.removeClass(s);
+                s = "icon-2x", ac = "addClass", rc = "removeClass";
+        return v ? e[ac](c) && i[ac](s) : e[rc](c) && i[rc](s);
     },
     cards: {/*Empty object on purpose. Not very useful when not persisting*/},
     Base: function() {
@@ -691,24 +691,43 @@ RT["handlers"] = {
         }
     },
     map: {
-        init: function(element, vA) {
-            var data = ko.unwrap(vA()), geo = ko.toJS(data.geo),
-                    add = data.address(), options, map;
-            if (data.showAddress()) {
-                if (geo) {
-                    options = {
-                        elt: element, /*ID of element on the page where you want the map added*/
-                        zoom: 10, /*initial zoom level of the map*/
-                        latLng: {lat: geo.lat, lng: geo.lon}, /*center of map in latitude/longitude */
-                        mtype: 'map', /*map type (map)*/
-                        bestFitMargin: 0, /*margin offset from the map viewport when applying a bestfit on shapes*/
-                        zoomOnDoubleClick: true                    /*zoom in when double-clicking on map*/
-                    };
-                    return new MQA.TileMap(options);
-                }
+            update: function (element, valueAccessor) {
+                if(typeof google === 'undefined')
+                    return;
+                google.maps.visualRefresh = true;
+                var mapObj = ko.unwrap(valueAccessor()),
+                        latLng = new google.maps.LatLng( ko.unwrap(mapObj.geo.lat),ko.unwrap(mapObj.geo.lon)),
+                        mapOptions = { center: latLng, zoom: 12, mapTypeId: google.maps.MapTypeId.ROADMAP};
+
+                mapObj.googleMap = new google.maps.Map(element, mapOptions);
+
+                mapObj.marker = new google.maps.Marker({
+                    map: mapObj.googleMap,
+                    position: latLng,
+                    title: mapObj.address(),
+                    draggable: true
+                });
+
+                mapObj.onChangedCoord = function(newValue) {
+                    var latLng = new google.maps.LatLng(
+                        ko.unwrap(mapObj.geo.lat),
+                        ko.unwrap(mapObj.geo.lon));
+                    mapObj.googleMap.setCenter(latLng);
+                };
+
+                mapObj.onMarkerMoved = function(dragEnd) {
+                    var latLng = mapObj.marker.getPosition();
+                    mapObj.geo.lat(latLng.lat());
+                    mapObj.geo.lon(latLng.lng());
+                };
+
+                mapObj.lat.subscribe(mapObj.onChangedCoord);
+                mapObj.lon.subscribe(mapObj.onChangedCoord);
+
+                google.maps.event.addListener(mapObj.marker, 'dragend', mapObj.onMarkerMoved);
+                $(element).data("mapObj",mapObj);
             }
-        }
-    },
+        },
     flash: {
         update: function(a, b) {
             var show = ko.unwrap(b());
@@ -1831,4 +1850,11 @@ RT["handlers"] = {
             }
         };
     });
+//    // google maps loading
+//    (function(){
+//        var script = document.createElement("script");
+//        script.type = "text/javascript";
+//        script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyC6-y0MkWb9eaFLz_HWMQlWhtgo-HAtDEE&sensor=true";
+//        document.body.appendChild(script);
+//    })();
 })(ko, RT, jQuery);

@@ -134,7 +134,7 @@ RT["Admin"]['Searcher'] = function() {
     self.createLocation = function(d) {
         self.locationForm(new RT.Admin.Location(ko.toJS(d)));
         var S = ko.utils.extend(RTC.CBSettings, {
-            width: "480px", href: RTC.getTemplate('createLocation'), height: "auto",
+            width: "480px", href: RTC.getTemplate('admin/createLocation'), height: "auto",
             onComplete: function() {
                 ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
                 return $.colorbox.resize();
@@ -263,13 +263,10 @@ RT["Admin"]['Straylocations'] = function() {
         self.locationForm(new RT.Admin.Location(ko.toJS(self.final)));
         self.locationForm().create = self.createLocation.bind(self);
         var S = ko.utils.extend(RTC.CBSettings, {
-            width: "480px", href: RTC.getTemplate('createLocation'), height: "auto",
+            width: "480px", href: RTC.getTemplate('admin/createLocation'), height: "auto",
             onComplete: function() {
                 ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
-                return setTimeout(function(){
-                                        return $.colorbox.resize();
-                                    }, 200);
-            }
+                return setTimeout(function(){return $.colorbox.resize();}, 200);}
         });
         return $.colorbox(S);
     };
@@ -285,13 +282,12 @@ RT["Admin"]['Straylocations'] = function() {
                 return $.bootstrapGrowl(msg, {type: 'success'});
             }
         }).error(function(r) {
-            return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me... I love you.', {type: 'error'});
+            return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me.', {type: 'error'});
         }).always(function() {
             return self.processing(false) && $.colorbox.close();
         });
     };
     self.updateStray = function() {
-
 //      updatestray
         return self.record() && RTC.PostApi({}, {
             url: '/locations/updatestray/',
@@ -358,9 +354,9 @@ RT["Admin"]['Straylocations'] = function() {
         $(document).on('click', '.ael', function() {
             var d = ko.dataFor(this);
             self.locationForm(new RT.Admin.Location(d));
-            self.locationForm().create = null;
+            self.locationForm();
             var S = ko.utils.extend(RTC.CBSettings, {
-                width: "480px", href: RTC.getTemplate('createLocation'), height: "100%",
+                width: "480px", href: RTC.getTemplate('admin/createLocation'), height: "100%",
                 onComplete: function() {
                     ko.applyBindings(self.locationForm(), document.getElementById('locationForm'));
                     return setTimeout(function(){
@@ -522,29 +518,43 @@ RT["Admin"]['editableTemplate'] = function(params) {
 
 RT["Admin"]['Location'] = function(p) {
     p = p || {};
-    var self, o = 'id name estate type subtype content property_type';
-    RTC.MakeObsFromArray.call(this, o);
-    self = this;
+    var self = this, o = '_id name type subtype content property_type changeEstate processing saveTime';
+    RTC.MakeObsFromArray.call(self, o);
+    self._id(p._id)
     self.name(p.child ? p.child : p.building);
     if (!self.name() && p.name) {
         ko.isObservable(p.name) && (self.name = p.name) || self.name(p.name);
     }
-    self.estate(p.estate);
-
+    self.estate = ko.observable(p.estate).extend({editable: true});
     if (p.parent) {
         self.parent = p.parent;
-
         if (!p.estate) {
             self.estate(p.parent.name);
         }
     }
-    self.changeEstate = ko.observable(false);
+    self.computedEstate = ko.computed({
+        read: function(){
+            return this.hasOwnProperty("parent") ? this.parent.name() : this.estate();
+        },
+        write: function(v){
+            if(this.hasOwnProperty("estate") && ko.isObservable(this.estate)){
+                this.estate(v);
+            }
+            if(this.hasOwnProperty("parent") && ko.isObservable(this.parent.name)){
+                this.parent.name(v);
+            }
+        },
+        owner:self
+    });
+    self.estate.subscribe(function(){
+        //return console.log(this.computedEstate.hasChanges());
+    }, self);
     self.changeEstate.subscribe(function(){
         return setTimeout(function(){
-            console.log('resize triggered')
             return $.colorbox.resize();
         }, 1);
     });
+    self.estate.beginEdit();
     ko.isObservable(p.property_type) && (self.property_type = p.property_type) || self.property_type(p.property_type);
     ko.isObservable(p.subtype) && (self.subtype = p.subtype) || self.subtype(p.subtype);
     self.type('location');
@@ -560,5 +570,52 @@ RT["Admin"]['Location'] = function(p) {
         }
         return null;
     }, self);
-    self.create = null;
+    self.locationParams = ko.computed(function(){
+        var t = this;
+        return {
+            _id: o = t._id(),
+            name: o = t.name(),
+            subtype: t.subtype(),
+            property_type: t.property_type()
+        };
+    }, self).extend({editable: true});
+    self.locationParams.beginEdit();
+    self.create = function(v){
+        var t = this, obj = {}, parent = {};
+        if(t.locationParams.hasChanges()){
+            obj = t.locationParams();
+        }
+        if(t.estate.hasChanges()){
+            if(t.hasOwnProperty("parent")){
+                parent = t.parent;
+            }
+            parent.name = t.estate();
+            obj.parent = parent;
+        }
+        if($.isEmptyObject(obj)) return false;
+        t.processing(true);
+        t.saveTime(new Date().getTime() / 1e3);
+
+        return RTC.PostApi({}, {
+            url: '/locations/editlocationinline/',
+            data: ko.toJSON(obj)
+        }).done(function(r) {
+            if (RTC.isSuccess(r)) {
+                t.locationParams.commit();
+                t.estate.commit();
+                console.log(r.data);
+                //var msg = "Yay! Location created. " + r.data.postal_updated + " postal code(s) were updated to reflect this;";
+                //return $.bootstrapGrowl(msg, {type: 'success'});
+            }
+        }).error(function(r) {
+            return RTC.isSuccess(r) && $.bootstrapGrowl('Oops something went wrong. If this keeps happening, call me.', {type: 'error'});
+        }).always(function() {
+            t.locationParams.beginEdit();
+            t.estate.beginEdit();
+            return t.processing(false); //&& $.colorbox.close();
+        });
+    };
+    self.saveLabel = ko.computed(function(){
+        return this.processing() ? "Saving" : "Save";
+    }, self);
 };

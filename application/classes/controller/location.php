@@ -74,6 +74,21 @@ class Controller_Location extends Controller_Auth {
         return parent::json_response($req);
     }
 
+    public function action_info()
+    {
+        $req = Api::request('/page/info/' . (string) $this->cp['_id'], [
+            'access_token' => $this->token()
+        ]);
+        $data = $req->get_data();
+        if(!empty($data))
+        {
+            $this->cp['geo'] = $data[0];
+            $this->cp["geo_search"] = $data;
+            return;
+        }
+        $this->cp["geo_search"] = $this->cp['geo'] = [];
+    }
+
     public function action_locations()
     {
         if ($this->request->param('id') === 'keyword')

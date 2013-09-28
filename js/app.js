@@ -75,6 +75,10 @@ RT.App = function() {
         }
         ;
     }, self);
+    self.isMobileBrowser = ko.computed(function(){
+        var a = navigator.userAgent || navigator.vendor || window.opera;
+        return /Mobi/.test(a);
+    });
     self.interactors = function() {
         var t = this, a = arguments[0] || {}, u = RTApp.user();
         t.items = ko.observableArray();
@@ -255,9 +259,9 @@ RT.App.prototype = {
             });
         }
     },
-    initLoginForm: function() {
+    initLoginForm: function(d,ev) {
         "use strict";
-        var t = this, cf = t.currentForm, C = RTC, P = C.processing, S = ko.utils.extend(C.CBSettings, {
+        var t = this, e = RTC.elementFromEvent(ev), cf = t.currentForm, C = RTC, P = C.processing, S = ko.utils.extend(C.CBSettings, {
             width: "570px", height: "30%", href: RTC.getTemplate("login"), onComplete: function() {
                 cf(new RT.Forms.Login());
                 setTimeout(function() {
@@ -265,8 +269,10 @@ RT.App.prototype = {
                 }, 15);
                 return $.colorbox.resize();
             }
-        });
-        if(t.isSmallerThanDefault()){
+        , onClosed: function(){
+            return $(e).find('i').removeClass("icon-spin icon-spinner").addClass("icon-signin");
+        }});
+        if(t.isMobileBrowser()){
             return window.location.href = t.loginRedirect();
         }
         t.hideListingsSearch();
@@ -1116,7 +1122,6 @@ RT.singleAttachment = function(currentAlbum) {
 //    });
     return self;
 };
-
 
 RT.ControllerMessages = function() {
     var self = this;

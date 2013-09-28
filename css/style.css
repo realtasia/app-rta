@@ -2137,10 +2137,14 @@ Info Content*/
     margin: 5px 0 5px 1px;
     padding: 5px 0;
     box-shadow: 1px 1px 1px #ddd;
-    border-top: 1px solid #eee;
-    border-left: 1px solid #eee;
+    border: 1px solid #eee;
 }
-
+.popin {
+background: #fff;
+padding: 15px;
+box-shadow: 0 0 5px #ddd;
+border-radius: 2px;
+}
 .infoContent .control-group {
     background-color: #fff;
     margin: 0;

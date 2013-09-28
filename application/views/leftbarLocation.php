@@ -5,11 +5,13 @@
                 <i class="hovercards" data-bind="attr:{class:cpIconClass()}"></i>
             </div>
         </div>
-        <!--ko if : user-->
-        <div class="createListing" style="display:none" data-bind="visible:user().isAdmin || user().isAgent">
-            <a href="#"><i class="action16 plusCircleBG"></i><span class="hidden-phone">&nbsp;Create Listing</span></a>
+        <div class="visible-desktop">
+            <!--ko with : user-->
+            <div class="createListing" style="display:none" data-bind="flash:canPostListings">
+                <a href="#" data-bind="click:$parent.initListings.bind($parent)" class="responsiveIconLink"><i class="icon-list"></i><span style="text-transform: capitalize;font-variant: small-caps">&nbsp;New Listing</span></a>
+            </div>
+            <!--/ko-->
         </div>
-        <!--/ko-->
         <div class="outerBox">
             <div class="contentArea newWidgetContentBG">
                 <nav class="tabbable tabs-left">
@@ -17,7 +19,7 @@
                         <?php if (isset($links['Feed'])): ?>
                             <li data-bind="css : {active : ca() === 'feed'}, hoverClass: 'hovering'">
                                 <a id="sidenavFeed" href="<?php echo $links['Feed']; ?>">
-                                    <i class="info16 feed"></i><span class="hidden-phone">&nbsp;Feed</span>
+                                    <i class="sideNavIcon icon-list-alt"></i><span class="hidden-phone">&nbsp;Feed</span>
                                 </a>
                             </li>
                         <?php endif; ?>
@@ -54,13 +56,13 @@
                         <?php if (isset($links['Reviews'])): ?>
                             <li data-bind="css : {active : ca() === 'reviews'}, hoverClass: 'hovering'">
                                 <a id="sidenavTestimonials" href="<?php echo $links['Reviews']; ?>">
-                                    <i class="info16 itestimonial"></i>&nbsp;Reviews</a>
+                                    <span class="sideNavIcon"><i class="icon-user"></i><i class="icon-comment-alt superscript"></i></span><span>&nbsp;Reviews</span></a>
                                 </a>
                             </li>
                         <?php endif; ?>
                         <?php if (isset($links['Listings'])): ?>
                             <li data-bind="hoverClass: 'hovering'">
-                                <a id="sidenavListings" href="<?php echo $links['Listings']; ?>"><i class="info16 listings"></i>&nbsp;
+                                <a id="sidenavListings" href="<?php echo $links['Listings']; ?>"><i class="sideNavIcon icon-list"></i>
                                     <span class="hidden-phone">Listings</span>&nbsp;
                                     <span data-bind="text:cp().counts.listings" class="badge hidden-phone"><?php echo $cp['counts']['listings'] ?></span></a>
                             </li>

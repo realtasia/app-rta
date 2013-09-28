@@ -1,10 +1,3 @@
-<head>
-    <link rel="stylesheet" type="text/css" href="http://jjpc.net/common/css/final/css/jquery-ui-boostrap.css" />
-    <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/icons.css" />
-    <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/RTA.css" />
-    <link rel="stylesheet" type="text/css" href="http://beta.jjpc.net/css/style.css" />
-</head>
 <section class="RTAWindow clearfix" id="locationForm" style="margin:0 auto;height:auto">
     <header class="titleBar">
         <div class="contentArea titleBarBG">
@@ -30,23 +23,36 @@
                     </fieldset>
                     <br>
                     <fieldset>
-                        <legend><small>Modify Estate</small></legend>
-                        <h5 data-bind="ifnot: $data.changeEstate">
-                            <span data-bind="text: $data.parent && $data.parent.name() || $data.estate()"></span>
+                        <legend style="margin-bottom:5px;"><small>Modify Estate</small></legend>
+                        <!--ko ifnot: $data.changeEstate-->
+                        <h5>
+                            <span data-bind="text: $data.computedEstate"></span>
                             <small><a href="#"  style="padding-left:10px" data-bind="reverse: $data.changeEstate"><i class="icon-edit-sign"></i> Change</a></small>
                         </h5>
+                        <!--/ko-->
                         <div data-bind="if: $data.changeEstate">
                             <small class="text-warning">
-                                <i class="icon-warning-sign"></i> Changing the Estate name will affect all 'child' locations within the Estate.
+                                <i class="icon-warning-sign"></i> Changing Estate will affect all 'child' locations within itself.
                                 <a href="#" data-bind="reverse: $data.changeEstate"><i class="icon-ban-circle"></i>  Cancel</a>
                             </small>
-                            <input type="text" data-bind="value: $data.parent && $data.parent.name() || $data.estate()" name="estate" placeholder="Estate">
+                            <input type="text" data-bind="value: $data.computedEstate, valueUpdate:'afterkeydown'" name="estate" placeholder="Estate">
                         </div>
                     </fieldset>
                     <input type="hidden" data-bind="value:type" name="type" placeholder="Type">
-                    <div data-bind="if: $data.create">
-                        <button type="submit" data-bind="click:$data.create" class="btn">Save</button>
+                    <!--ko if: $data.create-->
+                    <div class="btn-toolbar">
+                        <div class="btn-group">
+                            <button type="submit" data-bind="click:$data.create" class="btn">
+                                <span data-bind="text:$data.saveLabel"></span>
+                            </button>
+                        </div>
+                        <!--ko if: $data.saveTime-->
+                        <div class="btn-group">
+                            <button class="alert" style="margin-bottom:0;padding:4px;cursor:default" disabled="disabled"><span>saved <span data-bind="timeago:$data.saveTime"></span></span></button>
+                        </div>
+                        <!--/ko-->
                     </div>
+                    <!--/ko-->
                 </form>
             </div>
         </section>

@@ -59,7 +59,7 @@
         <article class="contentArea widgetContentBG relative location" data-bind="event: {mouseover: showPostSettings, mouseleave: hidePostSettings}">
             <!--ko if:$root.cuIsAdmin-->
             <div class="postSettings" data-bind="visible:postSettings">
-                <div style="margin-right:10px;font-size:90%"><a href="#" class="ael">edit location</a> | <a href="#" class="aee">edit estate</a></div>
+                <div style="margin-right:10px;font-size:90%"><a href="#" class="ael">edit location</a></div>
             </div> <!-- post settings -->
             <!--/ko-->
             <section class="media">
@@ -78,7 +78,7 @@
                     <ul class="unstyled" style="font-size:90%;">
                         <li><strong>Estate</strong><a href="#" data-bind="attr:{href:$data.parent.uri}, text:$data.parent.name"></a></li>
                         <!--ko if:$data.property_type-->
-                        <li><strong>Property Type</strong></dt><dd><a href="#" data-bind="text:property_type"></a></li>
+                        <li><strong>Property Type</strong> <a href="#" data-bind="text:property_type"></a></li>
                             <!--/ko-->
                         <li><strong>Listings</strong><a data-bind="text:counts.listings, attr:{href : uri() + '/listings'}"></a></li>
                         <li><strong>Last Active</strong><time data-bind="timeago:$data.modified || $data.created"></time></li>

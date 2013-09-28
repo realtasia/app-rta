@@ -414,7 +414,7 @@ abstract class Controller_Auth extends Controller_Template {
             {
                 array_unshift($menus, [
                     'title' => 'Home',
-                    'url'   => $this->cu->uri,
+                    'url'   => $this->cu->uri . '?ref=home',
                     'icon'   => 'icon-home',
                     'attrs' => [
                         'class' => strpos(Request::initial()->url(), $this->cu->uri) !== false ? 'active' : '',
