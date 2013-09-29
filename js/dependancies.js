@@ -127,11 +127,11 @@ RT.Com = {
                 return "http://" + this.picture().replace(this.user._id(), this.user._id() + "/" + s);
             }
             return null;
-        },
-                found = getPicBySize.call(this, s);
+        },found = getPicBySize.call(this, s);
         if(found){
             i = new Image();
             i.width = s;
+            i.height = s;
             i.alt = "Album Thumbnails";
             i.src = found;
             return $(i)[0].outerHTML;
@@ -670,6 +670,9 @@ RT.Com = {
         mobile: {
             invalid: {message: "Please enter a valid Singapore Mobile number"},
             notUnique: {message: "This number has already been registered."}
+        },
+        device: {
+            noMobileListings: '<p><i class="icon-lightbulb"></i> Oops!<br><small><b>Edit</b> or <b>Create</b> listings on your Desktop or Notebook computer.</small></p>'
         }
     }
 };

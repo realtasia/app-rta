@@ -6,7 +6,7 @@
             <h4><i class="icon-magic"></i> Listing Wizard</h4>
         </div>
     </header>
-    <section class="RTAWindowContainer">
+    <section class="RTAWindowContainer" style="overflow-y:auto">
         <section class="RTAWindowContent noSidebar relative">
             <section class="relative">
                 <nav class="windowMenuBar" data-bind="visible:!confirmCancel()">
@@ -319,7 +319,8 @@
 </script> <!--listing attachment-->
 
 <script type="text/html" id="smallNail">
-<li class="listingNail smallNail" data-bind="css:{blue:_id() === $root.selectedCoverId()}"><div class="thumbnail">
+<li class="listingNail smallNail" data-bind="css:{blue:_id() === $root.selectedCoverId()}">
+    <div class="thumbnail">
         <a href="#" data-bind="html:getAttachmentThumb(40), click:$root.selectCover" style="width:35px;height:35px"></a>
     </div>
 </li>
@@ -334,11 +335,10 @@
             <a href="#" style="margin-top:25%;text-align: center;font-size: 1.5em;display:block">&larr; Back to Albums</a>
         </li>
         <!--ko serverForEach : {name : 'selectablePicture', foreach: selectedAlbum().attachments, afterRender:$parent.resize}--><!--/ko-->
-        <li data-bind="RTModal:selectedAlbum().slideShow"></li>
         <!--ko if:selectedAlbum().hasNextPage-->
         <li class="hasHoverButtons clearfix" style="width:110px">
             <div class="thumbnail relative clearfix" style="cursor: pointer;">
-                <a href="#" id="loadAttachments" style="width:110px;text-align: center;font-size: 2em;display:block;margin-top:25%">Load More</a>
+                <a href="#" style="width:110px;text-align: center;font-size: 2em;display:block;margin-top:25%">Load More</a>
             </div>
         </li>
         <!--/ko-->
@@ -367,12 +367,10 @@
          title:excerpt,rel:$parent._id
          }">
         <div class="selectable-inner" data-bind="css:{blue:isSelected}">
-            <!--<input type="checkbox" data-bind="checked:isSelected,click:$root.addToSelected,clickBubble:false">-->
-            <!--<input type="checkbox" data-bind="visible:!isSelected()">-->
-            <i class="icon-plus" data-bind="visible:!isSelected()"></i>
-            <i class="icon-ok" data-bind="visible:isSelected"></i>
+            <i class="icon-check-empty" data-bind="visible:!isSelected()"></i>
+            <i class="icon-check" data-bind="visible:isSelected"></i>
         </div>
-        <span data-bind="html:getAttachmentThumb()"></span>
+        <span data-bind="html: getAttachmentThumb()"></span>
     </div>
 </li>
 </script><!--selectable picture-->
@@ -470,7 +468,7 @@
     <h5 style="margin:0"><i class="icon-ok"></i> Success! <small class="text-success"> Your listing was successfully posted.</small></h5>
     <div class="btn-toolbar">
         <div class="btn-group">
-             <button class="btn" data-bind="enable: hasChanges()"><i class="icon-ok"></i> Saved</button>
+            <button class="btn" data-bind="enable: hasChanges()"><i class="icon-ok"></i> Saved</button>
             <button class="btn" data-bind="enable: !savedButHasChanges()"><i class="icon-off"></i> Exit</button>
         </div>
     </div>
@@ -479,7 +477,7 @@
 <div class="outerBox" data-bind="with:serverVals">
     <article class="contentArea widgetContentBG relative media listing">
         <div class="pull-left">
-            <a href="" class="thumbnail"><img data-bind="attr:{src:$parent.getSelectedPicture}"></a>
+            <a href="#" data-bind="html:$parent.getSelectedPicture"></a>
             <div class="mediaThumbLinks">
                 <span class="thumbInfo"><a href="#" class="text-center" style="display: block">View details</a></span>
             </div>

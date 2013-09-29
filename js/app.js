@@ -388,8 +388,12 @@ RT.App.prototype = {
     },
     initListings: function() {
         "use strict";
-        var t = this, cf = t.currentForm, C = RTC, P = C.processing, cp = t.cp(),
-                u = t.user(), S = ko.utils.extend(C.CBSettings, {
+        var t = this, cf = t.currentForm, C = RTC, P = C.processing, cp = t.cp(), u = t.user(), S;
+        cf(null);
+        if(t.isMobileBrowser()){
+            return $.bootstrapGrowl(RTC.Validation.device.noMobileListings, {type: 'warning'});
+        }
+        S = ko.utils.extend(C.CBSettings, {
             width: "980px", href: RTC.getTemplate("listingWizard"),
             height: "auto", overlayClose:false,escKey:false,
             onComplete: function() {
@@ -408,7 +412,6 @@ RT.App.prototype = {
                 return cf().resize();
             }
         });
-        cf(null);
         if(u && !P && u.canPostListings()){
             P = !0;
             return $.colorbox(S);
@@ -2179,17 +2182,20 @@ RT.Listing = function() {
     };
     t.startEditing = function() {
         "use strict";
-        var t = this, cf = RTApp.currentForm, C = RTC, P = C.processing,
-                u = RTApp.user(), S = ko.utils.extend(C.CBSettings, {
-            width: "980px", href: RTC.getTemplate("listingWizard"),
-            height: "auto", overlayClose:false, escKey:false}), promise;
+        var t = this, cf = RTApp.currentForm, C = RTC, P = C.processing, u = RTApp.user(), S, promise;
         cf(null);
+        if(RTApp.isMobileBrowser()){
+            return $.bootstrapGrowl(RTC.Validation.device.noMobileListings, {type: 'warning'});
+        }
+        S = ko.utils.extend(C.CBSettings, {
+            width: "980px", href: RTC.getTemplate("listingWizard"),
+            height: "auto", overlayClose:false, escKey:false})
         t.fullContent();
         if(u && !P && u.canPostListings() && u._id() === t.user._id()){
             P = !0;
             // populate addedMedia to full objects -> it returns a deferred
             promise = t.populateAddedMedia();
-            // when populated define the onComplete and start colorbox
+            // when populated, define the onComplete and start colorbox
             promise.done(function(){
                 S.onComplete = function(){
                     var fl, f, tl = t.listing, unit = tl.unit(), uarray;
@@ -2204,24 +2210,26 @@ RT.Listing = function() {
                     });
 
                     // this must be set to true
-                    f.editing(true);
+                    f.editing(!0);
+                    // reset this var because hasChanges will computed to yes
+                    f.hasChanges(false);
                     // add the populated attachments to form
                     f.addedMedia(t.addedMedia());
                     // set the subtype
                     f.subtype(t.page.subtype());
+
                     // add listing details
-                    fl.rooms(tl.rooms());
+                    RTC.forEach(['rooms', 'price', 'cov', 'cobroke', 'baths', 'valuation', 'property_type'], function(i){
+                        return fl[i](tl[i]());
+                    });
                     fl.builtSize(tl.built_size());
                     fl.landSize(tl.land_size());
-                    fl.price(tl.price());
-                    fl.cov(tl.cov());
-                    fl.cobroke(tl.cobroke());
-                    fl.baths(tl.baths());
-                    fl.valuation(tl.valuation());
-                    fl.address(t.address());
-                    fl.page(ko.toJS(t.page));
-                    fl.page_parent(ko.toJS(t.page_parent));
-                    fl.property_type(ko.toJS(tl.property_type));
+                    
+                    // these are listings params but set in the parent object
+                    RTC.forEach(['address', 'page', 'page_parent', 'showAddress'], function(i){
+                        return fl[i](ko.toJS(t[i]()));
+                    });
+
                     // this is an array if the property for this listing is not landed
                     if(uarray.length > 1){
                         fl.unit.floor(uarray[0]);
@@ -2229,9 +2237,6 @@ RT.Listing = function() {
                     } else {
                         fl.unitIsAddress(true);
                     }
-                    // other properties
-                    f.showAddress(t.showAddress());
-                    f.hasChanges(false);
 
                     ko.applyBindings(cf(), document.getElementById("listingCreationWizard"));
                     return cf().resize();
@@ -2316,6 +2321,7 @@ RT.Attachment = function() {
                     'aria-labelledby': 'Placeholder Image'
                 });
             } else if (t.hasOwnProperty("picture") && t.picture()) {
+                var p = t.picture();
                 i = $(RTC.NewDom("img"));
                 a.length === 0 && (a = 110);
                 i.css({
@@ -2323,7 +2329,7 @@ RT.Attachment = function() {
                     width: a
                 });
                 i.attr({
-                    src: "//" + t.picture().replace(t.user._id(), t.user._id() + "/" + a),
+                    src: "//" + p.replace(t.user._id(), t.user._id() + "/" + a),
                     alt: t.excerpt() || t.name() || "Attachment Thumbnail",
                     height: a,
                     width: a,
@@ -2526,8 +2532,13 @@ RT.Library = function(params) {
     RTC.MakeObsFromArray.call(this, o);
     var self = this;
     self.mediaCount = ko.computed(function() {
-        var c = this.counts;
-        return c && c.documents() + c.pictures() + c.videos();
+        var c = this.counts, ret = 0;
+        RTC.forEach(['documents', 'pictures', 'videos'], function(k){
+            if(c.hasOwnProperty(k) && typeof c[k] === 'function'){
+                ret += c[k]();
+            }
+        })
+        return ret;
     }, self);
     self.albumCount = ko.computed(function() {
         var c = this.counts && this.counts.albums;
@@ -3704,7 +3715,6 @@ RT.Forms = {
         };
         T.publish = function(d, e) {
             "use strict";
-            console.log("Got here")
             var p = {JSON: ko.toJSON(T.toJS())},
                     sv = T.serverVals,
                     a = RTApp,
@@ -3841,16 +3851,9 @@ RT.Forms = {
             return ci < T.steps().length - 1;
         });
         T.getSelectedPicture = ko.computed(function(){
-            var p = this.picture(), url, id = RTApp.user()._id();
-            if(!p)
-                return false;
-
-            url = p.picture().replace(id, id + "/" + 150);
-            if(url){
-                return "//" + url;
-            }
-
-        }, T);
+            var t = this, p = t.picture() ? t.picture().picture : t.picture;
+            return RTC.GetThumbnail.call({picture:p, user:RTApp.user()}, 150);
+        }, T).extend({throttle:1});
         T.picture.subscribe(function(v){
             var t = this, sv = t.serverVals();
             if(!sv)

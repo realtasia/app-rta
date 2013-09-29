@@ -40,7 +40,7 @@
                             <span class="pull-left">
                                 <img alt="LoginThumb" width="40" height="40" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" id="navBarProfilePhoto" data-bind="getAvatar : {context : $data, size : 40}">
                             </span>
-                            <a id="accountLink" class="media-body" data-bind="href : uri() + '?ref=accountLink'">
+                            <a id="accountLink" class="media-body" data-bind="href : uri() + '/?ref=accountLink'">
                                 Hello <span data-bind="text:name"></span>
                             </a>
                         </div>
