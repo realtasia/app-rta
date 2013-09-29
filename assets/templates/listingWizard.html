@@ -3,10 +3,10 @@
     <header class="titleBar">
         <div class="contentArea titleBarBG">
             <button type="button" class="close" aria-hidden="true" data-bind="click : cancel">&times;</button>
-            <h4><i class="icon-magic"></i> Listing Wizard</h4>
+            <h4><i class="icon-magic"></i> Listing Wizard </h4>
         </div>
     </header>
-    <section class="RTAWindowContainer" style="overflow-y:auto">
+    <section class="RTAWindowContainer" id="listingCreationContent" style="overflow-y:auto">
         <section class="RTAWindowContent noSidebar relative">
             <section class="relative">
                 <nav class="windowMenuBar" data-bind="visible:!confirmCancel()">
@@ -469,7 +469,7 @@
     <div class="btn-toolbar">
         <div class="btn-group">
             <button class="btn" data-bind="enable: hasChanges()"><i class="icon-ok"></i> Saved</button>
-            <button class="btn" data-bind="enable: !savedButHasChanges()"><i class="icon-off"></i> Exit</button>
+            <button class="btn" data-bind="enable: !savedButHasChanges(), click:window.location.reload"><i class="icon-off"></i> Exit</button>
         </div>
     </div>
 </div>

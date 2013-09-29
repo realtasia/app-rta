@@ -394,7 +394,7 @@ RT.App.prototype = {
             return $.bootstrapGrowl(RTC.Validation.device.noMobileListings, {type: 'warning'});
         }
         S = ko.utils.extend(C.CBSettings, {
-            width: "980px", href: RTC.getTemplate("listingWizard"),
+            width: "980px", href: RTC.getTemplate("listingWizard"),top:10,
             height: "auto", overlayClose:false,escKey:false,
             onComplete: function() {
                 cf(new RT.Forms.Listing());
@@ -2188,7 +2188,7 @@ RT.Listing = function() {
             return $.bootstrapGrowl(RTC.Validation.device.noMobileListings, {type: 'warning'});
         }
         S = ko.utils.extend(C.CBSettings, {
-            width: "980px", href: RTC.getTemplate("listingWizard"),
+            width: "980px", href: RTC.getTemplate("listingWizard"), top:10,
             height: "auto", overlayClose:false, escKey:false})
         t.fullContent();
         if(u && !P && u.canPostListings() && u._id() === t.user._id()){
@@ -2210,9 +2210,7 @@ RT.Listing = function() {
                     });
 
                     // this must be set to true
-                    f.editing(!0);
-                    // reset this var because hasChanges will computed to yes
-                    f.hasChanges(false);
+                    f.editing(true);
                     // add the populated attachments to form
                     f.addedMedia(t.addedMedia());
                     // set the subtype
@@ -2220,16 +2218,14 @@ RT.Listing = function() {
 
                     // add listing details
                     RTC.forEach(['rooms', 'price', 'cov', 'cobroke', 'baths', 'valuation', 'property_type'], function(i){
-                        return fl[i](tl[i]());
-                    });
-                    fl.builtSize(tl.built_size());
-                    fl.landSize(tl.land_size());
-                    
-                    // these are listings params but set in the parent object
-                    RTC.forEach(['address', 'page', 'page_parent', 'showAddress'], function(i){
-                        return fl[i](ko.toJS(t[i]()));
+                        fl[i](tl[i]());
                     });
 
+                    fl.builtSize(tl.built_size());
+                    fl.landSize(tl.land_size());
+                    fl.address(t.address());
+                    fl.page(ko.toJS(t.page));
+                    fl.page_parent(ko.toJS(t.page_parent));
                     // this is an array if the property for this listing is not landed
                     if(uarray.length > 1){
                         fl.unit.floor(uarray[0]);
@@ -2237,6 +2233,9 @@ RT.Listing = function() {
                     } else {
                         fl.unitIsAddress(true);
                     }
+                    // other properties
+                    f.showAddress(t.showAddress());
+                    f.hasChanges(false);
 
                     ko.applyBindings(cf(), document.getElementById("listingCreationWizard"));
                     return cf().resize();
@@ -3757,9 +3756,20 @@ RT.Forms = {
             var t = this, cs = t.currentStep, cps = cs() + 1;
             return cps <= t.totalSteps && cs(cps) && t.completedSteps.push(cps);
         };
-        T.resize = function() {
-            return RTC.CB.resize() && jQuery('.windowMenuBar td').width('20%');
+        T.resize = function(){
+            var pc = $("#listingCreationContent"), pp = $("#listingCreationWizard"),
+                iH = pp.innerHeight(), o = pp.offset().top,
+                w = RTApp.viewport.height, wmb = $('.windowMenuBar td'), nH;
+            if(w() >= iH){
+                return RTC.CB.resize() && wmb.width('20%');
+            }
+            nH = w() - (o/2);
+
+            pc.css("maxHeight", nH);
+            pp.css("maxHeight", nH);
+            RTC.CB.resize({height:nH}) && wmb.width('20%');
         };
+
         T.reload = function() {
             return $.fn.colorbox.load();
         };
