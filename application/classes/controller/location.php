@@ -80,13 +80,15 @@ class Controller_Location extends Controller_Auth {
             'access_token' => $this->token()
         ]);
         $data = $req->get_data();
+        //die(Debug::vars($data));
         if(!empty($data))
         {
-            $this->cp['geo'] = $data[0];
+            $this->cp['geo'] = $data[0]['geo'];
+            $this->cp['address'] = $data[0]['address'];
             $this->cp["geo_search"] = $data;
             return;
         }
-        $this->cp["geo_search"] = $this->cp['geo'] = [];
+        $this->cp["geo_search"] = [];
     }
 
     public function action_locations()

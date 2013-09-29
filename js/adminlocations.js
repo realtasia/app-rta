@@ -514,7 +514,7 @@ RT["Admin"]['editableTemplate'] = function(params) {
     self.text.subscribe(function(v) {
         return v && self.stopEditing();
     });
-}
+};
 
 RT["Admin"]['Location'] = function(p) {
     p = p || {};

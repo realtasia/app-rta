@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-28 12:01:59 
+   Compiled at: 2013-09-29 01:41:30 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -694,41 +694,43 @@ RT["handlers"] = {
         }
     },
     map: {
-            update: function (element, valueAccessor) {
+            init: function (element, valueAccessor) {
                 if(typeof google === 'undefined')
                     return;
                 google.maps.visualRefresh = true;
                 var mapObj = ko.unwrap(valueAccessor()),
-                        latLng = new google.maps.LatLng( ko.unwrap(mapObj.geo.lat),ko.unwrap(mapObj.geo.lon)),
+                        latLng = new google.maps.LatLng( ko.unwrap(mapObj.lat),ko.unwrap(mapObj.lon)),
                         mapOptions = { center: latLng, zoom: 12, mapTypeId: google.maps.MapTypeId.ROADMAP};
 
-                mapObj.googleMap = new google.maps.Map(element, mapOptions);
+                this.googleMap = new google.maps.Map(element, mapOptions);
 
-                mapObj.marker = new google.maps.Marker({
-                    map: mapObj.googleMap,
+                this.marker = new google.maps.Marker({
+                    map: this.googleMap,
                     position: latLng,
-                    title: mapObj.address(),
-                    draggable: true
+                    title: 'address', //mapObj.address(),
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
                 });
 
-                mapObj.onChangedCoord = function(newValue) {
-                    var latLng = new google.maps.LatLng(
-                        ko.unwrap(mapObj.geo.lat),
-                        ko.unwrap(mapObj.geo.lon));
-                    mapObj.googleMap.setCenter(latLng);
-                };
+                this.onChangedCoord = function(newValue) {
+                    var latLng = new google.maps.LatLng( ko.unwrap(mapObj.lat), ko.unwrap(mapObj.lon));
+                        this.marker.setPosition(latLng);
+                        this.googleMap.setCenter(latLng);
+                }.bind(this);
 
-                mapObj.onMarkerMoved = function(dragEnd) {
-                    var latLng = mapObj.marker.getPosition();
-                    mapObj.geo.lat(latLng.lat());
-                    mapObj.geo.lon(latLng.lng());
-                };
+                this.onMarkerMoved = function(dragEnd) {
+                    var latLng = this.marker.getPosition();
+                    mapObj.lat(latLng.lat());
+                    mapObj.lon(latLng.lng());
+                }.bind(this);
 
-                mapObj.lat.subscribe(mapObj.onChangedCoord);
-                mapObj.lon.subscribe(mapObj.onChangedCoord);
+                    mapObj.lat && mapObj.lat.subscribe(this.onChangedCoord);
+                    mapObj.lon && mapObj.lon.subscribe(this.onChangedCoord);
 
-                google.maps.event.addListener(mapObj.marker, 'dragend', mapObj.onMarkerMoved);
-                $(element).data("mapObj",mapObj);
+
+                google.maps.event.addListener(this.marker, 'dragend', this.onMarkerMoved);
+
+                //$(element).data("mapObj",mapObj);
             }
         },
     flash: {
@@ -1863,7 +1865,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-28 12:01:59 
+   Compiled at: 2013-09-29 01:41:30 
 ================================ */
 RT.App = function() {
     "use strict";
