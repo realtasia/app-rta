@@ -53,7 +53,10 @@ class Api_Request extends Api {
     public static function executeDirect(\Request $request)
     {
         $request->headers('Accept-Encoding', 'gzip, deflate');
+
         $r = $request->execute();
+		// if(strpos($request->uri(), 'auth') === false)
+			// die(Debug::vars(gzdecode($r)));
         try
         {
             return gzdecode($r);

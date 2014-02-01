@@ -24,9 +24,10 @@
     </section> <!--  theLoop -->
 </section>
 <!--/ko-->
-<script type="text/html" id="jsPostBox">
+<script type="text/html" id="jsPostBox"> 
+	
     <div class="navbar navbar-responsive" style="border:1px solid #ddd">
-        <div class="navbar-inner relative clearfix" style="border-radius:0;padding:5px;min-height:33px" data-bind="with:$root.postForm">
+        <div class="navbar-inner relative clearfix" style="border-radius:0;padding:5px;min-height:33px;border: 1px solid #fff;" data-bind="with:$root.postForm">
             <form style="margin:0;padding:0" class=" relative clearfix">
                 <div style="position:absolute;width:35px;left:0;height:100%;margin-right: -6px;padding-bottom: 4px;" data-bind="visible:!RTApp.cpIsCu()">
                     <a class="btn centralize btnPostType" data-bind="click:togglePostType, title:'Click to choose between sharing an update & writing a testimonial'">

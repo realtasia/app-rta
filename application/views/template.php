@@ -80,7 +80,7 @@
             echo isset($cp) ? 'RT.cp="' . base64_encode(json_encode($cp)) . '";' : '';
             echo isset($cl) ? 'RT.cl="' . base64_encode(json_encode($cl)) . '";' : '';
             ?></script>
-        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC6-y0MkWb9eaFLz_HWMQlWhtgo-HAtDEE&sensor=true"></script>
+        <!-- <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC6-y0MkWb9eaFLz_HWMQlWhtgo-HAtDEE&sensor=true"></script> -->
             <?php
             //if ( ! Fragment::load('assets', Date::YEAR, true)):
             echo Assets::factory('deps')

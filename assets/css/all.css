@@ -1,5 +1,5 @@
 /* File: assets/css/jquery-boostrap.css
-   Compiled at: 2013-09-28 12:05:38 
+   Compiled at: 2014-02-01 17:46:16 
 ================================ */
 /*! jQuery UI - v1.10.3 - 2013-07-26
 * http://jqueryui.com
@@ -49,7 +49,7 @@
 .mCS-dark-thin>.mCSB_scrollTools .mCSB_draggerRail{background:#000;background:rgba(0,0,0,0.15)}.mCS-dark-thin>.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{width:2px;background:#000;background:rgba(0,0,0,0.75)}.mCS-dark-thin.mCSB_horizontal>.mCSB_scrollTools .mCSB_draggerRail{width:100%}.mCS-dark-thin.mCSB_horizontal>.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{width:100%;height:2px;margin:7px auto}.mCS-dark-thin>.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar{background:rgba(0,0,0,0.85)}.mCS-dark-thin>.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar,.mCS-dark-thin>.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar{background:rgba(0,0,0,0.9)}
 
 /* File: assets/css/RTA.css
-   Compiled at: 2013-09-28 12:05:38 
+   Compiled at: 2014-02-01 17:46:16 
 ================================ */
 /*[fmt]0*/
 /*Document   : RTA
@@ -536,7 +536,7 @@ Search Box Area*/
     opacity: 0.3;
 }
 
-.superscript{font-size:xx-small; vertical-align:top !important;display:inline-block;line-height: 1 !important;margin-left:-1px}
+.superscript{font-size:xx-small; vertical-align:top !important;display:inline-block !important;line-height: 1 !important;margin-left:-1px}
 
 #wraparound {
     color: #6A6340;
@@ -1518,7 +1518,7 @@ html {
 }
 
 /* File: assets/css/style.css
-   Compiled at: 2013-09-28 12:05:38 
+   Compiled at: 2014-02-01 17:46:16 
 ================================ */
 /*Document   : Style
 Created on : Sep 12, 2012, 7:50:34 PM
@@ -3214,6 +3214,18 @@ BUTTON.close {
 #theLoop .postTitle > A, #rtModal .postTitle > A{
     font-weight: bold;
     color: #F37400;
+}
+
+#theLoop .alert {
+	margin:10px auto;
+}
+
+#theLoop .postFeed .alert {
+	margin:auto !important;
+}
+
+#theLoop .alert a{
+	color: #368AC9;
 }
 
 .postActionButtons,.postActionInfo,.postComments,.commentInline,.newPostButtons,.newPostMediaButtons,.membersInline {
@@ -5834,7 +5846,7 @@ a.RTNotify i{ color:#555}
 BODY{display:inherit !important;}
 
 /* File: assets/css/font-awesome.min.css
-   Compiled at: 2013-09-28 12:05:38 
+   Compiled at: 2014-02-01 17:46:16 
 ================================ */
 @font-face{font-family:'FontAwesome';src:url('/fonts/fontawesome-webfont.eot?v=3.2.0');src:url('/fonts/fontawesome-webfont.eot?#iefix&v=3.2.0') format('embedded-opentype'),url('/fonts/fontawesome-webfont.woff?v=3.2.0') format('woff'),url('/fonts/fontawesome-webfont.ttf?v=3.2.0') format('truetype'),url('/fonts/fontawesome-webfont.svg#fontawesomeregular?v=3.2.0') format('svg');font-weight:normal;font-style:normal;}[class^="icon-"],[class*=" icon-"], .ui-icon{font-family:FontAwesome;font-weight:normal;font-style:normal;text-decoration:inherit;-webkit-font-smoothing:antialiased;*margin-right:.3em;}
 [class^="icon-"]:before,[class*=" icon-"]:before{text-decoration:inherit;display:inline-block;cursor:default;speak:none;}
@@ -6241,7 +6253,7 @@ a .icon-rotate-90:before,a .icon-rotate-180:before,a .icon-rotate-270:before,a .
 
 
 /* File: assets/css/icons.css
-   Compiled at: 2013-09-28 12:05:38 
+   Compiled at: 2014-02-01 17:46:17 
 ================================ */
 /*[fmt]0*/
 /*Document   :Icons

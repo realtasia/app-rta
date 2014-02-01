@@ -1694,6 +1694,18 @@ BUTTON.close {
     color: #F37400;
 }
 
+#theLoop .alert {
+	margin:10px auto;
+}
+
+#theLoop .postFeed .alert {
+	margin:auto !important;
+}
+
+#theLoop .alert a{
+	color: #368AC9;
+}
+
 .postActionButtons,.postActionInfo,.postComments,.commentInline,.newPostButtons,.newPostMediaButtons,.membersInline {
     list-style: none;
     vertical-align: top;

@@ -4998,9 +4998,6 @@ jQuery(document).ready(function($) {
             .on("click", ".person-info-guide > .close", function() {
         $(this).parent().fadeOut();
     })
-//            .on("mouseenter", '.hasHoverButtons', function() {
-//                $(this).find('.imageBar').fadeIn();
-//            })
             .on("mouseenter", '.carousel', function() {
         $(this).find('.carousel-control').fadeIn();
     })

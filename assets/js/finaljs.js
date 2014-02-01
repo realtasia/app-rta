@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2013-09-29 16:11:26 
+   Compiled at: 2014-01-30 12:42:37 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1868,7 +1868,7 @@ RT["handlers"] = {
 })(ko, RT, jQuery);
 
 /* File: assets/js/app.js
-   Compiled at: 2013-09-29 16:11:26 
+   Compiled at: 2014-01-30 12:42:37 
 ================================ */
 RT.App = function() {
     "use strict";
@@ -6870,9 +6870,6 @@ jQuery(document).ready(function($) {
             .on("click", ".person-info-guide > .close", function() {
         $(this).parent().fadeOut();
     })
-//            .on("mouseenter", '.hasHoverButtons', function() {
-//                $(this).find('.imageBar').fadeIn();
-//            })
             .on("mouseenter", '.carousel', function() {
         $(this).find('.carousel-control').fadeIn();
     })

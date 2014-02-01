@@ -16,6 +16,9 @@ class Controller_Location extends Controller_Auth {
         parent::before();
         $slug          = trim($this->request->param('slug'));
         $this->subtype = trim($this->request->param('subtype'));
+		
+
+		
         if (!$slug || empty($slug))
         {
             $this->request->redirect($this->request->referrer());
@@ -23,7 +26,13 @@ class Controller_Location extends Controller_Auth {
 
         $par = ['access_token' => $this->token()];
 
-        $response = Api::request('/page/index/' . $slug, $par);
+        $response = Api::request('/page/getBySlug/' . $slug, $par);
+
+		// die(Debug::vars([
+			// 'slug' => $slug,
+			// 'subtype' => $response
+// 		
+		// ]));
 
         $data = $response->get_data();
 

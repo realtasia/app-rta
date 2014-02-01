@@ -18,22 +18,22 @@
                     <ul class="nav nav-tabs">
                         <?php if (isset($links['Feed'])): ?>
                             <li data-bind="css : {active : ca() === 'feed'}, hoverClass: 'hovering'">
-                                <a id="sidenavFeed" href="<?php echo $links['Feed']; ?>">
+                                <a id="sidenavFeed" href="<?php echo Arr::get($links, "Feed"); ?>">
                                     <i class="sideNavIcon icon-list-alt"></i><span class="hidden-phone">&nbsp;Feed</span>
                                 </a>
                             </li>
                         <?php endif; ?>
                         <?php if (isset($links['Info'])): ?>
                             <li data-bind="css : {active : ca() === 'info'}, hoverClass: 'hovering'">
-                                <a id="sidenavInfo" href="<?php echo $links['Info']; ?>">
+                                <a id="sidenavInfo" href="<?php echo Arr::get($links, "Info"); ?>">
                                     <i class="sideNavIcon icon-info-sign"></i><span class="hidden-phone">&nbsp;Info</span>
                                 </a>
                             </li>
                         <?php endif; ?>
                         <?php if (isset($links['Locations'])): ?>
                             <li data-bind="css : {active : ca() === 'locations'}, hoverClass: 'hovering'">
-                                <a id="sidenavLocations" href="<?php echo $links['Locations']; ?>">
-                                    <i class="sideNavIcon icon-compass"></i><span class="hidden-phone">&nbsp;Locations</span><span data-bind="text:cp().counts.locations" class="badge hidden-phone"><?php echo $cp['counts']['locations'] ?></span>
+                                <a id="sidenavLocations" href="<?php echo Arr::get($links, 'Locations'); ?>">
+                                    <i class="sideNavIcon icon-compass"></i><span class="hidden-phone">&nbsp;Locations</span><span data-bind="text:cp().counts.locations" class="badge hidden-phone"><?php echo Arr::path($cp, 'counts.locations')?></span>
                                 </a>
                             </li>
                         <?php endif; ?>

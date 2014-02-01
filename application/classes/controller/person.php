@@ -55,6 +55,7 @@ class Controller_Person extends Controller_Auth {
 
             if (!$id)
             {
+            	die(Debug::vars($response::get_data()));
                 throw new HTTP_Exception_404('The requested URL :file does not exist', array(':file' => $this->request->uri()));
             }
 
