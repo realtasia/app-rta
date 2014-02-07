@@ -74,6 +74,10 @@ HR {
     margin: 5px 0 10px;
 }
 
+#vcardHelpBlock HR {
+	border-top:1px solid #f0c36d
+}
+
 .warningBorderColor {
     border-color: #EDBF67 !important;
 }

@@ -8,7 +8,7 @@
             </a>
             <span id="realtLogo">
                 <a href="/?ref=logo" class="brand" >
-                    <img alt="Realtasia Logo" src="http://static2.realtasia.com.sg/realtlogo6.png" width="160" height="34">
+                    <img alt="Realtasia Logo" src="http://static.realtasia.com.sg/realtlogo6.png" width="160" height="34">
                 </a>
             </span>
             <ul class="nav mainNavPhone hidden-desktop" style="font-size:110%">

@@ -8,7 +8,7 @@
 //  console.trace();
 //  return true;
 //};
-
+RT["PubSub"] = {};
 /**
  *  Lib:        Common Utilities
  *  Author:     Jason Nathan
@@ -492,50 +492,7 @@ RT.Com = {
         }
     },
     poll: function() {
-        var p = {url: '/poll'}, s = {}, data, RTC = RT["Com"],
-                cu = RTC.GetObsVal(window.RTApp.user),
-                cp = RTC.GetObsVal(window.RTApp.cp), i = [];
-        //RTC.log('at', p);
-        (s = new RTC.Get(s, p)) && s.done(function(r) {
-            if (RTC.isSuccess(r)) {
-                data = r.data || {};
-                //RTC.log('server', r.data);
-                //ko.mapping.fromJS(r.data, {create:RTC.CreateLoop}, t.user);
-                for (var p in r.data.counts) {
-                    //RTC.log('property', p)
-                    if ('testimonials' === p) {
-                        for (var a in r.data.counts[p]) {
-                            cu.counts[p][a](r.data.counts[p][a]);
-                        }
-                    } else {
-                        cu.counts[p](r.data.counts[p]);
-                    }
-
-                }
-                RT["Com"].forEach(r.data.subscribers, function(u) {
-                    i.push(RTC.MakeObjPropsObs(u));
-                });
-                cu.subscribers(i);
-                i = [];
-                RT["Com"].forEach(r.data.likers, function(u) {
-                    i.push(RTC.MakeObjPropsObs(u));
-                });
-                cu.likers(i);
-                if (cp && cp._id && cp._id() === cu._id()) {
-                    if (cp.lib) {
-                        cu.lib = cp.lib;
-                    }
-                    window.RTApp.cp(cu);
-                }
-                RTC.Renew();
-
-            }
-            //return RTC.log('polls', ko.toJS(cu));
-        }).always(function() {
-//            window['console']['log'] = function() {
-//            };
-            return cu && setTimeout(RTC.poll, 3e4);
-        });
+		return true;
     },
     arrGet: function($arr, $key, $default) {
         // likely this isn't an array but an object :-)
@@ -1310,9 +1267,51 @@ RT["handlers"] = {
     }
 };
 
+
+
+RT["Notify"] = function() {
+	var self = this, types = [
+		'notification', 'newMessage', 'currentUserUpdate'
+	];
+
+	self.onCurretnUserUpdate = function(data) {
+		var RTC = window.RTC || RT["Com"], currentUser = window.RTApp.user
+		// init a new user from given data
+		, tu = new RT.User(data), fo = {}, cu, cu_id, cp, cp_id;
+		for (var k in currentUser()) {
+			if (tu.hasOwnProperty(k)) {
+				fo[k] = tu[k];
+			} else {
+				fo[k] = currentUser()[k];
+			}
+		}
+
+		currentUser(fo);
+
+		cu = RTC.GetObsVal(currentUser);
+		cu_id = cu ? cu._id() : null;
+		cp = RTC.GetObsVal(window.RTApp.cp);
+		cp_id = cp ? cp._id() : null;
+
+		// if the current page happens to be the current user, then
+		// update the current page to be the current user (in any case,
+		// this is the logged in user.)
+		if (cp_id === cu_id) {
+			if (cp.lib) {
+				cu.lib = cp.lib;
+			}
+			window.RTApp.cp(cu);
+		}
+		RTC.Renew();
+	};
+
+};
+
+
+
 /**
  *  Runtime Function: jQuery & startup Defaults
- *  Author:     Jason Nathan
+ *  Author:	Jason Nathan
  *
  *  Sets some plugin defaults and some basic support checks
  *
@@ -1325,7 +1324,7 @@ RT["handlers"] = {
      * @param u the UL object to manipulate
      * @param i the item
      *
-     * returns bolded text in the lis of the ul
+     * returns bolded text in the list of the ul
      */
     $.ui.autocomplete.prototype._renderItem = function(u, i) {
         "use strict";
@@ -1554,6 +1553,52 @@ RT["handlers"] = {
             ko.cleanNode($node[0]);
         }
     };
+
+	//RT PubSub
+	(function(q) {
+	    var topics = {}, subUid = -1;
+	    q.subscribe = function(topic, func) {
+	        if (!topics[topic]) {
+	            topics[topic] = [];
+	        }
+	        var token = (++subUid).toString();
+	        topics[topic].push({
+	            token: token,
+	            func: func
+	        });
+	        return token;
+	    };
+	 
+	    q.publish = function(topic, args) {
+	        if (!topics[topic]) {
+	            return false;
+	        }
+	        setTimeout(function() {
+	            var subscribers = topics[topic],
+	                len = subscribers ? subscribers.length : 0;
+	 
+	            while (len--) {
+	                subscribers[len].func(args);
+	            }
+	        }, 0);
+	        return true;
+	 
+	    };
+	 
+	    q.unsubscribe = function(token) {
+	        for (var m in topics) {
+	            if (topics[m]) {
+	                for (var i = 0, j = topics[m].length; i < j; i++) {
+	                    if (topics[m][i].token === token) {
+	                        topics[m].splice(i, 1);
+	                        return token;
+	                    }
+	                }
+	            }
+	        }
+	        return false;
+	    };
+	}(RT.PubSub));	
 
     //RT Modal && ko binding RTModal
     (function() {

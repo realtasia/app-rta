@@ -121,32 +121,21 @@
             </div>
         </footer>
         <script type="text/javascript">
-            var analytics = analytics || [];
-            analytics.load = function(e) {
-            var t = document.createElement("script");
-            t.type = "text/javascript", t.async = !0, t.src = ("https:" === document.location.protocol ? "https://" : "http://") + "d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/" + e + "/analytics.js";
-            var n = document.getElementsByTagName("script")[0];
-            n.parentNode.insertBefore(t, n);
-            var r = function(e) {
-            return function() {
-            analytics.push([e].concat(Array.prototype.slice.call(arguments, 0)))
-            }
-            }, i = ["identify", "track", "trackLink", "trackForm", "trackClick", "trackSubmit", "pageview", "ab", "alias", "ready"];
-            for (var s = 0; s < i.length; s++)
-            analytics[i[s]] = r(i[s])
-            };
-            analytics.load(RT.APP_SERVER === "app.realtasia.com" ? "9pmcbdqqhz" : "ajjkg6zgwa");
-            window.Muscula = { settings:{
-            logId:"281c77d5-5402-4739-b4a0-33893b9f1678", suppressErrors: false, branding: 'none'
-            }};
-            (function () {
-            var m = document.createElement('script'); m.type = 'text/javascript'; m.async = true;
-            m.src = window.location.protocol + '//musculahq.appspot.com/Muscula.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
-            window.Muscula.run=function(c){eval(c);window.Muscula.run=function(){};};
-            window.Muscula.errors=[];window.onerror=function(){window.Muscula.errors.push(arguments);
-            return window.Muscula.settings.suppressErrors===undefined;}
-            })();
+			var analytics = analytics || [];
+			analytics.load = function(e) {
+				var t = document.createElement("script");
+				t.type = "text/javascript", t.async = !0, t.src = ("https:" === document.location.protocol ? "https://" : "http://") + "d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/" + e + "/analytics.js";
+				var n = document.getElementsByTagName("script")[0];
+				n.parentNode.insertBefore(t, n);
+				var r = function(e) {
+					return function() {
+						analytics.push([e].concat(Array.prototype.slice.call(arguments, 0)))
+					}
+				}, i = ["identify", "track", "trackLink", "trackForm", "trackClick", "trackSubmit", "pageview", "ab", "alias", "ready"];
+				for (var s = 0; s < i.length; s++)
+					analytics[i[s]] = r(i[s])
+			};
+			analytics.load(RT.APP_SERVER === "app.realtasia.com.sg" ? "9pmcbdqqhz" : "ajjkg6zgwa");
         </script>
     </body>
 </html>
