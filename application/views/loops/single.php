@@ -1,4 +1,6 @@
-<article class="media leftContent">
+<section class="contentArea centerContent" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet, opaque:RTC.processing}">
+<section id="theLoop" >
+<article class="media">
     <div class="pull-left thumbnail">
         <span style="width:50px" class=" ">
             <a href="/<?php $post['user']['_id']?>" title="Go to <?php echo $post['user']['name']?>'s profile page">
@@ -6,7 +8,7 @@
             </a>
         </span>
     </div> <!-- post profile thumb -->
-    <div class="media-body" id="theLoop">
+    <div class="media-body">
         <div class="postTitle">
             <a href="/<?php echo $post['user']['_id'] ?>" class="personHoverCard"><?php echo $post['user']['name'] ?></a> <?php echo $post['generated_title'] ?>
             <?php
@@ -26,3 +28,5 @@
         <?php echo View::factory('loops/comments', $post) ?>
     </div>
 </article> <!-- one_post-->
+</section>
+</section>

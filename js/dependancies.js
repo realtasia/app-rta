@@ -8,7 +8,105 @@
 //  console.trace();
 //  return true;
 //};
-RT["PubSub"] = {};
+RT["PubSub"] = function(user){
+	
+	var self = this, app = RTApp
+	, u = user || app.user()
+	, socket = io.connect('http://localhost:3000/')
+	, cl = app.cl();
+	
+	self.callbacks = {
+		connect: function(data){
+			var channel = RTC.GetObsVal(u._id);
+			console.log("Connected, listening to: " + channel);
+	        socket.emit('subscribe', {channel:channel});
+	        if(u.hasOwnProperty('isAdmin') && u.isAdmin()){
+	        	socket.emit('adminSubscribe', {channel:channel});
+	        }       
+	     },
+	     disconnect: function(){},
+	     message: function(msg){
+          if(msg.type === 'private-message'){
+			self.processMessage(msg);
+          } else {
+          	self.processNotify(msg);
+          }
+               	
+	     }
+	};
+	
+	self.processMessage = function(msg){
+		var app = RTApp, inbox = app.inbox();
+		msg.post_uri = u.uri() + '#conversations/' + msg.doc_id;
+		
+		if(app.ca() === 'conversations' && inbox){
+			// we are in conversation view and we don't need to add the notifier to the
+			// new message queue.
+			if()
+		}
+		
+          	
+          	u.unreadMessages.push(msg);
+          	u.counts.newMessages(u.counts.newMessages() + 1);		
+	};
+	
+	self.processNotify = function(msg){
+		console.log({"Isupdatable":['comment', 'like', 'subscribe'].indexOf(msg.type) >= 0});
+		if(['comment', 'like', 'subscribe'].indexOf(msg.type) >= 0){
+			
+			var post = ko.utils.arrayFirst(cl, function(item){
+				return RTC.GetObsVal(item._id) === msg.doc_id;
+			});
+			
+			if(post){
+				console.log({"found a post":post});
+				var counter = msg.type === 'comment' ? 'comments' : msg.type + 'rs';
+				console.log({"counter":counter});
+				if(post.counts[counter]){
+					console.log({"count":post.counts[counter]()});
+					post.counts[counter]( post.counts[counter]() + 1 );
+					msg.type === 'comment' && post.getComment();
+				} 
+			}
+		}
+		
+		u.newNotifications.push({
+			summary: msg.summary.stripTags(),
+			timestamp: msg.timestamp,
+			excerpt: msg.excerpt,
+			post_uri:msg.post_uri,
+			iconClass: self.iconClass(msg.type),
+			isActiveClass: self.isActiveClass(msg.type)
+		});
+	};
+	
+	self.isActiveClass = function(type){
+		return type === 'subscribe' || type === 'like';
+	};
+	
+	self.iconClass= function(type){
+
+		switch(type){
+			case 'comment': return "icon-comment color-comment";	
+			case 'feedback': return "icon-bullhorn color-feedback" ;	
+			case 'post': case 'wallpost': return "icon-file-text-alt color-post";	
+			case 'listing': return  "icon-map-marker color-listing";	
+			case 'testimonial': return  "icon-comment-alt color-testimonial";	
+			case 'like': return  "action16 likeSmall";	
+			case 'subscribe': return  "action16 subscribe";	
+			case 'join_beta': return  "icon-user color-join_beta";	
+			case 'approve_testimonial': return "icon-ok color-approve_testimonial";	
+		}
+	};
+
+	self.init = function(){
+		for(var cb in self.callbacks){
+			socket.on(cb, self.callbacks[cb]);
+		} 		
+	};
+
+	
+};
 /**
  *  Lib:        Common Utilities
  *  Author:     Jason Nathan
@@ -981,7 +1079,9 @@ RT["handlers"] = {
     scrollMessages: {
         init: function(e, va, allBindings, vm, context) {
             var d = ko.unwrap(va()), p = ko.unwrap(context).$parent;
-            console.log(d);
+            if(!p.hasOwnProperty('messagesPrepended')){
+            	p = ko.unwrap(context);
+            }
             return $(e).addClass("customScroll").mCustomScrollbar({
                 enable: true,
                 theme: "dark-thick",
@@ -995,15 +1095,24 @@ RT["handlers"] = {
                 callbacks: {
                     onTotalScrollBackOffset: 30,
                     onTotalScrollBack: function() {
+                    	var r, c;
+                    	if(this.hasOwnProperty('getMessages')){
+                    		r = this.getMessages;
+                    		c = p.sc.counts.messages();
+                    	} else {
+                    		r = this.getConversations;
+                    		c = this.counts.messages();
+                    	}
+                    	
                         if (!!d.length) {
-                            this.messagesPrepended(d[0]._id());
-                            if (d.length === p.sc.counts.messages()) {
+                            this.hasOwnProperty('messagesPrepended') && this.messagesPrepended(d[0]._id());
+                            if (d.length === c) {
                                 return $(e).mCustomScrollbar("scrollTo", 40, {
                                     scrollInertia: 200
                                 });
                             }
                         }
-                        return this.getMessages.call(this);
+                        return r.call(this);
                     }.bind(p)
                 }
             });

@@ -53,6 +53,19 @@ class Controller_Home extends Controller_Auth {
         $this->content = View::factory('access_denied');
     }
 
+
+	public function action_previewterms()
+	{
+		$this->content = View::factory('preview_terms');
+	}
+
+	public function action_privacy()
+	{
+		$this->content = View::factory('preview_terms');
+	}
+
+
+
     public function action_test()
     {
         $this->content = View::factory('test');

@@ -3643,6 +3643,13 @@ span.placehash{position:absolute; top:-50px;}
     .nav-tabs > li {
         float: none;
     }
+    #conversationsMobile .well{
+    	border:none !important;
+    	padding:0 !important;
+    }
+    .centerContent, .contentArea{
+    	padding:5px;;
+    }
     body {
         padding-left: 0;
         padding-right: 0;
@@ -4326,3 +4333,88 @@ a.RTNotify i{ color:#555}
     color: #fff !important;
 }
 BODY{display:inherit !important;}
+
+ul.dropdown-messages, ul.dropdown-notifications{
+    min-width: 0;
+    width: 310px !important;
+    border-radius: 2px !important;
+    margin: 0 auto;
+    padding:0;
+}
+.dropdown-messages li, .dropdown-notifications li{
+    margin:0;
+    list-style:none;
+    padding:0;
+}
+.dropdown-messages .mCSB_container, .dropdown-notifications .mCSB_container{
+    margin-right:10px;
+}
+
+.dropdown-notifications li a,
+.dropdown-messages li a{
+    margin:5px 1px;
+    display:block;
+}
+.dropdown-notifications li > a:hover,
+.dropdown-messages li > a:hover{
+	text-decoration:none !important;
+	color:#fff;
+}
+
+.dropdown-notifications .divider,
+.dropdown-messages .divider{
+	margin: 0 1px !important;
+	box-shadow: 1px 1px 2px #eee;   
+	 background-color: #E0E0E0;
+ border-bottom: none;
+}
+
+.dropdown-notifications-profile,
+.dropdown-messages-profile {
+    border-radius: 3px;
+    margin-right: 15px;
+    margin-top: 3px;
+}
+
+.dropdown-notifications-message,
+.dropdown-messages-message {
+    font-size: 12px;
+    white-space: normal;
+    max-height: 40px;
+    overflow:hidden;
+    text-overflow: ellipsis;	
+    
+}
+.dropdown-dropdown-notifications-message-date,
+.dropdown-messages-date{
+	font-size:.8em;
+	color:#999;
+	margin-right:1em;
+}
+.dropdown-footer{
+	padding: 1px 0 0 0;
+	background: #0188A2;
+}
+a#inboxLink{
+	margin: 0;
+	min-height: 35px;
+	border: 1px solid #95BDF0;
+	border-right: 0 none;
+	border-bottom: 0 none;
+	text-shadow: -1px -1px 1px #193296;
+	color:#fff !important;
+}
+.truncate{
+  overflow: hidden;
+  text-overflow: ellipsis;	
+}
+
+
+header.navbar-inverse a i.color-comment{color: #4d90fe !important;}
+header.navbar-inverse a i.color-feedback{color: purple !important;}
+header.navbar-inverse a i.color-post{color: crimson !important;}
+header.navbar-inverse a i.color-listing{color: #e77000 !important;}
+header.navbar-inverse a i.color-testimonial{color: #5bc0de !important;}
+header.navbar-inverse a i.color-join_beta{color: #yellow !important;}
+header.navbar-inverse a i.color-approve_testimonial{color: #5aac41 !important;}
+header.navbar-inverse a i.color-default{color: #111111 !important;}

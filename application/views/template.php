@@ -81,26 +81,7 @@
             echo isset($cl) ? 'RT.cl="' . base64_encode(json_encode($cl)) . '";' : '';
             ?></script>
         <!-- <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC6-y0MkWb9eaFLz_HWMQlWhtgo-HAtDEE&sensor=true"></script> -->
-            <?php
-            //if ( ! Fragment::load('assets', Date::YEAR, true)):
-            echo Assets::factory('deps')
-              //->merge(TRUE)
-              //->process(TRUE)
-              ->js("compiledjq.js")
-              ->js("kodebug.js");
-            echo Assets::factory('dep2')
-              ->process(TRUE)
-              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.js");
-            //Fragment::save();
-            //endif;
-            echo Assets::factory('finaljs')
-              ->merge(TRUE)
-              //->process(TRUE)
-              //->js("dependancies.min.js")
-              ->js("dependancies.js")
-              ->js("app.js");
-            //->render();
-            ?>
+
 
             <section id="rttm"><div id="lgf"></div><div id="rgf"></div><div id="admtbl"></div><div id="admsess"></div></section>
             <div style="float:left;min-height:100%;clear:both;"></div>
@@ -120,6 +101,27 @@
                 </div>
             </div>
         </footer>
+            <?php
+            //if ( ! Fragment::load('assets', Date::YEAR, true)):
+            echo Assets::factory('deps')
+              ->merge(TRUE)
+              ->process(TRUE)
+              ->js("compiledjq.js")
+              ->js("kodebug.js");
+            echo Assets::factory('dep2')
+              ->process(TRUE)
+              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js")
+              ->js("http://localhost:3000/socket.io/socket.io.js");
+            //Fragment::save();
+            //endif;
+            echo Assets::factory('finaljs')
+              ->merge(TRUE)
+              //->process(TRUE)
+              //->js("dependancies.min.js")
+              ->js("dependancies.js")
+              ->js("app.js");
+            //->render();
+            ?>        
         <script type="text/javascript">
 			var analytics = analytics || [];
 			analytics.load = function(e) {
