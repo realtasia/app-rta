@@ -20,11 +20,11 @@
           ->css('icons.css');
         echo Assets::factory('init')
           ->merge(TRUE)
-          ->js("http://" . RT::COM_SERVER . "/js/jquery.min.js")
+          ->js("https://" . RT::COM_SERVER . "/js/jquery.min.js")
           ->js("http://html5shiv.googlecode.com/svn/trunk/html5.js", ['condition' => 'IE'])
-          ->js("http://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
-          ->js("http://" . RT::COM_SERVER . "/js/respond.min.js", ['condition' => 'lte IE 8'])
-          ->js("http://" . RT::COM_SERVER . "/js/json.js", ['condition' => 'lte IE 7'])
+          ->js("https://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
+          ->js("https://" . RT::COM_SERVER . "/js/respond.min.js", ['condition' => 'lte IE 8'])
+          ->js("https://" . RT::COM_SERVER . "/js/json.js", ['condition' => 'lte IE 7'])
           ->js("lte-ie7.js", ['condition' => 'lte IE 7'])
         ?>
         <!--[if lte IE 9]>
@@ -110,8 +110,7 @@
               ->js("kodebug.js");
             echo Assets::factory('dep2')
               ->process(TRUE)
-              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js")
-              ->js("http://localhost:3000/socket.io/socket.io.js");
+              ->js("https://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js");
             //Fragment::save();
             //endif;
             echo Assets::factory('finaljs')
@@ -137,7 +136,7 @@
 				for (var s = 0; s < i.length; s++)
 					analytics[i[s]] = r(i[s])
 			};
-			analytics.load(RT.APP_SERVER === "app.realtasia.com.sg" ? "9pmcbdqqhz" : "ajjkg6zgwa");
+			analytics.load(RT.APP_SERVER === "realtasia.com.sg" ? "9pmcbdqqhz" : "ajjkg6zgwa");
         </script>
     </body>
 </html>

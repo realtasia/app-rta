@@ -55,8 +55,8 @@ class Mongosession
         'cache'             => 'private_no_expire',
         'cache_expiry'      => 10,//minutes
         'cookie_path'       => '/',
-        'cookie_domain'     => '.thisdomain.com',
-        'cookie_secure'     => false,
+        'cookie_domain'     => '.realtasia.com.sg',
+        'cookie_secure'     => true,
         'autostart'         => false,
         'locktimeout'       => 30,//seconds
         'locksleep'         => 100,//milliseconds

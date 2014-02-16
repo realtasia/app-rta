@@ -508,7 +508,7 @@ RT.App.prototype = {
 		return s;
 	},
 	getKeyword : function(request, response) {"use strict";
-		var f = jQuery("form.RTASearch"), l = window.location, u = !!f.length ? f.attr("action") : "http:" + l.host + l.pathname, p = {
+		var f = jQuery("form.RTASearch"), l = window.location, u = !!f.length ? f.attr("action") : "https:" + l.host + l.pathname, p = {
 			state : jQuery("#RTASearchState").val(),
 			s : request.term,
 			url : u + '/keyword'
@@ -831,7 +831,7 @@ RT.App.prototype = {
 			user_id : u ? u._id : "Public",
 			viewing : name + "(" + id + ")"
 		});
-		return 'http://' + window.location.host + "/user?id=" + id || "";
+		return 'https://' + window.location.host + "/user?id=" + id || "";
 	},
 	getLocationHoverCard : function(d) {
 		var id = d._id(), u = ko.toJS(RTApp.user());
@@ -839,7 +839,7 @@ RT.App.prototype = {
 			user_id : u ? u._id : "Public",
 			viewing : d.name + "(" + id + ")"
 		});
-		return 'http://' + window.location.host + "/page?id=" + id || "";
+		return 'https://' + window.location.host + "/page?id=" + id || "";
 	}
 };
 
@@ -2065,7 +2065,7 @@ RT.Post.prototype.extend(function() {
 			return t.excerpt();
 	}, this);
 	this.getHoverCard = ko.computed(function() {
-		return this.uri ? 'http://' + location.host + this.uri() : "";
+		return this.uri ? 'https://' + location.host + this.uri() : "";
 	}, this);
 });
 RT.Page = function() {

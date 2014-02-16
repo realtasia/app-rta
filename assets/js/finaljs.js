@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2014-02-13 20:45:04 
+   Compiled at: 2014-02-15 08:56:35 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -30,14 +30,29 @@ RT["PubSub"] = function(user){
 	     disconnect: function(){},
 	     message: function(msg){
           if(msg.type === 'private-message'){
-          	msg.post_uri = u.uri() + '#conversations/' + msg.doc_id;
-          	u.unreadMessages.push(msg);
-          	u.counts.newMessages(u.counts.newMessages() + 1);
+			self.processMessage(msg);
           } else {
           	self.processNotify(msg);
           }
                	
 	     }
+	};
+	
+	self.processMessage = function(msg){
+		var app = RTApp, inbox = app.inbox();
+		msg.post_uri = u.uri() + '#conversations/' + msg.doc_id;
+		
+		if(app.ca() === 'conversations' && inbox && inbox.history().length >= 3){
+			// we are in conversation view and we don't need to add the notifier to the
+			// new message queue.
+			if(inbox.history().history()[2] && inbox.history()[2].hasOwnProperty('messages')){
+				
+			}
+		}
+		
+          	
+          	u.unreadMessages.push(msg);
+          	u.counts.newMessages(u.counts.newMessages() + 1);		
 	};
 	
 	self.processNotify = function(msg){
@@ -2010,7 +2025,7 @@ RT["Notify"] = function() {
 
 
 /* File: assets/js/app.js
-   Compiled at: 2014-02-13 20:45:04 
+   Compiled at: 2014-02-15 08:56:35 
 ================================ */
 RT.App = function() {"use strict";
 	var self, o = "inbox user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch  hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin adminLocations";
@@ -3246,7 +3261,7 @@ RT.ControllerMessages = function() {
 				return $.colorbox.resize();
 			}
 		});
-	});
+	}, self);
 	self.history([{
 		name : 'Home',
 		hashURL : RTApp.cp().uri(),

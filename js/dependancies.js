@@ -12,7 +12,7 @@ RT["PubSub"] = function(user){
 	
 	var self = this, app = RTApp
 	, u = user || app.user()
-	, socket = io.connect('http://localhost:3000/')
+	, socket = io.connect('http://sock.realtasia.com')
 	, cl = app.cl();
 	
 	self.callbacks = {
@@ -39,10 +39,12 @@ RT["PubSub"] = function(user){
 		var app = RTApp, inbox = app.inbox();
 		msg.post_uri = u.uri() + '#conversations/' + msg.doc_id;
 		
-		if(app.ca() === 'conversations' && inbox){
+		if(app.ca() === 'conversations' && inbox && inbox.history().length >= 3){
 			// we are in conversation view and we don't need to add the notifier to the
 			// new message queue.
-			if()
+			if(inbox.history().history()[2] && inbox.history()[2].hasOwnProperty('messages')){
+				
+			}
 		}
 		
           	
@@ -622,7 +624,7 @@ RT.Com = {
     api: RT.API_SERVER + '/',
     templates: '/assets/templates/',
     getTemplate: function(d){ return RT.Com.templates + d + '.html'},
-    resources: 'http://' + RT.COM_SERVER,
+    resources: 'https://' + RT.COM_SERVER,
     isSuccess: function(r) {
         return r && r.hasOwnProperty("status") && r.status === 'success';
     },
