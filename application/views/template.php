@@ -20,11 +20,11 @@
           ->css('icons.css');
         echo Assets::factory('init')
           ->merge(TRUE)
-          ->js("https://" . RT::COM_SERVER . "/js/jquery.min.js")
+          ->js("http://" . RT::COM_SERVER . "/js/jquery.min.js")
           ->js("http://html5shiv.googlecode.com/svn/trunk/html5.js", ['condition' => 'IE'])
-          ->js("https://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
-          ->js("https://" . RT::COM_SERVER . "/js/respond.min.js", ['condition' => 'lte IE 8'])
-          ->js("https://" . RT::COM_SERVER . "/js/json.js", ['condition' => 'lte IE 7'])
+          ->js("http://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
+          ->js("http://" . RT::COM_SERVER . "/js/respond.min.js", ['condition' => 'lte IE 8'])
+          ->js("http://" . RT::COM_SERVER . "/js/json.js", ['condition' => 'lte IE 7'])
           ->js("lte-ie7.js", ['condition' => 'lte IE 7'])
         ?>
         <!--[if lte IE 9]>
@@ -110,7 +110,7 @@
               ->js("kodebug.js");
             echo Assets::factory('dep2')
               ->process(TRUE)
-              ->js("https://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js");
+              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js");
             //Fragment::save();
             //endif;
             echo Assets::factory('finaljs')
