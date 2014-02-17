@@ -103,6 +103,7 @@ Kohana::$config->attach(new Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules([
+	'deploy'	   => MODPATH . 'deploy',
     'Mongo'        => MODPATH . 'mongodb', // RTA Core
     'RT'           => MODPATH . 'RT', // RTA Core
     'cache'        => MODPATH . 'cache', // Caching with multiple backends
