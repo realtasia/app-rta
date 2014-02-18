@@ -51,7 +51,7 @@ abstract class Controller_Auth extends Controller_Template {
         	$this->session = Session::instance();
         } catch (Exception $e)
 		{
-			$this->session->destroy();
+			Mongosession::instance()->destroy(session_id());
 			$this->session = Session::instance();
 		}
         //Profiler::stop($ba);
