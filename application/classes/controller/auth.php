@@ -46,7 +46,14 @@ abstract class Controller_Auth extends Controller_Template {
         /*         * **************************************************************** */
         //ASDK::dynamoSession();
         Mongosession::init();
-        $this->session = Session::instance();
+        try
+        {
+        	$this->session = Session::instance();
+        } catch (Exception $e)
+		{
+			$this->session->destroy();
+			$this->session = Session::instance();
+		}
         //Profiler::stop($ba);
     }
 
