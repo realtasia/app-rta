@@ -111,7 +111,7 @@
             echo Assets::factory('dep2')
               ->process(TRUE)
               ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js")
-              ->js("http://" . RT::SOCK_SERVER . "socket.io/socket.io.js");
+              ->js("http://" . RT::SOCK_SERVER . "/socket.io/socket.io.js");
             //Fragment::save();
             //endif;
             echo Assets::factory('finaljs')
