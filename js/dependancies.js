@@ -26,6 +26,7 @@ RT["PubSub"] = function(user){
 	     },
 	     disconnect: function(){},
 	     message: function(msg){
+	     	console.log(msg);
           if(msg.type === 'private-message'){
 			self.processMessage(msg);
           } else {
