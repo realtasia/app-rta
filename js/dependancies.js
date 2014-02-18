@@ -12,7 +12,7 @@ RT["PubSub"] = function(user){
 	
 	var self = this, app = RTApp
 	, u = user || app.user()
-	, socket = io.connect('http://sock.realtasia.com.sg:3000')
+	, socket = io.connect('http://sock.realtasia.com.sg')
 	, cl = app.cl();
 	
 	self.callbacks = {
