@@ -110,7 +110,8 @@
               ->js("kodebug.js");
             echo Assets::factory('dep2')
               ->process(TRUE)
-              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js");
+              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js")
+              ->js("http://" . RT::SOCK_SERVER . "/js/plupload/plupload.full.min.js");
             //Fragment::save();
             //endif;
             echo Assets::factory('finaljs')
