@@ -48,7 +48,7 @@ class Controller_Ipn extends Controller {
      * This should be your primary paypal email address or, if using sandbox,
      * the email address of your seller test user.
      */
-    public $expected_receiver_email = 'sandboxmerchant@realtasia.com';
+    public $expected_receiver_email = 'sandboxsell@realtasia.com';
 
     /**
      * Main method
@@ -182,40 +182,40 @@ class Controller_Ipn extends Controller {
      */
     protected function _check_and_save()
     {
-        //return $this->response->body(Debug::vars($this->request->post()));
+        return $this->response->body(Debug::vars($this->request->post()));
         Log::instance()->add(Log::NOTICE, print_r($this->request->post(), true));
-//        if ($this->_listener->check_email($this->expected_receiver_email))
-//        {
-//            if ($this->_listener->is_unique_transaction())
-//            {
-//                // Save payment to db
-//                $this->_listener->save_payment();
-//            }
-//            else
-//            {
-//                // This transaction id was already used
-//                if ($this->log_errors)
-//                {
-//                    $message = strtr('Not unique transaction: [:transaction_id] [:payment_status].', [
-//                        ':transaction_id' => $this->_listener->get_post_data('txn_id'),
-//                        ':payment_status' => $this->_listener->get_post_data('payment_status')
-//                    ]);
-//                    Log::instance()->add(Log::NOTICE, $message);
-//                }
-//            }
-//        }
-//        else
-//        {
-//            // The receiver email address is not the expected one
-//            if ($this->log_errors)
-//            {
-//                $message = strtr('Email addresses does not match: [:email_posted] [:email_expected].', [
-//                    ':email_posted'   => $this->_listener->get_post_data('receiver_email'),
-//                    ':email_expected' => $this->expected_receiver_email
-//                ]);
-//                Log::instance()->add(Log::NOTICE, $message);
-//            }
-//        }
+        if ($this->_listener->check_email($this->expected_receiver_email))
+        {
+            if ($this->_listener->is_unique_transaction())
+            {
+                // Save payment to db
+                $this->_listener->save_payment();
+            }
+            else
+            {
+                // This transaction id was already used
+                if ($this->log_errors)
+                {
+                    $message = strtr('Not unique transaction: [:transaction_id] [:payment_status].', [
+                        ':transaction_id' => $this->_listener->get_post_data('txn_id'),
+                        ':payment_status' => $this->_listener->get_post_data('payment_status')
+                    ]);
+                    Log::instance()->add(Log::NOTICE, $message);
+                }
+            }
+        }
+        else
+        {
+            // The receiver email address is not the expected one
+            if ($this->log_errors)
+            {
+                $message = strtr('Email addresses does not match: [:email_posted] [:email_expected].', [
+                    ':email_posted'   => $this->_listener->get_post_data('receiver_email'),
+                    ':email_expected' => $this->expected_receiver_email
+                ]);
+                Log::instance()->add(Log::NOTICE, $message);
+            }
+        }
     }
 
 }

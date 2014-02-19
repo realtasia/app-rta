@@ -1511,9 +1511,16 @@ RT.newConversationForm = function(conversations) {
 
 		p.done(function(r) {
 			if (RTC.isSuccess(r)) {
-				var p = self.parent, c = p && p.conversations, d = ko.mapping.fromJS(r.data);
-				c.addToSet(d);
-				return p.selectConversation(d) && RTC.CB.close();
+				console.log(r);
+				if(r && r.data && r.data.conversation){
+					var p = self.parent
+					, c = p && p.conversations
+					, d = new RT.Conversation(r.data.conversation);
+
+					c.addToSet(d);
+					p.selectConversation(d);					
+				}
+				return RTC.CB.close();
 			}
 		});
 
@@ -2825,7 +2832,7 @@ RT.Forms = {
 		self.VM = RTApp;
 		RTC.MakeObsFromArray.call(this, o.concat(self.regFields));
 		RTC.MakeObsFromArray.apply(this, ["isUniqueUsername isUniquePhone isUniqueEmail", !0]);
-		self.currentState("reg");
+		self.currentState("payment");
 		self.gender("male");
 		self.gender.extend({
 			required : !0

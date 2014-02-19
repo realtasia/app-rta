@@ -867,10 +867,11 @@ RT["handlers"] = {
     },
     autoComplete: {
         init: function(element, params) {
+        	var e = jQuery(element);
             ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
-                jQuery(element).autocomplete("destroy");
+                e.autocomplete("destroy");
             });
-            jQuery(element).autocomplete(params());
+            e.autocomplete(params());
         },
         update: function(element, params) {
             jQuery(element).autocomplete("option", "source", params().source);
