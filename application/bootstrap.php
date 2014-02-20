@@ -56,6 +56,10 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  */
 I18n::lang('en-us');
 
+if(isset($_SERVER['SERVER_NAME']) && strpos($_SERVER['SERVER_NAME'], 'realtasia.com.sg') !== FALSE)
+{
+	Kohana::$environment = Kohana::PRODUCTION;
+}
 /**
  * Set Kohana::$environment if a 'KOHANA_ENV' environment variable has been supplied.
  *
