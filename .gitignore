@@ -4,6 +4,6 @@
 /uploads
 /application/logs/
 /application/cache/
-/assets/js/deps.js
-/assets/jas/final.js
+assets/js/deps.js
+assets/js/finaljs.js
 debug.html
