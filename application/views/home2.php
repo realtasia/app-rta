@@ -12,7 +12,7 @@
                     <div class="span9 wordHolder">
                         <img src="img/RealTAsiaLogoWords.png" class="words-img"  style="display:none;">
                         <small class="badge badge-warning" style="position:absolute;top:0;right:0">BETA 1.0</small>
-                        <h1 class="slogan">The Right Now Real Estate </h1>
+                        <h1 class="slogan" style="display:none;">The Right Now Real Estate </h1>
                     </div>
                 </div>
             </div>
@@ -145,7 +145,7 @@
 
                 <ul>
                     <li>
-                        <span class="number">50</span> Property Listings
+                        <span class="number">20</span> Property Listings
                     </li>
                     <li>
                         Email / Phone Support
@@ -173,7 +173,7 @@
 
                 <ul>
                     <li>
-                        <span class="number">Unlimited</span> Property Listings
+                        <span class="number">50</span> Property Listings
                     </li>
                     <li>
                         Email / Phone Support
@@ -196,20 +196,19 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
 <script>
 	$(document).ready(function() {
-		var l = $(".logo-img"), w = $(".words-img"), g = $(".grayscale");
-		g.hover(function() {
-			$(this).removeClass('grayscale');
-		}, function() {
-			$(this).addClass('grayscale');
-		});
+		var l = $(".logo-img"), w = $(".words-img"), slogan = $(".slogan");
 		setTimeout(function() {
 			l.fadeIn("slow", function() {
 				l.addClass('flip');
 				setTimeout(function() {
-					w.fadeIn();
-				}, 1000);
+					w.fadeIn(function(){
+						setTimeout(function() {
+							slogan.slideDown();
+						}, 500);						
+					});
+				}, 500);
 			})
-		}, 1000);
+		}, 500);
 
 	})
 </script>
