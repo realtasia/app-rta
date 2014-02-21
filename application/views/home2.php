@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="css/landing.css">
 
-
 <div class="page-wrap" style="min-height:500px;">
     <div class="image-overlay">
         <div class="sales-section" id="section-one">
@@ -8,10 +7,12 @@
                 <div class="row-fluid">
                     <div class="span3" style="position:relative;padding-top:4em">
                         <img src="img/transparentLogo.png" class="logo-img"  style="display:none;">
+                        
                     </div>
                     <div class="span9 wordHolder">
                         <img src="img/RealTAsiaLogoWords.png" class="words-img"  style="display:none;">
-                        <h1 class="slogan">The Right Now Real Estate</h1>
+                        <small class="badge badge-warning" style="position:absolute;top:0;right:0">BETA 1.0</small>
+                        <h1 class="slogan">The Right Now Real Estate </h1>
                     </div>
                 </div>
             </div>
@@ -97,71 +98,99 @@
     </div>
 </div>
 <div id="container" style="padding-bottom:100px;">
-	    <section class="clearfix" id="prices">
-            <header class="title">
-                <h2 class="centralize">Choose your package</h2>
-            </header>
+    <section class="clearfix" id="prices">
+        <header class="title">
+            <h1 class="text-center">Choose your package</h1>
+        </header>
 
-            <div class="row-fluid animate fadeIn-onload fadeIn">
-                <!-- Pricing Item 1 -->
+        <div class="row-fluid animate fadeIn-onload fadeIn">
+            <!-- Pricing Item 1 -->
 
-                <div class="span4 pricing-item" >
-                    <div class="pricing-title">
-                        Basic
-                    </div>
-
-                    <div class="pricer">
-                        <span>$99.99<span>/yr</span></span>
-                    </div>
-
-                    <ul>
-                        <li><span class="number">10</span> Property Listings</li>
-                        <li>Email / Phone Support</li>
-                        <li>1GB Storage</li>
-                        <li>Lifetime Subscription Lock In</li>
-                        <li>Free upgrades to new features*</li>
-                    </ul><a class="btn btn-primary btn-large" href=
-                    "#">Subscribe</a>
-                </div><!-- Pricing Item 2 -->
-
-                <div class="span4 pricing-item best">
-                    <div class="pricing-title">
-                        Plus
-                    </div>
-
-                    <div class="pricer">
-                        <span>$149.99<span>/yr</span></span>
-                    </div>
-
-                    <ul>
-                        <li><span class="number">30</span>  Property Listings</li>
-                        <li>Email / Phone Support</li>
-                        <li>5GB Storage</li>
-                        <li>Lifetime Subscription Lock In</li>
-                        <li>Free upgrades to new features*</li>
-                    </ul><a class="btn btn-primary btn-large" href=
-                    "#">Subscribe</a>
-                </div><!-- Pricing Item 3 -->
-
-                <div class="span4 pricing-item">
-                    <div class="pricing-title">
-                        Enhanced
-                    </div>
-
-                    <div class="pricer">
-                        <span>$199.99<span>/yr</span></span>
-                    </div>
-
-                    <ul>
-                        <li><span class="number">Unlimited</span>  Property Listings</li>
-                        <li>Email / Phone Support</li>
-                        <li>Unlimited Storage</li>
-                        <li>Lifetime Subscription Lock In</li>
-                        <li>Free upgrades to new features*</li>
-                    </ul><a class="btn btn-primary btn-large" href=
-                    "#">Subscribe</a>
+            <div class="span4 pricing-item" >
+                <div class="pricing-title">
+                    Basic
                 </div>
-            </div><!-- /row -->
+
+                <div class="pricer">
+                    <span>$99.99<span>/yr</span></span>
+                </div>
+
+                <ul>
+                    <li>
+                        <span class="number">10</span> Property Listings
+                    </li>
+                    <li>
+                        Email / Phone Support
+                    </li>
+                    <li>
+                        1GB Storage
+                    </li>
+                    <li>
+                        Lifetime Subscription Lock In
+                    </li>
+                    <li>
+                        Free upgrades to new features*
+                    </li>
+                </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
+            </div><!-- Pricing Item 2 -->
+
+            <div class="span4 pricing-item best">
+                <div class="pricing-title">
+                    Plus
+                </div>
+
+                <div class="pricer">
+                    <span>$149.99<span>/yr</span></span>
+                </div>
+
+                <ul>
+                    <li>
+                        <span class="number">50</span> Property Listings
+                    </li>
+                    <li>
+                        Email / Phone Support
+                    </li>
+                    <li>
+                        5GB Storage
+                    </li>
+                    <li>
+                        Lifetime Subscription Lock In
+                    </li>
+                    <li>
+                        Free upgrades to new features*
+                    </li>
+                </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
+            </div><!-- Pricing Item 3 -->
+
+            <div class="span4 pricing-item">
+                <div class="pricing-title">
+                    Enhanced
+                </div>
+
+                <div class="pricer">
+                    <span>$199.98<span>/yr</span></span>
+                </div>
+
+                <ul>
+                    <li>
+                        <span class="number">Unlimited</span> Property Listings
+                    </li>
+                    <li>
+                        Email / Phone Support
+                    </li>
+                    <li>
+                        Unlimited Storage
+                    </li>
+                    <li>
+                        Lifetime Subscription Lock In
+                    </li>
+                    <li>
+                        Free upgrades to new features*
+                    </li>
+                </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
+            </div>
+        </div><!-- /row -->
+        <p class="muted contentArea">* Plan terms are subject to our conditions of use and privacy policy. Please read the FAQ for more information</p>
     </section>
 </div>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
