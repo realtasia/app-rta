@@ -9,14 +9,14 @@
 	}
 	#section-one {
 		background-color: #fff;
-		opacity: .94;
+		opacity: .85;
 	}
 	.color-overlay {
 		opacity: 0.9;
 		background-color: #ff7800;
 	}
 	.white-overlay {
-		opacity: 0.92;
+		opacity: 0.85;
 		background-color: #fff;
 		color: #000;
 	}
@@ -239,7 +239,7 @@
     background: #0161fd;
 }
 #prices .pricing-item.best .pricer {
-    background: #10459C;
+    background: #0453D5;
 }
 #prices .pricing-item:hover .pricing-title {
     background: #76A3EC;

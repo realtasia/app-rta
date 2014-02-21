@@ -115,15 +115,11 @@
                     </div>
 
                     <ul>
-                        <li>Site Explorer Platform</li>
-
-                        <li>Fresh Index Each Month</li>
-
-                        <li>Access to API</li>
-
-                        <li>60 Detailed Reports Per Month</li>
-
-                        <li>2,000,000 Analyzable Backlinks</li>
+                        <li><span class="number">10</span> Property Listings</li>
+                        <li>Email / Phone Support</li>
+                        <li>1GB Storage</li>
+                        <li>Lifetime Subscription Lock In</li>
+                        <li>Free upgrades to new features*</li>
                     </ul><a class="btn btn-primary btn-large" href=
                     "#">Subscribe</a>
                 </div><!-- Pricing Item 2 -->
@@ -138,22 +134,18 @@
                     </div>
 
                     <ul>
-                        <li>Site Explorer Platform</li>
-
-                        <li>Fresh Index Each Week</li>
-
-                        <li>Access to API</li>
-
-                        <li>120 Detailed Reports Per Month</li>
-
-                        <li>5,000,000 Analyzable Backlinks</li>
+                        <li><span class="number">30</span>  Property Listings</li>
+                        <li>Email / Phone Support</li>
+                        <li>5GB Storage</li>
+                        <li>Lifetime Subscription Lock In</li>
+                        <li>Free upgrades to new features*</li>
                     </ul><a class="btn btn-primary btn-large" href=
                     "#">Subscribe</a>
                 </div><!-- Pricing Item 3 -->
 
                 <div class="span4 pricing-item">
                     <div class="pricing-title">
-                        Maximum
+                        Enhanced
                     </div>
 
                     <div class="pricer">
@@ -161,15 +153,11 @@
                     </div>
 
                     <ul>
-                        <li>Site Explorer Platform</li>
-
-                        <li>Fresh Index Each Day</li>
-
-                        <li>Access to API</li>
-
-                        <li>60 Detailed Reports Per Month</li>
-
-                        <li>8,000,000 Analyzable Backlinks</li>
+                        <li><span class="number">Unlimited</span>  Property Listings</li>
+                        <li>Email / Phone Support</li>
+                        <li>Unlimited Storage</li>
+                        <li>Lifetime Subscription Lock In</li>
+                        <li>Free upgrades to new features*</li>
                     </ul><a class="btn btn-primary btn-large" href=
                     "#">Subscribe</a>
                 </div>
