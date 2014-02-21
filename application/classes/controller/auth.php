@@ -44,16 +44,11 @@ abstract class Controller_Auth extends Controller_Template {
         /* Profiling******************************************************** */
         //$ba = Profiler::start('Controller', 'Auth ' . 'Session Setup');
         /*         * **************************************************************** */
-        //ASDK::dynamoSession();
-        Mongosession::init();
-        try
-        {
-        	$this->session = Session::instance();
-        } catch (Exception $e)
-		{
-			Mongosession::instance()->destroy(session_id());
-			$this->session = Session::instance();
-		}
+        $s=ASDK::dynamoSession();
+        //Mongosession::init();
+        $this->session = Session::instance();
+		// echo "<h1 style='margin-top:50px'>".Debug::vars($s->isSessionOpen())."</h1>";
+		//die(Debug::vars(session_module_name()));
         //Profiler::stop($ba);
     }
 
@@ -171,7 +166,7 @@ abstract class Controller_Auth extends Controller_Template {
 
     /**
      * Proxy method to query the API. Used for ajax calls. Just to solve
-     * cross-domain issues and other reap other benefits
+     * cross-domain issues and other heap of benefits
      */
     public function action_api()
     {

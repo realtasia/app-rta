@@ -15,7 +15,7 @@
 );*/
 
 return array(
-	'driver'       => 'mongo',
+	'driver'       => 'native',
 	'hash_method'  => 'sha256',
 	'hash_key'     => 'pS3*Z2f9Ow<}^H6L,{<dS<><ld; 6|xAkwg3MgakYd}>t:KZgjjDx4U@/}#XO+]*',
 	'lifetime'     => 1209600,
