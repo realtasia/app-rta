@@ -1,9 +1,9 @@
 <div style="margin-top:50px" class="contentArea">
-    <h1>General Terms and Conditions of Use</h1>
-    <p class="lead">
+    <h3><i class="icon-legal"></i>&nbsp;General Terms and Conditions of Use</h3>
+    <p>
         This website, including any subsite accessible through the realtasia.com.sg homepage (the “Site”), is published and maintained by subsidiaries, affiliates, or related entities of Realtasia Pte Ltd. (“Realtasia”).
     </p>
-    <p class="lead">
+    <p>
         WHEN YOU ACCESS, BROWSE, OR USE THIS SITE YOU ACCEPT, WITHOUT LIMITATION OR QUALIFICATION, THE TERMS AND CONDITIONS SET FORTH BELOW AND ANY ADDITIONAL TERMS AND CONDITIONS OF USE SET FORTH IN ANY SUBSITE. IF YOU DO NOT AGREE TO THESE TERMS AND CONDITIONS OF USE, PLEASE DO NOT ACCESS, BROWSE OR USE THE SITE OR ANY OF THE SERVICES PROVIDED ON THE SITE.
     </p>
     <p>
@@ -132,4 +132,4 @@
     <p>
     	Please report any violations of the Terms and Conditions of Use to <a href="mailto:admin@realtasia.com.sg">admin@realtasia.com.sg</a>
     </p>
-
+</div>

@@ -1,5 +1,5 @@
 <div style="margin-top:50px" class="contentArea">
-    <h1>Privacy Policy</h1>
+    <h3><i class="icon-key"></i>&nbsp;Privacy Policy</h3>
     <p class="lead">
         Realtasia knows that you care about how your personal information is used
         and shared and we take your <strong>privacy seriously</strong>.
@@ -117,7 +117,7 @@
 
         an e-mail request). In addition, with each communication you receive from Realtasia you will have the
 
-        opportunity to indicate if you do not wish to receive future communications. 
+        opportunity to indicate if you do not wish to receive future communications.
         <br>
         <br>
 
@@ -170,7 +170,8 @@
         The e-mail address of the operator collecting or maintaining personal information from children
 
         through this website is: <a href="mailto:privacy.realtasia.com">privacy@realtasia.com.sg</a>
-        <br><br>
+        <br>
+        <br>
         The types of personal information collected from children may include the name, e-mail address, home
 
         address, telephone number, or any other information reasonably necessary for the child to participate in
@@ -187,26 +188,28 @@
 
         through a forum or by other means.
     </p>
-        <h4 class="bold">Consent to Processing</h4>
-        <p>
-By providing any personal information to realtasia.com.sg, all users fully understand and 
+    <h4 class="bold">Consent to Processing</h4>
+    <p>
+        By providing any personal information to realtasia.com.sg, all users fully understand and
 
-unambiguously consent to the collection and processing of such information in the Republic of 
+        unambiguously consent to the collection and processing of such information in the Republic of
 
-Singapore.        	
-        </p>
-        <h4 class="bold">Changes to Privacy Policy</h4>
-        <p>
-The terms of this policy will govern the use and any information collected while it is in place. Realtasia 
+        Singapore.
+    </p>
+    <h4 class="bold">Changes to Privacy Policy</h4>
+    <p>
+        The terms of this policy will govern the use and any information collected while it is in place. Realtasia
 
-reserves the right to change this policy at any time, so please re-visit this page as often as you wish. 
+        reserves the right to change this policy at any time, so please re-visit this page as often as you wish.
 
-Changes to this privacy policy are effective at the time they are posted to this Site, and your continued 
+        Changes to this privacy policy are effective at the time they are posted to this Site, and your continued
 
-use of this Site after posting will constitute acceptance of, and agreement to be bound by those changes.    	
-        </p>
-                        <h4 class="bold">Questions</h4>
-        <p>If you have any questions or comments about our personal information practices or about this privacy 
+        use of this Site after posting will constitute acceptance of, and agreement to be bound by those changes.
+    </p>
+    <h4 class="bold">Questions</h4>
+    <p>
+        If you have any questions or comments about our personal information practices or about this privacy
 
-statement, please feel free to send an email to <a href="mailto:privacy.realtasia.com">privacy@realtasia.com.sg</a>
-        </p>
+        statement, please feel free to send an email to <a href="mailto:privacy.realtasia.com">privacy@realtasia.com.sg</a>
+    </p>
+</div>

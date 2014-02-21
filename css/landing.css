@@ -1,259 +1,283 @@
-	.sales-section {
-		position: relative;
-		padding-bottom: 5em;
-		padding: 6em 0;
-	}
-	.image-overlay {
-		background: url(/img/business-network.jpg) no-repeat fixed;
-		background-size: 100% auto;
-	}
-	#section-one {
-		background-color: #fff;
-		opacity: .9;
-	}
-	.color-overlay {
-		opacity: 0.9;
-		background-color: #ff7800;
-	}
-	.white-overlay {
-		opacity: 0.85;
-		background-color: #fff;
-		color: #000;
-	}
-	#section-orange {
+.sales-section {
+	position: relative;
+	padding-bottom: 5em;
+	padding: 6em 0;
+}
+.image-overlay {
+	background: url(/img/business-network.jpg) no-repeat fixed;
+	background-size: 100% auto;
+}
+#section-one {
+	background-color: #fff;
+	opacity: .9;
+}
+.color-overlay {
+	opacity: 0.9;
+	background-color: #ff7800;
+}
+.white-overlay {
+	opacity: 0.85;
+	background-color: #fff;
+	color: #000;
+}
+#section-orange {
 
-		border-top: 1px solid #FF5200;
-		text-shadow: 0 -1px 1px #A5A5A5;
-	}
-	#section-blue-light {
-		background-color: #4d90fe;
-		padding: 3em 0;
-		border-top: 1px solid #0046B9;
-		box-shadow: 1px 1px 1px #C5C5C5 inset;
-		text-shadow: -1px -1px 1px #777;
-	}
-	.logo-img {
-		text-align: center;
-		display: block;
-		margin: 0 auto;
-		width: 15rem;
-		height: auto !important;
-	}
-	.wordHolder {
-		margin: 0;
-		vertical-align: middle;
-		text-align: left;
-		padding-top: 2em;
-		position: relative
-	}
+	border-top: 1px solid #FF5200;
+	text-shadow: 0 -1px 1px #A5A5A5;
+}
+#section-blue-light {
+	background-color: #4d90fe;
+	padding: 3em 0;
+	border-top: 1px solid #0046B9;
+	box-shadow: 1px 1px 1px #C5C5C5 inset;
+	text-shadow: -1px -1px 1px #777;
+}
+.logo-img {
+	text-align: center;
+	display: block;
+	margin: 0 auto;
+	width: 15rem;
+	height: auto !important;
+}
+.wordHolder {
+	margin: 0;
+	vertical-align: middle;
+	text-align: left;
+	padding-top: 2em;
+	position: relative
+}
 
-	.head-banner {
-		bottom: 0;#prices .pricing-item {
-    padding: 0 0 20px 0;
-    text-align: center;
-    background: #eee;
-    margin-top: 20px;
+.head-banner {
+	bottom: 0;#prices .pricing-item {
+	padding: 0 0 20px 0;
+	text-align: center;
+	background: #eee;
+	margin-top: 20px;
 }
 #prices .pricing-item .pricing-title {
-    font-family: 'Roboto', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 20px 0;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	text-transform: uppercase;
+	padding: 20px 0;
 }
 #prices .pricing-item .pricer {
-    font-family: 'Roboto', sans-serif;
-    font-size: 18px;
-    font-weight: 300;
-    padding: 20px 0;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	font-weight: 300;
+	padding: 20px 0;
 }
 #prices .pricing-item .pricer span {
-    display: block;
-    font-size: 48px;
-    font-weight: 700;
+	display: block;
+	font-size: 48px;
+	font-weight: 700;
 }
 #prices .pricing-item .pricer span span {
-    font-size: 18px;
-    font-weight: 300;
-    display: inline;
+	font-size: 18px;
+	font-weight: 300;
+	display: inline;
 }
 #prices .pricing-item ul {
-    padding: 0 10px 10px 0;
-    list-style: none;
+	padding: 0 10px 10px 0;
+	list-style: none;
 }
 #prices .pricing-item ul li {
-    padding: 15px 0;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-    color: #777;
+	padding: 15px 0;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+	color: #777;
 }
-#prices .pricing-item:hover,
-#prices .pricing-item.best:hover {
-    background: #f9f9f9
+#prices .pricing-item:hover, #prices .pricing-item.best:hover {
+	background: #f9f9f9
 }
 #prices .pricing-item.best {
-    background: #f5f5f5
+	background: #f5f5f5
 }
-#prices .pricing-item:hover div,
-#prices .pricing-item:hover a {
-    transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
+#prices .pricing-item:hover div, #prices .pricing-item:hover a {
+	transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
 }
-		left: 0;
-		width: 100%;
-		background-color: #000;
-		background-image: url(/img/stressed_linen.png);
-		background-size: auto;
-		/*background-color: rgba(0,0,0,0.8);*/
-		background-repeat: repeat repeat;
-		padding: 5em 0;
+left: 0;
+width: 100%;
+background-color: #000;
+background-image: url(/img/stressed_linen.png);
+background-size: auto;
+/*background-color: rgba(0,0,0,0.8);*/
+background-repeat: repeat repeat;
+padding: 5em 0;
+}
+.slogan {
+	text-align: left;
+	font-size: 4em;
+}
+.largeNav {
+	opacity: 0 !important;
+}
+
+.flip {
+	-webkit-animation: spin 3s ease 1;
+	-moz-animation: spin 3s ease 1;
+	animation: spin 3s ease 1;
+}
+.hoverEffect {
+	-webkit-transition: all 0.5s;
+	font-size: 9em;
+	padding: 10px 20px;
+}
+.grayscale {
+	-webkit-filter: grayscale(100%);
+}
+
+@media (min-width: 980px) and (max-width: 1200px) {
+	.hoverEffect {
+		font-size: 8em
+	}
+}
+@media (min-width: 768px) and (max-width: 979px) {
+	.hoverEffect {
+		font-size: 6em
 	}
 	.slogan {
+		font-size: 2.5em;
+	}
+}
+@media (max-width: 767px) {
+	.logo-img {
+		width: 5rem;
+		height: 5rem;
+	}
+	.wordHolder {
+		padding: 1em;
+	}
+	.slogan {
+		font-size: 1.7em;
 		text-align: left;
-		font-size: 4em;
-	}
-	.largeNav {
-		opacity: 0 !important;
-	}
-
-	.flip {
-		-webkit-animation: spin 3s ease 1;
-		-moz-animation: spin 3s ease 1;
-		animation: spin 3s ease 1;
+		margin-top: 0;
+		margin-left: 21%;
+		line-height: 1.4;
 	}
 	.hoverEffect {
-		-webkit-transition: all 0.5s;
-		font-size: 9em;
-		padding: 10px 20px;
+		font-size: 4em
 	}
-	.grayscale {
-		-webkit-filter: grayscale(100%);
-	}
-
-	@media (min-width: 980px) and (max-width: 1200px) {
-		.hoverEffect {
-			font-size: 8em
-		}
-	}
-	@media (min-width: 768px) and (max-width: 979px) {
-		.hoverEffect {
-			font-size: 6em
-		}
-		.slogan {
-			font-size: 2.5em;
-		}		
-	}
-	@media (max-width: 767px) {
-		.logo-img {
-			width: 5rem;
-			height: 5rem;
-		}
-		.wordHolder {
-			padding: 1em;
-		}
-		.slogan {
-			font-size: 1.7em;
-			text-align: left;
-			margin-top:0;
-			margin-left:21%;
-			line-height:1.4;
-		}
-		.hoverEffect {
-			font-size: 4em
-		}
-		.centerOnSmall {
-			width: 100%;
-			float: none;
-			text-align: center;
-			margin: 0 auto;
-			padding-bottom: 2em;
-		}
-		.sales-section {
-			padding: 3em 2em;
-		}
-		#section-one {
-			padding: 3em 0 !important;
-		}
-		.noMrgTop {
-			font-size: 2.3em;
-			line-height: 1.1;
-		}
-	}
-
-	@-moz-keyframes spin { 100% { -moz-transform: rotateY(360deg); } }
-	@-webkit-keyframes spin { 100% { -webkit-transform: rotateY(360deg); } }
-	@keyframes spin { 100% { -webkit-transform: rotateY(360deg); transform:rotateY(360deg); } }
-
-	#prices .pricing-item {
-		padding: 0 0 20px 0;
+	.centerOnSmall {
+		width: 100%;
+		float: none;
 		text-align: center;
-		background: #eee;
-		margin-top: 20px;
+		margin: 0 auto;
+		padding-bottom: 2em;
 	}
-	#prices .pricing-item .pricing-title {
-		font-family: 'Roboto', sans-serif;
-		font-size: 18px;
-		font-weight: 700;
-		text-transform: uppercase;
-		padding: 20px 0;
+	.sales-section {
+		padding: 3em 2em;
 	}
-	#prices .pricing-item .pricer {
-		font-family: 'Roboto', sans-serif;
-		font-size: 18px;
-		font-weight: 300;
-		padding: 20px 0;
+	#section-one {
+		padding: 3em 0 !important;
 	}
-	#prices .pricing-item .pricer span {
-		display: block;
-		font-size: 48px;
-		font-weight: 700;
+	.noMrgTop {
+		font-size: 2.3em;
+		line-height: 1.1;
 	}
-	#prices .pricing-item .pricer span span {
-		font-size: 18px;
-		font-weight: 300;
-		display: inline;
-	}
-	#prices .pricing-item ul {
-		padding: 0 10px 10px 0;
-		list-style: none;
-	}
-	#prices .pricing-item ul li {
-		padding: 15px 0;
-		text-align: center;
-		border-bottom: 1px solid #ddd;
-		color: #777;
-	}
-	#prices .pricing-item:hover, #prices .pricing-item.best:hover {
-		background: #f9f9f9
-	}
-	#prices .pricing-item.best {
-		background: #f5f5f5
-	}
-	#prices .pricing-item:hover div, #prices .pricing-item:hover a {
-		transition: all 0.3s;
-		-moz-transition: all 0.3s;
-		-webkit-transition: all 0.3s;
-		-o-transition: all 0.3s;
-	}
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotateY(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotateY(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotateY(360deg); transform:rotateY(360deg); } }
+
+#prices .pricing-item {
+	padding: 0 0 20px 0;
+	text-align: center;
+	background: #eee;
+	margin-top: 20px;
+}
 #prices .pricing-item .pricing-title {
-    background: #4d90fe;
-    color: #fff;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	text-transform: uppercase;
+	padding: 20px 0;
+}
+#prices .pricing-item .pricing-title small {
+	font-weight: normal;
+	text-transform: none;
+	padding: 20px 0;
 }
 #prices .pricing-item .pricer {
-    background: #0F6AFF;
-    color: #fff;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	font-weight: 300;
+	padding: 20px 0;
+}
+#prices .pricing-item .pricer span {
+	display: block;
+	font-size: 48px;
+	font-weight: 700;
+}
+#prices .pricing-item .pricer span span {
+	font-size: 18px;
+	font-weight: 300;
+	display: inline;
+}
+#prices .pricing-item ul {
+	padding: 0 10px 10px 0;
+	list-style: none;
+}
+#prices .pricing-item ul li {
+	padding: 15px 0;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+	color: #777;
+}
+#prices .pricing-item:hover, #prices .pricing-item.best:hover {
+	background: #f9f9f9
+}
+#prices .pricing-item.best {
+	background: #f5f5f5
+}
+#prices .pricing-item:hover div, #prices .pricing-item:hover a {
+	transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+}
+#prices .pricing-item .pricing-title {
+	background: #048FC4;
+	color: #fff;
+}
+#prices .pricing-item .pricer {
+	background: #00ACED;
+	color: #fff;
 }
 #prices .pricing-item.best .pricing-title {
-    background: #0161fd;
+	background: #008DDD;
 }
 #prices .pricing-item.best .pricer {
-    background: #0453D5;
+	background: #00B9FF;
 }
 #prices .pricing-item:hover .pricing-title {
-    background: #76A3EC;
+	background: #42B7E4;
 }
 #prices .pricing-item:hover .pricer {
-    background: #0F6AFF;
+	background: #00B9FF;
+}
+.red{color:crimson}
+.title{
+	padding-top:2em;
+}
+.title h2 {
+	padding:.3em 0;
+	font-size:3em;	
+}
+.title .circle {
+	width: 20px;
+	height: 20px;
+	margin: 0 auto;
+	border-radius: 50%;
+	background: #00ACED;
+}
+.title .line {
+	width: 165px;
+	height: 2px;
+	margin: 0 auto;
+	background: #00ACED;
 }

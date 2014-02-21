@@ -7,12 +7,13 @@
                 <div class="row-fluid">
                     <div class="span3 hidden-phone" style="position:relative;padding-top:4em">
                         <img src="img/transparentLogo.png" class="logo-img"  style="display:none;">
-                        
+
                     </div>
                     <div class="span9 wordHolder">
                         <img src="img/RealTAsiaLogoWords.png" class="words-img hidden-phone"  style="display:none;">
-                        <div class="visible-phone"><img src="img/RealTAsiaLogoFull.png" class="words-img"  style="display:none;"></div>
-                        <small class="badge badge-warning" style="position:absolute;top:0;right:10px;">BETA</small>
+                        <div class="visible-phone"><img src="img/RealTAsiaLogoFull.png" class="words-img"  style="display:none;">
+                        </div>
+                        <small class="label label-info" style="position:absolute;top:0;right:10px;">BETA</small>
                         <h1 class="slogan" style="display:none;">The Right Now Real Estate </h1>
                     </div>
                 </div>
@@ -39,8 +40,12 @@
             </div>
         </div>
         <div class="white-overlay">
+            <header class="title centralize">
+                <div class="circle"></div>
+                <h2 class="noMrgTop">Features</h2>
+                <div class="line"></div>
+            </header>
             <div class="sales-section">
-
                 <div class="container-fluid" style="height:100%">
                     <div class="row-fluid">
                         <div class="span4 text-center">
@@ -50,6 +55,7 @@
                             <h1 class="noMrgTop">Conversations matter.</h1>
                             <p class="lead">
                                 Exchange ideas in a public or private setting. Create opportunities for people to write testimonials on your services. You can even write one for co-workers or co-brokers.
+                                RealtAsia provides a way for people to subscribe to your updates so you can send that important message to those who matter.
                             </p>
                         </div>
                         <div class="span4 text-center">
@@ -71,11 +77,20 @@
                             <h1 class="noMrgTop">Real time updates.</h1>
                             <p class="lead">
                                 Access the latest developments and events in any location. Never miss out on up-to-date information while you are viewing a property.
+                                Instant notifications of a person or place you are subscribed to keeps you in the know.
+                                <br>
+                                Everytime.
                             </p>
                         </div>
 
                     </div>
                 </div>
+            </div>
+            <div class="centralize">
+            	<h3>Just the tip of the iceberg.</h3>
+                <p>
+                    We'll share the details of our roadmap and a list of features with you when you join our community
+                </p>
             </div>
         </div>
     </div>
@@ -86,30 +101,30 @@
         </p>
         <div class="btn-toolbar">
             <div class="btn-group">
-                <button class="btn btn-danger btn-large">
-                    Subscribe
-                </button>
+                <a href="#prices" class="btn btn-warning btn-large"> See Packages </a>
             </div>
             <div class="btn-group">
-                <button class="btn btn-large">
-                    FAQ
-                </button>
+                <a href="/faq" class="btn btn-large"> FAQ </a>
             </div>
         </div>
     </div>
 </div>
 <div id="container" style="padding-bottom:100px;">
     <section class="clearfix" id="prices">
-        <header class="title">
-            <h1 class="text-center">Choose your package</h1>
+        <header class="title centralize">
+            <div class="circle"></div>
+            <h2 class="noMrgTop">Packages</h2>
+            <div class="line"></div>
         </header>
 
         <div class="row-fluid animate fadeIn-onload fadeIn">
             <!-- Pricing Item 1 -->
 
-            <div class="span4 pricing-item" >
+            <div class="span4 pricing-item">
                 <div class="pricing-title">
                     Basic
+                    <br>
+                    <small><i class="red">*</i> Limited to 50 Sign-Ups</small>
                 </div>
 
                 <div class="pricer">
@@ -129,15 +144,15 @@
                     <li>
                         Lifetime Subscription Lock In
                     </li>
-                    <li>
-                        Free upgrades to new features*
-                    </li>
+
                 </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
             </div><!-- Pricing Item 2 -->
 
             <div class="span4 pricing-item best">
                 <div class="pricing-title">
                     Plus
+                    <br>
+                    <small><i class="red">*</i> Limited to 50 Sign-Ups.</small>
                 </div>
 
                 <div class="pricer">
@@ -152,13 +167,10 @@
                         Email / Phone Support
                     </li>
                     <li>
-                        5GB Storage
+                        10GB Storage
                     </li>
                     <li>
                         Lifetime Subscription Lock In
-                    </li>
-                    <li>
-                        Free upgrades to new features*
                     </li>
                 </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
             </div><!-- Pricing Item 3 -->
@@ -166,6 +178,8 @@
             <div class="span4 pricing-item">
                 <div class="pricing-title">
                     Enhanced
+                    <br>
+                    <small><i class="red">*</i> Limited to 50 Sign-Ups.</small>
                 </div>
 
                 <div class="pricer">
@@ -185,13 +199,12 @@
                     <li>
                         Lifetime Subscription Lock In
                     </li>
-                    <li>
-                        Free upgrades to new features*
-                    </li>
                 </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
             </div>
         </div><!-- /row -->
-        <p class="muted contentArea">* Plan terms are subject to our conditions of use and privacy policy. Please read the FAQ for more information</p>
+        <p class="muted contentArea">
+            * Plan terms are subject to our <a href="/terms">terms of use</a> and <a href="/privacy">privacy policy</a>. Please read the <a href="/faq">FAQ</a> for more information
+        </p>
     </section>
 </div>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
@@ -202,10 +215,10 @@
 			l.fadeIn("slow", function() {
 				l.addClass('flip');
 				setTimeout(function() {
-					w.fadeIn(function(){
+					w.fadeIn(function() {
 						setTimeout(function() {
 							slogan.slideDown();
-						}, 500);						
+						}, 500);
 					});
 				}, 500);
 			})
