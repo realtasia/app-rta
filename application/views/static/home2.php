@@ -5,13 +5,14 @@
         <div class="sales-section" id="section-one">
             <div class="container-fluid clearfix" style="max-width:1000px;text-align: center;margin:0 auto">
                 <div class="row-fluid">
-                    <div class="span3" style="position:relative;padding-top:4em">
+                    <div class="span3 hidden-phone" style="position:relative;padding-top:4em">
                         <img src="img/transparentLogo.png" class="logo-img"  style="display:none;">
                         
                     </div>
                     <div class="span9 wordHolder">
-                        <img src="img/RealTAsiaLogoWords.png" class="words-img"  style="display:none;">
-                        <small class="badge badge-warning" style="position:absolute;top:0;right:0">BETA 1.0</small>
+                        <img src="img/RealTAsiaLogoWords.png" class="words-img hidden-phone"  style="display:none;">
+                        <div class="visible-phone"><img src="img/RealTAsiaLogoFull.png" class="words-img"  style="display:none;"></div>
+                        <small class="badge badge-warning" style="position:absolute;top:0;right:10px;">BETA</small>
                         <h1 class="slogan" style="display:none;">The Right Now Real Estate </h1>
                     </div>
                 </div>
@@ -208,7 +209,7 @@
 					});
 				}, 500);
 			})
-		}, 500);
+		}, 100);
 
 	})
 </script>
