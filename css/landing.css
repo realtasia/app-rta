@@ -232,18 +232,18 @@
     color: #fff;
 }
 #prices .pricing-item .pricer {
-    background: #2aaeb6;
+    background: #0F6AFF;
     color: #fff;
 }
 #prices .pricing-item.best .pricing-title {
     background: #0161fd;
 }
 #prices .pricing-item.best .pricer {
-    background: #32b5bd;
+    background: #10459C;
 }
 #prices .pricing-item:hover .pricing-title {
     background: #76A3EC;
 }
 #prices .pricing-item:hover .pricer {
-    background: #39bec6;
+    background: #0F6AFF;
 }
