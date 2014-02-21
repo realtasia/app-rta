@@ -73,13 +73,13 @@ Route::set('default', function($uri) {
               'action'     => $uri
           ];
       // at least something was given, check if static page.
-      if (in_array(trim($uri, '/'), ['index', 'faq', 'terms', 'help', 'about', 'contact']))
+      if (in_array(trim($uri, '/'), ['index', 'faq', 'terms', 'help', 'about', 'contact', 'register', 'privacy']))
           return [
               'controller' => 'home',
               'static'     => trim($uri, '/')
           ];
 
-      if (in_array(trim($uri, '/'), ['login', 'logout', 'api', 'verify_sms', 'get_verification', 'checkAuth', 'renew', 'accessdenied', 'poll', 'loginbasic', 'previewterms', 'generalterms', 'privacy']))
+      if (in_array(trim($uri, '/'), ['login', 'logout', 'api', 'verify_sms', 'get_verification', 'checkAuth', 'renew', 'accessdenied', 'poll', 'loginbasic']))
           return [
               'controller' => 'home',
               'action'     => trim($uri, '/')

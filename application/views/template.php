@@ -89,15 +89,15 @@
         <footer class="clearfix" id="mainFooter">
             <div class="container-fluid" style="border-top:1px solid #aaa;">
                 <div class="centralize">
-                    <h4 style="margin:0 auto"><a href="#"><i class="icon-legal"></i>&nbsp;Terms of Use</a></h4><span class="middot">&middot;</span>
-                    <h4 style="margin:0 auto"><a href="#"><i class="icon-key"></i>&nbsp;Privacy</a></h4><span class="middot">&middot;</span>
+                    <h4 style="margin:0 auto"><a href="/terms"><i class="icon-legal"></i>&nbsp;Terms of Use</a></h4><span class="middot">&middot;</span>
+                    <h4 style="margin:0 auto"><a href="/privacy"><i class="icon-key"></i>&nbsp;Privacy</a></h4><span class="middot">&middot;</span>
                     <h4 style="margin:0 auto"><a href="#"><i class="icon-phone"></i>&nbsp;Contact Us</a></h4>
                 </div>
                 <div class="centralize">
                     <h4 style="margin:0 auto"><a target="_blank" href="http://www.facebook.com/realtasia"><i class="icon-facebook icon-2x"></i></a></h4>
                     <h4 style="margin:0 auto"><a target="_blank" href="http://www.twitter.com/realtasia"><i class="icon-twitter icon-2x"></i></a></h4>
                     <h4 style="margin:0 auto"><a target="_blank" href="https://plus.google.com/u/0/b/115564044398517531473/"><i class="icon-google-plus icon-2x"></i></a></h4>
-                    <small style="display:block; color:#222">&COPY; 2011 - <?php echo date("Y") ?> RealtAsia Pte Ltd <span class="middot">&middot;</span> 10 Anson Road, International Plaza, #10-11, S(077490) <span class="middot">&middot;</span> Reg: 201025666K</small>
+                    <small style="display:block; color:#222">&COPY; 2010 - <?php echo date("Y") ?> RealtAsia Pte Ltd <span class="middot">&middot;</span> 10 Anson Road, International Plaza, #10-11, S(077490) <span class="middot">&middot;</span> Reg: 201025666K</small>
                 </div>
             </div>
         </footer>

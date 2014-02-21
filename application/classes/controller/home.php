@@ -20,7 +20,7 @@ class Controller_Home extends Controller_Auth {
         $static = $this->request->param('static');
 
         if (!empty($static))
-            return $this->{"action_" . str_replace('-', '_', $static)}();
+			$this->request->action(str_replace('-', '_', $static));
     }
 
     /**
@@ -30,8 +30,13 @@ class Controller_Home extends Controller_Auth {
      */
     public function action_index()
     {
-        return $this->content = View::factory('home2');
+        $this->content = View::factory('static/home2');
     }
+
+	public function action_faq()
+	{
+		$this->content = View::factory('static//faq');
+	}
 
     /**
      * Displays non-ajax login page
@@ -40,7 +45,7 @@ class Controller_Home extends Controller_Auth {
      */
     public function action_loginbasic()
     {
-        return $this->content = View::factory('forms/login');
+        $this->content = View::factory('forms/login');
     }
 
     /**
@@ -54,14 +59,14 @@ class Controller_Home extends Controller_Auth {
     }
 
 
-	public function action_previewterms()
+	public function action_terms()
 	{
-		$this->content = View::factory('preview_terms');
+		return $this->content = View::factory('static/terms');
 	}
 
 	public function action_privacy()
 	{
-		$this->content = View::factory('preview_terms');
+		$this->content = View::factory('static/privacy');
 	}
 
 
