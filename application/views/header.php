@@ -141,7 +141,7 @@
                     <!--/ko-->
                     <!--ko ifnot: user-->
                     <li>
-                        <a href="/#Register"><i class="icon-hand-right"></i> Register</a>
+                        <a href="/#prices"><i class="icon-hand-right"></i> Register</a>
                     </li>
                     <li class="verticle-divider"></li>
                     <li>

@@ -6,15 +6,15 @@
             <div class="container-fluid clearfix" style="max-width:1000px;text-align: center;margin:0 auto">
                 <div class="row-fluid">
                     <div class="span3 hidden-phone" style="position:relative;padding-top:4em">
-                        <img src="img/transparentLogo.png" class="logo-img"  style="display:none;">
+                        <img src="img/transparentLogo.png" class="logo-img">
 
                     </div>
                     <div class="span9 wordHolder">
-                        <img src="img/RealTAsiaLogoWords.png" class="words-img hidden-phone"  style="display:none;">
-                        <div class="visible-phone"><img src="img/RealTAsiaLogoFull.png" class="words-img"  style="display:none;">
+                        <img src="img/RealTAsiaLogoWords.png" class="words-img hidden-phone">
+                        <div class="visible-phone"><img src="img/RealTAsiaLogoFull.png" class="words-img">
                         </div>
                         <small class="label label-info" style="position:absolute;top:0;right:10px;">BETA</small>
-                        <h1 class="slogan" style="display:none;">The Right Now Real Estate </h1>
+                        <h1 class="slogan">The Right Now Real Estate </h1>
                     </div>
                 </div>
             </div>
@@ -210,19 +210,36 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
 <script>
 	$(document).ready(function() {
-		var l = $(".logo-img"), w = $(".words-img"), slogan = $(".slogan");
-		setTimeout(function() {
+		var logo = $(".logo-img")
+		, words = $(".words-img")
+		, slogan = $(".slogan")
+		, menu = $('.navbar-inverse')
+		, tl = new TimelineLite({paused: true});
+		
+		
+		tl.from(logo, 2, {opacity: .1, scale: 2, rotationY: 720})
+		.from(words, .8, {opacity: .1, scale: 2, ease: Back.easeOut}, "-=1")
+		.from(slogan, .8, {rotation: "-40deg", alpha: 0, ease: Back.easeOut}, "-=.8")
+		.to(menu, .8, {opacity: 1, ease: Back.easeOut}, "-=.3")
+		.resume();
+		
+		
+		
+/*		setTimeout(function() {
 			l.fadeIn("slow", function() {
 				l.addClass('flip');
 				setTimeout(function() {
 					w.fadeIn(function() {
 						setTimeout(function() {
-							slogan.slideDown();
-						}, 500);
+							slogan.slideDown(700, function(){
+								$('.largeNav').removeClass('largeNav')
+							});
+						}, 400);
 					});
-				}, 500);
+				}, 400);
 			})
 		}, 100);
+*/			
+	});
 
-	})
 </script>

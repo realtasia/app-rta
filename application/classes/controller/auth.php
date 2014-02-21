@@ -46,7 +46,7 @@ abstract class Controller_Auth extends Controller_Template {
         /*         * **************************************************************** */
         $s=ASDK::dynamoSession();
         //Mongosession::init();
-        $this->session = Session::instance();
+        $this->session = Session::instance('native');
 		// echo "<h1 style='margin-top:50px'>".Debug::vars($s->isSessionOpen())."</h1>";
 		//die(Debug::vars(session_module_name()));
         //Profiler::stop($ba);
