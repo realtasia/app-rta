@@ -1,105 +1,97 @@
 <link rel="stylesheet" type="text/css" href="css/landing.css">
+
+
 <div class="page-wrap" style="min-height:500px;">
     <div class="image-overlay">
         <div class="sales-section" id="section-one">
-            <div class="container-fluid clearfix" style=
-            "max-width:1000px;text-align: center;margin:0 auto">
+            <div class="container-fluid clearfix" style="max-width:1000px;text-align: center;margin:0 auto">
                 <div class="row-fluid">
-                    <div class="span3" style=
-                    "position:relative;padding-top:4em"><img class="logo-img"
-                    src="img/transparentLogo.png" style="display:none;"></div>
-
+                    <div class="span3" style="position:relative;padding-top:4em">
+                        <img src="img/transparentLogo.png" class="logo-img"  style="display:none;">
+                    </div>
                     <div class="span9 wordHolder">
-                        <img class="words-img" src="img/RealTAsiaLogoWords.png"
-                        style="display:none;">
-
+                        <img src="img/RealTAsiaLogoWords.png" class="words-img"  style="display:none;">
                         <h1 class="slogan">The Right Now Real Estate</h1>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="color-overlay">
             <div class="sales-section" id="section-orange">
-                <div class="container clearfix" style=
-                "margin:0 auto;height:100%">
+                <div class="container clearfix" style="margin:0 auto;height:100%">
                     <div class="row-fluid">
-                        <div class="span2 centerOnSmall"></div>
-
+                        <div class="span2 centerOnSmall">
+                            <i class="hoverEffect text-right icon-group white"></i>
+                        </div>
                         <div class="span10">
-                            <h1 class="white noMrgTop">A Real Estate Portal
-                            designed to focus on you.</h1>
-
-                            <p class="lead white">It's a property portal. It's
-                            a social network.<br>
-                            Mostly, it's really all about you. RealtAsia
-                            showcases you and your services as well as we do
-                            your property listings.</p>
+                            <h1 class="white noMrgTop">A Real Estate Portal designed to focus on you.</h1>
+                            <p class="lead white">
+                                It's a property portal. It's a social network.
+                                <br>
+                                Mostly, it's really all about you.
+                                RealtAsia showcases you and your services as well as we do your property listings.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="white-overlay">
             <div class="sales-section">
+
                 <div class="container-fluid" style="height:100%">
                     <div class="row-fluid">
                         <div class="span4 text-center">
-                            <div class="hoverEffect centralize"></div>
-
+                            <div class="hoverEffect centralize">
+                                <i class="icon-comments-alt"></i>
+                            </div>
                             <h1 class="noMrgTop">Conversations matter.</h1>
-
-                            <p class="lead">Exchange ideas in a public or
-                            private setting. Create opportunities for people to
-                            write testimonials on your services. You can even
-                            write one for co-workers or co-brokers.</p>
+                            <p class="lead">
+                                Exchange ideas in a public or private setting. Create opportunities for people to write testimonials on your services. You can even write one for co-workers or co-brokers.
+                            </p>
                         </div>
-
                         <div class="span4 text-center">
-                            <div class="hoverEffect centralize"></div>
-
+                            <div class="hoverEffect centralize">
+                                <i class="icon-hand-up"></i>
+                            </div>
                             <h1 class="noMrgTop">Instant interactivity.</h1>
 
-                            <p class="lead">Users can comment on, like or
-                            subscribe to each individual <strong>property
-                            listing</strong>. They get to see attached
-                            brochures, pictures or videos without ever leaving
-                            the page.<br>
-                            Answer queries once in comments and have everyone
-                            else read it.</p>
+                            <p class="lead">
+                                Users can comment on, like or subscribe to each individual <strong>property listing</strong>. They get to see attached brochures, pictures or videos without ever leaving the page.
+                                <br>
+                                Answer queries once in comments and have everyone else read it.
+                            </p>
                         </div>
-
                         <div class="span4 text-center">
-                            <div class="hoverEffect centralize"></div>
-
+                            <div class="hoverEffect centralize">
+                                <i class="icon-dashboard"></i>
+                            </div>
                             <h1 class="noMrgTop">Real time updates.</h1>
-
-                            <p class="lead">Access the latest developments and
-                            events in any location. Never miss out on
-                            up-to-date information while you are viewing a
-                            property.</p>
+                            <p class="lead">
+                                Access the latest developments and events in any location. Never miss out on up-to-date information while you are viewing a property.
+                            </p>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="head-banner centralize">
-        <h1 class="white noMrgTop">Registrations Now Open for our Private
-        Preview!</h1>
-
-        <p class="lead white">Membership is currently limited, so hurry,
-        subscribe now or read through our FAQ.</p>
-
+        <h1 class="white noMrgTop">Registrations Now Open for our Private Preview!</h1>
+        <p class="lead white">
+            Membership is currently limited, so hurry, subscribe now or read through our FAQ.
+        </p>
         <div class="btn-toolbar">
             <div class="btn-group">
-                <button class="btn btn-danger btn-large">Subscribe</button>
+                <button class="btn btn-danger btn-large">
+                    Subscribe
+                </button>
             </div>
-
             <div class="btn-group">
-                <button class="btn btn-large">FAQ</button>
+                <button class="btn btn-large">
+                    FAQ
+                </button>
             </div>
         </div>
     </div>
