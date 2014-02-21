@@ -30,7 +30,7 @@ class Controller_Home extends Controller_Auth {
      */
     public function action_index()
     {
-        return $this->content = View::factory('home');
+        return $this->content = View::factory('home2');
     }
 
     /**

@@ -1,4 +1,4 @@
-<header class="navbar navbar-fixed-top navbar-inverse">
+<header class="largeNav navbar navbar-fixed-top navbar-inverse">
     <div class="navbar-inner inner">
         <div class="">
             <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar collapsed hidden-desktop"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>

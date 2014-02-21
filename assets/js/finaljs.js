@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2014-02-19 21:10:04 
+   Compiled at: 2014-02-21 13:17:07 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -1969,19 +1969,19 @@ RT["Notify"] = function() {
 
     })();
     // simple method to keep the footer fixed to the bottom
-    (function() {
-        var w = $(window), fixFooter = function() {
-            var $footer = $("#mainFooter"),
-                    fHeight = $footer.height(),
-                    fTop = (w.scrollTop() + w.height() - fHeight) + "px";
-
-            return ($(document.body).height() + fHeight) < w.height()
-                    ? $footer.css({position: "absolute"}).animate({top: fTop})
-                    : $footer.css({position: "static"});
-        };
-        fixFooter();
-        w.scroll(fixFooter).resize(fixFooter);
-    })();
+    // (function() {
+        // var w = $(window), fixFooter = function() {
+            // var $footer = $("#mainFooter"),
+                    // fHeight = $footer.height(),
+                    // fTop = (w.scrollTop() + w.height() - fHeight) + "px";
+// 
+            // return ($(document.body).height() + fHeight) < w.height()
+                    // ? $footer.css({position: "absolute"}).animate({top: fTop})
+                    // : $footer.css({position: "static"});
+        // };
+        // setTimeout(function(){fixFooter()}, 1);
+        // w.scroll(fixFooter).resize(fixFooter);
+    // })();
     // ko binding tick (for clocks) - currently not used
     (function() {
         var mins = new Date().getMinutes(), secs = mins * 60,
@@ -2027,7 +2027,7 @@ RT["Notify"] = function() {
 
 
 /* File: assets/js/app.js
-   Compiled at: 2014-02-19 21:10:04 
+   Compiled at: 2014-02-21 13:17:07 
 ================================ */
 RT.App = function() {"use strict";
 	var self, o = "inbox user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch  hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin adminLocations";

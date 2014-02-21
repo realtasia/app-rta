@@ -1966,19 +1966,19 @@ RT["Notify"] = function() {
 
     })();
     // simple method to keep the footer fixed to the bottom
-    (function() {
-        var w = $(window), fixFooter = function() {
-            var $footer = $("#mainFooter"),
-                    fHeight = $footer.height(),
-                    fTop = (w.scrollTop() + w.height() - fHeight) + "px";
-
-            return ($(document.body).height() + fHeight) < w.height()
-                    ? $footer.css({position: "absolute"}).animate({top: fTop})
-                    : $footer.css({position: "static"});
-        };
-        fixFooter();
-        w.scroll(fixFooter).resize(fixFooter);
-    })();
+    // (function() {
+        // var w = $(window), fixFooter = function() {
+            // var $footer = $("#mainFooter"),
+                    // fHeight = $footer.height(),
+                    // fTop = (w.scrollTop() + w.height() - fHeight) + "px";
+// 
+            // return ($(document.body).height() + fHeight) < w.height()
+                    // ? $footer.css({position: "absolute"}).animate({top: fTop})
+                    // : $footer.css({position: "static"});
+        // };
+        // setTimeout(function(){fixFooter()}, 1);
+        // w.scroll(fixFooter).resize(fixFooter);
+    // })();
     // ko binding tick (for clocks) - currently not used
     (function() {
         var mins = new Date().getMinutes(), secs = mins * 60,

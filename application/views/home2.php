@@ -1,0 +1,206 @@
+<link rel="stylesheet" type="text/css" href="css/landing.css">
+<div class="page-wrap" style="min-height:500px;">
+    <div class="image-overlay">
+        <div class="sales-section" id="section-one">
+            <div class="container-fluid clearfix" style=
+            "max-width:1000px;text-align: center;margin:0 auto">
+                <div class="row-fluid">
+                    <div class="span3" style=
+                    "position:relative;padding-top:4em"><img class="logo-img"
+                    src="img/transparentLogo.png" style="display:none;"></div>
+
+                    <div class="span9 wordHolder">
+                        <img class="words-img" src="img/RealTAsiaLogoWords.png"
+                        style="display:none;">
+
+                        <h1 class="slogan">The Right Now Real Estate</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="color-overlay">
+            <div class="sales-section" id="section-orange">
+                <div class="container clearfix" style=
+                "margin:0 auto;height:100%">
+                    <div class="row-fluid">
+                        <div class="span2 centerOnSmall"></div>
+
+                        <div class="span10">
+                            <h1 class="white noMrgTop">A Real Estate Portal
+                            designed to focus on you.</h1>
+
+                            <p class="lead white">It's a property portal. It's
+                            a social network.<br>
+                            Mostly, it's really all about you. RealtAsia
+                            showcases you and your services as well as we do
+                            your property listings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="white-overlay">
+            <div class="sales-section">
+                <div class="container-fluid" style="height:100%">
+                    <div class="row-fluid">
+                        <div class="span4 text-center">
+                            <div class="hoverEffect centralize"></div>
+
+                            <h1 class="noMrgTop">Conversations matter.</h1>
+
+                            <p class="lead">Exchange ideas in a public or
+                            private setting. Create opportunities for people to
+                            write testimonials on your services. You can even
+                            write one for co-workers or co-brokers.</p>
+                        </div>
+
+                        <div class="span4 text-center">
+                            <div class="hoverEffect centralize"></div>
+
+                            <h1 class="noMrgTop">Instant interactivity.</h1>
+
+                            <p class="lead">Users can comment on, like or
+                            subscribe to each individual <strong>property
+                            listing</strong>. They get to see attached
+                            brochures, pictures or videos without ever leaving
+                            the page.<br>
+                            Answer queries once in comments and have everyone
+                            else read it.</p>
+                        </div>
+
+                        <div class="span4 text-center">
+                            <div class="hoverEffect centralize"></div>
+
+                            <h1 class="noMrgTop">Real time updates.</h1>
+
+                            <p class="lead">Access the latest developments and
+                            events in any location. Never miss out on
+                            up-to-date information while you are viewing a
+                            property.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="head-banner centralize">
+        <h1 class="white noMrgTop">Registrations Now Open for our Private
+        Preview!</h1>
+
+        <p class="lead white">Membership is currently limited, so hurry,
+        subscribe now or read through our FAQ.</p>
+
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                <button class="btn btn-danger btn-large">Subscribe</button>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-large">FAQ</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="container" style="padding-bottom:100px;">
+	    <section class="clearfix" id="prices">
+            <header class="title">
+                <h2 class="centralize">Choose your package</h2>
+            </header>
+
+            <div class="row-fluid animate fadeIn-onload fadeIn">
+                <!-- Pricing Item 1 -->
+
+                <div class="span4 pricing-item" >
+                    <div class="pricing-title">
+                        Basic
+                    </div>
+
+                    <div class="pricer">
+                        <span>$99.99<span>/yr</span></span>
+                    </div>
+
+                    <ul>
+                        <li>Site Explorer Platform</li>
+
+                        <li>Fresh Index Each Month</li>
+
+                        <li>Access to API</li>
+
+                        <li>60 Detailed Reports Per Month</li>
+
+                        <li>2,000,000 Analyzable Backlinks</li>
+                    </ul><a class="btn btn-primary btn-large" href=
+                    "#">Subscribe</a>
+                </div><!-- Pricing Item 2 -->
+
+                <div class="span4 pricing-item best">
+                    <div class="pricing-title">
+                        Plus
+                    </div>
+
+                    <div class="pricer">
+                        <span>$149.99<span>/yr</span></span>
+                    </div>
+
+                    <ul>
+                        <li>Site Explorer Platform</li>
+
+                        <li>Fresh Index Each Week</li>
+
+                        <li>Access to API</li>
+
+                        <li>120 Detailed Reports Per Month</li>
+
+                        <li>5,000,000 Analyzable Backlinks</li>
+                    </ul><a class="btn btn-primary btn-large" href=
+                    "#">Subscribe</a>
+                </div><!-- Pricing Item 3 -->
+
+                <div class="span4 pricing-item">
+                    <div class="pricing-title">
+                        Maximum
+                    </div>
+
+                    <div class="pricer">
+                        <span>$199.99<span>/yr</span></span>
+                    </div>
+
+                    <ul>
+                        <li>Site Explorer Platform</li>
+
+                        <li>Fresh Index Each Day</li>
+
+                        <li>Access to API</li>
+
+                        <li>60 Detailed Reports Per Month</li>
+
+                        <li>8,000,000 Analyzable Backlinks</li>
+                    </ul><a class="btn btn-primary btn-large" href=
+                    "#">Subscribe</a>
+                </div>
+            </div><!-- /row -->
+    </section>
+</div>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
+<script>
+	$(document).ready(function() {
+		var l = $(".logo-img"), w = $(".words-img"), g = $(".grayscale");
+		g.hover(function() {
+			$(this).removeClass('grayscale');
+		}, function() {
+			$(this).addClass('grayscale');
+		});
+		setTimeout(function() {
+			l.fadeIn("slow", function() {
+				l.addClass('flip');
+				setTimeout(function() {
+					w.fadeIn();
+				}, 1000);
+			})
+		}, 1000);
+
+	})
+</script>
