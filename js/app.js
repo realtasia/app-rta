@@ -2832,7 +2832,7 @@ RT.Forms = {
 		self.VM = RTApp;
 		RTC.MakeObsFromArray.call(this, o.concat(self.regFields));
 		RTC.MakeObsFromArray.apply(this, ["isUniqueUsername isUniquePhone isUniqueEmail", !0]);
-		self.currentState("payment");
+		self.currentState("reg");
 		self.gender("male");
 		self.gender.extend({
 			required : !0

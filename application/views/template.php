@@ -63,7 +63,7 @@
             <?php
             include_once(Kohana::find_file('views', 'header'));
             $r = Request::initial();
-            if ($r->controller() === 'home' && $r->action() === 'index'):
+            if ($r->controller() === 'home' && ($r->action() === 'index' || $r->action() === 'register')):
                 echo $content;
             else:
                 ?>

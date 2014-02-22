@@ -10,7 +10,7 @@
 #section-one {
 	background-color: #fff;
 	opacity: .9;
-	margin-top:10px;
+	margin-top: 10px;
 }
 .color-overlay {
 	opacity: 0.9;
@@ -116,11 +116,10 @@
 .largeNav {
 	opacity: 0;
 	/*transition: opacity 0.5s ease-in-out;
-	-moz-transition: opacity 0.5s ease-in-out;
-	-webkit-transition: opacity 0.5s ease-in-out;
-	-o-transition: opacity 0.5s ease-in-out;*/	
+	 -moz-transition: opacity 0.5s ease-in-out;
+	 -webkit-transition: opacity 0.5s ease-in-out;
+	 -o-transition: opacity 0.5s ease-in-out;*/
 }
-
 .flip {
 	-webkit-animation: spin 3s ease 1;
 	-moz-animation: spin 3s ease 1;
@@ -134,7 +133,11 @@
 .grayscale {
 	-webkit-filter: grayscale(100%);
 }
-@media (min-width: 1080px){ #section-one{min-height:250px}}
+@media (min-width: 1080px) {
+	#section-one {
+		min-height: 250px
+	}
+}
 @media (min-width: 980px) and (max-width: 1200px) {
 	.hoverEffect {
 		font-size: 8em
@@ -189,82 +192,6 @@
 @-webkit-keyframes spin { 100% { -webkit-transform: rotateY(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotateY(360deg); transform:rotateY(360deg); } }
 
-#prices .pricing-item {
-	padding: 0 0 20px 0;
-	text-align: center;
-	background: #eee;
-	margin-top: 20px;
-}
-#prices .pricing-item .pricing-title {
-	font-family: 'Roboto', sans-serif;
-	font-size: 18px;
-	font-weight: 700;
-	text-transform: uppercase;
-	padding: 20px 0;
-}
-#prices .pricing-item .pricing-title small {
-	font-weight: normal;
-	text-transform: none;
-	padding: 20px 0;
-}
-#prices .pricing-item .pricer {
-	font-family: 'Roboto', sans-serif;
-	font-size: 18px;
-	font-weight: 300;
-	padding: 20px 0;
-}
-#prices .pricing-item .pricer span {
-	display: block;
-	font-size: 48px;
-	font-weight: 700;
-}
-#prices .pricing-item .pricer span span {
-	font-size: 18px;
-	font-weight: 300;
-	display: inline;
-}
-#prices .pricing-item ul {
-	padding: 0 10px 10px 0;
-	list-style: none;
-}
-#prices .pricing-item ul li {
-	padding: 15px 0;
-	text-align: center;
-	border-bottom: 1px solid #ddd;
-	color: #777;
-}
-#prices .pricing-item:hover, #prices .pricing-item.best:hover {
-	background: #f9f9f9
-}
-#prices .pricing-item.best {
-	background: #f5f5f5
-}
-#prices .pricing-item:hover div, #prices .pricing-item:hover a, .navbar-inverse {
-	transition: all 0.3s;
-	-moz-transition: all 0.3s;
-	-webkit-transition: all 0.3s;
-	-o-transition: all 0.3s;
-}
-#prices .pricing-item .pricing-title {
-	background: #048FC4;
-	color: #fff;
-}
-#prices .pricing-item .pricer {
-	background: #00ACED;
-	color: #fff;
-}
-#prices .pricing-item.best .pricing-title {
-	background: #008DDD;
-}
-#prices .pricing-item.best .pricer {
-	background: #00B9FF;
-}
-#prices .pricing-item:hover .pricing-title {
-	background: #42B7E4;
-}
-#prices .pricing-item:hover .pricer {
-	background: #00B9FF;
-}
 .red {
 	color: crimson
 }
@@ -287,4 +214,108 @@
 	height: 2px;
 	margin: 0 auto;
 	background: #00ACED;
+}
+
+.pricing-table {
+	text-align: center;
+	padding: 0;
+	margin: 30px 0;
+	line-height: 150%;
+}
+
+.pricing-table.dark > li {
+	background-image: -webkit-linear-gradient(top, #666666 0%, #444444 100%);
+	background-image: linear-gradient(to bottom, #666666 0%, #444444 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff666666', endColorstr='#ff444444', GradientType=0);
+	color: #fff;
+}
+
+.pricing-table > li {
+	background-image: -webkit-linear-gradient(top, #ebeef5 0%, #ffffff 100%);
+	background-image: linear-gradient(to bottom, #ebeef5 0%, #ffffff 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffebeef5', endColorstr='#ffffffff', GradientType=0);
+	color: #444;
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s;
+}
+
+.pricing-table li {
+	list-style: none;
+	margin-left: 0;
+}
+
+.compact.row-fluid [class*="span"] {
+	margin-left: 0;
+}
+.pricing-table > li.active.primary {
+	background-image: -webkit-linear-gradient(top, #357ebd 0%, #428bca 100%);
+	background-image: linear-gradient(to bottom, #357ebd 0%, #428bca 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff357ebd', endColorstr='#ff428bca', GradientType=0);
+}
+
+@media (min-width: 768px) {
+	.pricing-table > li.active {
+		-webkit-transform: scale(1.03);
+		-ms-transform: scale(1.03);
+		transform: scale(1.03);
+	}
+}
+
+.pricing-table > li.active, .pricing-table > li.active .footer {
+	color: #fff;
+	-webkit-box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.5);
+	z-index: 1;
+}
+.pricing-table h3 {
+	text-transform: uppercase;
+	padding: 15px 0;
+	line-height: inherit;
+}
+.pricing-table > li.active.primary .price-body, .pricing-table > li.active.success .price-body, .pricing-table > li.active.warning .price-body, .pricing-table > li.active.danger .price-body, .pricing-table > li.active.info .price-body {
+	border-color: #fff;
+}
+.pricing-table.dark .price-body {
+	border-color: #fff;
+}
+.pricing-table .price-body {
+	width: 125px;
+	height: 125px;
+	margin: 0 auto 15px auto;
+	border: 2px solid #444;
+	border-radius: 100%;
+	display: table;
+}
+.pricing-table .features ul {
+	margin: 0;
+	padding: 0;
+}
+.pricing-table .features ul li {
+	padding: 5px 0;
+}
+
+.pricing-table.dark .footer {
+	background: #333;
+}
+.pricing-table .footer {
+	padding: 15px;
+	margin: 15px -15px 0;
+	background: #eee;
+}
+.pricing-table .aprice {
+	font-size: 25px;
+	font-weight: bold;
+	text-transform: uppercase;
+	vertical-align: middle;
+	display: table-cell;
+}
+.pricing-table .aprice .price-figure {
+	display: block;
+}
+.pricing-table .aprice .price-term {
+	font-size: 11px;
+	font-weight: normal;
 }

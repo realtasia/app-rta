@@ -69,7 +69,10 @@ class Controller_Home extends Controller_Auth {
 		$this->content = View::factory('static/privacy');
 	}
 
-
+	public function action_register()
+	{
+		$this->content = View::factory('forms/register');
+	}
 
     public function action_test()
     {

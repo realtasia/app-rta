@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div class="centralize">
-            	<h3>Just the tip of the iceberg.</h3>
+                <h3>Just the tip of the iceberg.</h3>
                 <p>
                     We'll share the details of our roadmap and a list of features with you when you join our community
                 </p>
@@ -110,136 +110,154 @@
     </div>
 </div>
 <div id="container" style="padding-bottom:100px;">
-    <section class="clearfix" id="prices">
+
+    <section class="compact row-fluid">
         <header class="title centralize">
             <div class="circle"></div>
             <h2 class="noMrgTop">Packages</h2>
             <div class="line"></div>
-        </header>
-
-        <div class="row-fluid animate fadeIn-onload fadeIn">
-            <!-- Pricing Item 1 -->
-
-            <div class="span4 pricing-item">
-                <div class="pricing-title">
-                    Basic
-                    <br>
-                    <small><i class="red">*</i> Limited to 50 Sign-Ups</small>
+        </header>    	
+        <ul class="pricing-table dark" contenteditable="">
+        	<li class="hidden-phone" style="width:2.2%;display:inline-block;float:left;background:transparent">&nbsp;</li>
+            <li class="span4">
+                <h3>Starter <br><small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
+                <div class="price-body">
+                    <div class="aprice">
+                        <span class="price-figure"><sup>$</sup>99<small>.99</small> </span>
+                        <span class="price-term">per year</span>
+                    </div>
                 </div>
-
-                <div class="pricer">
-                    <span>$99.99<span>/yr</span></span>
+                <div class="features">
+                    <ul>
+                        <li>
+                            <strong>10</strong> Property Listings
+                        </li>
+                        <li>
+                            Personalised Profile Page
+                        </li>
+                        <li>
+                            Email / Phone Support
+                        </li>
+                        <li>
+                            1GB Storage
+                        </li>
+                        <li>
+                            Lifetime Subscription Lock In
+                        </li>
+                    </ul>
                 </div>
-
-                <ul>
-                    <li>
-                        <span class="number">10</span> Property Listings
-                    </li>
-                    <li>
-                        Email / Phone Support
-                    </li>
-                    <li>
-                        1GB Storage
-                    </li>
-                    <li>
-                        Lifetime Subscription Lock In
-                    </li>
-
-                </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
-            </div><!-- Pricing Item 2 -->
-
-            <div class="span4 pricing-item best">
-                <div class="pricing-title">
-                    Plus
-                    <br>
-                    <small><i class="red">*</i> Limited to 50 Sign-Ups.</small>
+                <div class="footer">
+                    <a href="#" class="btn btn-primary btn-large">Get Started</a>
                 </div>
+            </li>
 
-                <div class="pricer">
-                    <span>$149.99<span>/yr</span></span>
+            <!-- Active/Hover styles -->
+            <li class="active primary span4">
+                <h3>Basic <br><small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
+                <div class="price-body">
+                    <div class="aprice">
+                        <span class="price-figure"><sup>$</sup>149<small>.99</small> </span>
+                        <span class="price-term">per year</span>
+                    </div>
                 </div>
-
-                <ul>
-                    <li>
-                        <span class="number">20</span> Property Listings
-                    </li>
-                    <li>
-                        Email / Phone Support
-                    </li>
-                    <li>
-                        10GB Storage
-                    </li>
-                    <li>
-                        Lifetime Subscription Lock In
-                    </li>
-                </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
-            </div><!-- Pricing Item 3 -->
-
-            <div class="span4 pricing-item">
-                <div class="pricing-title">
-                    Enhanced
-                    <br>
-                    <small><i class="red">*</i> Limited to 50 Sign-Ups.</small>
+                <div class="features">
+                    <ul>
+                        <li>
+                            <strong>20</strong> Property Listings
+                        </li>
+                        <li>
+                            Personalised Profile Page
+                        </li>
+                        <li>
+                            Email / Phone Support
+                        </li>
+                        <li>
+                            10GB Storage
+                        </li>
+                        <li>
+                            Lifetime Subscription Lock In
+                        </li>
+                    </ul>
                 </div>
-
-                <div class="pricer">
-                    <span>$199.98<span>/yr</span></span>
+                <div class="footer">
+                    <a href="#" class="btn btn-danger btn-large">Get Started</a>
                 </div>
-
-                <ul>
-                    <li>
-                        <span class="number">50</span> Property Listings
-                    </li>
-                    <li>
-                        Email / Phone Support
-                    </li>
-                    <li>
-                        Unlimited Storage
-                    </li>
-                    <li>
-                        Lifetime Subscription Lock In
-                    </li>
-                </ul><a class="btn btn-danger btn-large" href="#">Subscribe</a>
-            </div>
-        </div><!-- /row -->
-        <p class="muted contentArea">
-            * Plan terms are subject to our <a href="/terms">terms of use</a> and <a href="/privacy">privacy policy</a>. Please read the <a href="/faq">FAQ</a> for more information
-        </p>
+            </li>
+            <li class="span4">
+                <h3>Premium <br><small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
+                <div class="price-body">
+                    <div class="aprice">
+                        <span class="price-figure"><sup>$</sup>199<small>.99</small> </span>
+                        <span class="price-term">per year</span>
+                    </div>
+                </div>
+                <div class="features">
+                    <ul>
+                        <li>
+                            <strong>50</strong> Property Listings
+                        </li>
+                        <li>
+                            Personalised Profile Page
+                        </li>
+                        <li>
+                            Email / Phone Support
+                        </li>
+                        <li>
+                            Unlimited Storage
+                        </li>
+                        <li>
+                            Lifetime Subscription Lock In
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer">
+                    <a href="#" class="btn btn-primary btn-large">Get Started</a>
+                </div>
+            </li>
+            <div class="clearfix"></div>
+        </ul>
     </section>
 </div>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
 <script>
 	$(document).ready(function() {
-		var logo = $(".logo-img")
-		, words = $(".words-img")
-		, slogan = $(".slogan")
-		, menu = $('.navbar-inverse')
-		, tl = new TimelineLite({paused: true});
-		
-		
-		tl.from(logo, 2, {opacity: .1, scale: 2, rotationY: 720})
-		.from(words, .8, {opacity: .1, scale: 2, ease: Back.easeOut}, "-=1")
-		.from(slogan, .8, {rotation: "-40deg", alpha: 0, ease: Back.easeOut}, "-=.8")
-		.to(menu, .8, {opacity: 1, ease: Back.easeOut}, "-=.3")
-		.resume();
-		
-		
-		
-/*		setTimeout(function() {
-			l.fadeIn("slow", function() {
-				l.addClass('flip');
-				setTimeout(function() {
-					w.fadeIn(function() {
-						setTimeout(function() {
-							slogan.slideDown(700, function(){
-								$('.largeNav').removeClass('largeNav')
-							});
-						}, 400);
-					});
-				}, 400);
-			})
-		}, 100);
-*/			
+		var logo = $(".logo-img"), words = $(".words-img"), slogan = $(".slogan"), menu = $('.navbar-inverse'), tl = new TimelineLite({
+			paused : true
+		});
+
+		tl.from(logo, 2, {
+			opacity : .1,
+			scale : 2,
+			rotationY : 360,
+			ease : Quad.easeInOut
+		}).from(words, .8, {
+			opacity : 0,
+			scale : 2,
+			ease : Quad.easeOut
+		}, "-=.8").from(slogan, .6, {
+			rotation : "-40deg",
+			alpha : 0,
+			ease : Back.easeOut
+		}, "-=.3").to(menu, .8, {
+			opacity : 1,
+			ease : Back.easeOut
+		}, "-=.3").resume();
+
+		/*		setTimeout(function() {
+		 l.fadeIn("slow", function() {
+		 l.addClass('flip');
+		 setTimeout(function() {
+		 w.fadeIn(function() {
+		 setTimeout(function() {
+		 slogan.slideDown(700, function(){
+		 $('.largeNav').removeClass('largeNav')
+		 });
+		 }, 400);
+		 });
+		 }, 400);
+		 })
+		 }, 100);
+		 */
 	});
 
 </script>

@@ -4402,7 +4402,7 @@ a#inboxLink{
   overflow: hidden;
   text-overflow: ellipsis;	
 }
-
+.success .add-on, .error .add-on, .warning .add-on {color:#fff !important;}
 
 header.navbar-inverse a i.color-comment{color: #4d90fe !important;}
 header.navbar-inverse a i.color-feedback{color: purple !important;}
