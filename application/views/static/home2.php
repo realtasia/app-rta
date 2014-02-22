@@ -137,7 +137,7 @@
                                 <div class="features">
                                     <ul>
                                         <li>
-                                            <strong>10</strong> Property Listings
+                                            <h4 style="display:inline-block;font-weight:bolder">10</h4> Property Listings
                                         </li>
                                         <li>
                                             Personalised Profile Page
@@ -149,7 +149,7 @@
                                             1GB Storage
                                         </li>
                                         <li>
-                                            Lifetime Subscription Lock In
+                                            Subscription Price Lock-In
                                         </li>
                                     </ul>
                                 </div>
@@ -172,7 +172,7 @@
                                 <div class="features">
                                     <ul>
                                         <li>
-                                            <strong>25</strong> Property Listings
+                                            <h4 style="display:inline-block;font-weight:bolder">25</h4> Property Listings
                                         </li>
                                         <li>
                                             Personalised Profile Page
@@ -184,7 +184,7 @@
                                             10GB Storage
                                         </li>
                                         <li>
-                                            Lifetime Subscription Lock In
+                                            Subscription Price Lock-In
                                         </li>
                                     </ul>
                                 </div>
@@ -205,7 +205,7 @@
                                 <div class="features">
                                     <ul>
                                         <li>
-                                            <strong>50</strong> Property Listings
+                                            <h4 style="display:inline-block;font-weight:bolder">50</h4> Property Listings
                                         </li>
                                         <li>
                                             Personalised Profile Page
@@ -217,7 +217,7 @@
                                             Unlimited Storage
                                         </li>
                                         <li>
-                                            Lifetime Subscription Lock In
+                                            Subscription Price Lock-In
                                         </li>
                                     </ul>
                                 </div>
@@ -247,10 +247,30 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
 <script>
 	$(document).ready(function() {
-		var logo = $(".logo-img"), words = $(".words-img"), slogan = $(".slogan"), menu = $('.navbar-inverse'), tl = new TimelineLite({
+		var logo = $(".logo-img")
+		, words = $(".words-img")
+		, slogan = $(".slogan")
+		, menu = $('.navbar-inverse')
+		, tl = new TimelineLite({
 			paused : true
-		}), carousel = $('#contentCarousel');
+		})
+		, carousel = $('#contentCarousel')
+		, carouselRight = function() {
+			var idx = $('#contentCarousel .active').index('#contentCarousel .item');
+			if(idx === 0){
+				carousel.carousel('next');
+				$('html, body').animate({
+					scrollTop : $("#prices").offset().top - 20
+				}, 500, 'easeOutExpo');
+				RTApp.initRegForm();
+			}
 
+		}, carouselLeft = function(){
+			var idx = $('#contentCarousel .active').index('#contentCarousel .item');
+			if(idx !== 0){
+				carousel.carousel('prev');
+			}			
+		};
 		carousel.carousel({
 			interval : false
 		});
@@ -273,16 +293,10 @@
 			ease : Back.easeOut
 		}, "-=.3").resume();
 		
-		carousel.on('swipeleft', function(){$(this).carousel("prev")});
-		carousel.on('swiperight', function(){$(this).carousel("right")});
+		carousel.on('swipeleft', carouselLeft);
+		carousel.on('swiperight', carouselRight);
 
-		$('.pricing-table .btn').click(function() {
-			carousel.carousel('next');
-			$('html, body').animate({
-				scrollTop : $("#prices").offset().top - 20
-			}, 500, 'easeOutExpo');
-			RTApp.initRegForm();
-		})
+		$('.pricing-table .btn').click(carouselRight);
 	});
 
 </script>

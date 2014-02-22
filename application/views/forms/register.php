@@ -8,7 +8,7 @@
 		max-width: 450px;
 		box-shadow: 2px 2px 15px #999;
 		border-radius: 5px;
-		margin:30px auto;
+		margin: 30px auto;
 	}
 
 </style>
@@ -118,89 +118,51 @@
         <!--/ko-->
         <!--ko if : currentState() === 'payment' -->
         <div id="payment" style="display:block;">
-            <h3 class="textShadow"><i class="icon-user"></i>&nbsp;Please select your account type</h3>
-            <hr>
             <div class="row-fluid" style='min-height:450px'>
-                <div class="span6">
-                    <a class="btn-large thumbnail choice" data-bind="css:{active:isAgent}, click:toggleIsAgent">I am a Real Estate Agent
-                    <br>
-                    <small class="muted">Private Preview Subscription: <span class="relative" style="text-decoration: line-through;vertical-align:middle">$239*</span>&nbsp;<strong>$99/yr</strong></small></a>
-                    <div class="well" style="border-radius:0 2px 2px 0;margin-top:-1px" data-bind="animateActive:isAgent">
-                        <form class="form-large" style="margin-top:10px">
-                            <div class="control-group row-fluid" data-bind="RTAValidationEle: company">
-                                <div class="span6">
-                                    <input type="text" name="company" autocomplete="off" data-bind="value : companyLabel, autoComplete : { source: getCompany, select: addCompany, change:resetCompany, delay: 500, minLength: 2 }" placeholder="Your company name">
-                                </div>
-                                <div class="span6">
-                                    <span class="help-inline" title="Okay" data-bind="RTAValidationMsg: company"></span>
-                                </div>
-                            </div>
-                            <div class="control-group row-fluid" data-bind="RTAValidationEle: license">
-                                <div class="span6">
-                                    <input type="text" name="license" autocomplete="off" data-bind="value: license, valueUpdate: 'afterkeydown'" placeholder="Your CEA Registration No.">
-                                </div>
-                                <div class="span6">
-                                    <span class="help-inline" title="Okay" data-bind="RTAValidationMsg: license"></span>
-                                </div>
-                            </div>
-                            <input type="hidden" name='code' value="<?php echo Security::token() ?>">
-                        </form>
-                        <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                            <input type="hidden" name="cmd" value="_s-xclick">
-                            <input type="hidden" name="hosted_button_id" value="EDFQQ4HYU3RU2">
-                            <input type="hidden" name="_id" value="" data-bind="value: _id">
-                            <button name="submit" alt="PayPal – The safer, easier way to pay online." class="btn btn-large btn-warning" data-bind="enable: validateAgent">
-                                <i class="icon-hand-right" style="vertical-align: bottom;font-size:larger"></i>&nbsp;Pay with <span style="color:#14497B">Pay</span><span style="color:#007BC2">Pal</span>
-                            </button>
-                            <img alt="" border="0" src="https://www.sandbox.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-                        </form>
-                        <!--                                        <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="display:inline-block" data-bind="submit:saveExtras">
-                        <input type="hidden" name="cmd" value="_xclick">
-                        <input type="hidden" name="business" value="TTT8JAWADWV7L">
-                        <input type="hidden" name="lc" value="SG">
-                        <input type="hidden" name="item_name" value="RTA-OneTimePayment">
-                        <input type="hidden" name="item_number" value="1234">
-                        <input type="hidden" name="amount" value="99.90">
-                        <input type="hidden" name="currency_code" value="SGD">
-                        <input type="hidden" name="button_subtype" value="services">
-                        <input type="hidden" name="no_note" value="0">
-                        <input type="hidden" name="cn" value="Add special instructions to the seller:">
-                        <input type="hidden" name="no_shipping" value="2">
-                        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted">
-                        <button name="submit" alt="PayPal – The safer, easier way to pay online." class="btn btn-large btn-warning" data-bind="enable:validateAgent"><i class="icon-hand-right" style="vertical-align: bottom;font-size:larger"></i>&nbsp;Pay with <span style="color:#14497B">Pay</span><span style="color:#007BC2">Pal</span></button>
-                        <img alt="" border="0" src="https://www.sandbox.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-                        </form>-->
-                        <small class="muted">You don't need a paypal account.</small>
-
-                        <a onclick="return false;" href="#" style="text-align: left;text-decoration: underline;display:block;" data-bind="qtip:function(){return 'Please check your email for other payment options.'}">Other payment options</a>
-                        <br>
-                        <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup', 'WIPaypal', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');return false;"> <img class="img-polaroid" src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark" width="300" /> </a>
-                    </div>
-                </div>
-                <div class="span6">
-                    <a class="btn-large thumbnail choice" data-bind="css:{active:isUser}, click:toggleIsUser">I am <strong>Not</strong> a Real Estate Agent
-                    <br>
-                    <small class="muted">Free Account</small></a>
-                    <div class="well" style="border-radius:0 2px 2px 0;margin-top:-1px" data-bind="animateActive: isUser">
-                        <div class="alert alert-warning media">
-                            <p class="pull-left icon-info-sign" style="font-size:large"></p>
-
-                            <div class="media-body" >
-                                <h4>Your Account has been created!</h4>
-                                <p style="margin-top:5px">
-                                    However, at this time, we're limiting account activation to licensed real estate agents.
-                                </p>
-                                <p style="margin-top:5px">
-                                    Your account will be activated soon and we'll inform you via email/SMS using details you provided.
-                                </p>
-                                <p style="margin-top:5px">
-                                    If you have an enquiry, please navigate to the bottom of this page to see how you can get in touch with us.
-                                    <strong style="display:block;margin-top:5px">Thank you for your interest.</strong>
-                                </p>
-                                <small style="margin-top:10px" class="muted" data-bind="click:toggleIsAgent">Agent? Click <a href='#'>here.</a></small>
-                            </div>
+                <div class="span12">
+                    <small class="muted">Private Preview Subscription: <span class="relative" style="text-decoration: line-through;vertical-align:middle">$239*</span>&nbsp;<strong>$99/yr</strong></small>
+                    <form class="form-large" style="margin-top:10px">
+                        <div class="control-group row-fluid active" data-bind="RTAValidationEle: company">
+                            <input type="text" name="company" autocomplete="off" data-bind="value : companyLabel, autoComplete : { source: getCompany, select: addCompany, change:resetCompany, delay: 500, minLength: 2 }" placeholder="Your company name">
+                            <span class="help-block" title="Okay" data-bind="RTAValidationMsg: company"></span>
                         </div>
-                    </div>
+                        <div class="control-group row-fluid" data-bind="RTAValidationEle: license">
+                            <input type="text" name="license" autocomplete="off" data-bind="value: license, valueUpdate: 'afterkeydown'" placeholder="Your CEA Registration No.">
+                            <span class="help-inline" title="Okay" data-bind="RTAValidationMsg: license"></span>
+                        </div>
+                        <input type="hidden" name='code' value="<?php echo Security::token() ?>">
+                    </form>
+                    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin:5px auto;">
+                        <input type="hidden" name="cmd" value="_s-xclick">
+                        <input type="hidden" name="hosted_button_id" value="EDFQQ4HYU3RU2">
+                        <input type="hidden" name="_id" value="" data-bind="value: _id">
+                        <button name="submit" alt="PayPal – The safer, easier way to pay online." class="btn btn-large btn-warning" data-bind="enable: validateAgent">
+                            <i class="icon-hand-right" style="vertical-align: bottom;font-size:larger"></i>&nbsp;Pay with <span style="color:#14497B">Pay</span><span style="color:#007BC2">Pal</span>
+                        </button>
+                        <img alt="" border="0" src="https://www.sandbox.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+                        <br>
+                        <small class="muted">You don't need a paypal account.</small>
+                    </form>
+                    <!--                                        <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="display:inline-block" data-bind="submit:saveExtras">
+                    <input type="hidden" name="cmd" value="_xclick">
+                    <input type="hidden" name="business" value="TTT8JAWADWV7L">
+                    <input type="hidden" name="lc" value="SG">
+                    <input type="hidden" name="item_name" value="RTA-OneTimePayment">
+                    <input type="hidden" name="item_number" value="1234">
+                    <input type="hidden" name="amount" value="99.90">
+                    <input type="hidden" name="currency_code" value="SGD">
+                    <input type="hidden" name="button_subtype" value="services">
+                    <input type="hidden" name="no_note" value="0">
+                    <input type="hidden" name="cn" value="Add special instructions to the seller:">
+                    <input type="hidden" name="no_shipping" value="2">
+                    <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted">
+                    <button name="submit" alt="PayPal – The safer, easier way to pay online." class="btn btn-large btn-warning" data-bind="enable:validateAgent"><i class="icon-hand-right" style="vertical-align: bottom;font-size:larger"></i>&nbsp;Pay with <span style="color:#14497B">Pay</span><span style="color:#007BC2">Pal</span></button>
+                    <img alt="" border="0" src="https://www.sandbox.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+                    </form>-->
+
+                    <a class="form_footer" href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup', 'WIPaypal', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');return false;"> 
+                		<img class="img-polaroid" src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark" width="300" /> 
+                	</a>
                 </div>
             </div>
         </div>
