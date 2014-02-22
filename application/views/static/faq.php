@@ -81,7 +81,8 @@
                 <p class="muted textShadow" style="font-size:110%;line-height:1.7">
                     Your subscription plan never changes; so long as you maintain an account with us.
                     You get a chance to contribute to and help shape Realtasia as it moves forward.
-                    The preview period is <strong>limited to just a few </strong> users and you get up to <strong><em>40%</em></strong> off the proposed subscription fees!
+                    The preview period is <strong>limited to just a few </strong> users and you get up to <strong>* <em>40%</em></strong> off the proposed subscription fees!
+                    <br><small><b>*</b> Subject to package availability</small>
                 </p>
                 <a href="#main-content">Back to questions&nbsp;<i class="icon-arrow-up"></i></a>
             </div>

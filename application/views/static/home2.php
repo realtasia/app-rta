@@ -110,119 +110,149 @@
     </div>
 </div>
 <div id="container" style="padding-bottom:100px;">
+    <div class="container-fluid homeMenu">
+        <div id="contentCarousel" data-interval="false" class="relative carousel slide">
+            <div class="carousel-inner" style="margin-top:10px;">
+                <div class="active item relative" id="Packages">
+                    <section class="compact row-fluid" id="prices">
+                        <header class="title centralize">
+                            <div class="circle"></div>
+                            <h2 class="noMrgTop">Packages</h2>
+                            <div class="line"></div>
+                        </header>
+                        <ul class="pricing-table dark" contenteditable="">
+                            <li class="hidden-phone" style="width:2.2%;display:inline-block;float:left;background:transparent">
+                                &nbsp;
+                            </li>
+                            <li class="span4">
+                                <h3>Starter
+                                <br>
+                                <small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
+                                <div class="price-body">
+                                    <div class="aprice">
+                                        <span class="price-figure"><sup>$</sup>99<small>.99</small> </span>
+                                        <span class="price-term">per year</span>
+                                    </div>
+                                </div>
+                                <div class="features">
+                                    <ul>
+                                        <li>
+                                            <strong>10</strong> Property Listings
+                                        </li>
+                                        <li>
+                                            Personalised Profile Page
+                                        </li>
+                                        <li>
+                                            Email / Phone Support
+                                        </li>
+                                        <li>
+                                            1GB Storage
+                                        </li>
+                                        <li>
+                                            Lifetime Subscription Lock In
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="footer">
+                                    <a href="#" class="btn btn-primary btn-large">Get Started</a>
+                                </div>
+                            </li>
 
-    <section class="compact row-fluid">
-        <header class="title centralize">
-            <div class="circle"></div>
-            <h2 class="noMrgTop">Packages</h2>
-            <div class="line"></div>
-        </header>    	
-        <ul class="pricing-table dark" contenteditable="">
-        	<li class="hidden-phone" style="width:2.2%;display:inline-block;float:left;background:transparent">&nbsp;</li>
-            <li class="span4">
-                <h3>Starter <br><small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
-                <div class="price-body">
-                    <div class="aprice">
-                        <span class="price-figure"><sup>$</sup>99<small>.99</small> </span>
-                        <span class="price-term">per year</span>
-                    </div>
+                            <!-- Active/Hover styles -->
+                            <li class="active primary span4">
+                                <h3>Basic
+                                <br>
+                                <small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
+                                <div class="price-body">
+                                    <div class="aprice">
+                                        <span class="price-figure"><sup>$</sup>149<small>.99</small> </span>
+                                        <span class="price-term">per year</span>
+                                    </div>
+                                </div>
+                                <div class="features">
+                                    <ul>
+                                        <li>
+                                            <strong>25</strong> Property Listings
+                                        </li>
+                                        <li>
+                                            Personalised Profile Page
+                                        </li>
+                                        <li>
+                                            Email / Phone Support
+                                        </li>
+                                        <li>
+                                            10GB Storage
+                                        </li>
+                                        <li>
+                                            Lifetime Subscription Lock In
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="footer">
+                                    <a href="#" class="btn btn-warning btn-large">Get Started</a>
+                                </div>
+                            </li>
+                            <li class="span4">
+                                <h3>Premium
+                                <br>
+                                <small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
+                                <div class="price-body">
+                                    <div class="aprice">
+                                        <span class="price-figure"><sup>$</sup>199<small>.99</small> </span>
+                                        <span class="price-term">per year</span>
+                                    </div>
+                                </div>
+                                <div class="features">
+                                    <ul>
+                                        <li>
+                                            <strong>50</strong> Property Listings
+                                        </li>
+                                        <li>
+                                            Personalised Profile Page
+                                        </li>
+                                        <li>
+                                            Email / Phone Support
+                                        </li>
+                                        <li>
+                                            Unlimited Storage
+                                        </li>
+                                        <li>
+                                            Lifetime Subscription Lock In
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="footer">
+                                    <a href="#" class="btn btn-primary btn-large">Get Started</a>
+                                </div>
+                            </li>
+                            <div class="clearfix"></div>
+                        </ul>
+                    </section>
                 </div>
-                <div class="features">
-                    <ul>
-                        <li>
-                            <strong>10</strong> Property Listings
-                        </li>
-                        <li>
-                            Personalised Profile Page
-                        </li>
-                        <li>
-                            Email / Phone Support
-                        </li>
-                        <li>
-                            1GB Storage
-                        </li>
-                        <li>
-                            Lifetime Subscription Lock In
-                        </li>
-                    </ul>
+                <div class="item relative" id="Register">
+                    <header class="title centralize">
+                        <div class="circle"></div>
+                        <h2 class="noMrgTop">Create your Account</h2>
+                        <div class="line"></div>
+                    </header>
+                    <?php
+						include Kohana::find_file('views/forms', 'register');
+ ?>
                 </div>
-                <div class="footer">
-                    <a href="#" class="btn btn-primary btn-large">Get Started</a>
-                </div>
-            </li>
-
-            <!-- Active/Hover styles -->
-            <li class="active primary span4">
-                <h3>Basic <br><small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
-                <div class="price-body">
-                    <div class="aprice">
-                        <span class="price-figure"><sup>$</sup>149<small>.99</small> </span>
-                        <span class="price-term">per year</span>
-                    </div>
-                </div>
-                <div class="features">
-                    <ul>
-                        <li>
-                            <strong>20</strong> Property Listings
-                        </li>
-                        <li>
-                            Personalised Profile Page
-                        </li>
-                        <li>
-                            Email / Phone Support
-                        </li>
-                        <li>
-                            10GB Storage
-                        </li>
-                        <li>
-                            Lifetime Subscription Lock In
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer">
-                    <a href="#" class="btn btn-danger btn-large">Get Started</a>
-                </div>
-            </li>
-            <li class="span4">
-                <h3>Premium <br><small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
-                <div class="price-body">
-                    <div class="aprice">
-                        <span class="price-figure"><sup>$</sup>199<small>.99</small> </span>
-                        <span class="price-term">per year</span>
-                    </div>
-                </div>
-                <div class="features">
-                    <ul>
-                        <li>
-                            <strong>50</strong> Property Listings
-                        </li>
-                        <li>
-                            Personalised Profile Page
-                        </li>
-                        <li>
-                            Email / Phone Support
-                        </li>
-                        <li>
-                            Unlimited Storage
-                        </li>
-                        <li>
-                            Lifetime Subscription Lock In
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer">
-                    <a href="#" class="btn btn-primary btn-large">Get Started</a>
-                </div>
-            </li>
-            <div class="clearfix"></div>
-        </ul>
-    </section>
+            </div>
+        </div>
+    </div>
 </div>
+
 <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
 <script>
 	$(document).ready(function() {
 		var logo = $(".logo-img"), words = $(".words-img"), slogan = $(".slogan"), menu = $('.navbar-inverse'), tl = new TimelineLite({
 			paused : true
+		}), carousel = $('#contentCarousel');
+
+		carousel.carousel({
+			interval : false
 		});
 
 		tl.from(logo, 2, {
@@ -242,22 +272,17 @@
 			opacity : 1,
 			ease : Back.easeOut
 		}, "-=.3").resume();
+		
+		carousel.on('swipeleft', function(){$(this).carousel("prev")});
+		carousel.on('swiperight', function(){$(this).carousel("right")});
 
-		/*		setTimeout(function() {
-		 l.fadeIn("slow", function() {
-		 l.addClass('flip');
-		 setTimeout(function() {
-		 w.fadeIn(function() {
-		 setTimeout(function() {
-		 slogan.slideDown(700, function(){
-		 $('.largeNav').removeClass('largeNav')
-		 });
-		 }, 400);
-		 });
-		 }, 400);
-		 })
-		 }, 100);
-		 */
+		$('.pricing-table .btn').click(function() {
+			carousel.carousel('next');
+			$('html, body').animate({
+				scrollTop : $("#prices").offset().top - 20
+			}, 500, 'easeOutExpo');
+			RTApp.initRegForm();
+		})
 	});
 
 </script>

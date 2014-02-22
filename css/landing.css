@@ -244,6 +244,7 @@
 .pricing-table li {
 	list-style: none;
 	margin-left: 0;
+	position:relative;
 }
 
 .compact.row-fluid [class*="span"] {
