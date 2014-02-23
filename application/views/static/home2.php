@@ -139,7 +139,7 @@
                                     <ul>
                                         <li>
                                             <h4 style="display:inline-block;font-weight:bolder" data-bind="text:listings"></h4> Property Listings
-                                        </li>javascript remove first 
+                                        </li>
                                         <li>
                                             Personalised Profile Page
                                         </li>
