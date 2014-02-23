@@ -3024,10 +3024,16 @@ RT.Forms = {
 		self.validateRegistration = ko.computed(function() {
 			var t = this, f = t.regFields, v = true;
 			RTC.forEach(f, function(i) {
-				return t[i].isValid() || ( v = !1);
+				if(!t[i].isValid()){
+					v = !1;
+				} else {
+					if(v !== !1){
+						v = !0;
+					}
+				}
 			});
 			return v;
-		}, this).extend({
+		}, self).extend({
 			throttle : 500
 		});
 		self.validateAgent = ko.computed(function() {
@@ -4127,7 +4133,8 @@ RT.Forms = {
 	PP: function(options){
 		options = options || {};
 		var self = this;
-		
+		self.debug = ko.observable(true);
+				
 		self.fields =  {
 			cmd: '_xclick',
 			notify_url: 'http://' + RT.APP_SERVER + '/ipn',
@@ -4146,7 +4153,7 @@ RT.Forms = {
 			email: options.email,
 			first_name: options.first_name,
 			last_name: options.last_name,
-			business: 'admin@realtasia.com',
+			business: self.debug() ? 'sandpayer@realtasia.com' : 'admin@realtasia.com',
 			country:'SG'
 		};
 		
@@ -4163,7 +4170,7 @@ RT.Forms = {
 			
 			return ko.toJS(ret);
 		};
-		self.debug = ko.observable(false);
+
 		self.url = ko.computed(function(){
 			return self.debug() ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr'; 
 		});
@@ -5185,7 +5192,7 @@ RT.Forms.Registration.prototype = {
 			return RTC.isSuccess(r) && setTimeout(function() {
 				t._id(r.data._id);
 				t.currentState('payment');
-				RTApp.regForm.pp.custom = JSON.stringify({
+				RTApp.regForm().pp.custom = JSON.stringify({
 					uid: t._id()
 				});
 				return $.bootstrapGrowl('<p>Your account was successfully created. We sent you an email.</p>', {

@@ -1,5 +1,5 @@
 /* File: assets/js/dependancies.js
-   Compiled at: 2014-02-23 08:13:29 
+   Compiled at: 2014-02-23 17:13:36 
 ================================ */
 //window.onerror = function(message, file, line) {
 //  setTimeout(function() {
@@ -2027,7 +2027,7 @@ RT["Notify"] = function() {
 
 
 /* File: assets/js/app.js
-   Compiled at: 2014-02-23 08:13:29 
+   Compiled at: 2014-02-23 17:13:36 
 ================================ */
 RT.App = function() {"use strict";
 	var self, o = "inbox user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch  hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin adminLocations";
@@ -5055,10 +5055,16 @@ RT.Forms = {
 		self.validateRegistration = ko.computed(function() {
 			var t = this, f = t.regFields, v = true;
 			RTC.forEach(f, function(i) {
-				return t[i].isValid() || ( v = !1);
+				if(!t[i].isValid()){
+					v = !1;
+				} else {
+					if(v !== !1){
+						v = !0;
+					}
+				}
 			});
 			return v;
-		}, this).extend({
+		}, self).extend({
 			throttle : 500
 		});
 		self.validateAgent = ko.computed(function() {
@@ -6158,7 +6164,8 @@ RT.Forms = {
 	PP: function(options){
 		options = options || {};
 		var self = this;
-		
+		self.debug = ko.observable(true);
+				
 		self.fields =  {
 			cmd: '_xclick',
 			notify_url: 'http://' + RT.APP_SERVER + '/ipn',
@@ -6177,7 +6184,7 @@ RT.Forms = {
 			email: options.email,
 			first_name: options.first_name,
 			last_name: options.last_name,
-			business: 'admin@realtasia.com',
+			business: self.debug() ? 'sandpayer@realtasia.com' : 'admin@realtasia.com',
 			country:'SG'
 		};
 		
@@ -6194,7 +6201,7 @@ RT.Forms = {
 			
 			return ko.toJS(ret);
 		};
-		self.debug = ko.observable(false);
+
 		self.url = ko.computed(function(){
 			return self.debug() ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr'; 
 		});
@@ -7216,7 +7223,7 @@ RT.Forms.Registration.prototype = {
 			return RTC.isSuccess(r) && setTimeout(function() {
 				t._id(r.data._id);
 				t.currentState('payment');
-				RTApp.regForm.pp.custom = JSON.stringify({
+				RTApp.regForm().pp.custom = JSON.stringify({
 					uid: t._id()
 				});
 				return $.bootstrapGrowl('<p>Your account was successfully created. We sent you an email.</p>', {

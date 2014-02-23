@@ -35,7 +35,7 @@ class Controller_Home extends Controller_Auth {
 
 	public function action_faq()
 	{
-		$this->content = View::factory('static//faq');
+		$this->content = View::factory('static/faq');
 	}
 
     /**

@@ -188,7 +188,7 @@
 	}
 	.title h2 {
 		font-size: 1.9em !important;
-	}	
+	}
 }
 
 @-moz-keyframes spin { 100% { -moz-transform: rotateY(360deg); } }

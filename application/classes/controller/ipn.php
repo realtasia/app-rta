@@ -48,15 +48,13 @@ class Controller_Ipn extends Controller {
      * This should be your primary paypal email address or, if using sandbox,
      * the email address of your seller test user.
      */
-    public $expected_receiver_email = 'sandboxsell@realtasia.com';
+    public $expected_receiver_email = 'sandpayer@realtasia.com';
 
     /**
      * Main method
      */
     public function action_index()
     {
-        return $this->_check_and_save();
-        //Debug::log(print_r($this->request->post(), true));
         // Create and set up listener
         $this->_listener          = Ipn::factory();
         $this->_listener->use_ssl = $this->use_ssl;
@@ -86,7 +84,19 @@ class Controller_Ipn extends Controller {
                 Log::instance()->add(Log::NOTICE, $e->getMessage());
             }
         }
+		echo Debug::vars($this->_listener->get_text_report());
     }
+	
+	public function action_paymentsuccess()
+	{
+		$this->action_index();
+	}
+	
+	public function action_paymentcancel()
+	{
+		$this->action_index();
+	}
+	
 
     /**
      * Process a verified payment
@@ -182,7 +192,6 @@ class Controller_Ipn extends Controller {
      */
     protected function _check_and_save()
     {
-        return $this->response->body(Debug::vars($this->request->post()));
         Log::instance()->add(Log::NOTICE, print_r($this->request->post(), true));
         if ($this->_listener->check_email($this->expected_receiver_email))
         {

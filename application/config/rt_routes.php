@@ -66,27 +66,34 @@ Route::set('default', function($uri) {
               'controller' => 'home',
               'static'     => 'index'
           ];
+	  $trim_uri = trim($uri, '/');  
       // Check if this is the single controller. A finite set of actions.
-      if (in_array(trim($uri, '/'), ['parseurl', 'post', 'external', 'user', 'page']))
+      if (in_array($trim_uri, ['parseurl', 'post', 'external', 'user', 'page']))
           return [
               'controller' => 'single',
-              'action'     => $uri
+              'action'     => $trim_uri
           ];
       // at least something was given, check if static page.
-      if (in_array(trim($uri, '/'), ['index', 'faq', 'terms', 'help', 'about', 'contact', 'register', 'privacy']))
+      if (in_array($trim_uri, ['index', 'faq', 'terms', 'help', 'about', 'contact', 'register', 'privacy']))
           return [
               'controller' => 'home',
-              'static'     => trim($uri, '/')
+              'static'     => $trim_uri
           ];
+	  // paypal related
+	  if(in_array($trim_uri, ['paymentsuccess', 'paymentcancel']))
+		  return [
+		  	  'controller' => 'ipn', 
+		  	  'action'     => $trim_uri
+		  ];
 
-      if (in_array(trim($uri, '/'), ['login', 'logout', 'api', 'verify_sms', 'get_verification', 'checkAuth', 'renew', 'accessdenied', 'poll', 'loginbasic']))
+      if (in_array($trim_uri, ['login', 'logout', 'api', 'verify_sms', 'get_verification', 'checkAuth', 'renew', 'accessdenied', 'poll', 'loginbasic']))
           return [
               'controller' => 'home',
-              'action'     => trim($uri, '/')
+              'action'     => $trim_uri
           ];
       // not static, have to explode and check to route params for person
       // controller
-      $parts = explode('/', trim($uri, '/'));
+      $parts = explode('/', $trim_uri);
 
       // this is the default
       $return = [

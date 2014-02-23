@@ -13,7 +13,7 @@
 
 </style>
 <div class="centralize outerBox">
-    <div class="contentArea" style="background: rgba(255, 255, 255, 0.6);padding:30px;border-radius:5px;">
+    <div class="contentArea" style="background: rgba(255, 255, 255, 0.9);padding:30px;border-radius:5px;">
         <!--ko if : currentState() === 'reg'-->
         <form id="newRegForm" class="form-large text-left">
             <label class="control-label" for="imobile">Mobile<a href="#" class="label label-inverse help-text" data-bind="title:'Please have your mobile with you. We will send you a verification SMS shortly.'">?</a></label>

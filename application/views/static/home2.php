@@ -32,7 +32,7 @@
                                 It's a property portal. It's a social network.
                                 <br>
                                 Mostly, it's really all about you.
-                                RealtAsia showcases you and your services as well as we do your property listings.
+                                RealtAsia showcases you and your services just as well as we do your property listings.
                             </p>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
         </p>
         <div class="btn-toolbar">
             <div class="btn-group">
-                <a href="#prices" class="btn btn-warning btn-large"> See Packages </a>
+                <a href="#prices" id="seePackages" class="btn btn-warning btn-large"> See Packages </a>
             </div>
             <div class="btn-group">
                 <a href="/faq" class="btn btn-large"> FAQ </a>
@@ -234,8 +234,7 @@
 		carousel.on('swipeleft', carouselLeft);
 		carousel.on('swiperight', carouselRight);
 
-		$('#goPrev').click(carouselLeft);
-		$('#goNext').click(carouselRight);
+		$('#seePackages').click(function(){carouselLeft(); return true;});
 		$('.homeMenu').on('click', '.pricing-table a.btn', function(){
 			console.log('click');
 			var data = ko.dataFor(this), vm = ko.contextFor(this);
