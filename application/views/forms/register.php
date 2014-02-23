@@ -101,16 +101,16 @@
             </div>
             <div class="control-group row-fluid" data-bind='RTAValidationEle: agreedTerms'>
                 <div>
-                    <label class="checkbox checkbox-inline inline">
+                    <label class="checkbox checkbox-inline inline" style="font-size:1.1em">
                         <input type="checkbox" name="terms" data-bind="checked: agreedTerms">
-                        <small class="muted">&nbsp;I agree to Realtasia's <a href="/privacy" target="_blank">privacy policy</a> and <a href="/terms" target="_blank">terms of use</a></small> </label>
+                        <span class="muted">&nbsp;I agree to Realtasia's <a href="/privacy" target="_blank">privacy policy</a> and <a href="/terms" target="_blank">terms of use</a></span> </label>
                 </div>
                 <div>
                     <span class="help-inline" title="Okay" data-bind="RTAValidationMsg: agreedTerms"></span>
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn btn-inverse" data-bind="enable:validateRegistration, click:createAccount">
+                <button class="btn btn-inverse btn-large" data-bind="enable:validateRegistration, click:createAccount">
                     <i class="icon-ok" data-bind="css:{'icon-spinner icon-spin':creating}"></i>&nbsp;Create Account
                 </button>
             </div>

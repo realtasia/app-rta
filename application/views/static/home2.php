@@ -147,7 +147,7 @@
                                             Email / Phone Support
                                         </li>
                                         <li>
-                                            <span data-bind="text: $data.storage || 'unlimited'"></span> GB Storage
+                                            <span data-bind="text: $data.storage || 'Unlimited'"></span> GB Storage
                                         </li>
                                         <li>
                                             Subscription Price Lock-In
