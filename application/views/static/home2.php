@@ -110,7 +110,7 @@
     </div>
 </div>
 <div id="container" style="padding-bottom:100px;">
-    <div class="container-fluid homeMenu">
+    <div class="container-fluid homeMenu" data-bind="with:$root.regForm">
         <div id="contentCarousel" data-interval="false" class="relative carousel slide">
             <div class="carousel-inner" style="margin-top:10px;">
                 <div class="active item relative" id="Packages">
@@ -120,25 +120,26 @@
                             <h2 class="noMrgTop">Packages</h2>
                             <div class="line"></div>
                         </header>
-                        <ul class="pricing-table dark" contenteditable="">
+                        <ul class="pricing-table dark">
                             <li class="hidden-phone" style="width:2.2%;display:inline-block;float:left;background:transparent">
                                 &nbsp;
                             </li>
-                            <li class="span4">
-                                <h3>Starter
+                            <!-- ko foreach:$data.package.plans -->
+                            <li class="span4" data-bind="css:{active:featured, primary:featured}">
+                                <h3><span data-bind="text:name"></span>
                                 <br>
                                 <small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
                                 <div class="price-body">
                                     <div class="aprice">
-                                        <span class="price-figure"><sup>$</sup>99<small>.99</small> </span>
+                                        <span class="price-figure"><sup>$</sup><span data-bind="text:dollars"></span><small data-bind="text:cents.toString().slice(1)"></small> </span>
                                         <span class="price-term">per year</span>
                                     </div>
                                 </div>
                                 <div class="features">
                                     <ul>
                                         <li>
-                                            <h4 style="display:inline-block;font-weight:bolder">10</h4> Property Listings
-                                        </li>
+                                            <h4 style="display:inline-block;font-weight:bolder" data-bind="text:listings"></h4> Property Listings
+                                        </li>javascript remove first 
                                         <li>
                                             Personalised Profile Page
                                         </li>
@@ -146,7 +147,7 @@
                                             Email / Phone Support
                                         </li>
                                         <li>
-                                            1GB Storage
+                                            <span data-bind="text: $data.storage || 'unlimited'"></span>GB Storage
                                         </li>
                                         <li>
                                             Subscription Price Lock-In
@@ -157,75 +158,7 @@
                                     <a href="#" class="btn btn-primary btn-large">Get Started</a>
                                 </div>
                             </li>
-
-                            <!-- Active/Hover styles -->
-                            <li class="active primary span4">
-                                <h3>Basic
-                                <br>
-                                <small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
-                                <div class="price-body">
-                                    <div class="aprice">
-                                        <span class="price-figure"><sup>$</sup>149<small>.99</small> </span>
-                                        <span class="price-term">per year</span>
-                                    </div>
-                                </div>
-                                <div class="features">
-                                    <ul>
-                                        <li>
-                                            <h4 style="display:inline-block;font-weight:bolder">25</h4> Property Listings
-                                        </li>
-                                        <li>
-                                            Personalised Profile Page
-                                        </li>
-                                        <li>
-                                            Email / Phone Support
-                                        </li>
-                                        <li>
-                                            10GB Storage
-                                        </li>
-                                        <li>
-                                            Subscription Price Lock-In
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="footer">
-                                    <a href="#" class="btn btn-warning btn-large">Get Started</a>
-                                </div>
-                            </li>
-                            <li class="span4">
-                                <h3>Premium
-                                <br>
-                                <small class="white"><i class="red">*</i> Limited to 50 Sign-Ups.</small></h3>
-                                <div class="price-body">
-                                    <div class="aprice">
-                                        <span class="price-figure"><sup>$</sup>199<small>.99</small> </span>
-                                        <span class="price-term">per year</span>
-                                    </div>
-                                </div>
-                                <div class="features">
-                                    <ul>
-                                        <li>
-                                            <h4 style="display:inline-block;font-weight:bolder">50</h4> Property Listings
-                                        </li>
-                                        <li>
-                                            Personalised Profile Page
-                                        </li>
-                                        <li>
-                                            Email / Phone Support
-                                        </li>
-                                        <li>
-                                            Unlimited Storage
-                                        </li>
-                                        <li>
-                                            Subscription Price Lock-In
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="footer">
-                                    <a href="#" class="btn btn-primary btn-large">Get Started</a>
-                                </div>
-                            </li>
-                            <div class="clearfix"></div>
+                            <!-- /ko -->
                         </ul>
                     </section>
                 </div>
@@ -236,40 +169,45 @@
                         <div class="line"></div>
                     </header>
                     <?php
-						include Kohana::find_file('views/forms', 'register');
- ?>
+					include Kohana::find_file('views/forms', 'register');
+                    ?>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    
 
-<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.1/TweenMax.min.js"></script>
+</div>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/easing/EasePack.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/jquery.gsap.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/TextPlugin.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/ScrollToPlugin.min.js"></script>
 <script>
 	$(document).ready(function() {
-		var logo = $(".logo-img")
-		, words = $(".words-img")
-		, slogan = $(".slogan")
-		, menu = $('.navbar-inverse')
-		, tl = new TimelineLite({
+		RTApp.initRegForm();		
+		var logo = $(".logo-img"), words = $(".words-img"), slogan = $(".slogan"), menu = $('.navbar-inverse'), tl = new TimelineLite({
 			paused : true
-		})
-		, carousel = $('#contentCarousel')
-		, carouselRight = function() {
+		}), carousel = $('#contentCarousel'), carouselRight = function() {
 			var idx = $('#contentCarousel .active').index('#contentCarousel .item');
-			if(idx === 0){
+			if (idx === 0) {
 				carousel.carousel('next');
-				$('html, body').animate({
-					scrollTop : $("#prices").offset().top - 20
-				}, 500, 'easeOutExpo');
-				RTApp.initRegForm();
+				TweenLite.to(window, 1, {
+					scrollTo : {
+						y : $("#prices").offset().top - 20,
+						autoKill : false
+					},
+					ease : Back.easeOut
+				});
 			}
 
-		}, carouselLeft = function(){
+		}, carouselLeft = function() {
 			var idx = $('#contentCarousel .active').index('#contentCarousel .item');
-			if(idx !== 0){
+			if (idx !== 0) {
 				carousel.carousel('prev');
-			}			
+			}
 		};
 		carousel.carousel({
 			interval : false
@@ -292,11 +230,18 @@
 			opacity : 1,
 			ease : Back.easeOut
 		}, "-=.3").resume();
-		
+
 		carousel.on('swipeleft', carouselLeft);
 		carousel.on('swiperight', carouselRight);
 
-		$('.pricing-table .btn').click(carouselRight);
+		$('#goPrev').click(carouselLeft);
+		$('#goNext').click(carouselRight);
+		$('.homeMenu').on('click', '.pricing-table a.btn', function(){
+			console.log('click');
+			var data = ko.dataFor(this), vm = ko.contextFor(this);
+			vm.$parent.package.selectedPlan(data);
+			carouselRight();
+		});
 	});
 
 </script>

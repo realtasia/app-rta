@@ -306,8 +306,24 @@ RT.App.prototype = {
 		return cf(null) && (!t.user() && !P) && ( P = !0) && $.colorbox(S) && $('.nav-collapse').collapse('toggle');
 	},
 	initRegForm : function() {"use strict";
-		var t = this, cf = t.regForm;
-		!cf() && cf(new RT.Forms.Registration());
+		var t = this, cf;
+		
+		if(t.regForm())
+			return;
+			
+		cf = new RT.Forms.Registration();
+		cf.package = new RT.Package;
+		cf.pp = new RT.Forms.PP({
+			email: cf.email,
+			first_name: cf.first_name,
+			last_name: cf.last_name
+		});
+		cf.package.selectedPlan.subscribe(function(v){
+			cf.pp.amount(v.amount);
+			cf.pp.item_name(v.item_name);
+			cf.pp.item_number(v.item_number);
+		});
+		t.regForm(cf);
 		RTC.setInputWidths();
 	},
 	initFeedbackForm : function() {"use strict";
@@ -2331,7 +2347,7 @@ RT.Listing = function() {
 			height : "auto",
 			overlayClose : false,
 			escKey : false
-		})
+		});
 		t.fullContent();
 		if (u && !P && u.canPostListings() && u._id() === t.user._id()) {
 			P = !0;
@@ -3029,7 +3045,7 @@ RT.Forms = {
 		}, self);
 		self.validateToSaveChanges.subscribe(function(v) {
 			return v && self.saveExtras.call(self);
-		});
+		});	
 	},
 	Info : function() {"use strict";
 		var self = this, A = RTApp, user = A.user(), vcard = user.vcard && user.vcard() || [], o = "isSaving checkUser smsVerify mobileVerify companyLabel changePassword dimensions uploadStatus uploadProgress uploadMessage tempUpload originalWidth originalHeight savingCrop userType uploadSettings saveCompleted";
@@ -3911,7 +3927,6 @@ RT.Forms = {
 						if (r.data.user._id === RTC.GetObsVal(a.cp()._id)) {
 							a.cp().counts.listings(a.cp().counts.listings() + 1);
 							var d = new RT.Listing(r.data);
-							console.log(d)
 							a.cl.replaceOrAdd(d);
 						}
 					}
@@ -3920,7 +3935,7 @@ RT.Forms = {
 				return is(false) && hs(false) && setTimeout(function() {
 					return RTC.CB.resize();
 				}, 1);
-			})
+			});
 			return p;
 		};
 		T.publish = function(d, e) {"use strict";
@@ -4108,6 +4123,60 @@ RT.Forms = {
 				return T.listing[n](C.MakePrice(v));
 			}, T);
 		});
+	},
+	PP: function(options){
+		options = options || {};
+		var self = this;
+		
+		self.fields =  {
+			cmd: '_xclick',
+			notify_url: 'http://' + RT.APP_SERVER + '/ipn',
+			amount: ko.observable(),
+			custom: ko.observable(),
+			item_name: ko.observable(),
+			item_number: ko.observable(),
+			currency_code: 'SGD',
+			page_style:'primary',
+			no_note: 1,
+			no_shipping: 1,
+			'return':  'http://' + RT.APP_SERVER + '/paymentsuccess',
+			rm: 2,
+			cbt: 'Return to RealtAsia',
+			cancel_return:  'http://' + RT.APP_SERVER + '/paymentcancel',
+			email: options.email,
+			first_name: options.first_name,
+			last_name: options.last_name,
+			business: 'admin@realtasia.com',
+			country:'SG'
+		};
+		
+		for(var p in self.fields){
+			self[p] = self.fields[p];
+		}
+		self.toJS = function(){
+			var ret = {};
+			for(var k in self.fields){
+				if(self.hasOwnProperty(k)){
+					ret[k] = self[k];	
+				}
+			}
+			
+			return ko.toJS(ret);
+		};
+		self.debug = ko.observable(false);
+		self.url = ko.computed(function(){
+			return self.debug() ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr'; 
+		});
+		
+		self.submit = function(){
+			  var form = $(RTC.NewDom('form')), data = self.toJS();
+			  $(form).hide().attr('method','post').attr('action', self.url() );
+			  for (var i in data){
+			    var input = $('<input type="hidden" />').attr('name',i).val(data[i]);
+			    $(form).append(input);
+			  }
+			  $(form).appendTo('body').submit();
+		};
 	}
 };
 RT.Forms.Album.prototype = {
@@ -4149,7 +4218,7 @@ RT.Forms.Album.prototype = {
 				case !t.isEditingName() && t.name.hasChanged():
 				case !t.isEditingExcerpt() && t.excerpt.hasChanged():
 				case t.privacy.is.hasChanged():
-					return t.saveAlbum();
+					return t.saveAlbum();selectedPlan
 			}
 		}
 		return t.isSaved();
@@ -5116,6 +5185,9 @@ RT.Forms.Registration.prototype = {
 			return RTC.isSuccess(r) && setTimeout(function() {
 				t._id(r.data._id);
 				t.currentState('payment');
+				RTApp.regForm.pp.custom = JSON.stringify({
+					uid: t._id()
+				});
 				return $.bootstrapGrowl('<p>Your account was successfully created. We sent you an email.</p>', {
 					type : 'success'
 				});
@@ -5146,6 +5218,37 @@ RT.Forms.Registration.prototype = {
 		});
 	}
 };
+
+RT.Package = function(){
+	var self = this, plan = function(name, listings, dollars, featured, storage){
+		var self = this;
+		
+		self.dollars = dollars;
+		self.cents = .99;
+		self.amount = ko.computed(function(){
+			return self.dollars + self.cents;
+		});
+		self.name = name;
+		self.item_name = 'RealtAsia Private Preview - ' + name;
+		self.item_number = 'PP-Annual-' + name + '-1';
+		self.listings = listings;
+		self.storage = storage;
+		self.featured = featured;
+	};
+	
+	self.plans = [
+		new plan('Starter', 10, 99, false, 2), 
+		new plan('Basic', 25, 149, true, 10), 
+		new plan('Premium', 50, 199, false, null) 
+	];
+	
+	self.selectThePlan = function(data){
+		self.selectedPlan(data);
+	};
+	
+	self.selectedPlan = ko.observable();
+};
+
 
 var RTApp = new RT.App;
 delete RT.App;
