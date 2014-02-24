@@ -61,7 +61,7 @@
     <div class="row-fluid">
         <div style="display:none;margin-top:10%" class="contentArea centralize" data-bind="if:RTApp.user() && !RTApp.autoLogin(), visible:RTApp.user, flash:RTApp.user">
             <h4>Hi <span data-bind="text:RTApp.user().first_name"></span>, you have successfully signed in!</h4>
-            <a data-bind="attr:{href:RTApp.user().uri}" href="#" class="btn span12 btn-info btn-large" style="margin:0"><i class="icon-home"></i>&nbsp;Go to Home</a>
+            <a data-bind="attr:{href:RTApp.user().uri}" href="#" class="btn span12 btn-info btn-large" style="margin:0;height:auto"><i class="icon-home"></i>&nbsp;Go to Home</a>
         </div>
     </div>
     <div style="display:none" data-bind="visible:!RTApp.user() && !RTApp.autoLogin()">

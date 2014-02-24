@@ -13,7 +13,7 @@
                         <img src="img/RealTAsiaLogoWords.png" class="words-img hidden-phone">
                         <div class="visible-phone"><img src="img/RealTAsiaLogoFull.png" class="words-img">
                         </div>
-                        <small class="label label-info" style="position:absolute;top:0;right:10px;">BETA</small>
+                        <small class="label label-danger" style="position:absolute;top:0;right:10px;">BETA</small>
                         <h1 class="slogan">The Right Now Real Estate </h1>
                     </div>
                 </div>

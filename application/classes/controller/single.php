@@ -94,6 +94,28 @@ EOD;
         return parent::json_response($req);
     }
 
+	public function action_campaign()
+	{
+		echo "in campaign";
+		$id = $this->request->query('id');
+		
+		$agent = Document::factory('agent', $id);
+		
+		$agent->load();
+		
+		$agent = $agent ->as_array();
+		
+		if(\Arr::get($agent, 'name'))			
+			$this->session->set('campaign', [
+				'campaign' => [
+					'cuid' => \Arr::get($agent, '_id'),
+					'cid' => \Arr::get($agent, 'campaign_id'),
+				]
+			]);	
+		
+		return $this->request->redirect("/");
+	}
+
     public function subscribers($id)
     {
         $ids = parent::get_interactor_ids("/post/subscribers/$id");
@@ -119,8 +141,6 @@ EOD;
         {
             $this->leftbar  = "";
             $this->rightbar = "";
-            //$this->leftbar = null;
-            //$this->rightbar = null;
             if ($this->content instanceof View)
             {
                 $this->content->set(['ca' => $this->request->action()]);

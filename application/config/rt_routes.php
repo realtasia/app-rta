@@ -68,7 +68,7 @@ Route::set('default', function($uri) {
           ];
 	  $trim_uri = trim($uri, '/');  
       // Check if this is the single controller. A finite set of actions.
-      if (in_array($trim_uri, ['parseurl', 'post', 'external', 'user', 'page']))
+      if (in_array($trim_uri, ['parseurl', 'post', 'external', 'user', 'page', 'campaign']))
           return [
               'controller' => 'single',
               'action'     => $trim_uri

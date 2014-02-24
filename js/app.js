@@ -1,5 +1,5 @@
 RT.App = function() {"use strict";
-	var self, o = "inbox user admin cp cplib ca at st currentForm regForm currentSlideShow Search displayListingsSearch  hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin adminLocations";
+	var self, o = "inbox user admin cp cplib ca at st CMPN currentForm regForm currentSlideShow Search displayListingsSearch hasNextPage isGettingNext isGettingNew isResponsiveMenu isEditMode currentPage formParams ajaxStatus ticks displayMobileMediaLibrary autoLogin adminLocations";
 	RTC.MakeObsFromArray.call(this, o);
 	RTC.MakeObsFromArray.call(this, "postForm ajaxData", {});
 	self = this;
@@ -681,6 +681,7 @@ RT.App.prototype = {
 			RT.st && t.st(RTC.b64d(RT.st)) && (RT.st = null);
 			RT.cl && t.filterCl(RTC.b64d(RT.cl)) && (RT.cl = null);
 			RT.ca && t.ca(RT.ca) && (RT.ca = null);
+			RT.campaign && t.CMPN(RTC.b64d(RT.campaign)) && (RT.campaign = null);
 			RT.clt && t.setDefaults(RT.clt);
 			RT.autoLogin && t.autoLogin(RT.autoLogin) && (RT.autoLogin = null);
 		})(RT, RTC);
@@ -2842,13 +2843,14 @@ RT.Forms = {
 		this.errors = ko.validation.group(this);
 	},
 	Registration : function() {"use strict";
-		var self = this, o = "company license designation rep _id companyLabel first_name last_name isUser isAgent ajaxLoaded isKeyAuthenticated isAgentForm creating currentState user_type message birthday".split(" ");
+		var self = this, o = "company license designation rep _id companyLabel isUser isAgent ajaxLoaded isKeyAuthenticated isAgentForm creating currentState user_type message birthday".split(" ");
 		self.cache = {};
 		self.regFields = 'mobile first_name last_name username email password confirmPassword gender agreedTerms'.split(" ");
 		self.VM = RTApp;
-		RTC.MakeObsFromArray.call(this, o.concat(self.regFields));
-		RTC.MakeObsFromArray.apply(this, ["isUniqueUsername isUniquePhone isUniqueEmail", !0]);
-		self.currentState("reg");
+		RTC.MakeObsFromArray.call(self, o);
+		RTC.MakeObsFromArray.call(self, self.regFields);
+		RTC.MakeObsFromArray.apply(self, ["isUniqueUsername isUniquePhone isUniqueEmail", !0]);
+		self.currentState("payment");
 		self.gender("male");
 		self.gender.extend({
 			required : !0
@@ -2975,7 +2977,8 @@ RT.Forms = {
 			if (this.first_name.isModified() && this.last_name.isModified()) {
 				return this.populateUsername();
 			}
-		}, this).extend({
+			return false;
+		}, self).extend({
 			throttle : 500
 		});
 		self.password.extend({
@@ -3022,6 +3025,8 @@ RT.Forms = {
 			return !ui.item && self.company([]);
 		};
 		self.validateRegistration = ko.computed(function() {
+			if(RTApp.user())
+				return false;
 			var t = this, f = t.regFields, v = true;
 			RTC.forEach(f, function(i) {
 				if(!t[i].isValid()){
@@ -3042,7 +3047,7 @@ RT.Forms = {
 				return t[i].isValid() || ( v = !1);
 			});
 			return v;
-		}, this).extend({
+		}, self).extend({
 			throttle : 500
 		});
 		self.validateToSaveChanges = ko.computed(function() {
@@ -3050,8 +3055,8 @@ RT.Forms = {
 			return t.user_type() && t._id() && t.company.isValid() && t.license.isValid();
 		}, self);
 		self.validateToSaveChanges.subscribe(function(v) {
-			return v && self.saveExtras.call(self);
-		});	
+			return v && this.saveExtras.call(this);
+		}, self);	
 	},
 	Info : function() {"use strict";
 		var self = this, A = RTApp, user = A.user(), vcard = user.vcard && user.vcard() || [], o = "isSaving checkUser smsVerify mobileVerify companyLabel changePassword dimensions uploadStatus uploadProgress uploadMessage tempUpload originalWidth originalHeight savingCrop userType uploadSettings saveCompleted";
@@ -4225,7 +4230,7 @@ RT.Forms.Album.prototype = {
 				case !t.isEditingName() && t.name.hasChanged():
 				case !t.isEditingExcerpt() && t.excerpt.hasChanged():
 				case t.privacy.is.hasChanged():
-					return t.saveAlbum();selectedPlan
+					return t.saveAlbum();
 			}
 		}
 		return t.isSaved();
@@ -5187,13 +5192,18 @@ RT.Forms.Registration.prototype = {
 			});
 			return !1;
 		}
-		t.creating(true);
+		if(RTapp.user())
+			return false;
+			
+		t.creating(true);			
 		return ( a = t.submit('registration')) && a.done(function(r) {
 			return RTC.isSuccess(r) && setTimeout(function() {
 				t._id(r.data._id);
 				t.currentState('payment');
 				RTApp.regForm().pp.custom = JSON.stringify({
-					uid: t._id()
+					uid: t._id(),
+					cid: RT.CMPN() ? RTC.GetObsVal( RT.CMPN().cid ) : null,
+					cuid: RT.CMPN() ? RTC.GetObsVal( RT.CMPN().cuid ) : null
 				});
 				return $.bootstrapGrowl('<p>Your account was successfully created. We sent you an email.</p>', {
 					type : 'success'
@@ -5394,7 +5404,7 @@ jQuery(document).ready(function($) {"use strict";
 	$("#loadAttachments").waypoint(RTC.AlbumHandler, {
 		offset : 'bottom-in-view'
 	});
-
+	
 	$('header .nav-collapse > ul.nav > li > a:not(".dropdown-toggle")').click(function() {
 		var e = $(this);
 		e.closest("ul").find("li").removeClass('active');
@@ -5404,8 +5414,10 @@ jQuery(document).ready(function($) {"use strict";
 		return true;
 	});
 	if(RTApp.user()){
-		var r = new RT.PubSub(RTApp.user());	
+		var r = new RT.PubSub(RTApp.user()), mn = $('#mainNavLinks');
+		mn.show();		
 		r.init();
+		
 	}
 	
 }); 

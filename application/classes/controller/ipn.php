@@ -12,7 +12,7 @@
  * @license		http://www.opensource.org/licenses/isc-license.txt
  */
 
-class Controller_Ipn extends Controller {
+class Controller_Ipn extends Controller_Auth {
 
     /**
      * Whether to log or not errors
@@ -76,25 +76,30 @@ class Controller_Ipn extends Controller {
                 $this->_process_invalid_payment();
             }
         }
-        catch (Kohana_Exception $e)
+        catch (Exception $e)
         {
             // Something went wrong, log the error
             if ($this->log_errors)
             {
                 Log::instance()->add(Log::NOTICE, $e->getMessage());
             }
+			
+			throw new HTTP_Exception_403('You cannot access this page directly');
         }
-		echo Debug::vars($this->_listener->get_text_report());
     }
 	
 	public function action_paymentsuccess()
 	{
 		$this->action_index();
+		$this->template->content = View::factory('paypal/success');
 	}
 	
-	public function action_paymentcancel()
+	public function action_paymentcancel($process = true)
 	{
-		$this->action_index();
+		if($process)
+			$this->action_index();
+				
+		$this->template->content = View::factory('paypal/cancel');
 	}
 	
 
@@ -136,6 +141,7 @@ class Controller_Ipn extends Controller {
          * text report (($this->_listener->get_text_report())) to db, or just ignore it.
          */
         $this->_check_and_save();
+		$this->action_paymentcancel(false);
     }
 
     /**

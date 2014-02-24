@@ -12,7 +12,8 @@ class Kohana_Exception extends Kohana_Kohana_Exception {
        {
            try
            {
-               Debug::error(parent::text($e));
+               //Kohana::$log->add(Log::ERROR, parent::text($e));
+			   Debug::error(parent::text($e));
 
                $params = [
                    'action'  => 500,

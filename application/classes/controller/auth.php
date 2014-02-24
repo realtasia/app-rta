@@ -430,12 +430,20 @@ abstract class Controller_Auth extends Controller_Template {
             {
                 $this->main_menu->add($menu);
             }
-            $this->template->set_global([
+			$global_vars = [
                 'cu' => (array) $this->cu, // in case current user gets set, we bind it to the template.
                 'ca' => Request::initial()->action(), // add the current action to the template
                 'at' => $this->token(), // set the access_token for ajax requests.
                 'st' => Security::token() // set the state param for ajax requests to use.
-            ]);
+            ];
+			
+			// small edition to get a campaign
+			if($campaign = $this->session->get('campaign'))
+			{
+				$global_vars['campaign'] = $campaign;
+			}
+			
+            $this->template->set_global($global_vars);
         }
         return parent::after();
         /* Profiling******************************************************** */

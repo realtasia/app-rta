@@ -15,7 +15,7 @@
                 </li>
             </ul>
             <div class="nav-collapse navbar-responsive-collapse collapse" style="height:0;">
-                <ul class="nav" style="margin-bottom:-2px;">
+                <ul class="nav" style="margin-bottom:-2px;" id="mainNavLinks">
                     <?php echo $main_menu->render() ?>
                 </ul>
                 <ul class="nav pull-right" style="padding-bottom:0;">

@@ -13,6 +13,7 @@
 
 </style>
 <div class="centralize outerBox">
+
     <div class="contentArea" style="background: rgba(255, 255, 255, 0.9);padding:30px;border-radius:5px;">
         <!--ko if : currentState() === 'reg'-->
         <form id="newRegForm" class="form-large text-left">

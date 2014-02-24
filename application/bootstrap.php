@@ -56,21 +56,7 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  */
 I18n::lang('en-us');
 
-if(isset($_SERVER['SERVER_NAME']) && strpos($_SERVER['SERVER_NAME'], 'realtasia.com.sg') !== FALSE)
-{
-	Kohana::$environment = Kohana::PRODUCTION;
-}
-/**
- * Set Kohana::$environment if a 'KOHANA_ENV' environment variable has been supplied.
- *
- * Note: If you supply an invalid environment name, a PHP warning will be thrown
- * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
- */
-if (isset($_SERVER['KOHANA_ENV']))
-{
-    Kohana::$environment = constant('Kohana::' . strtoupper($_SERVER['KOHANA_ENV']));
-}
-
+Kohana::$environment = ($_SERVER['SERVER_NAME'] === 'realtasia.com.sg') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
 //Kohana::$environment = Kohana::PRODUCTION;
 
 /**
@@ -89,14 +75,11 @@ if (isset($_SERVER['KOHANA_ENV']))
 Kohana::init(array(
     'base_url'   => '/',
     'index_file' => '',
-    'profile'    => false,
-    'caching'    => true
+    'profile'    => Kohana::$environment === Kohana::PRODUCTION,
+    'caching'    => Kohana::$environment === Kohana::PRODUCTION
 ));
 
-/**
- * Attach the file write to logging. Multiple writers are supported.
- */
-Kohana::$log->attach(new Log_File(APPPATH . 'logs'));
+
 
 /**
  * Attach a file reader to config. Multiple readers are supported.
@@ -114,8 +97,17 @@ Kohana::modules([
     'image'        => MODPATH . 'image', // Image manipulation
     'purifier'     => MODPATH . 'purifier', // HTML purifier
     'asset-merger' => MODPATH . 'asset-merger', // Asset Management
+    'SMS' 		   => MODPATH . 'sms', // Asset Management
     'qrcode'       => MODPATH . 'qr',        // QRCode generator
 ]);
+
+/**
+ * Attach the file write to logging. Multiple writers are supported.
+ */
+Kohana::$log->attach( Kohana::$environment === Kohana::PRODUCTION 
+	? new Log_Mongo() 
+	: new Log_File(APPPATH . 'logs')
+	, array(), new Log_Mongo(), [], Log::DEBUG );
 
 Cookie::$domain = FALSE;
 Cookie::$httponly = TRUE;

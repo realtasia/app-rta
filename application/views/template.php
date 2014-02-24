@@ -23,8 +23,8 @@
           ->js("http://" . RT::COM_SERVER . "/js/jquery.min.js")
           ->js("http://html5shiv.googlecode.com/svn/trunk/html5.js", ['condition' => 'IE'])
           ->js("http://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
+          ->js("http://" . RT::APP_SERVER . "/js/json2.js", ['condition' => 'lte IE 9'])
           ->js("http://" . RT::COM_SERVER . "/js/respond.min.js", ['condition' => 'lte IE 8'])
-          ->js("http://" . RT::COM_SERVER . "/js/json.js", ['condition' => 'lte IE 7'])
           ->js("lte-ie7.js", ['condition' => 'lte IE 7'])
         ?>
         <!--[if lte IE 9]>
@@ -63,7 +63,7 @@
             <?php
             include_once(Kohana::find_file('views', 'header'));
             $r = Request::initial();
-            if ($r->controller() === 'home' && ($r->action() === 'index' || $r->action() === 'register')):
+            if (in_array($r->controller(), ['home', 'ipn']) && in_array($r->action(), ['index', 'paymentsuccess', 'paymentcancel'])):
                 echo $content;
             else:
                 ?>
@@ -75,10 +75,11 @@
             <?php endif; ?>
             <div id="feedbackProfileContent"></div>
         <!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key=[REDACTED]"></script>-->
-            <script type="text/javascript">window["RT"] = {version: "0.2.1", API_SERVER: '<?php echo RT::API_SERVER ?>', APP_SERVER: '<?php echo RT::APP_SERVER ?>', COM_SERVER: '<?php echo RT::COM_SERVER ?>', BUCKET: '<?php echo RT::BUCKET ?>', cu: null, at: "<?php echo @base64_encode($at) ?>", st: "<?php echo @base64_encode($st) ?>", cp: null, cl: null, ca: "<?php echo @$ca ?>", clt: "<?php echo @$clt ?>", autoLogin:"<?php echo @$autoLogin ?>"};<?php
+            <script type="text/javascript">window["RT"] = {version: "0.8.1", API_SERVER: '<?php echo RT::API_SERVER ?>', APP_SERVER: '<?php echo RT::APP_SERVER ?>', COM_SERVER: '<?php echo RT::COM_SERVER ?>', BUCKET: '<?php echo RT::BUCKET ?>', cu: null, at: "<?php echo @base64_encode($at) ?>", st: "<?php echo @base64_encode($st) ?>", cp: null, cl: null, ca: "<?php echo @$ca ?>", clt: "<?php echo @$clt ?>", autoLogin:"<?php echo @$autoLogin ?>"};<?php
             echo $cu ? 'RT.cu="' . base64_encode(json_encode($cu)) . '";' : '';
             echo isset($cp) ? 'RT.cp="' . base64_encode(json_encode($cp)) . '";' : '';
             echo isset($cl) ? 'RT.cl="' . base64_encode(json_encode($cl)) . '";' : '';
+            echo isset($campaign) ? 'RT.campaign="' . base64_encode(json_encode($campaign)) . '";' : '';
             ?></script>
         <!-- <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC6-y0MkWb9eaFLz_HWMQlWhtgo-HAtDEE&sensor=true"></script> -->
 

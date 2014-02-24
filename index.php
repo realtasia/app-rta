@@ -103,52 +103,9 @@ require APPPATH . 'bootstrap' . EXT;
 
 Cookie::$salt = 'SiRyA';
 
-/**
- * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
- * If no source is specified, the URI will be automatically detected.
- */
-//ob_start("ob_gzhandler");
-//echo Request::factory()
-//	->execute()
-//	->send_headers()
-//	->body();
-//
-//
-//    echo Request::factory()
-//            ->execute()
-//            ->send_headers()
-//            ->body();
 
-//try
-//{
     echo Request::factory()
       ->execute()
       ->send_headers()
       ->body();
-//}
-//catch (Exception $e)
-//{
-//    $error = sprintf('%s [ %s ]: %s ~ %s [ %d ]', get_class($e), $e->getCode(), strip_tags($e->getMessage()), Debug::path($e->getFile()), $e->getLine());
-//    Debug::log($error);
-//
-//    $callback = Arr::get($_REQUEST, 'callback');
-//
-//    $data = json_encode([
-//        'status' => 'error',
-//        'data'   => [
-//            'title'   => get_class($e),
-//            'code'    => $e->getCode(),
-//            'message' => strip_tags($e->getMessage()),
-//            'path'    => Debug::path($e->getFile()), $e->getLine(),
-//        ]
-//      ], JSON_PRETTY_PRINT);
-//
-//    //$data = $callback ? "($data)" : $data;
-//    //if(!ob_start("ob_gzhandler")) ob_start();
-//    echo Response::factory([
-//          'status' => 200
-//      ])->headers('Content-Type', 'application/json')
-//      ->body($data);
-//
-//    //return exec("php /home/jason/www/rta.casa.net/index.php --uri=stats/check");
-//}
+ 
