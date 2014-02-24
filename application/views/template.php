@@ -11,21 +11,24 @@
         <!--<meta name="viewport" content="initial-scale=1">-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <?php
-        echo Assets::factory('all')
-          ->merge(TRUE)
-          ->css('jquery-boostrap.css')
-          ->css('RTA.css')
-          ->css('style.css')
-          ->css('font-awesome.min.css')
-          ->css('icons.css');
-        echo Assets::factory('init')
-          ->merge(TRUE)
-          ->js("http://" . RT::COM_SERVER . "/js/jquery.min.js")
-          ->js("http://html5shiv.googlecode.com/svn/trunk/html5.js", ['condition' => 'IE'])
-          ->js("http://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
-          ->js("http://" . RT::APP_SERVER . "/js/json2.js", ['condition' => 'lte IE 9'])
-          ->js("http://" . RT::COM_SERVER . "/js/respond.min.js", ['condition' => 'lte IE 8'])
-          ->js("lte-ie7.js", ['condition' => 'lte IE 7'])
+		if ((Kohana::$environment === Kohana::PRODUCTION && !Fragment::load('styles', Date::YEAR, true)) || Kohana::$environment === Kohana::DEVELOPMENT):                
+	        echo Assets::factory('all')
+		        ->merge(TRUE)
+		        ->css('jquery-boostrap.css')
+		        ->css('RTA.css')
+		        ->css('style.css')
+		        ->css('font-awesome.min.css')
+		        ->css('icons.css');
+	        echo Assets::factory('init')
+		        ->merge(TRUE)
+		        ->js("http://" . RT::COM_SERVER . "/js/jquery.min.js")
+		        ->js("http://html5shiv.googlecode.com/svn/trunk/html5.js", ['condition' => 'IE'])
+		        ->js("http://" . RT::COM_SERVER . "/js/placeholder.min.js", ['condition' => 'lte IE 9'])
+		        // ->js("http://" . RT::APP_SERVER . "/js/json2.js", ['condition' => 'lte IE 9'])
+		        ->js("http://" . RT::COM_SERVER . "/js/respond.min.js", ['condition' => 'lte IE 8'])
+		        ->js("lte-ie7.js", ['condition' => 'lte IE 7']);
+			Fragment::save();
+		endif;		
         ?>
         <!--[if lte IE 9]>
         <script type="text/javascript">
@@ -103,25 +106,22 @@
             </div>
         </footer>
             <?php
-            //if ( ! Fragment::load('assets', Date::YEAR, true)):
-            echo Assets::factory('deps')
-              ->merge(TRUE)
-              ->process(TRUE)
-              ->js("compiledjq.js")
-              ->js("kodebug.js");
-            echo Assets::factory('dep2')
-              ->process(TRUE)
-              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js")
-              ->js("http://" . RT::SOCK_SERVER . "/socket.io/socket.io.js");
-            //Fragment::save();
-            //endif;
-            echo Assets::factory('finaljs')
-              ->merge(TRUE)
-              //->process(TRUE)
-              //->js("dependancies.min.js")
-              ->js("dependancies.js")
-              ->js("app.js");
-            //->render();
+            if ((Kohana::$environment === Kohana::PRODUCTION && !Fragment::load('assets', Date::YEAR, true)) || Kohana::$environment === Kohana::DEVELOPMENT):
+	            echo Assets::factory('deps')
+	              ->merge(TRUE)
+	              ->process(TRUE)
+	              ->js("compiledjq.js")
+	              ->js("kodebug.js");
+	            echo Assets::factory('dep2')
+	              ->process(TRUE)
+	              ->js("http://" . RT::COM_SERVER . "/js/plupload/plupload.full.min.js")
+	              ->js("http://" . RT::SOCK_SERVER . "/socket.io/socket.io.js");
+	            echo Assets::factory('finaljs')
+	              ->merge(TRUE)
+	              ->js("dependancies.js")
+	              ->js("app.js");
+	            Fragment::save();
+            endif;            
             ?>        
         <script type="text/javascript">
 			var analytics = analytics || [];

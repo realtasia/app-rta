@@ -6,12 +6,12 @@
             <div class="container-fluid clearfix" style="max-width:1000px;text-align: center;margin:0 auto">
                 <div class="row-fluid">
                     <div class="span3 hidden-phone" style="position:relative;padding-top:4em">
-                        <img src="img/transparentLogo.png" class="logo-img">
+                        <img src="img/transparentLogo.png" class="logo-img" width="953" height="860">
 
                     </div>
                     <div class="span9 wordHolder">
-                        <img src="img/RealTAsiaLogoWords.png" class="words-img hidden-phone">
-                        <div class="visible-phone"><img src="img/RealTAsiaLogoFull.png" class="words-img">
+                        <img src="img/RealTAsiaLogoWords.png" class="words-img hidden-phone" width="2805" height="628">
+                        <div class="visible-phone"><img src="img/RealTAsiaLogoFull.png" class="words-img" width="3538" height="667">
                         </div>
                         <small class="label label-danger" style="position:absolute;top:0;right:10px;">BETA</small>
                         <h1 class="slogan">The Right Now Real Estate </h1>

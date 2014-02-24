@@ -430,6 +430,7 @@ abstract class Controller_Auth extends Controller_Template {
             {
                 $this->main_menu->add($menu);
             }
+			
 			$global_vars = [
                 'cu' => (array) $this->cu, // in case current user gets set, we bind it to the template.
                 'ca' => Request::initial()->action(), // add the current action to the template

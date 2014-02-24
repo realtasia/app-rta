@@ -84,14 +84,14 @@
                                                             </td>
                                                         </tr>
                                                         <tr style="margin:0">
-                                                            <td style="padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;background-color: #D9EDF7;border:1px solid rgb(188, 232, 241);"><h4 style="text-shadow:rgba(255, 255, 255, 0.5) 0px 1px 0px;color :rgb(58, 135, 173); font-weight:bold;text-align:center">If you haven't done so, do take advantage of this offer as it is limited to the first 100 subscribers!</h4></td>
+                                                            <td style="padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;background-color: #D9EDF7;border:1px solid rgb(188, 232, 241);">
+                                                            	<h4 style="text-shadow:rgba(255, 255, 255, 0.5) 0px 1px 0px;color :rgb(58, 135, 173); font-weight:bold;text-align:center">
+                                                            		If you haven't done so, do take advantage of our preview subscriptions as discounted rates only apply to the first 150 customers!
+                                                            	</h4></td>
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <h3 style="color: #000; display: block; font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, serif; font-size: 1.1em; line-height: 100%; text-align: left; margin: 0;">Alternative payment option.</h3>
-                                                                <p><small>If you prefer, you can transfer <strong style="font-size:1.2em;color:#444">S$99.90</strong> to our corporate DBS account to take advantage of the on-going promotional rates.</small></p>
-                                                                <pre style="padding:10px;background-color: #eee;border:1px dashed #ddd;font-weight:bold;font-size:1.2em;color:#444">DBS current account: 066 901786 3</pre>
-                                                                <small style="padding:5px;padding-left:0;color:#999;font-size:11px">Please email a copy of the transaction slip to <a href="mailto:admin@realtasia.com" style="color:#75C8E9">admin@realtasia.com</a> or whatsApp to 912345678</small>
+                                                                <h3 style="color: #000; display: block; font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, serif; font-size: 1.1em; line-height: 100%; text-align: left; margin: 0;">Alternative payment option.</h3>                                                                
                                                                 <p><small>You can still pay using your credit/debit card by following this link.</small></p>
                                                                 <a style="background-color: #F89406;color: #FFF;padding: 10px 5px;border: 1px solid #DF880C;text-shadow:none;text-decoration:none;" href="#">Pay with <span style="color:#14497B">Pay</span><span style="color:#007BC2">Pal</span></a>
                                                             </td>
@@ -149,7 +149,7 @@
                                         <tr>
                                             <td valign="top" width="350" style="border-collapse: collapse;">
                                                 <div style="color: #999999; font-family: 'lucida grande',tahoma,verdana,'Open Sans', 'Helvetica Neue', Helvetica, Arial,sans-serif; font-size: 11px; line-height: 125%; text-align: left;" align="left">
-                                                    Copyright &copy; 2010 - 2012 Realtasia Pte Ltd, All rights reserved.
+                                                    Copyright &COPY; 2010 - <?php echo date("Y") ?>Realtasia Pte Ltd, All rights reserved.
                                                     <strong>Our mailing address is:</strong>
                                                     10 Anson Road | International Plaza | #10-11 | Singapore 079903
                                                 </div>

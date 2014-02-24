@@ -51,17 +51,17 @@
                                                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="">
                                                     <tbody>
                                                         <tr><td><h2 style="color: #333333; display: block; font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, serif; font-size: 1.4em; text-align: left; margin: 0; color:#79B833" align="left">
-                                                                    Your subscription is now active!
+                                                                    <?php echo $name?>, your subscription is now active!
                                                                 </h2></td></tr>
-                                                        <tr>
+                                                        <tr>                                                     	
                                                             <td valign="top" style="border-collapse:collapse;border:1px solid #fff">
                                                                 <h3 style="color: #000; display: block; font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, serif; font-size: 1.1em; line-height: 100%; text-align: left; margin: 0;">Subscription Details.</h3>
                                                                 <table width="100%" cellspacing="0" cellpadding="5" border="0" style="background-color:#fff;border:1px solid #f5f5f5;margin-bottom: 10px;margin-top:10px;text-shadow: 1px 1px 1px #fff;">
-                                                                    <tr><td><small>Subscription Plan</small></td><td><small>Realtasia Preview Subscription (beta1-annual)</small></td></tr>
-                                                                    <tr><td><small>Subscription Amount</small></td><td><small>$99.90</small></td></tr>
-                                                                    <tr><td><small>Paid with</small></td><td><small>Paypal (123456-h)</small></td></tr>
-                                                                    <tr><td><small>Paid from</small></td><td><small>20th May 2013 - 19 May 2014</small></td></tr>
-                                                                    <tr><td><small>Account Status</small></td><td><small style="color :#79B833">Active</small></td></tr>
+                                                                    <tr><td>Subscription Plan</td><td><?php echo $plan_name . ' (annual) '?></td></tr>
+                                                                    <tr><td>Subscription Amount</td><td><?php echo $amount?></td></tr>
+                                                                    <tr><td>Transaction ID</td><td>PayPal (<?php echo $transaction_id?>)</td></tr>
+                                                                    <tr><td>Paid from</td><td><?php echo date('jS M Y', $paid_from) ?> - <?php echo date('jS M Y', $paid_to) ?></td></tr>
+                                                                    <tr><td>Account Status</td><td><span style="color :#79B833">Active</span></td></tr>
                                                                 </table>
                                                             </td>
                                                         </tr>
@@ -71,21 +71,21 @@
                                                                 <div style="margin-top:20px; width:100%">
                                                                         <div valign="top">
                                                                             <div>
-                                                                                <p><small>This is where all your activity is consolidated. This includes updates from people & locations you are subscribed to. Also has quick access to your bio data.</small></p>
+                                                                                <p>This is where all your activity is consolidated. This includes updates from people & locations you are subscribed to. Also has quick access to your bio data.</p>
                                                                                 <div align="center" style="width:110px;background-color: #0054ab; font-weight:bold; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; color: #fff; text-decoration: none;text-shadow:none; font-family: Helvetica, Arial, sans-serif; display: block;border:1px solid;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);"><a href="#" style="color: #fff !important; text-decoration: none;font-size:13px;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial">Home Page</a></div>
                                                                             </div>
                                                                         </div>
                                                                     <hr style="border:1px solid #F5F5F5"/>
                                                                         <div valign="top">
                                                                             <div>
-                                                                                <p><small>As soon as you log in, you should edit your public profile. For better exposure, you can add a picture, certification and awards you've received.</small></p>
+                                                                                <p>As soon as you log in, you should edit your public profile. For better exposure, you can add a picture, certification and awards you've received.</p>
                                                                                 <div align="center" style="width:110px;background-color: #0054ab; font-weight:bold; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; color: #fff; text-decoration: none;text-shadow:none; font-family: Helvetica, Arial, sans-serif; display: block;border:1px solid;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);"><a href="#" style="color: #fff !important; text-decoration: none;font-size:13px;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial">Edit Profile</a></div>
                                                                             </div>
                                                                         </div>
                                                                     <hr style="border:1px solid #F5F5F5"/>
                                                                         <div valign="top">
                                                                             <div>
-                                                                                <p><small>This is where you manage your privacy and notification settings. You decide what information is public and what should remain private.</small></p>
+                                                                                <p>This is where you manage your privacy and notification settings. You decide what information is public and what should remain private.</p>
                                                                                 <div align="center" style="width:110px;background-color: #0054ab; font-weight:bold; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; color: #fff; text-decoration: none;text-shadow:none; font-family: Helvetica, Arial, sans-serif; display: block;border:1px solid;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);"><a href="#" style="color: #fff !important; text-decoration: none;font-size:13px;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial">Change Settings</a></div>
                                                                             </div>
                                                                         </div>
@@ -96,9 +96,9 @@
                                                         <tr>
                                                             <td>
                                                                 <h3 style="color: #000; display: block; font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, serif; font-size: 1.1em; line-height: 100%; text-align: left; margin: 0;">Contact options.</h3>
-                                                                <p><small>In addition to the social links below, you can also add us to your Google Talk (chat) account. Please add <a href="mailto:admin@realtasia.com">admin@realtasia.com</a> to chat with us.</small></p>
-                                                                <p><small>To ensure email deliverability, please add <strong>support@realtasia.com</strong> to your contacts list or address book.</small></p>
-                                                                <p><small>In the meantime, we hope you have a wonderful time exploring our site!</small></p>
+                                                                <p>In addition to the social links below, you can also add us to your Google Talk (chat) account. Please add <a href="mailto:admin@realtasia.com">admin@realtasia.com</a> to chat with us.</p>
+                                                                <p>To ensure email deliverability, please add <strong>support@realtasia.com</strong> to your contacts list or address book.</p>
+                                                                <p>In the meantime, we hope you have a wonderful time exploring our site!</p>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -148,7 +148,7 @@
                                         <tr>
                                             <td valign="top" width="350" style="border-collapse: collapse;">
                                                 <div style="color: #999999; font-family: 'lucida grande',tahoma,verdana,'Open Sans', 'Helvetica Neue', Helvetica, Arial,sans-serif; font-size: 11px; line-height: 125%; text-align: left;" align="left">
-                                                    Copyright &copy; 2010 - 2012 Realtasia Pte Ltd, All rights reserved.
+                                                    Copyright &COPY; 2010 - <?php echo date("Y") ?> Realtasia Pte Ltd, All rights reserved.
                                                     <strong>Our mailing address is:</strong>
                                                     10 Anson Road | International Plaza | #10-11 | Singapore 079903
                                                 </div>
@@ -166,7 +166,6 @@
         </table>
         <style type="text/css">
             body { width: 100% !important;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial; }
-            small{font-size:.81em !important;}
             .ReadMsgBody { width: 100% !important; }
             .ExternalClass { width: 100% !important; }
             body { -webkit-text-size-adjust: none !important; }

@@ -307,18 +307,18 @@ RT.App.prototype = {
 	},
 	initRegForm : function() {"use strict";
 		var t = this, cf;
-		
-		if(t.regForm())
+
+		if (t.regForm())
 			return;
-			
+
 		cf = new RT.Forms.Registration();
 		cf.package = new RT.Package;
 		cf.pp = new RT.Forms.PP({
-			email: cf.email,
-			first_name: cf.first_name,
-			last_name: cf.last_name
+			email : cf.email,
+			first_name : cf.first_name,
+			last_name : cf.last_name
 		});
-		cf.package.selectedPlan.subscribe(function(v){
+		cf.package.selectedPlan.subscribe(function(v) {
 			cf.pp.amount(v.amount);
 			cf.pp.item_name(v.item_name);
 			cf.pp.item_number(v.item_number);
@@ -783,20 +783,20 @@ RT.App.prototype = {
 			'settings' : function() {
 				return t.user() && t.ca('settings') && t.user().editSettings() || false;
 			},
-			'conversations/:id?' : function(id) {				
+			'conversations/:id?' : function(id) {
 				if (!t.user()) {
 					return false;
 				}
 				t.ca('conversations');
 				t.initConversations();
-				if(id){
-					
-					var handler = function(v){							
+				if (id) {
+
+					var handler = function(v) {
 						var view = v ? v.history()[1] : null;
-						if(view){
-							var cHandler = function(conversations){
-								if(conversations){
-									var c = ko.utils.arrayFirst(conversations, function(f){
+						if (view) {
+							var cHandler = function(conversations) {
+								if (conversations) {
+									var c = ko.utils.arrayFirst(conversations, function(f) {
 										return RTC.GetObsVal(f._id) === id;
 									});
 									view.selectedConversation(c);
@@ -806,12 +806,11 @@ RT.App.prototype = {
 									}
 								}
 							}, cArray = view.conversations;
-							return !!cArray().length ? cHandler(cArray()) : cArray.subscribe(cHandler);							
+							return !!cArray().length ? cHandler(cArray()) : cArray.subscribe(cHandler);
 						}
-						
-					}
-					, i = RTApp.inbox;
-					return i() ? handler( i() ) : i.subscribe(handler);
+
+					}, i = RTApp.inbox;
+					return i() ? handler(i()) : i.subscribe(handler);
 				}
 			},
 			'media' : function() {
@@ -971,7 +970,7 @@ RT.ControllerLibrary = function() {
 				u() && u().refresh();
 				$(document.body).css({
 					overflow : 'hidden'
-				});	
+				});
 				return $.colorbox.resize();
 			}
 		});
@@ -1529,13 +1528,11 @@ RT.newConversationForm = function(conversations) {
 		p.done(function(r) {
 			if (RTC.isSuccess(r)) {
 				console.log(r);
-				if(r && r.data && r.data.conversation){
-					var p = self.parent
-					, c = p && p.conversations
-					, d = new RT.Conversation(r.data.conversation);
+				if (r && r.data && r.data.conversation) {
+					var p = self.parent, c = p && p.conversations, d = new RT.Conversation(r.data.conversation);
 
 					c.addToSet(d);
-					p.selectConversation(d);					
+					p.selectConversation(d);
 				}
 				return RTC.CB.close();
 			}
@@ -1683,7 +1680,7 @@ RT.User = function() {"use strict";
 	ko.mapping.fromJS(a, {}, this);
 	t.unreadMessages = ko.observableArray();
 	t.newNotifications = ko.observableArray();
-	t.showNotifications = ko.computed(function(){
+	t.showNotifications = ko.computed(function() {
 		var n = this.newNotifications();
 		return !!n.length ? n.length : false;
 	}, t);
@@ -1805,8 +1802,7 @@ RT.Post = function() {
 			}
 		});
 	};
-	t.getComment = function() {
-		"use strict";
+	t.getComment = function() {"use strict";
 		console.log('getting comments');
 		var self = this, s = new RTC.GetApi({}, {
 			skip : self.counts.comments() - 1,
@@ -1821,7 +1817,7 @@ RT.Post = function() {
 				}));
 			}
 		});
-	};	
+	};
 	t.hide = function(d) {"use strict";
 		//return RTC.log(ko.toJS(d));
 		var p = {
@@ -2850,7 +2846,7 @@ RT.Forms = {
 		RTC.MakeObsFromArray.call(self, o);
 		RTC.MakeObsFromArray.call(self, self.regFields);
 		RTC.MakeObsFromArray.apply(self, ["isUniqueUsername isUniquePhone isUniqueEmail", !0]);
-		self.currentState("payment");
+		self.currentState("reg");
 		self.gender("male");
 		self.gender.extend({
 			required : !0
@@ -3025,14 +3021,14 @@ RT.Forms = {
 			return !ui.item && self.company([]);
 		};
 		self.validateRegistration = ko.computed(function() {
-			if(RTApp.user())
+			if (RTApp.user())
 				return false;
 			var t = this, f = t.regFields, v = true;
 			RTC.forEach(f, function(i) {
-				if(!t[i].isValid()){
+				if (!t[i].isValid()) {
 					v = !1;
 				} else {
-					if(v !== !1){
+					if (v !== !1) {
 						v = !0;
 					}
 				}
@@ -3056,7 +3052,7 @@ RT.Forms = {
 		}, self);
 		self.validateToSaveChanges.subscribe(function(v) {
 			return v && this.saveExtras.call(this);
-		}, self);	
+		}, self);
 	},
 	Info : function() {"use strict";
 		var self = this, A = RTApp, user = A.user(), vcard = user.vcard && user.vcard() || [], o = "isSaving checkUser smsVerify mobileVerify companyLabel changePassword dimensions uploadStatus uploadProgress uploadMessage tempUpload originalWidth originalHeight savingCrop userType uploadSettings saveCompleted";
@@ -4135,59 +4131,64 @@ RT.Forms = {
 			}, T);
 		});
 	},
-	PP: function(options){
+	PP : function(options) {
 		options = options || {};
 		var self = this;
 		self.debug = ko.observable(true);
-				
-		self.fields =  {
-			cmd: '_xclick',
-			notify_url: 'http://' + RT.APP_SERVER + '/ipn',
-			amount: ko.observable(),
-			custom: ko.observable(),
-			item_name: ko.observable(),
-			item_number: ko.observable(),
-			currency_code: 'SGD',
-			page_style:'primary',
-			no_note: 1,
-			no_shipping: 1,
-			'return':  'http://' + RT.APP_SERVER + '/paymentsuccess',
-			rm: 2,
-			cbt: 'Return to RealtAsia',
-			cancel_return:  'http://' + RT.APP_SERVER + '/paymentcancel',
-			email: options.email,
-			first_name: options.first_name,
-			last_name: options.last_name,
-			business: self.debug() ? 'sandpayer@realtasia.com' : 'admin@realtasia.com',
-			country:'SG'
+
+		self.fields = {
+			cmd : '_xclick',
+			notify_url : 'http://' + RT.APP_SERVER + '/ipn',
+			amount : ko.observable(),
+			custom : ko.observable(),
+			item_name : ko.observable(),
+			item_number : ko.observable(),
+			currency_code : 'SGD',
+			page_style : 'primary',
+			no_note : 1,
+			no_shipping : 1,
+			'return' : 'http://' + RT.APP_SERVER + '/paymentsuccess',
+			rm : 2,
+			cbt : 'Return to RealtAsia',
+			cancel_return : 'http://' + RT.APP_SERVER + '/paymentcancel',
+			email : options.email,
+			first_name : options.first_name,
+			last_name : options.last_name,
+			business : self.debug() ? 'sandpayer@realtasia.com' : 'admin@realtasia.com',
+			country : 'SG'
 		};
-		
-		for(var p in self.fields){
+
+		for (var p in self.fields) {
 			self[p] = self.fields[p];
 		}
-		self.toJS = function(){
+		self.toJS = function() {
 			var ret = {};
-			for(var k in self.fields){
-				if(self.hasOwnProperty(k)){
-					ret[k] = self[k];	
+			for (var k in self.fields) {
+				if (self.hasOwnProperty(k)) {
+					ret[k] = self[k];
 				}
 			}
-			
+
 			return ko.toJS(ret);
 		};
 
-		self.url = ko.computed(function(){
-			return self.debug() ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr'; 
+		self.url = ko.computed(function() {
+			return self.debug() ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
 		});
-		
-		self.submit = function(){
-			  var form = $(RTC.NewDom('form')), data = self.toJS();
-			  $(form).hide().attr('method','post').attr('action', self.url() );
-			  for (var i in data){
-			    var input = $('<input type="hidden" />').attr('name',i).val(data[i]);
-			    $(form).append(input);
-			  }
-			  $(form).appendTo('body').submit();
+
+		self.submit = function() {
+
+			console.log({
+				SubmittingToPP : self.toJS()
+			});
+
+			var form = $(RTC.NewDom('form')), data = self.toJS();
+			$(form).hide().attr('method', 'post').attr('action', self.url());
+			for (var i in data) {
+				var input = $('<input type="hidden" />').attr('name', i).val(data[i]);
+				$(form).append(input);
+			}
+			$(form).appendTo('body').submit();
 		};
 	}
 };
@@ -5185,33 +5186,52 @@ RT.Forms.Registration.prototype = {
 		return t.isUser(!1) && t.isAgent(!t.isAgent()) && t.user_type('agent');
 	},
 	createAccount : function() {
+		console.log("we're in");
 		var t = this, f = t.regFields, a;
+
+		if (t.creating()) {
+			console.log("Still in the process of creating");
+			return false;
+		}
+
 		if (!t.validateRegistration()) {
 			RTC.forEach(f, function(i) {
 				return t[i].isValid() || t[i].isModified(!0);
 			});
 			return !1;
 		}
-		if(RTapp.user())
+		if (RTApp.user()) {
+			console.log("User Found:".JSON.stringify(RTApp.user()));
 			return false;
-			
-		t.creating(true);			
-		return ( a = t.submit('registration')) && a.done(function(r) {
+		}
+
+		t.creating(true);
+
+		a = t.submit('registration');
+
+		a.done(function(r) {
 			return RTC.isSuccess(r) && setTimeout(function() {
 				t._id(r.data._id);
 				t.currentState('payment');
-				RTApp.regForm().pp.custom = JSON.stringify({
-					uid: t._id(),
-					cid: RT.CMPN() ? RTC.GetObsVal( RT.CMPN().cid ) : null,
-					cuid: RT.CMPN() ? RTC.GetObsVal( RT.CMPN().cuid ) : null
-				});
+				RTApp.regForm().pp.custom(JSON.stringify({
+					uid : t._id(),
+					cid : RTApp.CMPN() ? RTC.GetObsVal(RTApp.CMPN().cid) : null,
+					cuid : RTApp.CMPN() ? RTC.GetObsVal(RTApp.CMPN().cuid) : null
+				}));
 				return $.bootstrapGrowl('<p>Your account was successfully created. We sent you an email.</p>', {
 					type : 'success'
 				});
-			}, 1000);
+			}, 1);
 		}).always(function() {
 			t.creating(false);
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			return $.bootstrapGrowl('<p>There was an error creating your account: ' + textStatus + '.</p>', {
+				type : 'error'
+			});
 		});
+
+		return a;
+
 	},
 	saveExtras : function(n) {
 		var e = $(n), p = e.serialize(), f = ['company', 'license'], t = this, a;
@@ -5236,13 +5256,13 @@ RT.Forms.Registration.prototype = {
 	}
 };
 
-RT.Package = function(){
-	var self = this, plan = function(name, listings, dollars, featured, storage){
+RT.Package = function() {
+	var self = this, plan = function(name, listings, dollars, featured, storage) {
 		var self = this;
-		
+
 		self.dollars = dollars;
 		self.cents = .99;
-		self.amount = ko.computed(function(){
+		self.amount = ko.computed(function() {
 			return self.dollars + self.cents;
 		});
 		self.name = name;
@@ -5252,20 +5272,15 @@ RT.Package = function(){
 		self.storage = storage;
 		self.featured = featured;
 	};
-	
-	self.plans = [
-		new plan('Starter', 10, 99, false, 2), 
-		new plan('Basic', 25, 149, true, 10), 
-		new plan('Premium', 50, 199, false, null) 
-	];
-	
-	self.selectThePlan = function(data){
+
+	self.plans = [new plan('Starter', 10, 99, false, 2), new plan('Basic', 25, 149, true, 10), new plan('Premium', 50, 199, false, null)];
+
+	self.selectThePlan = function(data) {
 		self.selectedPlan(data);
 	};
-	
+
 	self.selectedPlan = ko.observable();
 };
-
 
 var RTApp = new RT.App;
 delete RT.App;
@@ -5404,7 +5419,7 @@ jQuery(document).ready(function($) {"use strict";
 	$("#loadAttachments").waypoint(RTC.AlbumHandler, {
 		offset : 'bottom-in-view'
 	});
-	
+
 	$('header .nav-collapse > ul.nav > li > a:not(".dropdown-toggle")').click(function() {
 		var e = $(this);
 		e.closest("ul").find("li").removeClass('active');
@@ -5413,11 +5428,10 @@ jQuery(document).ready(function($) {"use strict";
 		e.prepend('<i class="icon-spinner icon-spin"></i>&nbsp;');
 		return true;
 	});
-	if(RTApp.user()){
+	if (RTApp.user()) {
 		var r = new RT.PubSub(RTApp.user()), mn = $('#mainNavLinks');
-		mn.show();		
+		mn.show();
 		r.init();
-		
+
 	}
-	
-}); 
+});

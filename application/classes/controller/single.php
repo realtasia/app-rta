@@ -105,12 +105,12 @@ EOD;
 		
 		$agent = $agent ->as_array();
 		
+		$this->session->delete('campaign');
+		
 		if(\Arr::get($agent, 'name'))			
 			$this->session->set('campaign', [
-				'campaign' => [
-					'cuid' => \Arr::get($agent, '_id'),
-					'cid' => \Arr::get($agent, 'campaign_id'),
-				]
+				'cuid' => (string) \Arr::get($agent, '_id'),
+				'cid' => (string) \Arr::get($agent, 'campaign_id')
 			]);	
 		
 		return $this->request->redirect("/");
