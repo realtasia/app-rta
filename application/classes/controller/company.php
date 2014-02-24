@@ -25,7 +25,7 @@ class Controller_Company extends Controller_Auth {
 
         $par = ['access_token' => $this->token()];
 
-        $response = Api::request('/page/index/' . $slug, $par);
+        $response = Api::request('/page/getBySlug/' . $slug, $par);
 
         $data = $response->get_data();
 

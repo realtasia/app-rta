@@ -80,7 +80,7 @@ Route::set('default', function($uri) {
               'static'     => $trim_uri
           ];
 	  // paypal related
-	  if(in_array($trim_uri, ['paymentsuccess', 'paymentcancel']))
+	  if(in_array($trim_uri, ['paymentsuccess', 'paymentcancel', 'paymentvalidate']))
 		  return [
 		  	  'controller' => 'ipn', 
 		  	  'action'     => $trim_uri

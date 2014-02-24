@@ -148,9 +148,12 @@
 </style>
 
 <script>
+	var pid = "<?php echo $pid;?>";
 	
-	setTimeout(function(){
-		return window.location.href = "/loginbasic"
-	}, 5000);
-	
+	if(pid){
+		$.get('/paymentvalidate?id=' + pid)
+		.done(function(r){
+			return window.location.href = "/loginbasic"
+		});
+	}
 </script>

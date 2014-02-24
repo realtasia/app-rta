@@ -42,6 +42,14 @@ class Controller_Ipn extends Controller_Auth {
 	 */
 	protected $_listener;
 
+
+	/**
+	 * MongoID of the saved payment
+	 * 
+	 * @var MongoID
+	 */
+	protected $_payment_id = null;
+
 	/**
 	 * The expected receiver email
 	 *
@@ -82,28 +90,7 @@ class Controller_Ipn extends Controller_Auth {
 
 	public function action_paymentsuccess() {
 		$this -> action_index();
-
-		$custom = json_decode($this -> _listener -> get_post_data('custom'), true);
-		
-		if ($custom) {
-			$response = Api::request('/user/update/', [
-				'request_type' => 'activate', 
-				'transaction_id' => $this->_listener -> get_post_data('txn_id'), 
-				'mode' => $this->_listener-> get_post_data('payment_type'),
-				'mc_gross' => $this->_listener -> get_post_data('mc_gross'),
-				'payment_date' => $this-> _listener -> get_post_data('payment_date'),
-				'payer_email' => $this->_listener -> get_post_data('payer_email'),
-				'item_name' => $this->_listener -> get_post_data('item_name'),
-				'item_number' => $this->_listener -> get_post_data('item_number'),
-				'access_token' => $this->token(),
-				'uid' => \Arr::get($custom, 'uid'),
-				'cuid' => \Arr::get($custom, 'cuid')
-			], HTTP_Request::POST);
-			
-			Debug::log($response->as_json());
-		}
-
-		$this->template->content = View::factory('paypal/success');
+		$this->template->content = View::factory('paypal/success', ['pid' => $this->_payment_id]);
 	}
 
 	public function action_paymentcancel($process = true) {
@@ -111,6 +98,57 @@ class Controller_Ipn extends Controller_Auth {
 			$this -> action_index();
 
 		$this -> template -> content = View::factory('paypal/cancel');
+	}
+
+	/**
+	 * Called by AJAX method from front_end
+	 */
+	public function action_paymentvalidate()
+	{
+		// not a view to render
+		$this->auto_render = false;
+		// get id from $_GET
+		$id = $this->request->query('id');
+		
+		//set response to send JSON
+	    $this->response->headers('Content-type', 'application/json');	
+		
+		// cannot do much without an id.	
+		if(!$id)
+			throw new HTTP_Exception_403("No ID given for user activation");
+		
+		// get the document from the DB
+		$p = Document::factory('payment', $id);
+		
+		// load it :)
+		$p->load();
+		
+		// extract realtasia values stored in the payment
+		$realt_vars = json_decode($p->custom, true);
+		
+		// extract the whole chunk of paypal values stored in a JSON string.
+		$paypal_vars = json_decode($p->info, true);
+		
+		// can't move forward without realt vars
+		if ($realt_vars) {
+			// this will call the API method that does the needed and sends the emails.
+			$response = Api::request('/user/update/', [
+				'request_type' => 'activate', 
+				'transaction_id' => $p->transaction_id, 
+				'mode' => \Arr::get($paypal_vars, 'payment_type'),
+				'mc_gross' => \Arr::get($paypal_vars, 'mc_gross'),
+				'payment_date' => \Arr::get($paypal_vars, 'payment_date'),
+				'payer_email' => \Arr::get($paypal_vars, 'payer_email'),
+				'item_name' => \Arr::get($paypal_vars, 'item_name'),
+				'item_number' => \Arr::get($paypal_vars, 'item_number'),
+				'access_token' => $this->token(),
+				'uid' => \Arr::get($realt_vars, 'uid'),
+				'cuid' => \Arr::get($realt_vars, 'cuid')
+			], HTTP_Request::POST);
+
+			// return the response/
+	        return $this->response->body($response->as_json());
+		}		
 	}
 
 	/**
@@ -202,7 +240,11 @@ class Controller_Ipn extends Controller_Auth {
 		if ($this -> _listener -> check_email($this -> expected_receiver_email)) {
 			if ($this -> _listener -> is_unique_transaction()) {
 				// Save payment to db
-				$this -> _listener -> save_payment();
+				$id = $this -> _listener -> save_payment();
+				if($id)
+				{
+					$this->_payment_id = $id;
+				}
 			} else {
 				// This transaction id was already used
 				if ($this -> log_errors) {

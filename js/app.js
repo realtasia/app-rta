@@ -2958,15 +2958,15 @@ RT.Forms = {
 		self.first_name.extend({
 			required : !0,
 			pattern : {
-				params : "^[a-zA-Z]+$",
-				message : "Please use only letters (A-z)"
+				params : "^[a-zA-Z\\s']+$",
+				message : "Please use only letters, spaces and ' (A-z)"
 			}
 		});
 		self.last_name.extend({
 			required : !0,
 			pattern : {
-				params : "^[a-zA-Z]+$",
-				message : "Please use only letters (A-z)"
+				params : "^[a-zA-Z\\s']+$",
+				message : "Please use only letters, spaces and ' (A-z)"
 			}
 		});
 		self.fullName = ko.computed(function() {
@@ -5080,7 +5080,9 @@ RT.Forms.Post.prototype = {
 RT.Forms.Registration.prototype = {
 	populateUsername : function() {"use strict";
 		var a = this, b = function(c) {
-			return c.trim().toLowerCase().replace(/\s/g, "-");
+			c = c.trim().toLowerCase().replace(/\s/g, "-");
+			c = c.replace(/'/g, '');
+			return c.split(' ').join('-');
 		};
 		!a.first_name() && !a.last_name() && a.username("");
 		a.first_name() && a.last_name() && a.username(b(a.first_name()) + "-" + b(a.last_name()));
