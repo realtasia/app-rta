@@ -4154,7 +4154,8 @@ RT.Forms = {
 			email : options.email,
 			first_name : options.first_name,
 			last_name : options.last_name,
-			business : self.debug() ? 'sandpayer@realtasia.com' : 'admin@realtasia.com',
+			//business : self.debug() ? 'sandpayer@realtasia.com' : 'admin@realtasia.com',
+			business : 'admin@realtasia.com',
 			country : 'SG'
 		};
 
@@ -4173,7 +4174,8 @@ RT.Forms = {
 		};
 
 		self.url = ko.computed(function() {
-			return self.debug() ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+			//return self.debug() ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+			return 'https://www.paypal.com/cgi-bin/webscr';
 		});
 
 		self.submit = function() {
