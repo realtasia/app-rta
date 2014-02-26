@@ -1,6 +1,6 @@
 <div class="page-wrap" style="min-height:500px;margin-top:40px">
-        <div class="alert">
-            <div class="sales-section centralize" id="section-success">
+        <div class="alert-danger">
+            <div class="sales-section centralize" id="section-cancelled">
                 <h1><i class="icon-exclamation-sign"></i> Transaction Cancelled</h1>
                 <p class="lead">Oops... the transaction was cancelled. This page will redirect to RealtAsia's <a href="/">home page</a> in a few seconds.</p>
             </div>
@@ -16,8 +16,8 @@
 	.sales-section {
 		position: relative;
 		padding: 2em 0 1em 0;
-		color:#c09853;
-		text-shadow: 1px 0 1px #fff;		
+		/*color:#c09853;
+		text-shadow: 1px 0 1px #fff;	*/	
 	}
 	
 	.spinner {

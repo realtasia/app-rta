@@ -122,6 +122,9 @@
             <div class="row-fluid" style='min-height:450px'>
                 <div class="span12">
                     <small class="muted"><span data-bind="text:$data.pp.item_name"></span> <strong data-bind="text:$data.pp.amount()"></strong>/yr</small>
+                    <br>
+					<br><a onclick="$('#contentCarousel').carousel('prev');return false" href="#" data-bind="css:{'text-error' : !$data.pp.item_name()}"><i class="icon-backward"></i> <span data-bind="text: $data.pp.item_name() ? 'Click to modify Package' : 'Please choose a Package to continue'"></span></a>                 
+                    <hr>
                     <form class="form-large" style="margin-top:10px">
                         <div class="control-group row-fluid active" data-bind="RTAValidationEle: company">
                             <input type="text" name="company" autocomplete="off" data-bind="value : companyLabel, autoComplete : { source: getCompany, select: addCompany, change:resetCompany, delay: 500, minLength: 2 }" placeholder="Your company name">
@@ -133,7 +136,7 @@
                         </div>
                         <input type="hidden" name='code' value="<?php echo Security::token() ?>">
 
-                        <button name="submit" alt="PayPal – The safer, easier way to pay online." class="btn btn-large btn-warning" data-bind="enable: validateAgent, click:$data.pp.submit">
+                        <button name="submit" alt="PayPal – The safer, easier way to pay online." class="btn btn-large btn-warning" data-bind="enable: validateAgent() && $data.pp.item_name(), click:$data.pp.submit">
                             <i class="icon-hand-right" style="vertical-align: bottom;font-size:larger"></i>&nbsp;Pay with <span style="color:#14497B">Pay</span><span style="color:#007BC2">Pal</span>
                         </button>
                         <img alt="" border="0" src="https://www.sandbox.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">

@@ -129,6 +129,11 @@ class Controller_Location extends Controller_Auth {
         return parent::get_people_by_ids($ids);
     }
 
+	public function action_reviews()
+	{
+		$this->action_feed();
+	}
+
     public function action_subscribers()
     {
         $ids = parent::get_interactor_ids(\Arr::path($this->cp, 'connections.subscribers'));

@@ -56,7 +56,13 @@ class Controller_Ipn extends Controller_Auth {
 	 * This should be your primary paypal email address or, if using sandbox,
 	 * the email address of your seller test user.
 	 */
-	public $expected_receiver_email = 'sandpayer@realtasia.com';
+	public $expected_receiver_email = null;
+	
+	public function before()
+	{
+		$this->expected_receiver_email = Kohana::$environment === Kohana::PRODUCTION ? 'admin@realtasia.com' : 'sandpayer@realtasia.com';
+		parent::before();
+	} 
 
 	/**
 	 * Main method
@@ -90,10 +96,20 @@ class Controller_Ipn extends Controller_Auth {
 
 	public function action_paymentsuccess() {
 		$this -> action_index();
-		$this->template->content = View::factory('paypal/success', ['pid' => $this->_payment_id]);
+		
+		$status = @$this->_listener->get_post_data('payment_status');
+		
+		$pid = $this->_payment_id ? $this->_payment_id : null;
+		
+		$view = $status === "Completed" ? 'paypal/success' : 'paypal/pending';
+		
+		
+		$this->template->content = View::factory($view, [
+			'pid' => $pid
+		]);
 	}
 
-	public function action_paymentcancel($process = true) {
+	public function action_paymentcancel($process = false) {
 		if ($process)
 			$this -> action_index();
 

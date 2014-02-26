@@ -194,13 +194,9 @@
 			var idx = $('#contentCarousel .active').index('#contentCarousel .item');
 			if (idx === 0) {
 				carousel.carousel('next');
-				TweenLite.to(window, 1, {
-					scrollTo : {
-						y : $("#prices").offset().top - 20,
-						autoKill : false
-					},
-					ease : Back.easeOut
-				});
+			    $('html, body').animate({
+			        scrollTop: $("#prices").offset().top - 20
+			    }, 500);				
 			}
 
 		}, carouselLeft = function() {
@@ -235,7 +231,8 @@
 		carousel.on('swiperight', carouselRight);
 
 		$('#seePackages').click(function(){carouselLeft(); return true;});
-		$('.homeMenu').on('click', '.pricing-table a.btn', function(){
+		$('.homeMenu')
+		.on('click', '.pricing-table a.btn', function(){
 			console.log('click');
 			var data = ko.dataFor(this), vm = ko.contextFor(this);
 			vm.$parent.package.selectedPlan(data);
