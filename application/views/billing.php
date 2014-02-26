@@ -18,7 +18,7 @@
             You cannot make changes to your package at the moment. If you would like to upgrade your plan, please send an email to <a href="mailto:support@realtasia.com">support@realtasia.com</a></em></small>
         </p>
     </div>
-    <pre><?php $billing = \Arr::get($settings, 'billing')?></pre>
+   <?php $billing = \Arr::get($settings, 'billing')?>
     <h4>Membership details:</h4>
     <table class="table table-condensed table-bordered table-striped">
         <thead>

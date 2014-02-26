@@ -4134,7 +4134,7 @@ RT.Forms = {
 	PP : function(options) {
 		options = options || {};
 		var self = this;
-		self.debug = ko.observable(true);
+		self.debug = ko.observable(false);
 
 		self.fields = {
 			cmd : '_xclick',
