@@ -37,7 +37,7 @@
                                 </a>
                             </li>
                         <?php endif; ?>
-                        <li class="dropdown" style="display:none" data-bind="visible:$root.cpuIsCu, css : {active : ca() === 'testimonials'}, hoverClass: 'hovering'">
+                        <!-- <li class="dropdown" style="display:none" data-bind="visible:$root.cpuIsCu, css : {active : ca() === 'testimonials'}, hoverClass: 'hovering'">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                                 <i class="info16 itestimonial"></i>&nbsp;
                                 <span class="hidden-phone">Reviews</span>&nbsp;
@@ -47,7 +47,7 @@
                                 <li><a data-bind="attr:{href:cp().uri() + '/reviews/received'}">Received <span class="badge hidden-phone" data-bind="text:cp().counts.testimonials.received"></span></a></li>
                                 <li><a data-bind="attr:{href:cp().uri() + '/reviews/written'}">Written <span class="badge hidden-phone" data-bind="text:cp().counts.testimonials.written"></span></a></li>
                             </ul>
-                        </li>
+                        </li> -->
                         <?php //if(isset($links['Media'])):?>
                         <!--                    <li data-bind="hoverClass: 'hovering'">
                                                 <a id="sidenavMedia" href="<?php //echo $links['Media']; ?>"><i class="info16 images"></i>&nbsp;Media</a>
