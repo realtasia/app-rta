@@ -4,7 +4,7 @@
  */
 return [
     'default' => [
-        'database'  => 'db',
+        'database'  => 'synthetic-redacted',
         'server'    => RT::MONGOS,
         'options'   => [],
         'profiling' => TRUE

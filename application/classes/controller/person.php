@@ -523,7 +523,7 @@ class Controller_Person extends Controller_Auth {
  * "filter": "All",
  * "sort": "active",
  * "state": null,
- * "access_token": "[REDACTED]",
+ * "redacted_sensitive_value": "[archive-redacted]",
  * "listing": { "type": "Sale" },
  * "user_id": "513db6386c0199680c00005b"
  *
@@ -532,7 +532,7 @@ class Controller_Person extends Controller_Auth {
  * "filter":"All",
  * "sort":"active",
  * "state":"7c3674e5ceb644519814cab2fb87774d92cc8660",
- * "access_token":"[REDACTED]",
+ * "redacted_sensitive_value": "[archive-redacted]",
  * "type":"Sale",
  * "s":"",
  * "url":"\/listings",

@@ -545,10 +545,10 @@ RT.Com = {
 // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
 // +      input by: Brett Zamir (http://brett-zamir.me)
 // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-// *     example 1: base64_decode('S2V2aW4gdmFuIFpvbm5ldmVsZA==');
+// *     example 1: base64_decode('synthetic-redacted-token');
 // *     returns 1: 'Kevin van Zonneveld'
 // mozilla has this native
-// - but breaks in 2.0.0.12!
+// - but breaks in 192.0.2.1!
         if (typeof window['atob'] === 'function') {
             try {
                 return $.parseJSON(atob(data));
@@ -557,7 +557,7 @@ RT.Com = {
                 return atob(data);
             }
         }
-        var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        var b64 = 'synthetic-redacted-token';
         var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
                 ac = 0,
                 dec = "",

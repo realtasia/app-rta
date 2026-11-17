@@ -1,5 +1,5 @@
 <section class="contentArea centerContent" id="libraryMobile" data-bind="css:{'container-fluid': RTApp.isSmallerThanTablet}, with:cplib">
-    <div data-bind="slideTemplate:{name:'page', data:currentPage, if: currentPage}"></div>
+    <div data-bind="slideTemplate:{name:'synthetic-redacted', data:currentPage, if: currentPage}"></div>
     <a href="#" data-bind="visible:!currentPage(), click:function(){return currentIndex(1);}">Show Library</a>
 </section>
 
@@ -68,7 +68,7 @@
         </div>
     </div>
 </section> <!--  sort button & result count -->
-<input type="hidden" name="state" value="e1857a43b3a7688c3e6887d943f262c4aa824be7"><input type="hidden" name="sec_id" value="1373238553"></form>
+<input type="hidden" name="synthetic-redacted" value="e1857a43b3a7688c3e6887d943f262c4aa824be7"><input type="hidden" name="synthetic-redacted" value="1373238553"></form>
 <div data-bind="template:content" style="border-top:1px solid #eee;padding:10px 10px 0 10px"></div>
 </script>
 
@@ -120,6 +120,6 @@
     <input type="text" class="input-large" data-bind="value:name, valueUpdate: 'afterkeydown'" />
     <label>Description</label>
     <textarea type="text" class="input-large" data-bind="value:description, valueUpdate: 'afterkeydown', expand:35" />
-    <input type="hidden" name="state" data-bind="value:RTApp.st" />
+    <input type="hidden" name="synthetic-redacted" data-bind="value:RTApp.st" />
 </form>
 </script>

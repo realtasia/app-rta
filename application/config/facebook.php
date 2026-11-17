@@ -4,7 +4,7 @@
     */
 
 return [
-  'app_id'     => '150811318305350',
-  'api_key'     => '4b27cd05c26143e43ac7bb8ddb494cb9',
-  'secret'     => '935342935d5052887bf4106ecd154cd0'
+  'app_id'     => 'synthetic-redacted',
+  'api_key'     => 'synthetic-redacted',
+  'secret'     => 'synthetic-redacted'
 ];

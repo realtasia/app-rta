@@ -24,8 +24,8 @@
         $('#testlogin').click(function(e){
             e.preventDefault();
             $.post('/login', {
-                username: 'jason-nathan',
-                password: '90220964'
+                username: 'synthetic-redacted',
+                password: 'synthetic-redacted'
             }, function(r){
                 return checkApi() && checkCu();
             });

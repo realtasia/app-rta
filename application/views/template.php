@@ -77,7 +77,7 @@
                 </section>
             <?php endif; ?>
             <div id="feedbackProfileContent"></div>
-        <!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key=[REDACTED]"></script>-->
+        <!-- Historical Google Maps script URL removed from the archival snapshot. -->
             <script type="text/javascript">window["RT"] = {version: "0.8.1", API_SERVER: '<?php echo RT::API_SERVER ?>', APP_SERVER: '<?php echo RT::APP_SERVER ?>', COM_SERVER: '<?php echo RT::COM_SERVER ?>', BUCKET: '<?php echo RT::BUCKET ?>', cu: null, at: "<?php echo @base64_encode($at) ?>", st: "<?php echo @base64_encode($st) ?>", cp: null, cl: null, ca: "<?php echo @$ca ?>", clt: "<?php echo @$clt ?>", autoLogin:"<?php echo @$autoLogin ?>"};<?php
             echo $cu ? 'RT.cu="' . base64_encode(json_encode($cu)) . '";' : '';
             echo isset($cp) ? 'RT.cp="' . base64_encode(json_encode($cp)) . '";' : '';

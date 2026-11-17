@@ -15,6 +15,6 @@ return [
          */
         'cipher' => MCRYPT_RIJNDAEL_128,
         'mode'   => MCRYPT_MODE_NOFB,
-        'key'    => '[REDACTED]',
+        'key'    => 'synthetic-redacted',
     ],
 ];

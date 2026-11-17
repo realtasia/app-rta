@@ -2,27 +2,27 @@
 
 /*return array(
 
-	'driver'    => 'ORM',
-	'hash_method' => 'sha256',
-	'hash_key'   => 'pS3*Z2f9Ow<}^H6L,{<dS<><ld; 6|xAkwg3MgakYd}>t:KZgjjDx4U@/}#XO+]*',
+	'driver'    => 'synthetic-redacted',
+	'hash_method' => 'synthetic-redacted',
+	'hash_key'   => 'synthetic-redacted',
 	'lifetime'   => 1209600,
-	'session_key' => 'rta_user',
+	'session_key' => 'synthetic-redacted',
 
 	// Username/password combinations for the Auth File driver
 	'users' => array(
-		// 'admin' => 'b3154acf3a344170077d11bdb5fff31532f679a1919e716a02',
+		// 'admin' => 'synthetic-redacted',
 	),
 );*/
 
 return array(
-	'driver'       => 'native',
-	'hash_method'  => 'sha256',
-	'hash_key'     => 'pS3*Z2f9Ow<}^H6L,{<dS<><ld; 6|xAkwg3MgakYd}>t:KZgjjDx4U@/}#XO+]*',
+	'driver'       => 'synthetic-redacted',
+	'hash_method'  => 'synthetic-redacted',
+	'hash_key'     => 'synthetic-redacted',
 	'lifetime'     => 1209600,
-	'session_key'  => 'rta_user',
+	'session_key'  => 'synthetic-redacted',
 
 	// Username/password combinations for the Auth File driver
 	'users' => array(
-		// 'admin' => 'b3154acf3a344170077d11bdb5fff31532f679a1919e716a02',
+		// 'admin' => 'synthetic-redacted',
 	),
 );
